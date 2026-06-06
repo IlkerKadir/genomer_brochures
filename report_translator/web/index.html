@@ -10,7 +10,11 @@
   <header>
     <img src="genomerlogo.png" alt="Genomer" class="logo">
     <h1>Rapor Çevirici <span>EN → TR</span></h1>
-    <div class="out-dir">Çıktı: <code id="outDir">~/Genomer Ceviriler</code></div>
+    <div class="out-dir">
+      Çıktı: <code id="outDir">~/Genomer Ceviriler</code>
+      <button id="changeOutDirBtn" class="ghost small">Değiştir</button>
+      <button id="openOutDirBtn" class="ghost small">Klasörü aç</button>
+    </div>
   </header>
 
   <main>
@@ -35,6 +39,7 @@
           <div class="filter">
             <button data-filter="all" class="active">Tümü</button>
             <button data-filter="review">Gözden geçirilecek</button>
+            <button id="reviewTxtBtn" class="ghost small">Gözden geçirme listesini indir</button>
           </div>
           <div id="segList"></div>
         </aside>

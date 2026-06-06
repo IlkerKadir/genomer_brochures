@@ -4,6 +4,8 @@ import os
 import io
 import uuid
 import zipfile
+import subprocess
+import sys
 import fitz
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.responses import Response
@@ -78,8 +80,9 @@ async def upload(files: list[UploadFile] = File(...)):
               "overrides": {}, "saved_path": None}
         SESSIONS[session_id]["files"][file_id] = fs
         ann = _annotate(fs)
+        _save_one(fs)  # I-1: yükleme sonrası otomatik kaydet
         out.append({"file_id": file_id, "name": uf.filename, "kit": kit,
-                    "counts": _counts(ann)})
+                    "counts": _counts(ann), "saved_path": fs["saved_path"]})
     return {"session_id": session_id, "files": out}
 
 
@@ -190,9 +193,50 @@ class OutDirBody(BaseModel):
 
 
 @app.post("/api/{session}/out_dir")
-def change_out_dir(session: str, body: OutDirBody):
+def change_out_dir_legacy(session: str, body: OutDirBody):
     set_out_dir(body.path)
     return {"ok": True, "out_dir": _OUT_DIR}
+
+
+# I-3: session'sız out_dir yönetimi
+@app.get("/api/out_dir")
+def get_out_dir():
+    return {"out_dir": _OUT_DIR}
+
+
+@app.post("/api/out_dir")
+def change_out_dir(body: OutDirBody):
+    set_out_dir(body.path)
+    return {"ok": True, "out_dir": _OUT_DIR}
+
+
+@app.post("/api/open_out_dir")
+def open_out_dir():
+    os.makedirs(_OUT_DIR, exist_ok=True)
+    if sys.platform == "darwin":
+        subprocess.run(["open", _OUT_DIR])
+    elif sys.platform == "win32":
+        os.startfile(_OUT_DIR)
+    else:
+        subprocess.run(["xdg-open", _OUT_DIR])
+    return {"ok": True}
+
+
+# I-2: review.txt uç noktası
+@app.get("/api/{session}/{file}/review.txt")
+def review_txt(session: str, file: str):
+    fs = _get(session, file)
+    ann = _annotate(fs)
+    unique_en = sorted({a.en for a in ann if a.needs_review})
+    base = os.path.splitext(fs["name"])[0]
+    content = "# Gözden geçirilecek / sözlüğe eklenecek birimler\n\n" + "\n".join(unique_en)
+    return Response(
+        content=content,
+        media_type="text/plain; charset=utf-8",
+        headers={
+            "Content-Disposition": f'attachment; filename="{base}_review.txt"'
+        },
+    )
 
 
 # statik frontend (en sonda mount edilir ki /api yolları gölgelenmesin)

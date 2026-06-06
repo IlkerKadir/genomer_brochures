@@ -2,6 +2,33 @@ const $ = (s, r = document) => r.querySelector(s);
 const api = (p, o) => fetch("/api" + p, o).then(r => r.json());
 let SESSION = null, FILES = [], CUR = null, MANIFEST = [], FILTER = "all";
 
+// I-3: Sayfa açılışında gerçek çıktı klasörünü çek
+(async () => {
+  try {
+    const r = await api("/out_dir");
+    if (r.out_dir) $("#outDir").textContent = r.out_dir;
+  } catch (_) {}
+})();
+
+// I-3: Çıktı klasörü değiştir
+$("#changeOutDirBtn").onclick = async () => {
+  const cur = $("#outDir").textContent;
+  const newPath = prompt("Yeni çıktı klasörü yolu:", cur);
+  if (!newPath || newPath === cur) return;
+  const r = await api("/out_dir", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ path: newPath })
+  });
+  if (r.ok) { $("#outDir").textContent = r.out_dir; toast("Çıktı klasörü güncellendi"); }
+};
+
+// I-3: Çıktı klasörünü aç
+$("#openOutDirBtn").onclick = async () => {
+  await fetch("/api/open_out_dir", { method: "POST" });
+  toast("Klasör açılıyor…");
+};
+
 function toast(msg) {
   const t = $("#toast"); t.textContent = msg; t.classList.remove("hidden");
   setTimeout(() => t.classList.add("hidden"), 2200);
@@ -60,6 +87,12 @@ document.querySelectorAll(".filter button").forEach(b =>
     document.querySelectorAll(".filter button").forEach(x => x.classList.remove("active"));
     b.classList.add("active"); renderSegments();
   });
+
+// I-2: Gözden geçirme listesi indir
+$("#reviewTxtBtn").onclick = () => {
+  if (!SESSION || !CUR) return;
+  location.href = `/api/${SESSION}/${CUR.file_id}/review.txt`;
+};
 
 async function openEditor(f) {
   CUR = f;

@@ -117,3 +117,58 @@ def test_edit_segment_conflict_and_force(femobiome_pdf, tmp_path, monkeypatch):
     # Gerçek dictionary.json dokunulmadı
     real_data = json.loads(open(real_path, encoding="utf-8").read())
     assert real_data["femobiome_ii"]["Yeast fungi"] == "Maya mantarları"
+
+
+# ---- I-1: Yükleme sonrası otomatik kaydet ----
+def test_upload_auto_saves(femobiome_pdf, tmp_path):
+    """Upload sonrası saved_path dolu olmalı ve dosya diskte mevcut olmalı."""
+    c = _client()
+    app_mod.set_out_dir(str(tmp_path))
+    with open(femobiome_pdf, "rb") as fh:
+        r = c.post("/api/upload", files={"files": ("rep.pdf", fh.read(), "application/pdf")})
+    assert r.status_code == 200
+    body = r.json()
+    file_entry = body["files"][0]
+    assert "saved_path" in file_entry, "saved_path upload yanıtında eksik"
+    assert file_entry["saved_path"] is not None, "saved_path None olmamalı"
+    assert os.path.exists(file_entry["saved_path"]), f"Dosya diskte yok: {file_entry['saved_path']}"
+
+
+# ---- I-2: review.txt uç noktası ----
+def test_review_txt_endpoint(femobiome_pdf, tmp_path):
+    """GET /api/{s}/{f}/review.txt 200 + düz metin döner; başlık içerir."""
+    c = _client()
+    app_mod.set_out_dir(str(tmp_path))
+    with open(femobiome_pdf, "rb") as fh:
+        r = c.post("/api/upload", files={"files": ("rep.pdf", fh.read(), "application/pdf")})
+    body = r.json()
+    s = body["session_id"]
+    f = body["files"][0]["file_id"]
+
+    rv = c.get(f"/api/{s}/{f}/review.txt")
+    assert rv.status_code == 200
+    text = rv.text
+    assert "# Gözden geçirilecek" in text, "Başlık eksik"
+    assert "Content-Disposition" in rv.headers
+    assert "_review.txt" in rv.headers["Content-Disposition"]
+
+
+# ---- I-3: GET /api/out_dir ve POST /api/out_dir ----
+def test_get_and_set_out_dir(tmp_path):
+    """GET /api/out_dir mevcut yolu döner; POST /api/out_dir yolu günceller."""
+    c = _client()
+    app_mod.set_out_dir(str(tmp_path))
+
+    r_get = c.get("/api/out_dir")
+    assert r_get.status_code == 200
+    assert r_get.json()["out_dir"] == str(tmp_path)
+
+    new_dir = str(tmp_path / "yeni_klasor")
+    r_post = c.post("/api/out_dir", json={"path": new_dir})
+    assert r_post.status_code == 200
+    assert r_post.json()["ok"] is True
+    assert r_post.json()["out_dir"] == new_dir
+    assert os.path.isdir(new_dir)
+
+    # Temizlik: geri al
+    app_mod.set_out_dir(str(tmp_path))
