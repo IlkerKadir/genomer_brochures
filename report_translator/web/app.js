@@ -30,14 +30,14 @@ function renderCards() {
   FILES.forEach(f => {
     const c = document.createElement("div"); c.className = "card";
     if (f.error) {
-      c.innerHTML = `<div class="name">${f.name}</div><div class="err">${f.error}</div>`;
+      c.innerHTML = `<div class="name">${escapeHtml(f.name)}</div><div class="err">${escapeHtml(f.error)}</div>`;
     } else {
       const rev = f.counts.review;
-      c.innerHTML = `<span class="kit">${f.kit}</span>
-        <div class="name">${f.name}</div>
+      c.innerHTML = `<span class="kit">${escapeHtml(f.kit)}</span>
+        <div class="name">${escapeHtml(f.name)}</div>
         <div class="stat ok">✓ ${f.counts.translated} çevrildi</div>
         ${rev ? `<div class="stat warn">⚠ ${rev} gözden geçirilecek</div>` : ""}
-        <button data-f="${f.file_id}">Görüntüle / Düzelt</button>`;
+        <button data-f="${escapeHtml(f.file_id)}">Görüntüle / Düzelt</button>`;
       c.querySelector("button").onclick = () => openEditor(f);
     }
     wrap.appendChild(c);
@@ -105,12 +105,13 @@ function renderSegments() {
     el.className = "seg" + (s.needs_review ? " review" : "");
     el.dataset.id = s.id;
     el.innerHTML = `<div class="en">${escapeHtml(s.en)}</div>
-      <textarea>${escapeHtml(s.tr)}</textarea>
+      <textarea></textarea>
       <div class="acts">
         <button data-scope="dict">Sözlüğe ekle</button>
         <button class="ghost" data-scope="report">Sadece bu rapor</button>
       </div>`;
     const ta = el.querySelector("textarea");
+    ta.value = s.tr;
     el.querySelectorAll("button").forEach(btn =>
       btn.onclick = () => saveSeg(s, ta.value, btn.dataset.scope));
     list.appendChild(el);
@@ -132,13 +133,12 @@ async function saveSeg(s, tr, scope) {
     if (confirm(`Bu metin sözlükte zaten "${r.existing}" olarak var. Üzerine yazılsın mı?`)) {
       await api(`/${SESSION}/${CUR.file_id}/segment/${s.id}`,
         { method: "POST", headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ tr, scope: "report" }) });
-      // sözlüğe zorla yazmak için ayrı çağrı gerekmez; report kapsamı render'ı günceller
+          body: JSON.stringify({ tr, scope: "dict", force: true }) });
     } else return;
   }
   s.tr = tr;
-  toast(scope === "dict" ? "Sözlüğe eklendi" : "Bu rapora uygulandı");
   await renderPages();  // override'lı taze render
+  toast(scope === "dict" ? "Sözlüğe eklendi" : "Bu rapora uygulandı");
 }
 
 function escapeHtml(s) {

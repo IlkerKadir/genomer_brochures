@@ -108,6 +108,7 @@ def page_png(session: str, file: str, n: int):
 class SegmentEdit(BaseModel):
     tr: str
     scope: Literal["dict", "report"]
+    force: bool = False
 
 
 @app.post("/api/{session}/{file}/segment/{seg}")
@@ -119,7 +120,7 @@ def edit_segment(session: str, file: str, seg: str, body: SegmentEdit):
         ann = _annotate(fs)
         en = next((a.en for a in ann if a.id == seg), None)
         if en:
-            res = dictionary.add_entry(fs["kit"], en, body.tr, overwrite=False)
+            res = dictionary.add_entry(fs["kit"], en, body.tr, overwrite=body.force)
             if res.get("conflict"):
                 return {"ok": True, "conflict": True, "existing": res["existing"], "en": en}
     return result
