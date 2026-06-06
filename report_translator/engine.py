@@ -3,7 +3,8 @@
 """
 import os
 import re
-from dataclasses import dataclass, field
+import sys
+from dataclasses import dataclass
 import fitz  # PyMuPDF
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -264,14 +265,18 @@ def render(doc, annotated):
                 box = fitz.Rect(s.bbox)
                 left = box.x0 + indent
                 fs = s.size
+                fitted = False
                 while fs > 4.5:
                     pad = fitz.Rect(left, box.y0 - 1, box.x1 + 2, box.y1 + 4 * s.size)
                     rc = page.insert_textbox(pad, text, fontname=fontname, fontfile=fontfile,
                                              fontsize=fs, color=s.color, lineheight=1.15,
                                              align=fitz.TEXT_ALIGN_LEFT)
                     if rc >= 0:
+                        fitted = True
                         break
                     fs -= 0.25
+                if not fitted:
+                    sys.stderr.write("UYARI: segment sığmadı, atlandı: %r\n" % text)
     return doc
 
 
