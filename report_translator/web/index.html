@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Genomer · Rapor Çevirici</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <img src="genomerlogo.png" alt="Genomer" class="logo">
+    <h1>Rapor Çevirici <span>EN → TR</span></h1>
+    <div class="out-dir">Çıktı: <code id="outDir">~/Genomer Ceviriler</code></div>
+  </header>
+
+  <main>
+    <section id="uploadView">
+      <div id="dropzone" class="dropzone">
+        <p>PDF raporlarını buraya sürükleyin <br><small>veya tıklayıp seçin (çoklu)</small></p>
+        <input type="file" id="fileInput" accept="application/pdf" multiple hidden>
+      </div>
+      <div id="cards" class="cards"></div>
+      <div id="batchActions" class="batch hidden">
+        <button id="saveAllBtn">Tümünü kaydet</button>
+        <button id="zipBtn" class="ghost">ZIP indir</button>
+      </div>
+    </section>
+
+    <section id="editView" class="hidden">
+      <button id="backBtn" class="ghost">← Geri</button>
+      <h2 id="editTitle"></h2>
+      <div class="editor">
+        <div id="pages" class="pages"></div>
+        <aside class="segments">
+          <div class="filter">
+            <button data-filter="all" class="active">Tümü</button>
+            <button data-filter="review">Gözden geçirilecek</button>
+          </div>
+          <div id="segList"></div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast hidden"></div>
+  <script src="app.js"></script>
+</body>
+</html>
