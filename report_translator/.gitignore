@@ -6,3 +6,4 @@ dictionary.json.bak
 build/
 dist/
 *.spec
+.DS_Store
