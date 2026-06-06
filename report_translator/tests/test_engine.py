@@ -67,3 +67,24 @@ def test_translate_unknown_flagged(femobiome_pdf):
     ann = engine.translate_segments(engine.extract_segments(doc), table, passthrough, {})
     # bilinmeyen ya da kısmi paragraf -> needs_review True olan en az bir öğe
     assert any(a.needs_review for a in ann)
+
+
+def test_render_produces_turkish_pdf(femobiome_pdf):
+    table, passthrough = _table()
+    out_bytes = engine.translate_document_bytes(femobiome_pdf, table, passthrough, overrides={})
+    assert out_bytes[:4] == b"%PDF"
+    rendered = fitz.open(stream=out_bytes, filetype="pdf")
+    text = rendered[0].get_text()
+    assert "Maya mantarları" in text          # çeviri uygulanmış
+    assert "Mikrobiyota durumu" in text       # paragraf/başlık çevrilmiş
+    assert len(rendered) == 2                  # sayfa sayısı korunmuş
+
+
+def test_render_applies_override(femobiome_pdf):
+    table, passthrough = _table()
+    doc = fitz.open(femobiome_pdf)
+    target = next(s for s in engine.extract_segments(doc) if s.en == "Yeast fungi")
+    out_bytes = engine.translate_document_bytes(
+        femobiome_pdf, table, passthrough, overrides={target.id: "ÖZELMAYA"})
+    text = fitz.open(stream=out_bytes, filetype="pdf")[0].get_text()
+    assert "ÖZELMAYA" in text
