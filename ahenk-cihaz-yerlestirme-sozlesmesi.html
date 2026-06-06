@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Cihaz Yerleştirme ve Kit Tedarik Sözleşmesi - Ahenk</title>
+<style>
+    @page {
+        size: A4;
+        margin: 18mm 20mm 16mm 20mm;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+        font-family: "Times New Roman", Times, serif;
+        color: #1a1a1a;
+        background: #fff;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        font-size: 10.5pt;
+        line-height: 1.45;
+    }
+    .cover {
+        page-break-after: always;
+        text-align: center;
+        padding-top: 35mm;
+    }
+    .cover .logo img { height: 90px; width: auto; margin-bottom: 24mm; }
+    .cover .title {
+        font-size: 22pt;
+        font-weight: 700;
+        color: #0a5a8a;
+        letter-spacing: 1.2px;
+        margin-bottom: 10mm;
+        line-height: 1.25;
+    }
+    .cover .subtitle {
+        font-size: 12pt;
+        color: #333;
+        font-style: italic;
+        margin-bottom: 22mm;
+    }
+    .cover .parties {
+        font-size: 11pt;
+        line-height: 1.8;
+        margin-bottom: 22mm;
+    }
+    .cover .parties .between { color: #555; font-style: italic; margin: 3mm 0; }
+    .cover .parties .name {
+        font-weight: 700;
+        color: #0a5a8a;
+        font-size: 12pt;
+    }
+    .cover .meta {
+        margin-top: 18mm;
+        font-size: 10.5pt;
+        color: #333;
+        line-height: 1.7;
+    }
+    .cover .meta strong { display: inline-block; min-width: 36mm; text-align: left; }
+    .letterhead {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        border-bottom: 2.5px solid #0a5a8a;
+        padding-bottom: 8px;
+        margin-bottom: 12px;
+    }
+    .letterhead .logo img { height: 50px; width: auto; }
+    .letterhead .company {
+        text-align: right;
+        font-size: 9pt;
+        color: #333;
+        line-height: 1.5;
+    }
+    .letterhead .company .name {
+        font-weight: 700;
+        color: #0a5a8a;
+        font-size: 10pt;
+    }
+    h1.doc-title {
+        font-size: 14pt;
+        font-weight: 700;
+        color: #0a5a8a;
+        text-align: center;
+        letter-spacing: 0.8px;
+        margin: 4px 0 14px;
+    }
+    h2 {
+        font-size: 11pt;
+        font-weight: 700;
+        color: #0a5a8a;
+        margin: 14px 0 6px;
+        border-bottom: 1px solid #c8d0d8;
+        padding-bottom: 3px;
+        page-break-after: avoid;
+    }
+    h3 {
+        font-size: 10.5pt;
+        font-weight: 700;
+        color: #333;
+        margin: 8px 0 4px;
+        page-break-after: avoid;
+    }
+    p {
+        text-align: justify;
+        margin-bottom: 6px;
+        orphans: 3;
+        widows: 3;
+    }
+    ol.clauses {
+        margin-left: 0;
+        list-style: none;
+        counter-reset: clause;
+    }
+    ol.clauses > li {
+        counter-increment: clause;
+        margin-bottom: 6px;
+        padding-left: 14mm;
+        position: relative;
+        text-align: justify;
+    }
+    ol.clauses > li::before {
+        content: counter(clause) ".";
+        position: absolute;
+        left: 0;
+        font-weight: 700;
+        color: #0a5a8a;
+        width: 13mm;
+        text-align: left;
+    }
+    ol.sub {
+        margin-left: 6mm;
+        list-style: none;
+        counter-reset: subclause;
+    }
+    ol.sub > li {
+        counter-increment: subclause;
+        margin: 3px 0;
+        padding-left: 10mm;
+        position: relative;
+        text-align: justify;
+    }
+    ol.sub > li::before {
+        content: counter(clause) "." counter(subclause) ".";
+        position: absolute;
+        left: 0;
+        font-weight: 600;
+        color: #555;
+        width: 9mm;
+    }
+    .parties-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 6px 0 10px;
+        font-size: 10pt;
+    }
+    .parties-table td {
+        vertical-align: top;
+        width: 50%;
+        padding: 8px 10px;
+        border: 1px solid #c8d0d8;
+        line-height: 1.45;
+    }
+    .parties-table .role {
+        background: #0a5a8a;
+        color: #fff;
+        font-weight: 700;
+        padding: 5px 10px;
+        font-size: 9.5pt;
+        letter-spacing: 0.5px;
+    }
+    .parties-table .name { font-weight: 700; color: #0a5a8a; margin-bottom: 4px; }
+    .parties-table .row { margin: 1px 0; font-size: 9.5pt; }
+    .parties-table .row strong { display: inline-block; min-width: 30mm; color: #555; font-weight: 600; }
+    .annex-page {
+        page-break-before: always;
+    }
+    .annex-title {
+        text-align: center;
+        font-size: 13pt;
+        font-weight: 700;
+        color: #0a5a8a;
+        margin-bottom: 4px;
+        letter-spacing: 0.6px;
+    }
+    .annex-subtitle {
+        text-align: center;
+        font-size: 10pt;
+        color: #555;
+        font-style: italic;
+        margin-bottom: 14px;
+    }
+    table.annex {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 10pt;
+        margin-bottom: 10px;
+    }
+    table.annex th {
+        background: #0a5a8a;
+        color: #fff;
+        padding: 7px 10px;
+        font-size: 9.5pt;
+        text-align: left;
+        font-weight: 700;
+    }
+    table.annex td {
+        padding: 7px 10px;
+        border: 1px solid #c8d0d8;
+        vertical-align: top;
+    }
+    table.annex td.label {
+        background: #f5f8fb;
+        font-weight: 700;
+        color: #333;
+        width: 35%;
+    }
+    table.price {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 9.5pt;
+    }
+    table.price th, table.price td {
+        border: 1px solid #c8d0d8;
+        padding: 6px 9px;
+    }
+    table.price th {
+        background: #0a5a8a;
+        color: #fff;
+        text-align: left;
+        font-weight: 700;
+    }
+    table.price td.num {
+        text-align: right;
+    }
+    table.price td.center {
+        text-align: center;
+    }
+    .signature-block {
+        margin-top: 20px;
+        display: flex;
+        justify-content: space-between;
+        gap: 30px;
+        page-break-inside: avoid;
+    }
+    .closing-page {
+        page-break-before: always;
+    }
+    h2, h3 {
+        page-break-after: avoid;
+    }
+    p {
+        page-break-inside: avoid;
+    }
+    ol.clauses > li.keep {
+        page-break-inside: avoid;
+    }
+    .signature-block .sig-col {
+        flex: 1;
+        font-size: 10pt;
+        line-height: 1.5;
+    }
+    .signature-block .role {
+        font-weight: 700;
+        color: #0a5a8a;
+        margin-bottom: 5px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-size: 9.5pt;
+    }
+    .signature-block .org { font-weight: 700; margin-bottom: 2px; }
+    .signature-block .field { margin-bottom: 7px; }
+    .signature-block .field-label {
+        font-size: 8.5pt;
+        color: #666;
+        display: block;
+        margin-bottom: 1px;
+    }
+    .signature-block .line {
+        border-bottom: 1px solid #555;
+        height: 14px;
+    }
+    .signature-block .stamp-area {
+        margin-top: 14px;
+        height: 55px;
+        border: 1px dashed #c8d0d8;
+        text-align: center;
+        font-size: 9pt;
+        color: #999;
+        padding-top: 22px;
+        font-style: italic;
+    }
+    .note-box {
+        background: #f5f8fb;
+        border-left: 3px solid #0a5a8a;
+        padding: 8px 12px;
+        font-size: 9.5pt;
+        line-height: 1.5;
+        margin: 8px 0;
+    }
+    .footer-note {
+        margin-top: 10px;
+        font-size: 8.5pt;
+        color: #777;
+        text-align: center;
+        line-height: 1.45;
+        font-style: italic;
+    }
+</style>
+</head>
+<body>
+
+<!-- ============== KAPAK ============== -->
+<div class="cover">
+    <div class="logo"><img src="genomerlogo.png" alt="Genomer Biyoteknoloji"></div>
+    <div class="title">CİHAZ YERLEŞTİRME VE<br>KİT TEDARİK SÖZLEŞMESİ</div>
+    <div class="subtitle">Reagent Rental Placement and Kit Supply Agreement</div>
+
+    <div class="parties">
+        <div class="name">GENOMER BİYOTEKNOLOJİ ARGE SAN. VE TİC. LTD. ŞTİ.</div>
+        <div class="between">— ile —</div>
+        <div class="name">AHENK SAĞLIK EĞT. DAN. HİZM. A.Ş.</div>
+    </div>
+
+    <div class="meta">
+        <div><strong>Sözleşme No:</strong> GEN-CYS-2026/011</div>
+        <div><strong>Düzenleme Tarihi:</strong> 14.05.2026</div>
+        <div><strong>Yürürlük Tarihi:</strong> 14.05.2026</div>
+        <div><strong>Süre:</strong> 1 (bir) yıl, uzatma maddesi ile</div>
+    </div>
+</div>
+
+<!-- ============== SÖZLEŞME GÖVDESİ ============== -->
+
+<div class="letterhead">
+    <div class="logo"><img src="genomerlogo.png" alt="Genomer Biyoteknoloji"></div>
+    <div class="company">
+        <div class="name">GENOMER BİYOTEKNOLOJİ ARGE SAN. VE TİC. LTD. ŞTİ.</div>
+        Dumlupınar Mah. Nur Cad. No: 7/3, Kartepe / Kocaeli / Türkiye<br>
+        Tel: 0262 373 70 05 &nbsp;•&nbsp; www.genomer.com.tr &nbsp;•&nbsp; support@genomer.com.tr
+    </div>
+</div>
+
+<h1 class="doc-title">CİHAZ YERLEŞTİRME VE KİT TEDARİK SÖZLEŞMESİ</h1>
+
+<h2>1. TARAFLAR</h2>
+<p>İşbu Cihaz Yerleştirme ve Kit Tedarik Sözleşmesi ("<strong>Sözleşme</strong>"), aşağıda unvanları ve adresleri yer alan taraflar arasında, aşağıda belirtilen şartlar dahilinde akdedilmiştir.</p>
+
+<table class="parties-table">
+    <tr>
+        <td class="role">TEDARİKÇİ ("Genomer")</td>
+        <td class="role">KURUM ("Ahenk")</td>
+    </tr>
+    <tr>
+        <td>
+            <div class="name">Genomer Biyoteknoloji Arge San. ve Tic. Ltd. Şti.</div>
+            <div class="row"><strong>Adres:</strong> Dumlupınar Mah. Nur Cad. No: 7/3, Kartepe / Kocaeli</div>
+            <div class="row"><strong>Vergi Dairesi / VKN:</strong> Alemdar V.D. / 3941111048</div>
+            <div class="row"><strong>Mersis No:</strong> 0394111104800001</div>
+            <div class="row"><strong>Tic. Sicil No:</strong> 31056</div>
+            <div class="row"><strong>Telefon:</strong> 0262 373 70 05</div>
+            <div class="row"><strong>E-posta:</strong> support@genomer.com.tr</div>
+        </td>
+        <td>
+            <div class="name">Ahenk Sağlık Eğt. Dan. Hizm. A.Ş.</div>
+            <div class="row"><strong>Adres:</strong> Darülaceze Caddesi Merkez Mahallesi No: 20, 34384 Şişli / İstanbul</div>
+            <div class="row"><strong>Vergi Dairesi / VKN:</strong> Şişli V.D. / 0100092730</div>
+            <div class="row"><strong>Mersis No:</strong> 0010009273000013</div>
+            <div class="row"><strong>Tic. Sicil No:</strong> 410369</div>
+            <div class="row"><strong>Telefon / Faks:</strong> 0212 230 08 38 / 0212 231 75 51</div>
+            <div class="row"><strong>E-posta:</strong> agokay@ahenklab.com.tr</div>
+        </td>
+    </tr>
+</table>
+
+<p>Genomer ve Ahenk, bundan böyle ayrı ayrı "<strong>Taraf</strong>", birlikte "<strong>Taraflar</strong>" olarak anılacaktır.</p>
+
+<h2>2. TANIMLAR</h2>
+<ol class="clauses">
+    <li><strong>Cihaz:</strong> Genomer markalı ve mülkiyeti Genomer'de kalmak üzere Ahenk laboratuvarına yerleştirilen, marka, model, seri numarası ve aksesuarları Ek-1'de tanımlanan gerçek zamanlı PCR (qPCR) sistemini ifade eder.</li>
+    <li><strong>Kit / Kitler:</strong> Genomer tarafından üretilen ve Ek-2'de listelenen in vitro diyagnostik (IVD) qPCR test kitlerini ifade eder.</li>
+    <li><strong>Yerleştirme:</strong> Cihazın mülkiyeti Genomer'de kalmak kaydıyla, Ahenk'in işbu Sözleşme süresince yalnızca Genomer kitleri ile kullanmak üzere kendi laboratuvarında bulundurmasını ifade eder.</li>
+    <li><strong>Aktif Kullanım:</strong> Ahenk'in Cihaz'ı, Sözleşme'nin amacına ve laboratuvar pratiklerine uygun şekilde düzenli olarak işletmesini; bu kapsamda Genomer'den makul sıklıkta ve makul hacimde kit siparişi vermesini ifade eder. Aktif Kullanım'ın yeterliliği, Tarafların iyi niyet çerçevesinde değerlendirmesine tabidir.</li>
+    <li><strong>Yetkili Kullanıcı:</strong> Genomer tarafından eğitim verilmiş ve Cihazı kullanmaya yetkilendirilmiş Ahenk laboratuvarı personelini ifade eder.</li>
+</ol>
+
+<h2>3. SÖZLEŞMENİN KONUSU</h2>
+<p>İşbu Sözleşme'nin konusu; Genomer'in mülkiyetinde bulunan Ek-1'de tanımlı Cihaz'ın, herhangi bir bedel alınmaksızın Ahenk laboratuvarına yerleştirilmesi; Ahenk'in bu Cihaz'ı yalnızca Ek-2'de listelenen Genomer kitleri ile kullanmayı ve bu kitleri Genomer'den tedarik etmeyi taahhüt etmesi; Tarafların karşılıklı hak, yükümlülük ve sorumluluklarının düzenlenmesidir.</p>
+
+<h2>4. CİHAZ — MÜLKİYET, KURULUM VE KULLANIM</h2>
+<ol class="clauses">
+    <li>Cihaz'ın mülkiyeti, işbu Sözleşme'nin süresi ve uzatmaları dahil olmak üzere her halükarda Genomer'e aittir. Ahenk; Cihaz üzerinde Genomer'in yazılı onayı olmaksızın hiçbir tasarrufta bulunamaz, üçüncü kişilere devredemez, kiralayamaz, rehnedemez, haciz veya tedbir konusu olmasına olanak sağlayamaz.</li>
+    <li>Cihaz, Genomer'in yetkili teknik personeli tarafından Ahenk'in laboratuvarında kurulacak, temel performans doğrulaması ve kalibrasyon kontrolleri yapılacak; kurulum sonrası iki nüsha "<em>Cihaz Teslim Tutanağı</em>" düzenlenerek imza altına alınacaktır.</li>
+    <li>Ahenk; Cihaz'ı yalnızca Yetkili Kullanıcılar aracılığıyla, üretici talimatları ve kullanım kılavuzu doğrultusunda işletmekle yükümlüdür. Cihaz, üzerinde Genomer kitleri haricinde herhangi bir reaktif/kit ile çalıştırılamaz.</li>
+    <li>Cihaz'ın yerleşim noktasının değiştirilmesi, başka bir laboratuvara veya kuruma taşınması Genomer'in yazılı onayına tabidir.</li>
+    <li>Cihaz üzerinde herhangi bir donanım veya yazılım modifikasyonu, açma-müdahale veya orijinal mührün bozulması yapılamaz; aksi halde garanti ve sorumluluk hükümleri ortadan kalkar.</li>
+</ol>
+
+<h2>5. CİHAZIN GERİ ALINMASI</h2>
+<ol class="clauses">
+    <li>Genomer; Ahenk'in Cihaz üzerinde <strong>Aktif Kullanım</strong> sağlamadığını tespit etmesi halinde, 30 (otuz) gün önceden yazılı bildirimde bulunmak suretiyle Cihaz'ı geri alma hakkına sahiptir. Aktif Kullanım'ın yeterliliği, Genomer'in iyi niyet çerçevesinde gerçekleştireceği değerlendirmeye tabidir.</li>
+    <li>Bu hak; herhangi bir tazminat, cezai şart veya bedel doğurmaksızın Genomer'e ait olup, Ahenk'in bu hakka itiraz hakkı bulunmamaktadır.</li>
+    <li>Geri alma işlemi, Tarafların önceden mutabık kalacağı tarihte Genomer'in teknik personeli tarafından gerçekleştirilir; Cihaz, kurulum sırasındaki bileşenleri ile birlikte tutanak karşılığında iade edilir.</li>
+</ol>
+
+<h2>6. KİT TEDARİĞİ VE MÜNHASIRLIK</h2>
+<ol class="clauses">
+    <li>Ahenk; Cihaz üzerinde yalnızca Genomer kitlerini kullanmayı, üçüncü taraf reaktif veya kit kullanmamayı taahhüt eder.</li>
+    <li>Kit siparişleri, Ahenk tarafından yazılı (e-posta veya resmi sipariş formu) olarak Genomer'e iletilir; Genomer, sipariş onayını ve proforma faturayı 3 (üç) iş günü içinde Ahenk'e bildirir.</li>
+    <li>Kit teslimatları, ürünlerin gerektirdiği <strong>soğuk zincir koşulları</strong> (genel olarak −20 °C ila +2/+8 °C) korunarak yapılır. Teslim alındığında "<em>Kit Teslim Tutanağı</em>" iki nüsha olarak düzenlenir.</li>
+    <li>Ahenk; ambalaj, etiket, lot numarası ve son kullanma tarihi bilgilerini teslim anında kontrol etmekle, kabul edilmeyen veya soğuk zinciri bozulmuş ürünleri 24 saat içinde Genomer'e yazılı bildirmekle yükümlüdür.</li>
+</ol>
+
+<h2>7. FİYAT, ÖDEME VE FATURALAMA</h2>
+<ol class="clauses">
+    <li>Kit birim fiyatları Ek-2'de yer alan fiyat listesinde belirtilmiş olup; söz konusu liste, Sözleşme'nin ayrılmaz parçasıdır.</li>
+    <li>Fiyatlar ABD Doları (USD) cinsinden ve KDV hariç olarak listelenmiştir. Faturalama, faturanın düzenlendiği tarihteki Türkiye Cumhuriyet Merkez Bankası (TCMB) döviz satış kuru üzerinden Türk Lirası (TL) olarak yapılır ve 3065 sayılı KDV Kanunu hükümlerine göre KDV tahakkuk ettirilir.</li>
+    <li>Ödeme şartları: Genomer'in proforma faturası tarihinden itibaren <strong>60 (altmış) gün vade</strong>.</li>
+    <li>Genomer; piyasa koşulları, hammadde maliyetleri, döviz kuru değişimleri ve sair ticari gerekçelere bağlı olarak fiyat listesini güncelleme hakkını saklı tutar. Güncellenmiş fiyat listesi, yürürlük tarihinden en az 30 gün önce Ahenk'e yazılı olarak bildirilir; bildirim tarihinden önce verilmiş ve onaylanmış siparişler için eski fiyatlar geçerliliğini korur.</li>
+    <li>Gecikmiş ödemelerde, TCMB tarafından ilan edilen yıllık avans faiz oranı üzerinden gecikme faizi tahakkuk ettirilir.</li>
+</ol>
+
+<h2>8. EĞİTİM VE TEKNİK DESTEK</h2>
+<ol class="clauses">
+    <li>Genomer; kurulum sonrasında Ahenk personeline Cihaz kullanımı, kit protokolleri ve sonuç yorumlanmasına ilişkin eğitimi ücretsiz olarak verir; eğitim sonunda "<em>Kullanıcı Eğitim Tutanağı</em>" düzenlenir.</li>
+    <li>Teknik destek; mesai saatleri içinde telefon ve e-posta yoluyla, gerektiğinde uzaktan bağlantı ile sağlanır. Yerinde destek talepleri 3 iş günü içinde değerlendirilir.</li>
+    <li>Ahenk; Cihaz veya kitlere ilişkin tüm teknik soru, şikayet ve geri bildirimlerini support@genomer.com.tr adresine yazılı olarak iletmekle yükümlüdür.</li>
+</ol>
+
+<h2>9. BAKIM, KALİBRASYON VE ARIZA</h2>
+<ol class="clauses">
+    <li>Cihazın periyodik bakımı ve kalibrasyonu Genomer'in sorumluluğundadır ve yıllık olarak Genomer veya yetkili servis tarafından ücretsiz gerçekleştirilir.</li>
+    <li>Arıza halinde Ahenk, Cihaz'ı kullanmayı derhal durdurarak Genomer'e yazılı bildirimde bulunur; Genomer, bildirimi takiben 2 iş günü içinde ön değerlendirme, gerekli görüldüğünde 5 iş günü içinde yerinde müdahale sağlar.</li>
+    <li>Yetkisiz müdahale, kullanım hatası, elektrik dalgalanması, sıvı dökülmesi veya laboratuvar koşullarına aykırı kullanım kaynaklı arızalar bu kapsam dışındadır; bu hallerde onarım maliyetleri Ahenk'e aittir.</li>
+</ol>
+
+<h2>10. HASAR, KAYIP VE SİGORTA</h2>
+<ol class="clauses">
+    <li>Ahenk; Cihaz'ı, kendi malıymış gibi gerekli özeni göstererek korumakla, kayıp, çalınma, yangın, su baskını ve benzeri risklere karşı önlem almakla yükümlüdür.</li>
+    <li>Ahenk'in kusur, ihmal veya kötü kullanımından kaynaklanan hasarlardan Ahenk doğrudan sorumludur; Cihaz'ın onarımı mümkün değilse Cihaz'ın güncel piyasa değeri Genomer'e tazmin edilir.</li>
+    <li>Ahenk; Genomer'in yazılı talebi halinde Cihaz'ı, Genomer lehine düzenlenmiş bir tüm risk sigortası kapsamına almayı kabul eder.</li>
+</ol>
+
+<h2>11. GARANTİ VE SORUMLULUK SINIRI</h2>
+<ol class="clauses">
+    <li>Genomer; Cihaz'ın üretici garantisi kapsamında işlev göreceğini ve kitlerin geçerli IVDR / TİTCK düzenlemelerine uygun olarak üretildiğini taahhüt eder.</li>
+    <li>Kitlerin kullanım amacı dışındaki uygulamalarından, hatalı örnek alımı, taşıma veya saklama koşullarına uyulmamasından kaynaklanan sonuçlardan Genomer sorumlu tutulamaz.</li>
+    <li>Tarafların doğrudan zararlar dışındaki dolaylı, sonuçsal veya kâr kaybı niteliğindeki taleplerden sorumluluğu bulunmamaktadır; her halükarda Genomer'in toplam sorumluluğu, son 12 ayda Ahenk tarafından ödenen kit bedelinin toplamı ile sınırlıdır.</li>
+</ol>
+
+<h2>12. GİZLİLİK VE KİŞİSEL VERİLER</h2>
+<ol class="clauses">
+    <li>Taraflar; Sözleşme süresince edindikleri ticari, teknik, finansal ve kişisel verileri gizli tutmakla, üçüncü kişilere ifşa etmemekle yükümlüdür. Bu yükümlülük Sözleşme'nin sona ermesinden sonra 5 (beş) yıl süreyle devam eder.</li>
+    <li>Taraflar, 6698 sayılı KVKK ve ilgili mevzuat kapsamında, kendi sorumlulukları dahilindeki kişisel verilerin işlenmesi, saklanması ve aktarılması konusunda yasal yükümlülüklere uymayı kabul eder.</li>
+</ol>
+
+<h2>13. SÜRE, UZAMA VE FESİH</h2>
+<ol class="clauses">
+    <li>İşbu Sözleşme, yürürlük tarihinden itibaren <strong>1 (bir) yıl</strong> süreyle geçerlidir.</li>
+    <li>Sözleşme; Taraflardan herhangi birinin bitiş tarihinden en az 60 (altmış) gün önce yazılı fesih bildiriminde bulunmaması halinde, aynı şartlarla birer yıllık dönemler halinde otomatik olarak uzar.</li>
+    <li>Taraflardan biri; karşı tarafın esaslı bir yükümlülüğünü ihlal etmesi ve 30 günlük makul süreye rağmen ihlali gidermemesi halinde, Sözleşme'yi yazılı bildirim ile derhal feshetme hakkına sahiptir.</li>
+    <li>Genomer'in 5. madde kapsamındaki Cihaz geri alma hakkı, Sözleşme'nin fesih sebebi olarak da kullanılabilir.</li>
+    <li>Sözleşme'nin herhangi bir sebeple sona ermesi halinde Ahenk, Cihaz'ı en geç 15 iş günü içinde Genomer'e teslim etmek; varsa açık siparişler için doğmuş bedelleri ödemekle yükümlüdür.</li>
+</ol>
+
+<h2>14. MÜCBİR SEBEP</h2>
+<p>Tarafların kontrolü dışındaki doğal afet, salgın, savaş, ayaklanma, resmi makam kararları, lojistik kesintileri ve benzeri olaylar mücbir sebep sayılır. Mücbir sebep nedeniyle yükümlülüklerini yerine getiremeyen Taraf, durumu 7 gün içinde diğer Tarafa yazılı olarak bildirir; mücbir sebebin 60 günden uzun sürmesi halinde her iki Taraf da Sözleşme'yi feshetme hakkına sahiptir.</p>
+
+<h2>15. TEBLİGAT</h2>
+<p>Tarafların işbu Sözleşme'de belirtilen adres ve e-posta bilgileri yasal tebligat adresleri olarak kabul edilir. Adres veya iletişim bilgisi değişiklikleri 7 gün içinde yazılı olarak bildirilmediği takdirde, mevcut adrese yapılan tebligatlar geçerli sayılır.</p>
+
+<h2>16. UYUŞMAZLIKLARIN ÇÖZÜMÜ VE YETKİLİ MAHKEME</h2>
+<p>İşbu Sözleşme'nin yorumu, uygulanması ve ifasından doğacak uyuşmazlıklarda Türk Hukuku uygulanır. Tarafların uzlaşı yoluyla çözüm sağlayamadığı uyuşmazlıklarda <strong>İstanbul (Anadolu) Mahkemeleri ve İcra Daireleri</strong> yetkili olacaktır.</p>
+
+<h2>17. ÇEŞİTLİ HÜKÜMLER</h2>
+<ol class="clauses">
+    <li><strong>Devir:</strong> Hiçbir Taraf, diğer Tarafın yazılı onayı olmaksızın işbu Sözleşme'den doğan hak ve yükümlülüklerini üçüncü kişilere devredemez.</li>
+    <li><strong>Bütünlük:</strong> Ekler dahil işbu Sözleşme, Taraflar arasındaki tüm anlaşmayı yansıtır; sözleşme öncesi yazılı veya sözlü tüm beyan ve mutabakatların yerine geçer.</li>
+    <li><strong>Bölünebilirlik:</strong> Sözleşme'nin herhangi bir hükmünün geçersiz veya uygulanamaz hale gelmesi, diğer hükümlerin geçerliliğini etkilemez.</li>
+    <li><strong>Tadiller:</strong> Sözleşme'nin değiştirilmesi yalnızca Tarafların yetkili temsilcilerince imzalanacak yazılı zeyilname ile mümkündür.</li>
+    <li><strong>Ekler:</strong> Aşağıdaki ekler Sözleşme'nin ayrılmaz parçasıdır:
+        <ol class="sub">
+            <li>Ek-1: Cihaz Tanımı ve Aksesuar Listesi</li>
+            <li>Ek-2: Kit Listesi ve Fiyat Tarifesi</li>
+        </ol>
+    </li>
+</ol>
+
+<div class="closing-page">
+    <div class="letterhead">
+        <div class="logo"><img src="genomerlogo.png" alt="Genomer Biyoteknoloji"></div>
+        <div class="company">
+            <div class="name">GENOMER BİYOTEKNOLOJİ ARGE SAN. VE TİC. LTD. ŞTİ.</div>
+            Dumlupınar Mah. Nur Cad. No: 7/3, Kartepe / Kocaeli / Türkiye<br>
+            Tel: 0262 373 70 05 &nbsp;•&nbsp; www.genomer.com.tr &nbsp;•&nbsp; support@genomer.com.tr
+        </div>
+    </div>
+
+    <h2>18. YÜRÜRLÜK VE İMZA</h2>
+    <p>İşbu Sözleşme, 18 (on sekiz) ana madde ve 2 (iki) ek'ten oluşmakta olup, Tarafların yetkili temsilcilerince <strong>14.05.2026</strong> tarihinde iki nüsha olarak imzalanmış ve imza tarihinde yürürlüğe girmiştir. Ekler, işbu Sözleşme'nin ayrılmaz parçası olup taraflarca bu sayfadaki imza ile birlikte kabul edilmiştir.</p>
+
+    <div class="signature-block" style="margin-top: 40px;">
+        <div class="sig-col">
+            <div class="role">Tedarikçi / Supplier</div>
+            <div class="org">Genomer Biyoteknoloji Arge San. ve Tic. Ltd. Şti.</div>
+            <div class="field"><span class="field-label">Yetkili Ad - Soyad:</span><div class="line"></div></div>
+            <div class="field"><span class="field-label">Görev / Unvan:</span><div class="line"></div></div>
+            <div class="field"><span class="field-label">İmza:</span><div class="line"></div></div>
+            <div class="stamp-area" style="height: 75px; padding-top: 32px;">Kaşe</div>
+        </div>
+        <div class="sig-col">
+            <div class="role">Kurum / Institution</div>
+            <div class="org">Ahenk Sağlık Eğt. Dan. Hizm. A.Ş.</div>
+            <div class="field"><span class="field-label">Yetkili Ad - Soyad:</span><div class="line"></div></div>
+            <div class="field"><span class="field-label">Görev / Unvan:</span><div class="line"></div></div>
+            <div class="field"><span class="field-label">İmza:</span><div class="line"></div></div>
+            <div class="stamp-area" style="height: 75px; padding-top: 32px;">Kaşe</div>
+        </div>
+    </div>
+</div>
+
+<!-- ============== EK-1 ============== -->
+<div class="annex-page">
+    <div class="letterhead">
+        <div class="logo"><img src="genomerlogo.png" alt="Genomer Biyoteknoloji"></div>
+        <div class="company">
+            <div class="name">GENOMER BİYOTEKNOLOJİ ARGE SAN. VE TİC. LTD. ŞTİ.</div>
+            Dumlupınar Mah. Nur Cad. No: 7/3, Kartepe / Kocaeli / Türkiye<br>
+            Tel: 0262 373 70 05 &nbsp;•&nbsp; www.genomer.com.tr &nbsp;•&nbsp; support@genomer.com.tr
+        </div>
+    </div>
+
+    <div class="annex-title">EK-1: CİHAZ TANIMI VE AKSESUAR LİSTESİ</div>
+    <div class="annex-subtitle">Annex 1 — Device Specification &amp; Accessory List</div>
+
+    <table class="annex">
+        <tr>
+            <td class="label">Cihaz Adı</td>
+            <td>Genomer G-Quant 96 Real-Time PCR System</td>
+        </tr>
+        <tr>
+            <td class="label">Marka</td>
+            <td>Genomer Biyoteknoloji Arge San. ve Tic. Ltd. Şti.</td>
+        </tr>
+        <tr>
+            <td class="label">Model</td>
+            <td>G-Quant 96</td>
+        </tr>
+        <tr>
+            <td class="label">Seri Numarası</td>
+            <td><strong>R5N702</strong></td>
+        </tr>
+        <tr>
+            <td class="label">Kullanım Amacı</td>
+            <td>96 kuyucuklu, gerçek zamanlı kantitatif PCR (qPCR) ölçümleri</td>
+        </tr>
+        <tr>
+            <td class="label">Yerleşim Lokasyonu</td>
+            <td>Ahenk Sağlık Eğt. Dan. Hizm. A.Ş. Laboratuvarı — Darülaceze Cad. Merkez Mah. No: 20, Şişli / İstanbul</td>
+        </tr>
+        <tr>
+            <td class="label">Kurulum Tarihi</td>
+            <td>04.05.2026</td>
+        </tr>
+        <tr>
+            <td class="label">Garanti Süresi</td>
+            <td>Sözleşme süresince üretici garantisi kapsamındadır</td>
+        </tr>
+        <tr>
+            <td class="label">Kalibrasyon Notu</td>
+            <td>Cihaz kurulumda kalibre edilmiştir; yıllık periyodik kalibrasyon Genomer tarafından sağlanır.</td>
+        </tr>
+    </table>
+
+    <h3>Aksesuar / Ek Parça Listesi</h3>
+    <table class="price">
+        <thead>
+            <tr>
+                <th style="width:8mm;">No</th>
+                <th>Aksesuar / Bileşen</th>
+                <th style="width:25mm;">Adet</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td class="center">1</td><td>NM110 Vortex (Nüve)</td><td class="center">1</td></tr>
+            <tr><td class="center">2</td><td>DT Therm 48</td><td class="center">1</td></tr>
+            <tr><td class="center">3</td><td>Biosan Combi-Spin FLV-2400N</td><td class="center">1</td></tr>
+            <tr><td class="center">4</td><td>HP Desktop Bilgisayar</td><td class="center">1</td></tr>
+        </tbody>
+    </table>
+
+    <div class="note-box">
+        Kurulum tamamlandığında, Genomer tarafından düzenlenen <em>Cihaz Teslim Tutanağı</em> bu Ek'in tamamlayıcısı olarak Sözleşme dosyasına eklenir.
+    </div>
+</div>
+
+<!-- ============== EK-2 ============== -->
+<div class="annex-page">
+    <div class="letterhead">
+        <div class="logo"><img src="genomerlogo.png" alt="Genomer Biyoteknoloji"></div>
+        <div class="company">
+            <div class="name">GENOMER BİYOTEKNOLOJİ ARGE SAN. VE TİC. LTD. ŞTİ.</div>
+            Dumlupınar Mah. Nur Cad. No: 7/3, Kartepe / Kocaeli / Türkiye<br>
+            Tel: 0262 373 70 05 &nbsp;•&nbsp; www.genomer.com.tr &nbsp;•&nbsp; support@genomer.com.tr
+        </div>
+    </div>
+
+    <div class="annex-title">EK-2: KİT LİSTESİ VE FİYAT TARİFESİ</div>
+    <div class="annex-subtitle">Annex 2 — Kit Portfolio &amp; Price Schedule</div>
+
+    <p style="font-size:9.5pt;">Fiyatlar ABD Doları (USD) cinsinden ve KDV hariç olarak belirtilmiştir. Genomer; Madde 7 hükümleri uyarınca fiyat listesini güncelleme hakkını saklı tutar.</p>
+
+    <h3>Mikrobiyom Tanı Kitleri</h3>
+    <table class="price">
+        <thead>
+            <tr>
+                <th style="width:8mm;">No</th>
+                <th>Ürün Adı</th>
+                <th style="width:38mm;">Katalog No</th>
+                <th style="width:22mm;">Test /<br>Paket</th>
+                <th style="width:32mm;">Birim Fiyat<br>(USD)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="center">1</td>
+                <td>Femobiome II Multipleks qPCR Kiti</td>
+                <td class="center">M-FBII-0701v01-12</td>
+                <td class="center">12</td>
+                <td class="num">288,00</td>
+            </tr>
+            <tr>
+                <td class="center">2</td>
+                <td>Androbiome Multipleks qPCR Kiti</td>
+                <td class="center">M-AB-0701v01-12</td>
+                <td class="center">12</td>
+                <td class="num">288,00</td>
+            </tr>
+            <tr>
+                <td class="center">3</td>
+                <td>Enterobiome Kids Multipleks qPCR Kiti</td>
+                <td class="center">M-EBK-0701v01-12</td>
+                <td class="center">12</td>
+                <td class="num">360,00</td>
+            </tr>
+            <tr>
+                <td class="center">4</td>
+                <td>Genomer HPV Screening qPCR Kit</td>
+                <td class="center">&nbsp;</td>
+                <td class="center">&nbsp;</td>
+                <td class="num"><em style="color:#888;">Henüz belirlenmedi</em></td>
+            </tr>
+            <tr>
+                <td class="center">5</td>
+                <td>Genomer HPV 21 Genotyping qPCR Kit</td>
+                <td class="center">&nbsp;</td>
+                <td class="center">&nbsp;</td>
+                <td class="num"><em style="color:#888;">Henüz belirlenmedi</em></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Manuel Ekstraksiyon Kitleri</h3>
+    <table class="price">
+        <thead>
+            <tr>
+                <th style="width:8mm;">No</th>
+                <th>Ürün Adı</th>
+                <th style="width:38mm;">Katalog No</th>
+                <th style="width:22mm;">Test /<br>Paket</th>
+                <th style="width:32mm;">Birim Fiyat<br>(USD)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="center">6</td>
+                <td>PREP-NA PLUS DNA/RNA Ekstraksiyon Kiti<br><span style="font-size:8.5pt;color:#666;">Semen hariç tüm numune tipleri için</span></td>
+                <td class="center">I-NAP-v01-50</td>
+                <td class="center">50</td>
+                <td class="num">75,00</td>
+            </tr>
+            <tr>
+                <td class="center">7</td>
+                <td>PREP-MB MAX DNA Ekstraksiyon Kiti<br><span style="font-size:8.5pt;color:#666;">Semen numuneleri için optimize edilmiştir</span></td>
+                <td class="center">I-MBM-v01-48</td>
+                <td class="center">48</td>
+                <td class="num">134,40</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Transport Medium</h3>
+    <table class="price">
+        <thead>
+            <tr>
+                <th style="width:8mm;">No</th>
+                <th>Ürün Adı</th>
+                <th style="width:38mm;">Katalog No</th>
+                <th style="width:22mm;">Test /<br>Paket</th>
+                <th style="width:32mm;">Birim Fiyat<br>(USD)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="center">8</td>
+                <td>STOR F Transport Medium</td>
+                <td class="center">S-STRF-v01-100</td>
+                <td class="center">100</td>
+                <td class="num">60,00</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="note-box">
+        <strong>Not:</strong> Fiyatlar Madde 7 hükümleri uyarınca güncellenebilir. Faturalama, faturanın düzenlendiği tarihteki TCMB döviz satış kuru üzerinden TL olarak yapılır ve KDV ayrıca tahakkuk ettirilir. HPV Screening ve HPV 21 Genotyping kitlerine ilişkin fiyatlar henüz belirlenmemiş olup, fiyat belirlendiğinde Taraflarca yazılı zeyilname ile bu Ek'e işlenecektir.
+    </div>
+
+    <h3>Sipariş ve Teslim Süreci</h3>
+    <ol class="clauses" style="margin-top:6px;">
+        <li>Ahenk siparişlerini yazılı olarak (e-posta veya sipariş formu) support@genomer.com.tr adresine iletir.</li>
+        <li>Genomer 3 iş günü içinde proforma fatura düzenler ve sipariş onayını bildirir.</li>
+        <li>Teslimat, soğuk zincir koşulları korunarak Ahenk laboratuvarına yapılır ve <em>Kit Teslim Tutanağı</em> ile teyit edilir.</li>
+    </ol>
+
+    <div class="footer-note">
+        İşbu Ek, Sözleşme'nin ayrılmaz parçası olup Tarafların Madde 18 kapsamındaki imzaları ile birlikte hüküm doğurur.
+    </div>
+</div>
+
+</body>
+</html>

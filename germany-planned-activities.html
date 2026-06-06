@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Description of Planned Activities in Germany - Genomer Biotechnology</title>
+<style>
+    @page {
+        size: A4;
+        margin: 16mm 22mm 16mm 22mm;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+        font-family: "Times New Roman", Times, serif;
+        color: #1a1a1a;
+        background: #fff;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    body { padding: 0; }
+    .page-break { page-break-before: always; }
+    .letterhead {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        border-bottom: 2.5px solid #0a5a8a;
+        padding-bottom: 12px;
+        margin-bottom: 20px;
+    }
+    .letterhead .logo img { height: 68px; width: auto; }
+    .letterhead .company {
+        text-align: right;
+        font-size: 9.5pt;
+        color: #333;
+        line-height: 1.55;
+        max-width: 95mm;
+    }
+    .letterhead .company .name {
+        font-weight: 700;
+        color: #0a5a8a;
+        font-size: 10.5pt;
+        margin-bottom: 3px;
+    }
+    .ref-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 10.5pt;
+        margin-bottom: 14px;
+    }
+    .ref-row .ref strong { display: inline-block; min-width: 80px; }
+    .doc-title {
+        text-align: center;
+        font-size: 14pt;
+        font-weight: 700;
+        color: #0a5a8a;
+        margin: 6px 0 16px;
+        letter-spacing: 0.3px;
+    }
+    .body-text {
+        font-size: 10.5pt;
+        line-height: 1.55;
+        text-align: justify;
+        margin-bottom: 10px;
+    }
+    .body-text p { margin-bottom: 8px; }
+    h2 {
+        font-size: 11.5pt;
+        color: #0a5a8a;
+        margin: 14px 0 8px;
+        font-weight: 700;
+        border-bottom: 1px solid #c8d0d8;
+        padding-bottom: 3px;
+    }
+    h3 {
+        font-size: 10.5pt;
+        color: #1a1a1a;
+        margin: 10px 0 5px;
+        font-weight: 700;
+    }
+    ul.activities {
+        list-style: none;
+        padding: 0;
+        margin: 6px 0 10px;
+    }
+    ul.activities li {
+        font-size: 10.5pt;
+        line-height: 1.5;
+        padding: 5px 0 5px 22px;
+        position: relative;
+        text-align: justify;
+    }
+    ul.activities li::before {
+        content: "";
+        position: absolute;
+        left: 4px;
+        top: 12px;
+        width: 6px;
+        height: 6px;
+        background: #0a5a8a;
+        border-radius: 50%;
+    }
+    .info-box {
+        background: #f5f8fb;
+        border-left: 4px solid #0a5a8a;
+        padding: 10px 14px;
+        font-size: 10pt;
+        line-height: 1.55;
+        margin: 8px 0 12px;
+    }
+    .key-row {
+        display: flex;
+        gap: 12px;
+        margin: 8px 0;
+    }
+    .key-card {
+        flex: 1;
+        border: 1px solid #c8d0d8;
+        border-radius: 4px;
+        padding: 10px 12px;
+        font-size: 10pt;
+        line-height: 1.5;
+    }
+    .key-card .label {
+        color: #0a5a8a;
+        font-weight: 700;
+        font-size: 9pt;
+        letter-spacing: 0.4px;
+        text-transform: uppercase;
+        margin-bottom: 4px;
+    }
+    .scope-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 6px 0 10px;
+        font-size: 9.5pt;
+    }
+    .scope-table th {
+        background: #0a5a8a;
+        color: #fff;
+        padding: 6px 10px;
+        text-align: left;
+    }
+    .scope-table td {
+        padding: 5px 10px;
+        border-bottom: 1px solid #d0d7de;
+    }
+    .scope-table td.col-class {
+        width: 25mm;
+        text-align: center;
+        font-weight: 700;
+    }
+    .scope-table tr:nth-child(even) td { background: #f5f8fb; }
+    .signature-row {
+        margin-top: 22px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 40px;
+    }
+    .signature-row .sig-col {
+        width: 75mm;
+        font-size: 10.5pt;
+        line-height: 1.45;
+    }
+    .signature-row .sig-col .title { font-weight: 700; }
+    .signature-row .sig-col .subtitle { color: #555; font-size: 9.5pt; }
+    .signature-row .stamp-col {
+        width: 70mm;
+        text-align: center;
+        padding-top: 60px;
+        font-size: 10.5pt;
+        font-weight: 700;
+    }
+    .footer {
+        border-top: 1px solid #c8d0d8;
+        padding-top: 7px;
+        margin-top: 24px;
+        font-size: 8.5pt;
+        color: #666;
+        text-align: center;
+        line-height: 1.45;
+    }
+    h2, h3 { page-break-after: avoid; break-after: avoid; }
+    ul.activities, .info-box, .scope-table, .key-row { page-break-inside: avoid; break-inside: avoid; }
+    .signature-row { page-break-inside: avoid; break-inside: avoid; }
+</style>
+</head>
+<body>
+
+    <div class="letterhead">
+        <div class="logo">
+            <img src="genomerlogo.png" alt="Genomer Biotechnology">
+        </div>
+        <div class="company">
+            <div class="name">GENOMER BIOTECHNOLOGY<br>R&amp;D INDUSTRY AND TRADE LTD. CO.</div>
+            Barış SB Mah. 5003 Sk.<br>
+            Kadir Has Building Section A No: 2<br>
+            Internal Door No: Z14<br>
+            Gebze / Kocaeli / Türkiye<br>
+            www.genomer.com.tr &nbsp;|&nbsp; support@genomer.com.tr
+        </div>
+    </div>
+
+    <div class="ref-row">
+        <div class="ref"><strong>Reference No:</strong> GEN-DE-2026/001</div>
+        <div class="ref"><strong>Date:</strong> 22.04.2026</div>
+    </div>
+
+    <div class="doc-title">DESCRIPTION OF PLANNED ACTIVITIES IN GERMANY</div>
+
+    <h2>1. Purpose and Scope</h2>
+    <div class="body-text">
+        <p>
+            Genomer Biotechnology R&amp;D Industry and Trade Ltd. Co. (hereinafter
+            "Genomer") is preparing a structured market entry into the European Union
+            with its proprietary <em>in vitro</em> diagnostic (IVD) qPCR kits. Within
+            this framework, Genomer plans to establish a <strong>liaison office
+            (Verbindungsbüro)</strong> in <strong>Berlin, Germany</strong>. The liaison
+            office will not engage in any commercial or sales activity. Its sole purpose
+            is to carry out promotional, scientific relationship-building, market
+            research and regulatory coordination activities.
+        </p>
+    </div>
+
+    <div class="key-row">
+        <div class="key-card">
+            <div class="label">Status</div>
+            Liaison Office (Verbindungsbüro) — no commercial activity
+        </div>
+        <div class="key-card">
+            <div class="label">Location</div>
+            Berlin, Germany
+        </div>
+        <div class="key-card">
+            <div class="label">Target Opening</div>
+            Within 2026
+        </div>
+    </div>
+
+    <h2>2. Legal Status and Framework</h2>
+    <div class="body-text">
+        <p>
+            The office shall be structured as a <strong>liaison office without independent
+            legal personality</strong> in accordance with the German Commercial Code (HGB)
+            and applicable regulations. It will act solely on behalf of the parent
+            company, Genomer Biotechnology R&amp;D Industry and Trade Ltd. Co., and will
+            limit its activities to representation and preparatory work. The following
+            commercial activities are explicitly excluded from the scope of the office:
+        </p>
+    </div>
+
+    <ul class="activities">
+        <li>No direct product sales, order intake or invoicing will be conducted in Germany or any other EU member state.</li>
+        <li>The office will not place products on the EU market, will not appoint distributors and will not sign direct commercial contracts at the liaison-office level.</li>
+        <li>No commercial transactions giving rise to tax liability will be performed; the office will not generate revenue.</li>
+    </ul>
+
+    <h2>3. Planned Activities</h2>
+    <div class="body-text">
+        <p>
+            During the transition period until the IVDR 2017/746 conformity assessment
+            is completed, the liaison office will carry out the following activities
+            aimed at building credibility and awareness for Genomer's products in the
+            German and broader European markets:
+        </p>
+    </div>
+
+    <h3>3.1 Scientific Relationship Building and KOL Engagement</h3>
+    <ul class="activities">
+        <li>Establishing scientific dialogue with leading German university hospitals and research institutions — including Charité (Berlin), Technische Universität München and Universität Heidelberg — and with Key Opinion Leaders (KOLs) in women's health, urology and gastrointestinal microbiome research.</li>
+        <li>Organising one-to-one scientific meetings and presentations to introduce the scientific rationale, clinical performance and supporting publications of Genomer's product portfolio.</li>
+        <li>Identifying and exploring potential clinical research, validation study and joint-publication opportunities with German academic and clinical partners.</li>
+    </ul>
+
+    <h3>3.2 Promotional and Marketing Activities</h3>
+    <ul class="activities">
+        <li>Representation of the company at relevant congresses, symposia and professional events held in Germany and the wider European area (e.g. DGGG, MEDICA, ECCMID, EAU). Any product- or poster-level presentation will be subject to completion of the IVDR certification beforehand.</li>
+        <li>Preparation and dissemination of scientific promotional materials (brochures, monographs, white papers) in German and English to targeted professional audiences.</li>
+        <li>Communication of the technical and clinical benefits of the product portfolio through the company website, peer-reviewed publications and professional online channels.</li>
+    </ul>
+
+    <h3>3.3 Market Research and Strategic Preparation</h3>
+    <ul class="activities">
+        <li>Mapping the structure of the IVD market, reimbursement mechanisms (e.g. GKV / GOÄ codes) and the laboratory chain landscape in Germany and target EU countries.</li>
+        <li>Pre-screening of potential distributors, clinical laboratory partners and key accounts to support the future Phase 2 commercial structure.</li>
+        <li>Collection of competitive intelligence and pricing benchmarks.</li>
+    </ul>
+
+    <h3>3.4 Regulatory and IVDR Process Coordination</h3>
+    <ul class="activities">
+        <li>On-the-ground coordination of the IVDR 2017/746 certification process with European stakeholders (Notified Body, clinical evaluation experts, regulatory consultants).</li>
+        <li>Monitoring of EUDAMED registration requirements, post-market surveillance obligations and the evolving European regulatory landscape, with regular reporting to headquarters.</li>
+    </ul>
+
+    <h2>4. Product Portfolio Covered by Promotional Activities</h2>
+    <div class="body-text">
+        <p>
+            The Berlin liaison office will conduct scientific promotion exclusively
+            for the following product families, all of which are developed and
+            manufactured by Genomer Biotechnology and currently undergoing IVDR 2017/746
+            certification:
+        </p>
+    </div>
+
+    <table class="scope-table">
+        <thead>
+            <tr>
+                <th>Product Family</th>
+                <th>Application Area</th>
+                <th class="col-class">IVD Class</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Femobiome qPCR Kit Family</td>
+                <td>Female urogenital microbiota assessment</td>
+                <td class="col-class">B / C</td>
+            </tr>
+            <tr>
+                <td>Androbiome qPCR Kit Family</td>
+                <td>Male urogenital microbiota assessment</td>
+                <td class="col-class">C</td>
+            </tr>
+            <tr>
+                <td>Enterobiome Kids qPCR Kit</td>
+                <td>Paediatric intestinal microbiome analysis (children only)</td>
+                <td class="col-class">C</td>
+            </tr>
+            <tr>
+                <td>HPV Screening qPCR Kit</td>
+                <td>High-risk HPV screening</td>
+                <td class="col-class">C</td>
+            </tr>
+            <tr>
+                <td>HPV 21 Genotyping qPCR Kit</td>
+                <td>21-genotype HPV genotyping</td>
+                <td class="col-class">C</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="info-box">
+        All listed products are developed by Genomer Biotechnology and manufactured
+        in its ISO 13485-certified production facility in Türkiye. No product sales
+        will be conducted in Germany until IVDR certification has been completed.
+    </div>
+
+    <h2>5. Operating Model</h2>
+    <div class="body-text">
+        <p>
+            During Phase 1, the liaison office will not employ local personnel.
+            All activities will be carried out directly by the management team and
+            scientific advisors based at Genomer's headquarters in Türkiye. The Berlin
+            office will serve as a registered address and meeting infrastructure;
+            the team will conduct activities through regular visits to Germany,
+            scheduled meetings and digital communication channels. All operating
+            expenses (rent, travel, events, promotion) will be covered by the parent
+            company's budget.
+        </p>
+    </div>
+
+    <h2>6. Phase 2 — Roadmap to GmbH Conversion</h2>
+    <div class="body-text">
+        <p>
+            Following completion of the IVDR 2017/746 Notified Body certification —
+            currently anticipated within approximately <strong>12 months</strong> — the
+            liaison office will be converted into a <strong>GmbH</strong> with its own
+            legal personality, enabling the start of direct commercial activity. The
+            future GmbH is intended to handle product distribution and sales in Germany
+            and other EU member states, manage the distributor network, perform
+            invoicing and, where appropriate, also serve as Genomer's EU Authorised
+            Representative.
+        </p>
+        <p>
+            This roadmap ensures that Genomer's products will be introduced to the EU
+            market only after all regulatory requirements have been fulfilled and within
+            a fully compliant legal framework.
+        </p>
+    </div>
+
+    <h2>7. Declaration</h2>
+    <div class="body-text">
+        <p>
+            Genomer Biotechnology R&amp;D Industry and Trade Ltd. Co. hereby declares
+            that the activities described in this document will be conducted strictly
+            within the scope set out above and in full compliance with German and
+            European Union legislation.
+        </p>
+    </div>
+
+    <div class="signature-row">
+        <div class="sig-col">
+            <div class="title">Genomer Biotechnology</div>
+            <div class="subtitle">R&amp;D Industry and Trade Ltd. Co.</div>
+        </div>
+        <div class="stamp-col">Authorised Signature / Stamp</div>
+    </div>
+
+    <div class="footer">
+        Genomer Biotechnology R&amp;D Industry and Trade Ltd. Co. &nbsp;•&nbsp;
+        Barış SB Mah. 5003 Sk. Kadir Has Building Section A No:2, Gebze / Kocaeli / Türkiye<br>
+        www.genomer.com.tr &nbsp;•&nbsp; support@genomer.com.tr
+    </div>
+
+</body>
+</html>

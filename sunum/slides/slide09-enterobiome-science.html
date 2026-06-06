@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+html { background: #FFFFFF; }
+body {
+  width: 720pt; height: 405pt; margin: 0; padding: 0;
+  font-family: Arial, sans-serif;
+  display: flex; background: #FFFFFF;
+}
+.container { width: 100%; height: 100%; position: relative; }
+.header { position: absolute; top: 0; left: 0; right: 0; height: 48pt; background: #0891B2; }
+.header-text { position: absolute; top: 12pt; left: 40pt; }
+.logo-top { position: absolute; top: 12pt; right: 40pt; }
+.logo-top img { height: 22pt; }
+.content { position: absolute; top: 60pt; left: 30pt; right: 30pt; bottom: 10pt; }
+.section-title { font-size: 10pt; color: #0E7490; font-weight: bold; margin: 0 0 8pt 0; }
+.phases { display: flex; gap: 8pt; margin-bottom: 12pt; }
+.phase-card {
+  flex: 1; border-radius: 4pt; padding: 8pt;
+}
+.phase-card-teal { background: #ECFEFF; border-top: 3pt solid #0891B2; }
+.phase-card-green { background: #D1FAE5; border-top: 3pt solid #059669; }
+.phase-title { font-size: 8pt; color: #0E7490; font-weight: bold; margin: 0 0 4pt 0; }
+.phase-title-green { font-size: 8pt; color: #065F46; font-weight: bold; margin: 0 0 4pt 0; }
+.phase-body { font-size: 7pt; color: #4A4A5A; margin: 0; line-height: 1.4; }
+ul { margin: 0 0 4pt 0; padding-left: 14pt; }
+ul li { font-size: 8pt; color: #4A4A5A; line-height: 1.6; }
+.info-box {
+  background: #F0FDFA; border-left: 3pt solid #0891B2; padding: 8pt;
+  margin-top: 8pt;
+}
+.info-box p { font-size: 8pt; color: #0E7490; font-weight: bold; margin: 0; line-height: 1.4; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header"></div>
+  <div class="header-text">
+    <h2 style="color: #FFFFFF; font-size: 15pt; margin: 0;">ENTEROBIOME KIDS — Microbiome Development</h2>
+  </div>
+  <div class="logo-top"><img src="genomerlogo.png"></div>
+  <div class="content">
+    <p class="section-title">Four Phases of Gut Microbiota Formation in Children</p>
+    <div class="phases">
+      <div class="phase-card phase-card-teal">
+        <p class="phase-title">Phase 1: Birth</p>
+        <p class="phase-body">Streptococcus spp., Enterobacterales</p>
+      </div>
+      <div class="phase-card phase-card-teal">
+        <p class="phase-title">Phase 2: 14 Days</p>
+        <p class="phase-body">Bifidobacterium, Lactobacillaceae, Clostridium, Bacteroidota</p>
+      </div>
+      <div class="phase-card phase-card-teal">
+        <p class="phase-title">Phase 3: Complementary Foods</p>
+        <p class="phase-body">Bacteroidota, Bacillota, Verrucomicrobiota, Actinomycetota</p>
+      </div>
+      <div class="phase-card phase-card-green">
+        <p class="phase-title-green">Phase 4: Weaning</p>
+        <p class="phase-body">Stabilization — adult-like composition</p>
+      </div>
+    </div>
+    <p class="section-title">Factors Affecting Microbiota Formation</p>
+    <ul>
+      <li><b>Type of birth:</b> Natural birth → stable composition; C-section → delayed colonization, more C. difficile, Enterococcus, Klebsiella, Veillonella</li>
+      <li><b>Feeding type:</b> Breastfed → Bifidobacterium dominant (B. breve, B. bifidum, B. longum); Formula-fed → Bacteroides and Clostridium dominant</li>
+      <li><b>Gestational age:</b> Preterm → delayed anaerobic colonization, higher Enterobacteriaceae and opportunistic organisms</li>
+      <li><b>Antibiotic use:</b> Reduces diversity, increases drug-resistant Enterobacteriaceae and Clostridium, decreases Bifidobacteriaceae</li>
+    </ul>
+    <div class="info-box">
+      <p>A species-rich gut ecosystem is more resilient to adverse stresses. Reduced diversity is associated with disease presence.</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>

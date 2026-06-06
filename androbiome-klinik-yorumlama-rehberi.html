@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Androbiome — Rapor Okuma ve Yorumlama Rehberi</title>
+<style>
+    @page { size: A4; margin: 16mm 18mm 14mm 18mm; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+        font-family: "Times New Roman", Times, serif;
+        color: #1a1a1a; background: #fff;
+        -webkit-print-color-adjust: exact; print-color-adjust: exact;
+        font-size: 10.5pt; line-height: 1.5;
+    }
+    .cover {
+        page-break-after: always; text-align: center; padding-top: 24mm;
+        position: relative; min-height: 255mm;
+    }
+    .cover::before {
+        content: ""; position: absolute; top: 0; left: 0; right: 0; height: 8px;
+        background: linear-gradient(90deg, #0a5a8a 0%, #1a7ab0 60%, #0a5a8a 100%);
+    }
+    .cover .eyebrow { font-size: 11pt; letter-spacing: 4px; color: #555; text-transform: uppercase; margin-bottom: 10mm; }
+    .cover .title { font-size: 25pt; font-weight: 700; color: #0a5a8a; letter-spacing: 0.5px; line-height: 1.2; margin-bottom: 6mm; }
+    .cover .subtitle { font-size: 12.5pt; color: #333; font-style: italic; margin-bottom: 14mm; }
+    .cover .audience { font-size: 10.5pt; background: #f5f8fb; border-left: 3px solid #0a5a8a; text-align: left; padding: 10px 14px; margin: 0 22mm 12mm; line-height: 1.55; }
+    .cover .toc-card { margin: 0 22mm; background: #fff; border: 1px solid #c8d0d8; border-radius: 6px; text-align: left; padding: 14px 18px; font-size: 10pt; line-height: 1.5; }
+    .cover .toc-card .toc-head { font-weight: 700; color: #0a5a8a; font-size: 11pt; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 8px; border-bottom: 1px solid #e3e8ee; padding-bottom: 5px; }
+    .cover .toc-card .toc-row { display: flex; gap: 10px; padding: 4px 0; border-bottom: 1px dotted #e3e8ee; }
+    .cover .toc-card .toc-row:last-child { border-bottom: none; }
+    .cover .toc-card .toc-num { flex-shrink: 0; width: 18px; color: #0a5a8a; font-weight: 700; font-family: Georgia, serif; }
+    .cover .toc-card .toc-text { flex: 1; color: #333; }
+    .cover .toc-card .toc-text strong { color: #1a4a6a; }
+    .cover .bottom-band { position: absolute; bottom: 0; left: 0; right: 0; background: #0a5a8a; color: #fff; padding: 10px 14px; font-size: 9.5pt; font-style: italic; letter-spacing: 0.3px; text-align: center; }
+
+    .doc-title-band { background: #0a5a8a; color: #fff; padding: 4px 12px; font-size: 10pt; font-weight: 600; letter-spacing: 0.4px; margin-bottom: 12px; }
+
+    h2 { font-size: 12.5pt; font-weight: 700; color: #0a5a8a; margin: 14px 0 6px; border-bottom: 1px solid #c8d0d8; padding-bottom: 3px; page-break-after: avoid; }
+    h3 { font-size: 11pt; font-weight: 700; color: #1a4a6a; margin: 10px 0 4px; page-break-after: avoid; }
+    h4 { font-size: 10.5pt; font-weight: 700; color: #333; margin: 8px 0 3px; page-break-after: avoid; }
+    p { text-align: justify; margin-bottom: 6px; orphans: 3; widows: 3; }
+    ul, ol { margin-left: 18px; margin-bottom: 6px; }
+    li { margin-bottom: 3px; text-align: justify; }
+
+    .info-box { background: #f5f8fb; border-left: 3px solid #0a5a8a; padding: 8px 12px; margin: 8px 0; font-size: 10pt; line-height: 1.5; page-break-inside: avoid; }
+    .warn-box { background: #fef3c7; border-left: 3px solid #b45309; padding: 8px 12px; margin: 8px 0; font-size: 10pt; line-height: 1.5; page-break-inside: avoid; }
+    .key-box { background: #ecf7f0; border-left: 3px solid #15803d; padding: 8px 12px; margin: 8px 0; font-size: 10pt; line-height: 1.5; page-break-inside: avoid; }
+    .disclaimer-box { background: #fef2f2; border: 1.5px solid #dc2626; border-radius: 4px; padding: 10px 14px; margin: 10px 0; font-size: 10pt; line-height: 1.5; page-break-inside: avoid; }
+
+    table { width: 100%; border-collapse: collapse; margin: 6px 0 10px; font-size: 9.5pt; page-break-inside: avoid; }
+    table th { background: #0a5a8a; color: #fff; padding: 5px 8px; text-align: left; font-weight: 700; font-size: 9pt; }
+    table td { padding: 5px 8px; border: 1px solid #c8d0d8; vertical-align: top; }
+    table tr:nth-child(even) td { background: #f5f8fb; }
+    .light-table th { background: #e7ecf1; color: #1a4a6a; }
+
+    .traffic { display: inline-block; width: 14px; height: 14px; border-radius: 50%; margin-right: 6px; vertical-align: middle; border: 1px solid rgba(0,0,0,0.15); }
+    .traffic.green { background: #22c55e; }
+    .traffic.yellow { background: #f59e0b; }
+    .traffic.red { background: #dc2626; }
+
+    .flow { margin: 8px 0 10px; page-break-inside: avoid; }
+    .flow-step { display: flex; align-items: flex-start; gap: 10px; padding: 6px 0; border-bottom: 1px dotted #d3dbe3; }
+    .flow-step:last-child { border-bottom: none; }
+    .flow-num { flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; background: #0a5a8a; color: #fff; font-weight: 700; font-size: 10pt; display: flex; align-items: center; justify-content: center; font-family: Georgia, serif; }
+    .flow-step .flow-body { flex: 1; }
+    .flow-step .flow-body strong { color: #1a4a6a; }
+
+    .pattern { border: 1px solid #c8d0d8; border-radius: 5px; margin: 9px 0; overflow: hidden; page-break-inside: avoid; }
+    .pattern .pat-head { background: #eef3f7; padding: 5px 12px; font-weight: 700; color: #0a5a8a; font-size: 10.5pt; border-bottom: 1px solid #c8d0d8; display: flex; align-items: center; gap: 8px; }
+    .pattern .pat-head .dot { width: 12px; height: 12px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.15); }
+    .pattern .pat-body { padding: 7px 12px; }
+    .pattern .pat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .pattern .pat-col h4 { margin-top: 2px; color: #0a5a8a; font-size: 9.5pt; text-transform: uppercase; letter-spacing: 0.3px; }
+    .pattern ul { margin-left: 16px; font-size: 9.7pt; }
+    .pattern li { margin-bottom: 2px; }
+
+    .report-mock { border: 1.5px solid #c8d0d8; border-radius: 5px; overflow: hidden; margin: 8px 0; page-break-inside: avoid; }
+    .report-mock .rm-title { background: #0a5a8a; color: #fff; padding: 5px 12px; font-weight: 700; font-size: 10pt; display: flex; justify-content: space-between; align-items: center; }
+    .report-mock .rm-title .rm-tag { font-weight: 600; font-size: 8.5pt; opacity: 0.85; font-style: italic; }
+    .report-mock .rm-title .rm-status { font-size: 9pt; font-weight: 600; }
+    .report-mock table { margin: 0; font-size: 9pt; }
+    .report-mock table th { background: #1a4a6a; font-size: 8.5pt; padding: 3px 6px; }
+    .report-mock table td { padding: 2.5px 6px; border: 1px solid #d8dee4; }
+    .report-mock .grp td { background: #e7ecf1; font-weight: 700; color: #1a4a6a; font-style: italic; }
+    .report-mock .ind { padding-left: 16px; font-style: italic; }
+    .report-mock .neg { color: #999; }
+    .report-mock .hot { color: #c0392b; font-weight: 700; }
+    .report-mock .num-col { text-align: center; width: 18mm; }
+    .report-mock .pct-col { text-align: center; width: 24mm; }
+    .anno { display: inline-block; min-width: 15px; height: 15px; line-height: 15px; text-align: center; border-radius: 50%; background: #d35400; color: #fff; font-size: 8pt; font-weight: 700; font-family: Georgia, serif; padding: 0 3px; vertical-align: middle; margin-left: 4px; }
+    .anno-list { margin: 6px 0 4px; page-break-inside: avoid; }
+    .anno-item { display: flex; align-items: flex-start; gap: 8px; padding: 4px 0; border-bottom: 1px dotted #d3dbe3; font-size: 9.7pt; }
+    .anno-item:last-child { border-bottom: none; }
+    .anno-item .anno-badge { flex-shrink: 0; min-width: 17px; height: 17px; line-height: 17px; text-align: center; border-radius: 50%; background: #d35400; color: #fff; font-size: 8.5pt; font-weight: 700; font-family: Georgia, serif; padding: 0 3px; }
+    .anno-item .anno-text { flex: 1; }
+    .anno-item .anno-text strong { color: #1a4a6a; }
+
+    .ref-list { font-size: 9pt; line-height: 1.45; }
+    .ref-list li { margin-bottom: 5px; }
+    sup.ref { color: #0a5a8a; font-weight: 700; }
+
+    .footer-note { margin-top: 12px; font-size: 8.5pt; color: #777; text-align: center; font-style: italic; border-top: 1px solid #c8d0d8; padding-top: 6px; }
+    .section-break { page-break-before: always; }
+</style>
+</head>
+<body>
+
+<!-- ============== KAPAK ============== -->
+<div class="cover">
+    <div class="eyebrow">Klinisyenler İçin</div>
+    <div class="title">ANDROBIOME<br>Rapor Okuma ve Yorumlama Rehberi</div>
+    <div class="subtitle">Erkek Ürogenital Mikrobiyota Raporunun Adım Adım Değerlendirilmesi</div>
+
+    <div class="audience">
+        <strong>Amaç:</strong> Bu rehber, Androbiome raporunun klinik pratikte değerlendirilmesine yöneliktir. Raporun hangi sırayla incelendiği, kantitatif ve rölatif değerlerin ne ifade ettiği ve sık karşılaşılan rapor görünümlerinin nasıl yorumlandığı, gerçek bir rapor örneği üzerinden ele alınmaktadır.<br>
+        <strong>Hedef Kitle:</strong> Androbiome raporunu değerlendiren üroloji, androloji, dermatovenereoloji, üreme tıbbı ve enfeksiyon hastalıkları uzmanları.
+    </div>
+
+    <div class="toc-card">
+        <div class="toc-head">Bu Rehberde Neler Var?</div>
+        <div class="toc-row"><span class="toc-num">1.</span><span class="toc-text"><strong>Test ve Rapor Kısaca</strong> — ne ölçer, panelde ne var, örnek türleri ve örnek kalitesi</span></div>
+        <div class="toc-row"><span class="toc-num">2.</span><span class="toc-text"><strong>Raporu Adım Adım Okuma</strong> — değerlendirme sırası, kantitatif/rölatif değerler, kontrol parametreleri, işaretler</span></div>
+        <div class="toc-row"><span class="toc-num">3.</span><span class="toc-text"><strong>Rapor Görünümleri ve Yorumları</strong> — normal flora, transit (kontaminasyon), anaerobik disbiyoz, fırsatçı aerob, mikoplazma, CYBE pozitifliği</span></div>
+        <div class="toc-row"><span class="toc-num">4.</span><span class="toc-text"><strong>Örnek Değerlendirme Üzerinden Yorumlama</strong> — anotasyonlu temsili tablo</span></div>
+        <div class="toc-row"><span class="toc-num">5.</span><span class="toc-text"><strong>Özel Durumlar ve Tekrar Test</strong> — düşük yük, kontaminasyon, eşik altı, zamanlama</span></div>
+        <div class="toc-row"><span class="toc-num">6.</span><span class="toc-text"><strong>Sınırlamalar, Klinik Karar Notu ve Seçilmiş Kaynaklar</strong></span></div>
+    </div>
+
+    <div class="bottom-band">Bilgilendirme materyalidir — tedavi önerisi içermez. Klinik karar hekime aittir.</div>
+</div>
+
+<!-- ============== GÖVDE ============== -->
+<div class="doc-title-band">ANDROBIOME — RAPOR OKUMA VE YORUMLAMA REHBERİ</div>
+
+<!-- ===== 1 ===== -->
+<h2>1. Test ve Rapor Kısaca</h2>
+<p><strong>Androbiome</strong>, erkek ürogenital mikrobiyotasını real-time PCR (qPCR) ile değerlendiren çoklu hedefli bir testtir. Tek bir örnekten kommensal (normal) flora, fırsatçı anaerob ve aerob mikroorganizmalar, genital mikoplazmalar, mayalar ve zorunlu patojenler (cinsel yolla bulaşan enfeksiyon etkenleri) eş zamanlı değerlendirilir. Bakteriyel hedefler için sonuç, <strong>kantitatif bir değer (Lg GE/örnek)</strong> ve toplam bakteri kütlesine göre <strong>rölatif bir oran (%)</strong> şeklinde verilir; zorunlu patojenler ise kalitatif olarak (saptandı / saptanmadı) raporlanır.</p>
+
+<div class="warn-box">
+    <strong>Androbiome ile kadın testi (Femobiome) arasındaki üç temel fark, yorumda baştan akılda tutulmalıdır:</strong><br>
+    (1) <em>Lactobacillus</em>, erkekte normal floranın bir parçası değil, bir <strong>transit (geçici) mikroorganizma</strong>dır; saptanması çoğunlukla kadın partner kaynaklı kontaminasyona işaret eder.<br>
+    (2) Erkekte normal flora <strong>kommensaller</strong> (<em>Staphylococcus, Streptococcus, Corynebacterium</em>) ile temsil edilir.<br>
+    (3) Cinsel yolla bulaşan enfeksiyon (CYBE) etkenleri <strong>kalitatif</strong> raporlanır (saptandı / saptanmadı); kantitatif değer verilmez.
+</div>
+
+<h3>1.1 Panelde Ne Var?</h3>
+<table class="light-table">
+    <thead><tr><th style="width:46mm;">Grup</th><th>İçerik (raporda görünen başlıklar)</th></tr></thead>
+    <tbody>
+        <tr><td><strong>Transit mikroorganizmalar</strong></td><td><em>Lactobacillus</em> (erkekte kontaminasyon göstergesi)</td></tr>
+        <tr><td><strong>Kommensaller</strong><br>(normal flora)</td><td><em>Staphylococcus</em> spp., <em>Streptococcus</em> spp., <em>Corynebacterium</em> spp.</td></tr>
+        <tr><td><strong>BV ile ilişkili fırsatçı mikroorganizmalar</strong></td><td><em>Gardnerella vaginalis</em>, <em>Megasphaera/Veillonella/Dialister</em>, <em>Sneathia/Leptotrichia/Fusobacterium</em>, <em>Ureaplasma urealyticum</em>, <em>Ureaplasma parvum</em>, <em>Mycoplasma hominis</em>, Atopobium kümelenmesi</td></tr>
+        <tr><td><strong>Fırsatçı anaeroblar</strong></td><td><em>Bacteroides/Porphyromonas/Prevotella</em>, <em>Anaerococcus</em> spp., <em>Peptostreptococcus/Parvimonas</em>, <em>Eubacterium</em> spp.</td></tr>
+        <tr><td><strong>Fırsatçı aeroblar</strong></td><td><em>Haemophilus</em> spp.; <em>Pseudomonas aeruginosa/Ralstonia/Burkholderia</em>; <em>Enterobacteriaceae/Enterococcus</em></td></tr>
+        <tr><td><strong>Maya benzeri mantarlar</strong></td><td><em>Candida</em> spp.</td></tr>
+        <tr><td><strong>Zorunlu patojenler (CYBE)</strong><br>kalitatif</td><td><em>Chlamydia trachomatis</em>, <em>Neisseria gonorrhoeae</em>, <em>Mycoplasma genitalium</em>, <em>Trichomonas vaginalis</em></td></tr>
+    </tbody>
+</table>
+<p style="font-size:9.5pt;color:#555;">Not: Panelde viral hedef (HSV, CMV, HPV) bulunmaz; bu etkenler ayrı testlerle araştırılır.</p>
+
+<h3>1.2 Örnek Türleri</h3>
+<ul>
+    <li><strong>Penis glansı, foreskin, preputial kese veya üretradan epitel sürüntüsü</strong> — üretrit ve balanopostit gibi alt ürogenital enfeksiyonların değerlendirmesinde</li>
+    <li><strong>Prostat masajı sonrası prostat sıvısı</strong> — prostatit, epididimit, asemptomatik CYBE ve infertilite değerlendirmesinde</li>
+    <li><strong>Prostat masajı sonrası rezidüel idrar</strong> — prostat sıvısına alternatif olarak</li>
+    <li><strong>Ejakulat</strong> — özellikle infertilite ve yardımcı üreme teknikleri öncesi değerlendirmede</li>
+</ul>
+<div class="info-box">
+    <strong>Örnek alma kalitesi sonucu doğrudan belirler.</strong> Örneklemeden önce en az <strong>3 gün cinsel perhiz veya bariyer kontrasepsiyon</strong> önerilir; bu, kadın partner mikrobiyotasının erkek örneğine karışmasını (transit kontaminasyon) azaltır. Örneğin yeterli alınıp alınmadığı raporda İnsan DNA parametresiyle kontrol edilir (bkz. 2.3).<sup class="ref">(Androbiome Ürün Broşürü)</sup>
+</div>
+
+<!-- ===== 2 ===== -->
+<h2>2. Raporu Adım Adım Okuma</h2>
+
+<h3>2.1 Önerilen Değerlendirme Sırası</h3>
+<p>Raporun belirli bir sırayla incelenmesi, yorumda oluşabilecek yanılgıları büyük ölçüde önler. Aşağıdaki sıralama pratik bir yaklaşım sunmaktadır:</p>
+<div class="flow">
+    <div class="flow-step"><div class="flow-num">1</div><div class="flow-body"><strong>Kontrol parametreleri.</strong> İnsan DNA ve Toplam Bakteri Kütlesi (TBM) değerlerinin yeterli olması, örneğin uygun alındığını ve yorumun güvenilir olduğunu gösterir.</div></div>
+    <div class="flow-step"><div class="flow-num">2</div><div class="flow-body"><strong>Transit mikroorganizmalar.</strong> <em>Lactobacillus</em> satırı, örneğin kadın partner mikrobiyotasıyla kontamine olup olmadığını gösterir. Belirgin <em>Lactobacillus</em> varlığında mikrobiyom kompozisyonu güvenilir değerlendirilemez.</div></div>
+    <div class="flow-step"><div class="flow-num">3</div><div class="flow-body"><strong>Kommensaller (normal flora).</strong> <em>Staphylococcus, Streptococcus, Corynebacterium</em> gruplarının korunmuş olması sağlıklı bir erkek ürogenital florasını destekler.</div></div>
+    <div class="flow-step"><div class="flow-num">4</div><div class="flow-body"><strong>Fırsatçı gruplar.</strong> Yükün BV ile ilişkili mikroorganizmalara, fırsatçı anaeroblara ya da aeroblara kayması, disbiyozun yönünü ve klinik tabloyu belirler.</div></div>
+    <div class="flow-step"><div class="flow-num">5</div><div class="flow-body"><strong>Maya ve zorunlu patojenler.</strong> <em>Candida</em> eşik üstünde mi; CYBE etkenleri (<em>Chlamydia, N. gonorrhoeae, M. genitalium, T. vaginalis</em>) "saptandı" mı? Bu hedefler mikrobiyota durumundan bağımsız değerlendirilir.</div></div>
+</div>
+
+<h3>2.2 Sayıları Okuma: Kantitatif (Lg) ve Rölatif (%)</h3>
+<ul>
+    <li><strong>Kantitatif (Lg GE/örnek):</strong> Örnek başına genom eşdeğeri sayısının onluk logaritmasıdır. Örneğin "5,3" değeri yaklaşık 10<sup>5,3</sup> GE'ye karşılık gelir ve mikroorganizmanın mutlak yükünü ifade eder.</li>
+    <li><strong>Rölatif Lg (X/TBM):</strong> İlgili mikroorganizmanın toplam bakteri kütlesine oranıdır; kompozisyonu yansıtır ve raporda yüzde aralığı olarak (örneğin %54-73) verilir.</li>
+</ul>
+<div class="key-box">
+    <strong>Yorumda gözden kaçırılmaması gereken nokta:</strong> Mutlak değer (Lg) tek başına yanıltıcı olabilir. Bir grubun mutlak yükü görece yüksek olsa bile, kompozisyon içindeki ağırlığını rölatif oran belirler. Bu nedenle normal flora ile fırsatçı grupların dengesi değerlendirilirken öncelik rölatif orana verilir.
+</div>
+
+<h3>2.3 Kontrol Parametreleri: İnsan DNA ve TBM</h3>
+<table>
+    <thead><tr><th style="width:48mm;">Parametre</th><th>Nasıl okunur</th></tr></thead>
+    <tbody>
+        <tr><td><strong>İnsan DNA</strong></td><td>Örneğin epitel hücresi içeriğinin ölçüsüdür. Yeterli düzeyde olması örnek alımının uygun olduğunu, dolayısıyla yorumun güvenilir olduğunu gösterir. Düşükse tekrar örnekleme önerilir.</td></tr>
+        <tr><td><strong>Toplam Bakteri Kütlesi (TBM)</strong></td><td>Örnekteki toplam bakteri yükünün ölçüsüdür. Çok düşük olduğunda rölatif hesaplamalar güvenilir olmaz ve kompozisyon yorumu klinik tabloyla birlikte yapılır.</td></tr>
+    </tbody>
+</table>
+
+<h3>2.4 İşaretler</h3>
+<table>
+    <thead><tr><th style="width:38mm;">İşaret</th><th>Anlamı</th></tr></thead>
+    <tbody>
+        <tr><td><strong>saptanmadı</strong></td><td>Hedef saptanmadı (negatif).</td></tr>
+        <tr><td><strong>eşik altı</strong></td><td>Hedef saptandı ancak klinik ilgi eşiğinin altında (eşik altı kolonizasyon).</td></tr>
+        <tr><td><strong>SAPTANDI</strong></td><td>Zorunlu patojen (CYBE) sayfasında: etken kalitatif olarak pozitiftir.</td></tr>
+        <tr><td><strong>"/" ile birleşik</strong></td><td>Birden çok yakın türün birlikte (ayrım yapılmadan) saptanması (örneğin Bacteroides/Porphyromonas/Prevotella).</td></tr>
+    </tbody>
+</table>
+
+<!-- ===== 3 ===== -->
+<h2 class="section-break">3. Rapor Görünümleri ve Yorumları</h2>
+<p>Aşağıdaki tablolarda, sık karşılaşılan rapor görünümleri ve bunların klinik karşılıkları bir arada sunulmaktadır. Tüm bulgular, hastanın klinik tablosu ve öyküsüyle birlikte değerlendirilmelidir.</p>
+
+<div class="pattern">
+    <div class="pat-head"><span class="dot" style="background:#22c55e;"></span>3.1 Normal Erkek Florası</div>
+    <div class="pat-body"><div class="pat-row">
+        <div class="pat-col"><h4>Rapor görünümü</h4><ul>
+            <li><em>Lactobacillus</em> (transit) saptanmadı</li>
+            <li>Kommensaller korunmuş: <em>Staphylococcus, Streptococcus, Corynebacterium</em> gruplarından en az ikisi mevcut</li>
+            <li>Fırsatçı gruplar düşük; <em>Candida</em> eşik altı veya saptanmadı</li>
+            <li>CYBE etkenleri saptanmadı</li>
+        </ul></div>
+        <div class="pat-col"><h4>Yorum</h4><ul>
+            <li>Sağlıklı erkek ürogenital florasıyla uyumlu profil.</li>
+            <li>Kommensallerin baskınlığı, fırsatçı kolonizasyona karşı dengeleyici kabul edilir.</li>
+        </ul></div>
+    </div></div>
+</div>
+
+<div class="pattern">
+    <div class="pat-head"><span class="dot" style="background:#f59e0b;"></span>3.2 Transit (Kontaminasyon) Görünümü</div>
+    <div class="pat-body"><div class="pat-row">
+        <div class="pat-col"><h4>Rapor görünümü</h4><ul>
+            <li><em>Lactobacillus</em> belirgin şekilde saptandı (özellikle rölatif oran yüksekse)</li>
+            <li>Profilde kadın vajinal florasına özgü mikroorganizmalar göze çarpabilir</li>
+        </ul></div>
+        <div class="pat-col"><h4>Yorum</h4><ul>
+            <li>Erkek örneğinde <em>Lactobacillus</em> baskınlığı, kadın partner kaynaklı kontaminasyonu düşündürür.</li>
+            <li>Bu durumda mikrobiyom kompozisyonu güvenilir değerlendirilemez; cinsel perhiz kuralına uyularak tekrar örnekleme uygun olur.</li>
+        </ul></div>
+    </div></div>
+</div>
+
+<div class="pattern">
+    <div class="pat-head"><span class="dot" style="background:#dc2626;"></span>3.3 Anaerobik Disbiyoz Görünümü</div>
+    <div class="pat-body"><div class="pat-row">
+        <div class="pat-col"><h4>Rapor görünümü</h4><ul>
+            <li>Kommensaller azalmış</li>
+            <li>Fırsatçı anaeroblar baskın: <em>Bacteroides/Porphyromonas/Prevotella</em>, <em>Anaerococcus</em>, <em>Peptostreptococcus/Parvimonas</em>, <em>Eubacterium</em></li>
+            <li>BV ile ilişkili mikroorganizmalar artmış olabilir</li>
+        </ul></div>
+        <div class="pat-col"><h4>Yorum</h4><ul>
+            <li>Normal flora ile fırsatçı anaeroblar arasındaki dengenin anaeroblar lehine bozulması; dizüri, akıntı ve kronik prostatit gibi tablolarla ilişkilendirilebilir.</li>
+            <li>Klinik tablo ve diğer bulgularla birlikte değerlendirilir.</li>
+        </ul></div>
+    </div></div>
+</div>
+
+<div class="pattern">
+    <div class="pat-head"><span class="dot" style="background:#f59e0b;"></span>3.4 Fırsatçı Aerob Görünümü</div>
+    <div class="pat-body"><div class="pat-row">
+        <div class="pat-col"><h4>Rapor görünümü</h4><ul>
+            <li>Aerob fırsatçılar artmış: <em>Enterobacteriaceae/Enterococcus</em>, <em>Pseudomonas/Ralstonia/Burkholderia</em> veya <em>Haemophilus</em></li>
+        </ul></div>
+        <div class="pat-col"><h4>Yorum</h4><ul>
+            <li>Aerob fırsatçıların öne çıkması farklı bir disbiyoz yönüne işaret eder; özellikle üriner sistem ilişkisi ve eşlik eden semptomlar dikkate alınır.</li>
+        </ul></div>
+    </div></div>
+</div>
+
+<div class="pattern">
+    <div class="pat-head"><span class="dot" style="background:#f59e0b;"></span>3.5 Mikoplazma Görünümü</div>
+    <div class="pat-body"><div class="pat-row">
+        <div class="pat-col"><h4>Rapor görünümü</h4><ul>
+            <li><em>Ureaplasma urealyticum</em>, <em>Ureaplasma parvum</em> veya <em>Mycoplasma hominis</em> saptandı</li>
+        </ul></div>
+        <div class="pat-col"><h4>Yorum</h4><ul>
+            <li>Bunlar fırsatçı genital mikoplazmalardır; düşük miktarda asemptomatik kolonizasyon görülebilir.</li>
+            <li><strong>Ayrım önemlidir:</strong> fırsatçı mikoplazmalar, zorunlu patojen olan <em>Mycoplasma genitalium</em> ile karıştırılmamalıdır. <em>M. genitalium</em> CYBE sayfasında kalitatif olarak raporlanır.</li>
+        </ul></div>
+    </div></div>
+</div>
+
+<div class="pattern">
+    <div class="pat-head"><span class="dot" style="background:#dc2626;"></span>3.6 CYBE Pozitif Görünümü</div>
+    <div class="pat-body"><div class="pat-row">
+        <div class="pat-col"><h4>Rapor görünümü</h4><ul>
+            <li>CYBE sayfasında <em>Chlamydia trachomatis</em>, <em>Neisseria gonorrhoeae</em>, <em>Mycoplasma genitalium</em> veya <em>Trichomonas vaginalis</em> için "SAPTANDI" (kalitatif)</li>
+        </ul></div>
+        <div class="pat-col"><h4>Yorum</h4><ul>
+            <li>Saptanan etken, mikrobiyota durumundan bağımsız olarak patolojiktir.</li>
+            <li>Tedavi ve partner yönetimi için güncel CDC ve IUSTI kılavuzları esas alınır; <em>M. genitalium</em>'da makrolid direnci özel önem taşır.<sup class="ref">1,2,3</sup></li>
+        </ul></div>
+    </div></div>
+</div>
+
+<!-- ===== 4 ===== -->
+<h2 class="section-break">4. Örnek Değerlendirme Üzerinden Yorumlama</h2>
+<p>Aşağıdaki temsili değerlendirme tablosu, üzerine yerleştirilen numaralı işaretlerle açıklanmaktadır. Tablodaki değerler, gerçek bir rapor verisinden alınmış (kimlik bilgisi içermeyen) örnek bir profildir; her işaret, tablonun altındaki ilgili açıklamaya karşılık gelmektedir. Bu örnek, hem disbiyozun hem de eş zamanlı bir CYBE etkeninin birlikte görüldüğü patolojik bir tabloyu yansıtmaktadır.</p>
+
+<div class="report-mock">
+    <div class="rm-title"><span>Temsili Değerlendirme Tablosu <span class="rm-tag">(örnek)</span></span><span class="rm-status"><span class="traffic red" style="width:11px;height:11px;"></span>ANORMAL <span class="anno">1</span></span></div>
+    <table>
+        <thead><tr><th>Parametre</th><th class="num-col">Lg</th><th class="pct-col">Rölatif (%)</th></tr></thead>
+        <tbody>
+            <tr><td>İnsan DNA <span class="anno">2</span></td><td class="num-col">5,3</td><td class="pct-col">—</td></tr>
+            <tr><td>Toplam Bakteri Kütlesi <span class="anno">2</span></td><td class="num-col">5,3</td><td class="pct-col">—</td></tr>
+            <tr class="grp"><td>Transit — Lactobacillus <span class="anno">3</span></td><td class="neg" colspan="2" style="text-align:left;">saptanmadı</td></tr>
+            <tr class="grp"><td>Kommensaller, toplam <span class="anno">4</span></td><td class="num-col">4,6</td><td class="pct-col">17-23%</td></tr>
+            <tr><td class="ind">Corynebacterium spp.</td><td class="num-col">4,6</td><td class="pct-col">17-23%</td></tr>
+            <tr><td class="ind neg">Staphylococcus / Streptococcus</td><td class="neg" colspan="2" style="text-align:left;">saptanmadı</td></tr>
+            <tr class="grp"><td>Fırsatçı anaeroblar, toplam <span class="anno">5</span></td><td class="num-col hot">5,3</td><td class="pct-col hot">85-100%</td></tr>
+            <tr><td class="ind hot">Bacteroides / Porphyromonas / Prevotella</td><td class="num-col">5,1</td><td class="pct-col">54-73%</td></tr>
+            <tr><td class="ind">Anaerococcus spp.</td><td class="num-col">4,7</td><td class="pct-col">21-29%</td></tr>
+            <tr><td class="ind">Eubacterium spp.</td><td class="num-col">4,5</td><td class="pct-col">13-18%</td></tr>
+            <tr class="grp"><td>Maya — Candida spp. <span class="anno">6</span></td><td colspan="2" style="text-align:left;">eşik altı</td></tr>
+            <tr class="grp"><td>Zorunlu patojenler (CYBE) <span class="anno">7</span></td><td colspan="2" style="text-align:left;"><span class="hot">Chlamydia trachomatis: SAPTANDI</span> · diğerleri: saptanmadı</td></tr>
+        </tbody>
+    </table>
+</div>
+<div class="anno-list">
+    <div class="anno-item"><span class="anno-badge">1</span><span class="anno-text">Genel değerlendirme anormaldir; hem mikroflora dengesi bozulmuş hem de bir CYBE etkeni saptanmıştır.</span></div>
+    <div class="anno-item"><span class="anno-badge">2</span><span class="anno-text">İnsan DNA ve TBM yeterli düzeydedir (her ikisi 5,3 lg); örnek uygun alınmıştır ve yorum güvenilirdir.</span></div>
+    <div class="anno-item"><span class="anno-badge">3</span><span class="anno-text"><strong>Androbiome'a özgü kritik adım:</strong> Transit <em>Lactobacillus</em> saptanmamıştır. Bu, kadın partner kaynaklı kontaminasyon bulunmadığını ve mikrobiyom kompozisyonunun güvenilir biçimde değerlendirilebileceğini gösterir.</span></div>
+    <div class="anno-item"><span class="anno-badge">4</span><span class="anno-text">Normal florayı temsil eden kommensaller azalmıştır; toplam oran yalnızca %17-23'tür ve yalnızca <em>Corynebacterium</em> ile temsil edilmektedir (<em>Staphylococcus</em> ve <em>Streptococcus</em> saptanmamıştır).</span></div>
+    <div class="anno-item"><span class="anno-badge">5</span><span class="anno-text">Fırsatçı anaeroblar kompozisyonun %85-100'üne hâkimdir; özellikle <em>Bacteroides/Porphyromonas/Prevotella</em> grubu %54-73 ile öne çıkmaktadır. Tablo anaerobik disbiyozla uyumludur.</span></div>
+    <div class="anno-item"><span class="anno-badge">6</span><span class="anno-text"><em>Candida</em> eşik altındadır; asemptomatik bir olguda tek başına anlamlı kabul edilmez.</span></div>
+    <div class="anno-item"><span class="anno-badge">7</span><span class="anno-text"><em>Chlamydia trachomatis</em> kalitatif olarak saptanmıştır. Bu bulgu mikrobiyota durumundan bağımsızdır ve güncel kılavuzlara göre tedavi ile partner yönetimini gerektirir.</span></div>
+</div>
+
+<!-- ===== 5 ===== -->
+<h2 class="section-break">5. Özel Durumlar ve Tekrar Test</h2>
+
+<h3>5.1 Sık Karşılaşılan Özel Durumlar</h3>
+<table>
+    <thead><tr><th style="width:52mm;">Durum</th><th>Nasıl yorumlanır</th></tr></thead>
+    <tbody>
+        <tr><td><strong>Belirgin <em>Lactobacillus</em></strong> (transit)</td><td>Kadın partner kaynaklı kontaminasyon olasıdır; mikrobiyom kompozisyonu güvenilir değerlendirilemez. Cinsel perhiz kuralına uyularak tekrar örnekleme önerilir.</td></tr>
+        <tr><td><strong>Düşük TBM</strong>, İnsan DNA yeterli</td><td>Örnek uygundur; tablo gerçek bir düşük bakteri yükünü yansıtır. Rölatif değerlerin güvenilirliği azalacağından yorum klinik tabloyla birlikte yapılır.</td></tr>
+        <tr><td><strong>Yetersiz biyomateryal</strong> (İnsan DNA düşük)</td><td>Örnekleme kalitesi düşüktür ve sonuç güvenilir değildir; tekrar örnekleme önerilir.</td></tr>
+        <tr><td><strong>Eşik altı bildirim</strong></td><td>Hedef saptanmış ancak klinik ilgi eşiğini geçmemiştir. Asemptomatik kolonizasyon söz konusu olabilir; semptomatik olguda diğer bulgularla birlikte değerlendirilir.</td></tr>
+    </tbody>
+</table>
+
+<h3>5.2 Tekrar Test Zamanlaması</h3>
+<table>
+    <thead><tr><th style="width:62mm;">Durum</th><th>Önerilen yaklaşım</th></tr></thead>
+    <tbody>
+        <tr><td>Kontaminasyon (transit <em>Lactobacillus</em>) şüphesi</td><td>3 gün cinsel perhiz sonrası yeni örnekleme</td></tr>
+        <tr><td>Yetersiz biyomateryal</td><td>En kısa sürede, kurallara uygun yeni örnekleme</td></tr>
+        <tr><td>Antibiyotik tedavisi sonrası takip</td><td>Tedavi bitiminden sonra, kılavuz önerilerine göre</td></tr>
+        <tr><td>CYBE tedavisi sonrası test of cure</td><td>İlgili etken için güncel kılavuzların önerdiği sürede</td></tr>
+    </tbody>
+</table>
+<div class="info-box">
+    Örnekleme öncesi antibiyotik kullanımı sonuçları etkileyebilir. Sonuçlar, testin amacı ve hastanın öyküsü göz önünde bulundurularak hekim tarafından değerlendirilir.
+</div>
+
+<!-- ===== 6 ===== -->
+<h2>6. Sınırlamalar, Klinik Karar Notu ve Kaynaklar</h2>
+<ul>
+    <li>Androbiome nükleik asit tabanlı bir testtir; <strong>canlı/ölü ayrımı yapmaz.</strong> Yakın geçmişte tedavi almış hastada artık DNA saptanabilir.</li>
+    <li>Panelde viral hedef bulunmaz; HSV, CMV ve HPV ayrı testlerle araştırılır.</li>
+    <li>Rölatif yorum düşük bakteri yükünde güvenilir değildir (bkz. 5.1).</li>
+    <li>Sonuç, klinik bulgular ve hasta öyküsü olmadan tek başına tedavi kararı dayanağı olamaz.</li>
+</ul>
+
+<div class="disclaimer-box">
+    <strong>KLİNİK KARAR HEKİME AİTTİR.</strong> Bu rehber Androbiome raporunun okunup yorumlanmasına yardımcı olmak amacıyla hazırlanmış bilgilendirme materyalidir; <strong>tedavi önerisi içermez</strong> ve hekimin klinik muhakemesinin yerine geçmez. Tedavi kararları için güncel ulusal/uluslararası kılavuzlara ve hastanın bireysel tablosuna göre karar verilmelidir.
+</div>
+
+<h3>Seçilmiş Kaynaklar</h3>
+<ol class="ref-list">
+    <li><strong>Workowski KA, Bachmann LH, Chan PA, et al.</strong> Sexually Transmitted Infections Treatment Guidelines, 2021. <em>MMWR Recomm Rep</em>. 2021;70(4):1-187. <em>— CDC CYBE tanı ve tedavi kılavuzu.</em></li>
+    <li><strong>Horner P, Blee K, Falk L, et al.</strong> 2016 European (IUSTI) guideline on the management of non-gonococcal urethritis. <em>Int J STD AIDS</em>. 2016;27(11):928-937. <em>— Gonokoksik olmayan üretrit yönetimi.</em></li>
+    <li><strong>BASHH UK National Guideline</strong> for the Management of Infection with <em>Mycoplasma genitalium</em>, 2025. <em>— Güncel M. genitalium yönetimi ve makrolid direnci.</em></li>
+    <li><strong>Altmäe S, Franasiak JM, Mändar R.</strong> The seminal microbiome in health and disease. <em>Nat Rev Urol</em>. 2019;16(12):703-721. <em>— Seminal mikrobiyomun sağlık ve hastalıktaki rolü.</em></li>
+    <li><strong>Androbiome Üretici Ürün Broşürü</strong>, 2026. <em>— Panel, eşik değerleri ve örnek alma yönlendirmeleri için üreticiye ait teknik referans.</em></li>
+</ol>
+
+<div class="footer-note">
+    Bu rehber, Androbiome raporlarının değerlendirilmesinde hekimlere yardımcı bilgilendirme materyali olarak hazırlanmıştır. Tedavi önerisi içermez.
+</div>
+
+</body>
+</html>

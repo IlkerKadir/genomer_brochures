@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slayt 17 – Teknik Özellikler ve Uyumluluk</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 720pt;
+    height: 405pt;
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-direction: column;
+    background: #FFFFFF;
+    overflow: hidden;
+  }
+  .header {
+    width: 100%;
+    height: 48pt;
+    background: #1B262C;
+    display: flex;
+    align-items: center;
+    padding-left: 36pt;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .header h1 {
+    font-size: 14.5pt;
+    font-weight: bold;
+    color: #FFFFFF;
+    letter-spacing: 0.3pt;
+  }
+  .logo-top {
+    position: absolute;
+    top: 12pt;
+    right: 40pt;
+  }
+  .logo-top img {
+    height: 22pt;
+  }
+  .content {
+    flex: 1;
+    padding: 14pt 36pt 10pt 36pt;
+    display: flex;
+    gap: 24pt;
+  }
+  .col {
+    flex: 1;
+  }
+  .col-title {
+    font-size: 10pt;
+    color: #1B262C;
+    font-weight: bold;
+    margin-bottom: 8pt;
+  }
+  .sub-header {
+    font-size: 8.5pt;
+    font-weight: bold;
+    color: #1B262C;
+    margin-top: 8pt;
+    margin-bottom: 4pt;
+  }
+  .col ul {
+    list-style: disc;
+    padding-left: 12pt;
+    margin-bottom: 2pt;
+  }
+  .col ul li {
+    font-size: 8pt;
+    color: #4A4A5A;
+    line-height: 1.7;
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <h1>Teknik Özellikler ve Platform Uyumluluğu</h1>
+    <div class="logo-top"><img src="genomerlogo.png" alt="Genomer Logo"></div>
+  </div>
+
+  <div class="content">
+    <div class="col">
+      <p class="col-title">Ekstraksiyon ve PCR Platformları</p>
+
+      <p class="sub-header">DNA Ekstraksiyonu</p>
+      <ul>
+        <li>Allsheng Auto-Pure 96</li>
+        <li>KingFisher Flex (PREP-MB-RAPID II)</li>
+        <li>PREP-MB MAX (ejakülat için)</li>
+        <li>PREP-NA PLUS, PREP-GS PLUS (alternatifler)</li>
+      </ul>
+
+      <p class="sub-header">PCR Kurulumu</p>
+      <ul>
+        <li>Otomatik 384 kuyucuk formatı</li>
+        <li>Manuel 96 kuyucuk formatı</li>
+        <li>Başlıca real-time PCR cihazları için önceden tanımlanmış şablonlar</li>
+        <li>RealTime_PCR yazılımı ile otomatik sonuç oluşturma</li>
+      </ul>
+    </div>
+
+    <div class="col">
+      <p class="col-title">Saklama ve Lojistik</p>
+
+      <p class="sub-header">Kit Saklama</p>
+      <ul>
+        <li>+2 ile +8°C: S, A, A-TL paketleri</li>
+        <li>-18 ile -22°C: TechnoTaq MAX polimeraz (A paketi)</li>
+        <li>Raf ömrü: tüm kitler için 12 ay</li>
+      </ul>
+
+      <p class="sub-header">Numune Saklama</p>
+      <ul>
+        <li>2-8°C: 24 saate kadar</li>
+        <li>-18 ile -22°C: 1 aya kadar (dondurulmuş)</li>
+        <li>Taşıma besiyeri: STOR-F, STOR-M</li>
+      </ul>
+
+      <p class="sub-header">Uyumlu Sıvı Sitoloji Besiyerleri</p>
+      <ul>
+        <li>PreservCyt (Hologic Inc., ABD)</li>
+        <li>BD SurePath (Becton, Dickinson, ABD)</li>
+        <li>EASYPREP (YD Diagnostics, Güney Kore)</li>
+        <li>CellPrep (CP Biodyne, Güney Kore)</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FEMOBIOME II - Ahenk Laboratuvarı</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&family=Noto+Sans:wght@300;400;500;700&display=block" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #7B4B94;
+            --primary-light: #9B6BB0;
+            --primary-dark: #5C3470;
+            --primary-bg: #F5EBF8;
+            --ahenk-navy: #1B3A6B;
+            --ahenk-light: #7BA3D4;
+            --background: #FFFFFF;
+            --background-alt: #FAFAFA;
+            --text-primary: #1E1E2E;
+            --text-secondary: #4A4A5A;
+            --text-muted: #6B7280;
+            --border: #E5E7EB;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --font-heading: 'Figtree', sans-serif;
+            --font-body: 'Noto Sans', sans-serif;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { font-size: 10pt; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        body { font-family: var(--font-body); color: var(--text-primary); line-height: 1.6; background: var(--background); }
+        @page { size: 210mm 297mm; margin: 0; }
+        .page {
+            width: 210mm; height: 297mm; max-height: 297mm;
+            padding: 45px 50px; background: var(--background);
+            page-break-after: always; page-break-inside: avoid;
+            position: relative; overflow: hidden; box-sizing: border-box;
+        }
+        .page:last-child { page-break-after: auto; }
+        @media print { html, body { width: 210mm; height: 297mm; } .page { width: 210mm; height: 297mm; margin: 0; padding: 45px 50px; page-break-after: always; overflow: hidden; } }
+        h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: 600; line-height: 1.3; color: var(--primary); }
+        h2 { font-size: 1.6rem; margin-bottom: 1.2rem; }
+        h3 { font-size: 1.15rem; margin-bottom: 0.8rem; }
+        p { margin-bottom: 0.8rem; color: var(--text-secondary); }
+
+        /* Cover */
+        .cover-page {
+            background: linear-gradient(135deg, #E8EFF8 0%, #FFFFFF 50%, #E8EFF8 100%);
+            display: flex; flex-direction: column; padding: 0;
+        }
+        .cover-header {
+            padding: 35px 50px; display: flex; justify-content: space-between; align-items: center;
+        }
+        .cover-header img { height: 50px; width: auto; }
+        .cover-content {
+            flex: 1; display: flex; flex-direction: column; justify-content: center;
+            align-items: center; text-align: center; padding: 0 50px;
+        }
+        .cover-visual {
+            width: 240px; height: 240px;
+            background: linear-gradient(135deg, #3A6BA5 0%, #1B3A6B 100%);
+            border-radius: 50%; margin-bottom: 40px;
+            display: flex; align-items: center; justify-content: center;
+            position: relative;
+        }
+        .cover-visual svg { width: 120px; height: 120px; max-width: 120px; max-height: 120px; fill: white; }
+        .cover-title { font-size: 3rem; color: #1B3A6B; margin-bottom: 15px; letter-spacing: -0.5px; font-family: var(--font-heading); font-weight: 700; }
+        .cover-title sup { font-size: 1rem; vertical-align: super; }
+        .cover-tagline { font-size: 1.15rem; color: var(--text-secondary); max-width: 420px; margin-top: 10px; line-height: 1.5; }
+        .cover-footer {
+            background: #1B3A6B; color: white; padding: 40px 50px; margin-top: auto;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .cover-footer-text h2 { color: white; font-size: 1.15rem; margin-bottom: 4px; }
+        .cover-footer-text p { color: rgba(255,255,255,0.85); margin: 0; font-size: 0.9rem; }
+        .cover-footer img { height: 45px; filter: brightness(0) invert(1); }
+
+        /* Page header */
+        .page-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding-bottom: 12px; border-bottom: 2px solid var(--primary); margin-bottom: 18px;
+        }
+        .page-header img { height: 28px; width: auto; }
+        .page-number { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; }
+
+        /* Section headers */
+        .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+        .section-icon {
+            width: 32px; height: 32px; background: var(--primary-bg); border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .section-icon svg { width: 18px; height: 18px; stroke: var(--primary); fill: none; stroke-width: 2; }
+
+        /* Feature list */
+        .feature-list { list-style: none; }
+        .feature-item { display: flex; align-items: flex-start; gap: 12px; padding: 8px 0; }
+        .feature-bullet { width: 7px; height: 7px; background: var(--primary); border-radius: 50%; margin-top: 8px; flex-shrink: 0; }
+        .feature-text { color: var(--text-secondary); line-height: 1.5; font-size: 0.95rem; }
+
+        /* Category label */
+        .category-label { font-size: 0.85rem; font-weight: 600; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; margin-top: 20px; }
+        .category-label:first-of-type { margin-top: 0; }
+
+        /* Analyte panel table */
+        .panel-table { width: 100%; border-collapse: collapse; font-size: 0.72rem; line-height: 1.2; border: 1px solid var(--border); border-radius: 6px; }
+        .panel-table thead { background: var(--primary); color: white; }
+        .panel-table th { padding: 4px 10px; text-align: left; font-weight: 600; font-size: 0.7rem; }
+        .panel-table tbody tr { border-bottom: 1px solid var(--border); }
+        .panel-table tbody tr:nth-child(even) { background: var(--background-alt); }
+        .panel-table td { padding: 2px 10px; color: var(--text-secondary); }
+        .panel-table .category-row { background: var(--primary-bg) !important; }
+        .panel-table .category-row td { font-weight: 600; color: var(--primary-dark); padding: 3px 10px; font-size: 0.7rem; letter-spacing: 0.3px; }
+        .panel-table .indent { padding-left: 22px !important; font-style: italic; color: var(--text-muted); }
+
+        /* Clinical indications */
+        .clinical-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+        .clinical-table thead { background: var(--primary); color: white; }
+        .clinical-table th { padding: 5px 10px; text-align: left; font-weight: 600; }
+        .clinical-table tbody tr { border-bottom: 1px solid var(--border); }
+        .clinical-table .section-row { background: var(--primary-bg); }
+        .clinical-table .section-row td { font-weight: 600; color: var(--primary-dark); padding: 4px 10px; }
+        .clinical-table td { padding: 4px 10px; color: var(--text-secondary); }
+
+        /* Info box */
+        .info-box { background: var(--primary-bg); border-left: 4px solid var(--primary); padding: 10px 14px; border-radius: 0 8px 8px 0; margin: 12px 0; }
+        .info-box p { margin: 0; font-size: 0.8rem; }
+
+        /* Warning box */
+        .warning-box { background: #FEF3C7; border: 1px solid #F59E0B; border-radius: 8px; padding: 15px 18px; margin: 15px 0; }
+        .warning-box h4 { color: #B45309; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; font-size: 0.95rem; }
+        .warning-box p { color: #92400E; margin: 0; font-size: 0.85rem; }
+
+        /* Prep table */
+        .prep-section { margin-top: 10px; }
+        .prep-header { display: flex; background: var(--primary); color: white; border-radius: 8px 8px 0 0; overflow: hidden; }
+        .prep-header-left { flex: 1; padding: 6px 12px; font-weight: 600; font-size: 0.74rem; }
+        .prep-header-right { width: 95px; padding: 6px 8px; font-weight: 600; font-size: 0.68rem; text-align: center; background: var(--primary-dark); line-height: 1.3; }
+        .prep-card { display: flex; align-items: stretch; border: 1px solid var(--border); border-top: none; background: white; }
+        .prep-card:last-child { border-radius: 0 0 8px 8px; }
+        .prep-card-content { flex: 1; padding: 4px 12px; display: flex; align-items: center; gap: 8px; }
+        .prep-card-icon { width: 20px; height: 20px; background: #FEE2E2; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .prep-card-icon svg { width: 10px; height: 10px; stroke: #DC2626; fill: none; stroke-width: 2; }
+        .prep-card-text { color: var(--text-secondary); font-size: 0.75rem; line-height: 1.3; }
+        .prep-card-time { width: 95px; padding: 4px; background: var(--primary-bg); display: flex; align-items: center; justify-content: center; text-align: center; border-left: 2px solid var(--primary-light); }
+        .time-badge { background: var(--primary); color: white; padding: 3px 8px; border-radius: 12px; font-weight: 600; font-size: 0.68rem; white-space: nowrap; }
+        .time-badge-multi { background: transparent; color: var(--primary); padding: 1px 0; font-weight: 600; font-size: 0.64rem; line-height: 1.3; }
+        .prep-group { border: 1px solid var(--border); border-top: none; background: white; display: flex; }
+        .prep-group-items { flex: 1; }
+        .prep-group-item { padding: 3px 12px; display: flex; align-items: center; gap: 8px; border-bottom: 1px dashed var(--border); }
+        .prep-group-item:last-child { border-bottom: none; }
+        .prep-group-time { width: 95px; background: var(--primary-bg); display: flex; align-items: center; justify-content: center; border-left: 2px solid var(--primary-light); padding: 6px 6px; }
+
+        /* Traffic light table */
+        .traffic-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin-top: 15px; }
+        .traffic-table thead { background: var(--primary-bg); }
+        .traffic-table th { padding: 8px 8px; text-align: center; font-weight: 600; color: var(--primary); border-bottom: 2px solid var(--primary); font-size: 0.78rem; }
+        .traffic-table th:first-child { text-align: left; padding-left: 12px; }
+        .traffic-table tbody tr { border-bottom: 1px solid var(--border); }
+        .traffic-table td { padding: 10px 8px; text-align: center; }
+        .traffic-table td:first-child { text-align: left; padding-left: 12px; font-weight: 500; }
+        .status-icon { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%; }
+        .status-green { background: #D1FAE5; color: #059669; }
+        .status-yellow { background: #FEF3C7; color: #D97706; }
+        .status-red { background: #FEE2E2; color: #DC2626; }
+        .status-icon svg { width: 16px; height: 16px; }
+
+        /* Report features */
+        .report-features { display: grid; gap: 14px; margin-top: 18px; }
+        .report-feature { display: flex; align-items: flex-start; gap: 15px; padding: 14px; background: var(--background-alt); border-radius: 10px; border-left: 4px solid var(--primary); }
+        .report-feature-number { width: 30px; height: 30px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; flex-shrink: 0; }
+        .report-feature h4 { color: var(--primary); margin-bottom: 3px; font-size: 0.95rem; }
+        .report-feature p { margin: 0; font-size: 0.85rem; }
+
+        /* Legend */
+        .legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; font-size: 0.78rem; color: var(--text-muted); }
+
+        /* Report example pages */
+        .report-page-title { font-size: 1.3rem; color: var(--primary); margin-bottom: 4px; }
+        .report-page-subtitle { font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 14px; line-height: 1.4; }
+        .report-images { display: flex; gap: 12px; justify-content: center; align-items: flex-start; }
+        .report-images figure { margin: 0; flex: 1; }
+        .report-images img { width: 100%; max-height: 680px; object-fit: contain; border: 1px solid var(--border); border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .report-images figcaption { text-align: center; font-size: 0.72rem; color: var(--text-muted); margin-top: 4px; font-weight: 500; }
+        .report-badge { display: inline-block; padding: 3px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; margin-bottom: 10px; }
+        .badge-green { background: #D1FAE5; color: #059669; }
+        .badge-red { background: #FEE2E2; color: #DC2626; }
+        .report-callouts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+        .report-callout { background: var(--background-alt); border-radius: 8px; padding: 10px 12px; border-left: 3px solid var(--primary); }
+        .report-callout h4 { font-size: 0.82rem; color: var(--primary); margin-bottom: 3px; }
+        .report-callout p { margin: 0; font-size: 0.75rem; line-height: 1.35; }
+
+        /* Back cover */
+        .back-cover {
+            background: #FFFFFF; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center; padding: 50px;
+            position: relative;
+        }
+        .back-cover::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--ahenk-navy) 100%);
+        }
+        .back-cover::after {
+            content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 80px;
+            background: var(--ahenk-navy);
+        }
+        .back-cover .back-logo { height: 65px; margin-bottom: 30px; }
+        .back-cover h2 { color: var(--ahenk-navy); font-size: 1.4rem; margin-bottom: 8px; }
+        .back-cover p { color: var(--text-secondary); font-size: 1rem; margin-bottom: 0; }
+        .back-cover .contact-info { margin-top: 40px; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.8; position: relative; z-index: 1; }
+        .back-cover .contact-info a { color: var(--ahenk-navy); text-decoration: none; font-weight: 600; }
+        /* Highlight box */
+        .highlight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 18px 0; }
+        .highlight-card { background: var(--primary-bg); border-radius: 10px; padding: 16px; border-left: 4px solid var(--primary); }
+        .highlight-card h4 { color: var(--primary); font-size: 0.92rem; margin-bottom: 6px; }
+        .highlight-card p { margin: 0; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4; }
+
+        @media screen { body { background: #E5E7EB; padding: 40px 0; } .page { margin: 0 auto 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); } }
+    </style>
+</head>
+<body>
+    <!-- SAYFA 1: KAPAK -->
+    <div class="page cover-page">
+        <div class="cover-header">
+            <img src="ahenklogo.png" alt="Ahenk Laboratuvarı">
+        </div>
+        <div class="cover-content">
+            <div class="cover-visual">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M30 10 Q50 25 30 40 Q10 55 30 70 Q50 85 30 100" stroke="white" stroke-width="4" fill="none"/>
+                    <path d="M70 10 Q50 25 70 40 Q90 55 70 70 Q50 85 70 100" stroke="white" stroke-width="4" fill="none"/>
+                    <line x1="30" y1="20" x2="70" y2="20" stroke="white" stroke-width="3"/>
+                    <line x1="35" y1="35" x2="65" y2="35" stroke="white" stroke-width="3"/>
+                    <line x1="30" y1="50" x2="70" y2="50" stroke="white" stroke-width="3"/>
+                    <line x1="35" y1="65" x2="65" y2="65" stroke="white" stroke-width="3"/>
+                    <line x1="30" y1="80" x2="70" y2="80" stroke="white" stroke-width="3"/>
+                </svg>
+            </div>
+            <h1 class="cover-title">FEMOBIOME II</h1>
+            <p class="cover-tagline">Kadın ürogenital mikrobiyotasının kapsamlı değerlendirilmesine yönelik real-time PCR tabanlı moleküler tanı testi</p>
+        </div>
+        <div class="cover-footer">
+            <div class="cover-footer-text">
+                <h2>Moleküler Tanıda Öncü Teknoloji</h2>
+                <p>Kadın sağlığı için detaylı mikrobiyota profili</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SAYFA 2: ÜRÜN TANITIMI -->
+    <div class="page">
+        <header class="page-header">
+            <img src="ahenklogo.png" alt="Ahenk Laboratuvarı">
+            <span class="page-number">2</span>
+        </header>
+
+        <div class="section-header">
+            <div class="section-icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M12 16v-4M12 8h.01"/>
+                </svg>
+            </div>
+            <h2 style="margin-bottom: 0;">FEMOBIOME II Nedir?</h2>
+        </div>
+
+        <p>FEMOBIOME II, kadın mikrobiyotasının kapsamlı değerlendirilmesine yönelik en geniş kapasiteli evrensel real-time PCR testidir. Tek bir testte normobiyota, fırsatçı mikroorganizmalar, zorunlu patojenler, virüsler ve maya mantarlarını kantitatif olarak analiz eder.</p>
+
+        <div class="highlight-grid">
+            <div class="highlight-card">
+                <h4>Kapsamlı Mikroorganizma Paneli</h4>
+                <p>Her yaş grubundaki kadınlar için normobiyota durumunun tür düzeyinde ayrıntılı değerlendirmesi; Lactobacillus türlerinin ayrı ayrı kantitasyonu</p>
+            </div>
+            <div class="highlight-card">
+                <h4>GBS Kantitatif Analizi</h4>
+                <p>B Grubu Streptokok (Streptococcus agalactiae) kantitatif analizi &ndash; gebelik planlaması ve gebelik döneminde kritik öneme sahip</p>
+            </div>
+            <div class="highlight-card">
+                <h4>Zorunlu Patojen Kontrolü</h4>
+                <p>Asemptomatik ve subklinik enfeksiyonların dışlanması için CYBE etkenlerinin (Chlamydia, Gonore, Trichomonas, M. genitalium) tek testte taranması</p>
+            </div>
+            <div class="highlight-card">
+                <h4>Virüs Tespiti</h4>
+                <p>Üreme sağlığını etkileyen virüslerin tespiti: HSV-1, HSV-2, CMV ve yüksek riskli HPV tipleri (16, 18, 45 ve 11 ek tip)</p>
+            </div>
+        </div>
+
+        <div class="category-label" style="margin-top: 22px;">Kolay Klinik Yorumlama</div>
+        <ul class="feature-list">
+            <li class="feature-item">
+                <span class="feature-bullet"></span>
+                <span class="feature-text">Kişiye özel yorumlar ve infografikler içeren test raporu; trafik ışığı sistemiyle görsel değerlendirme</span>
+            </li>
+        </ul>
+
+        <div class="category-label">Esnek Biyomateryal Seçenekleri</div>
+        <ul class="feature-list">
+            <li class="feature-item">
+                <span class="feature-bullet"></span>
+                <span class="feature-text">Sıvı bazlı sitoloji transport ortamında alınan servikal sürüntüler</span>
+            </li>
+            <li class="feature-item">
+                <span class="feature-bullet"></span>
+                <span class="feature-text">Hastanın kendisi tarafından alınabilen vajinal örnekler (self-sampling)</span>
+            </li>
+        </ul>
+
+        <div class="info-box" style="margin-top: 18px;">
+            <p><strong style="color: var(--primary);">Biyomateryal:</strong> Servikal kanal ve vajina mukozasından epitel sürüntüsü; sıvı bazlı sitoloji taşıma besiyerinde alınmış servikal sürüntüler; kadın tarafından kendi kendine alınan vajinal numuneler</p>
+        </div>
+    </div>
+
+    <!-- SAYFA 3: TAM ANALİZ PANELİ -->
+    <div class="page">
+        <header class="page-header">
+            <img src="ahenklogo.png" alt="Ahenk Laboratuvarı">
+            <span class="page-number">3</span>
+        </header>
+
+        <div class="section-header">
+            <div class="section-icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="3" y="3" width="7" height="7" rx="1"/>
+                    <rect x="14" y="3" width="7" height="7" rx="1"/>
+                    <rect x="3" y="14" width="7" height="7" rx="1"/>
+                    <rect x="14" y="14" width="7" height="7" rx="1"/>
+                </svg>
+            </div>
+            <h2 style="margin-bottom: 0;">FEMOBIOME II Tam Analiz Paneli</h2>
+        </div>
+
+        <table class="panel-table">
+            <thead>
+                <tr>
+                    <th style="width: 55%;">Mikroorganizma / Gösterge</th>
+                    <th>Kategori</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="category-row"><td colspan="2">Göstergeler</td></tr>
+                <tr><td>İnsan genomik DNA'sı</td><td>Numune kalite kontrolü</td></tr>
+                <tr><td>Toplam bakteri yükü (TBK)</td><td>Genel bakteri kantitasyonu</td></tr>
+
+                <tr class="category-row"><td colspan="2">Normobiyota</td></tr>
+                <tr><td>Lactobacillus spp.</td><td>Toplam laktobasil</td></tr>
+                <tr><td class="indent">L. crispatus</td><td>Tür düzeyinde ayrım</td></tr>
+                <tr><td class="indent">L. jensenii / L. mulieris</td><td>Tür düzeyinde ayrım</td></tr>
+                <tr><td class="indent">L. gasseri / L. paragasseri</td><td>Tür düzeyinde ayrım</td></tr>
+                <tr><td class="indent">L. iners</td><td>Tür düzeyinde ayrım</td></tr>
+                <tr><td>Bifidobacterium spp.</td><td>Normobiyota</td></tr>
+
+                <tr class="category-row"><td colspan="2">Aeroblar</td></tr>
+                <tr><td>Staphylococcus spp.</td><td>Fırsatçı aerob</td></tr>
+                <tr><td>Streptococcus spp.</td><td>Fırsatçı aerob</td></tr>
+                <tr><td class="indent">Streptococcus agalactiae (GBS)</td><td>Gebelikte kritik</td></tr>
+                <tr><td>Enterobacteriaceae</td><td>Fırsatçı aerob</td></tr>
+                <tr><td>Enterococcus spp.</td><td>Fırsatçı aerob</td></tr>
+                <tr><td>Haemophilus spp.</td><td>Fırsatçı aerob</td></tr>
+
+                <tr class="category-row"><td colspan="2">Anaeroblar (BV ile ilişkili)</td></tr>
+                <tr><td>Gardnerella vaginalis</td><td>BV temel göstergesi</td></tr>
+                <tr><td>Fannyhessea vaginae (Atopobium vaginae)</td><td>BV göstergesi</td></tr>
+                <tr><td>Mobiluncus spp.</td><td>BV göstergesi</td></tr>
+                <tr><td>Anaerococcus spp.</td><td>Fırsatçı anaerob</td></tr>
+                <tr><td>Peptostreptococcus spp.</td><td>Fırsatçı anaerob</td></tr>
+                <tr><td>Bacteroides spp. / Porphyromonas spp. / Prevotella spp.</td><td>Fırsatçı anaerob</td></tr>
+                <tr><td>Sneathia spp. / Leptotrichia spp. / Fusobacterium spp.</td><td>Fırsatçı anaerob</td></tr>
+                <tr><td>Megasphaera spp. / Veillonella spp. / Dialister spp.</td><td>Fırsatçı anaerob</td></tr>
+                <tr><td>BVAB1 / BVAB2 / BVAB3</td><td>BV göstergesi</td></tr>
+
+                <tr class="category-row"><td colspan="2">Mikoplazmalar</td></tr>
+                <tr><td>Ureaplasma urealyticum</td><td>Fırsatçı mikoplazma</td></tr>
+                <tr><td>Ureaplasma parvum</td><td>Fırsatçı mikoplazma</td></tr>
+                <tr><td>Mycoplasma hominis</td><td>Fırsatçı mikoplazma</td></tr>
+
+                <tr class="category-row"><td colspan="2">Maya Mantarları</td></tr>
+                <tr><td>Candida spp.</td><td>Maya mantarı</td></tr>
+                <tr><td class="indent">Candida albicans</td><td>Tür düzeyinde ayrım</td></tr>
+
+                <tr class="category-row"><td colspan="2">Cinsel Yolla Bulaşan Enfeksiyonlar (CYBE)</td></tr>
+                <tr><td>Chlamydia trachomatis</td><td>Zorunlu patojen</td></tr>
+                <tr><td>Mycoplasma genitalium</td><td>Zorunlu patojen</td></tr>
+                <tr><td>Neisseria gonorrhoeae</td><td>Zorunlu patojen</td></tr>
+                <tr><td>Trichomonas vaginalis</td><td>Zorunlu patojen</td></tr>
+
+                <tr class="category-row"><td colspan="2">Herpesvirüsler</td></tr>
+                <tr><td>HSV-1</td><td>Virüs</td></tr>
+                <tr><td>HSV-2</td><td>Virüs</td></tr>
+                <tr><td>CMV</td><td>Virüs</td></tr>
+
+                <tr class="category-row"><td colspan="2">İnsan Papilloma Virüsleri</td></tr>
+                <tr><td>HPV 16</td><td>Yüksek riskli HPV</td></tr>
+                <tr><td>HPV 18</td><td>Yüksek riskli HPV</td></tr>
+                <tr><td>HPV 45</td><td>Yüksek riskli HPV</td></tr>
+                <tr><td>HPV 31/33/35/39/51/52/56/58/59/66/68</td><td>Yüksek riskli HPV</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- SAYFA 4: KLİNİK ENDİKASYONLAR + HASTA HAZIRLIĞI -->
+    <div class="page">
+        <header class="page-header">
+            <img src="ahenklogo.png" alt="Ahenk Laboratuvarı">
+            <span class="page-number">4</span>
+        </header>
+
+        <div class="section-header">
+            <div class="section-icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M12 16v-4M12 8h.01"/>
+                </svg>
+            </div>
+            <h2 style="margin-bottom: 0;">Klinik Endikasyonlar</h2>
+        </div>
+
+        <table class="clinical-table">
+            <thead>
+                <tr>
+                    <th>Klinik Durum</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="section-row"><td>Üreme sistemi enfeksiyonları</td></tr>
+                <tr><td>İnflamasyon belirtileri (akıntı, kaşıntı, koku)</td></tr>
+                <tr><td>Bakteriyel vajinoz (BV) belirtileri</td></tr>
+                <tr class="section-row"><td>Belirti olmayan durumlar</td></tr>
+                <tr><td>Pelvik cerrahi öncesi hazırlık</td></tr>
+                <tr><td>Koruyucu tarama</td></tr>
+                <tr class="section-row"><td>Tedavi takibi</td></tr>
+                <tr><td>Enfeksiyon tedavisi sonrası kontrol</td></tr>
+                <tr><td>BV tedavisi sonrası kontrol</td></tr>
+                <tr class="section-row"><td>Obstetrik</td></tr>
+                <tr><td>Gebelik planlaması, yardımcı üreme teknikleri (YÜT)</td></tr>
+                <tr><td>Gebelikte rutin kontroller</td></tr>
+                <tr><td>İnfertilite, düşük öyküsü</td></tr>
+            </tbody>
+        </table>
+
+        <h3 style="margin-top: 14px; margin-bottom: 6px;">Hasta Hazırlığı</h3>
+
+        <div class="prep-section">
+            <div class="prep-header">
+                <div class="prep-header-left">TEST ÖNCESİ YAPILMAMASI GEREKENLER</div>
+                <div class="prep-header-right">Bekleme Süresi</div>
+            </div>
+
+            <div class="prep-group">
+                <div class="prep-group-items">
+                    <div class="prep-group-item">
+                        <div class="prep-card-icon">
+                            <svg viewBox="0 0 24 24"><path d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
+                        </div>
+                        <span class="prep-card-text">Antiseptikle vajinal duş veya yıkama</span>
+                    </div>
+                    <div class="prep-group-item">
+                        <div class="prep-card-icon">
+                            <svg viewBox="0 0 24 24"><path d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
+                        </div>
+                        <span class="prep-card-text">Tampon kullanımı</span>
+                    </div>
+                    <div class="prep-group-item">
+                        <div class="prep-card-icon">
+                            <svg viewBox="0 0 24 24"><path d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
+                        </div>
+                        <span class="prep-card-text">Transvajinal ultrason</span>
+                    </div>
+                    <div class="prep-group-item">
+                        <div class="prep-card-icon">
+                            <svg viewBox="0 0 24 24"><path d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
+                        </div>
+                        <span class="prep-card-text">Korunmalı cinsel ilişki</span>
+                    </div>
+                </div>
+                <div class="prep-group-time">
+                    <span class="time-badge">24 saat</span>
+                </div>
+            </div>
+
+            <div class="prep-card">
+                <div class="prep-card-content">
+                    <div class="prep-card-icon">
+                        <svg viewBox="0 0 24 24"><path d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
+                    </div>
+                    <span class="prep-card-text">Kolposkopi</span>
+                </div>
+                <div class="prep-card-time">
+                    <span class="time-badge">48 saat</span>
+                </div>
+            </div>
+
+            <div class="prep-card">
+                <div class="prep-card-content">
+                    <div class="prep-card-icon">
+                        <svg viewBox="0 0 24 24"><path d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
+                    </div>
+                    <span class="prep-card-text">Korunmasız cinsel ilişki</span>
+                </div>
+                <div class="prep-card-time">
+                    <span class="time-badge">72 saat</span>
+                </div>
+            </div>
+
+            <div class="prep-card" style="border-radius: 0 0 10px 10px;">
+                <div class="prep-card-content">
+                    <div class="prep-card-icon">
+                        <svg viewBox="0 0 24 24"><path d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
+                    </div>
+                    <span class="prep-card-text">Antibiyotik veya probiyotik kullanımı</span>
+                </div>
+                <div class="prep-card-time" style="border-radius: 0 0 10px 0;">
+                    <div class="time-badge-multi">
+                        <div><strong>2 hafta</strong><br><small>tedavi sonrası</small></div>
+                        <div style="margin-top: 4px; padding-top: 4px; border-top: 1px dashed var(--primary-light);"><strong>4 hafta</strong><br><small>CYBE tedavisi sonrası</small></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-box" style="margin-top: 8px;">
+            <p style="font-size: 0.74rem;">Tedavi takibi amacıyla antibiyotik kullanan hastalara da test istenebilir. Ancak antibiyotikler sonucu etkileyebilir. Sonuçlar, testin amacı ve hastanın öyküsü göz önünde bulundurularak hekim tarafından değerlendirilmelidir.</p>
+        </div>
+    </div>
+
+    <!-- SAYFA 5: ÖRNEK RAPOR – ÖBİYOZ -->
+    <div class="page">
+        <header class="page-header">
+            <img src="ahenklogo.png" alt="Ahenk Laboratuvarı">
+            <span class="page-number">5</span>
+        </header>
+
+        <div class="section-header">
+            <div class="section-icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+            </div>
+            <h2 style="margin-bottom: 0;">Örnek Rapor &ndash; Öbiyoz</h2>
+        </div>
+
+        <span class="report-badge badge-green">Öbiyoz &ndash; Normal Mikrobiyota</span>
+        <p class="report-page-subtitle">Normobiyotanın baskın olduğu, patojen saptanmayan sağlıklı bir mikrobiyota profili örneği. Rapor iki sayfadan oluşmaktadır: ilk sayfa mikrobiyota değerlendirmesi ve grafikleri, ikinci sayfa patojen ve virüs tarama sonuçlarını içerir.</p>
+
+        <div class="report-images">
+            <figure>
+                <img src="report-eubiosis-p1.png" alt="Öbiyoz raporu sayfa 1">
+                <figcaption>Sayfa 1 &ndash; Mikrobiyota Değerlendirmesi</figcaption>
+            </figure>
+            <figure>
+                <img src="report-eubiosis-p2.png" alt="Öbiyoz raporu sayfa 2">
+                <figcaption>Sayfa 2 &ndash; Patojenler ve Virüsler</figcaption>
+            </figure>
+        </div>
+
+        <div class="report-callouts">
+            <div class="report-callout">
+                <h4>Lactobacillus Hakimiyeti</h4>
+                <p>Normobiyota oranı %100; L. crispatus, L. iners ve L. jensenii/L. mulieris tür düzeyinde raporlanır</p>
+            </div>
+            <div class="report-callout">
+                <h4>Patojen Taraması</h4>
+                <p>CYBE etkenleri, herpesvirüsler ve HPV tipleri negatif &ndash; tek raporda kapsamlı tarama</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SAYFA 6: ÖRNEK RAPOR – DİSBİYOZ -->
+    <div class="page">
+        <header class="page-header">
+            <img src="ahenklogo.png" alt="Ahenk Laboratuvarı">
+            <span class="page-number">6</span>
+        </header>
+
+        <div class="section-header">
+            <div class="section-icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+            </div>
+            <h2 style="margin-bottom: 0;">Örnek Rapor &ndash; Şiddetli Disbiyoz</h2>
+        </div>
+
+        <span class="report-badge badge-red">Şiddetli Anaerobik Disbiyoz</span>
+        <p class="report-page-subtitle">Normobiyotanın belirgin şekilde azaldığı, anaerobların arttığı ve HPV pozitifliği saptanan bir disbiyoz profili örneği. Bu senaryo, klinisyenin acil müdahale planlaması için kritik bilgi sağlar.</p>
+
+        <div class="report-images">
+            <figure>
+                <img src="report-dysbiosis-p1.png" alt="Disbiyoz raporu sayfa 1">
+                <figcaption>Sayfa 1 &ndash; Mikrobiyota Değerlendirmesi</figcaption>
+            </figure>
+            <figure>
+                <img src="report-dysbiosis-p2.png" alt="Disbiyoz raporu sayfa 2">
+                <figcaption>Sayfa 2 &ndash; Patojenler ve Virüsler</figcaption>
+            </figure>
+        </div>
+
+        <div class="report-callouts">
+            <div class="report-callout">
+                <h4>Anaerobik Disbiyoz</h4>
+                <p>Normobiyota %6'ya düşmüş; fırsatçı anaerobların oranı belirgin artış göstermektedir</p>
+            </div>
+            <div class="report-callout">
+                <h4>HPV Pozitifliği</h4>
+                <p>HPV 16 ve HPV 31-68 grubu saptanmış &ndash; kantitatif sonuçlar raporda yer almaktadır</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SAYFA 7: TEST RAPORU YORUMLAMA -->
+    <div class="page">
+        <header class="page-header">
+            <img src="ahenklogo.png" alt="Ahenk Laboratuvarı">
+            <span class="page-number">7</span>
+        </header>
+
+        <div class="section-header">
+            <div class="section-icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+            </div>
+            <h2 style="margin-bottom: 0;">Test Raporu Yorumlama</h2>
+        </div>
+
+        <h3>Gösterge renk kodu &ndash; trafik ışığı sistemi</h3>
+
+        <table class="traffic-table">
+            <thead>
+                <tr>
+                    <th rowspan="2"></th>
+                    <th colspan="3">PATOJENLER</th>
+                </tr>
+                <tr>
+                    <th>Var</th>
+                    <th colspan="2">Yok</th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th style="font-size: 0.7rem;">Virüs veya<br>Mikoplazma* &ge; 4 lg<br>veya Candida** &ge; 4 lg<br><strong>Var</strong></th>
+                    <th>Yok</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="color: var(--success);">Öbiyoz (Eubiosis)</td>
+                    <td><span class="status-icon status-red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg></span></td>
+                    <td><span class="status-icon status-yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg></span></td>
+                    <td><span class="status-icon status-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg></span></td>
+                </tr>
+                <tr>
+                    <td style="color: var(--warning);">Orta derece disbiyoz</td>
+                    <td><span class="status-icon status-red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg></span></td>
+                    <td><span class="status-icon status-yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg></span></td>
+                    <td><span class="status-icon status-yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg></span></td>
+                </tr>
+                <tr>
+                    <td style="color: var(--danger);">Ağır disbiyoz</td>
+                    <td><span class="status-icon status-red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg></span></td>
+                    <td><span class="status-icon status-red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg></span></td>
+                    <td><span class="status-icon status-red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg></span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="legend">
+            <span>* Ureaplasma urealyticum, Ureaplasma parvum, Mycoplasma hominis</span>
+            &nbsp;&nbsp;
+            <span>** Candida spp., Candida albicans</span>
+        </div>
+
+        <div class="report-features">
+            <div class="report-feature">
+                <span class="report-feature-number">1</span>
+                <div>
+                    <h4>Gösterge simgesi</h4>
+                    <p>Trafik ışığı sistemine göre mikrobiyota durumu ve patojen varlığının görsel özeti</p>
+                </div>
+            </div>
+            <div class="report-feature">
+                <span class="report-feature-number">2</span>
+                <div>
+                    <h4>Çizgi grafik</h4>
+                    <p>Mikrobiyota içindeki normobiyota, anaeroblar, aeroblar ve mikoplazmaların oranlarının grafiksel gösterimi</p>
+                </div>
+            </div>
+            <div class="report-feature">
+                <span class="report-feature-number">3</span>
+                <div>
+                    <h4>Sütun grafik</h4>
+                    <p>Fırsatçı patojenlerin kendi grupları içindeki dağılımını gösteren ayrıntılı mikroorganizma profili</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SAYFA 8: ARKA KAPAK -->
+    <div class="page back-cover">
+        <img src="ahenklogo.png" alt="Ahenk Laboratuvarı" class="back-logo">
+        <h2>Sağlığınız İçin Doğru Sonuçlar</h2>
+
+        <div class="contact-info">
+            <a href="https://www.ahenklab.com.tr">www.ahenklab.com.tr</a><br>
+            444 89 88<br>
+            Merkez Mah. Darülaceze Cad. No: 20 Pk. 34381 Şişli / İSTANBUL
+        </div>
+    </div>
+</body>
+</html>

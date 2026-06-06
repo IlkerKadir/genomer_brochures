@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 720pt;
+    height: 405pt;
+    display: flex;
+    flex-direction: column;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #FFFFFF;
+    position: relative;
+    overflow: hidden;
+  }
+  .header {
+    width: 100%;
+    height: 48pt;
+    background: #7B4B94;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28pt;
+    flex-shrink: 0;
+  }
+  .header h2 {
+    font-size: 15pt;
+    color: #FFFFFF;
+    font-weight: bold;
+  }
+  .header img {
+    height: 22pt;
+  }
+  .two-col {
+    display: flex;
+    gap: 20pt;
+    padding: 12pt 28pt 0 28pt;
+    flex: 1;
+  }
+  .col {
+    flex: 1;
+  }
+  .col > h3 {
+    font-size: 10pt;
+    color: #7B4B94;
+    font-weight: bold;
+    margin-bottom: 8pt;
+  }
+  .placeholder {
+    width: 300pt;
+    height: 170pt;
+    background: #f5f5f5;
+    border-radius: 4pt;
+    border: 1pt dashed #D1D5DB;
+  }
+  .note-text {
+    font-size: 7.5pt;
+    color: #4A4A5A;
+    line-height: 1.5;
+    margin-top: 8pt;
+  }
+  .col ul {
+    font-size: 8pt;
+    color: #4A4A5A;
+    line-height: 1.7;
+    margin-left: 12pt;
+  }
+  .col ul li {
+    margin-bottom: 3pt;
+  }
+  .col h4 {
+    font-size: 8.5pt;
+    color: #4A4A5A;
+    font-weight: bold;
+    margin-top: 10pt;
+    margin-bottom: 6pt;
+  }
+  .result-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 6pt;
+    margin-bottom: 5pt;
+  }
+  .indicator {
+    width: 8pt;
+    height: 8pt;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 2pt;
+  }
+  .indicator-green { background: #10B981; }
+  .indicator-yellow { background: #F59E0B; }
+  .indicator-red { background: #EF4444; }
+  .result-item p {
+    font-size: 8pt;
+    color: #4A4A5A;
+    line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <h2>FEMOBIOME II — Rapor Yorumlama</h2>
+    <img src="genomerlogo.png" alt="Genomer">
+  </div>
+  <div class="two-col">
+    <div class="col">
+      <h3>Trafik I&#351;&#305;&#287;&#305; G&ouml;sterge Sistemi</h3>
+      <div id="traffic-table" class="placeholder"></div>
+      <p class="note-text">Mikoplazmalar: U. urealyticum, U. parvum, M. hominis. Candida: C. spp., C. albicans. E&#351;ik de&#287;erler: &#8805;10&#8308; GE/ml.</p>
+    </div>
+    <div class="col">
+      <h3>Rapor Bile&#351;enleri</h3>
+      <ul>
+        <li>G&ouml;sterge simgesi — mikrobiyota durumu ve patojen varl&#305;&#287;&#305;n&#305; birle&#351;tiren g&ouml;rsel &ouml;zet</li>
+        <li>Do&#287;rusal histogram — normobiyota, anaeroblar, aeroblar ve mikoplazmalar&#305;n renk kodlu miktar d&uuml;zeyleriyle oranlar&#305;</li>
+        <li>S&uuml;tunsal histogram — her gruptaki ko&#351;ullu patojen mikroorganizmalar&#305;n ayr&#305;nt&#305;l&#305; da&#287;&#305;l&#305;m&#305;</li>
+        <li>Her hasta i&ccedil;in ki&#351;iselle&#351;tirilmi&#351; yorumlar ve infografikler</li>
+      </ul>
+      <h4>Sonu&ccedil; Kategorileri</h4>
+      <div class="result-item">
+        <div class="indicator indicator-green"></div>
+        <p>&Ouml;biyoz — patojen yok, anlaml&#305; d&uuml;zeyde vir&uuml;s/mikoplazma/Candida yok</p>
+      </div>
+      <div class="result-item">
+        <div class="indicator indicator-yellow"></div>
+        <p>Uyar&#305; — orta d&uuml;zeyde disbiyoz veya y&uuml;ksek vir&uuml;s/mikoplazma/Candida d&uuml;zeyi</p>
+      </div>
+      <div class="result-item">
+        <div class="indicator indicator-red"></div>
+        <p>Alarm — a&#287;&#305;r disbiyoz veya zorunlu patojen tespit edildi</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

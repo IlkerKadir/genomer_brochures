@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Business Plan — Berlin Liaison Office | Genomer Biotechnology</title>
+<style>
+    @page {
+        size: A4;
+        margin: 16mm 22mm 16mm 22mm;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+        font-family: "Times New Roman", Times, serif;
+        color: #1a1a1a;
+        background: #fff;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    .letterhead {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        border-bottom: 2.5px solid #0a5a8a;
+        padding-bottom: 12px;
+        margin-bottom: 18px;
+    }
+    .letterhead .logo img { height: 68px; width: auto; }
+    .letterhead .company {
+        text-align: right;
+        font-size: 9.5pt;
+        color: #333;
+        line-height: 1.55;
+        max-width: 95mm;
+    }
+    .letterhead .company .name {
+        font-weight: 700;
+        color: #0a5a8a;
+        font-size: 10.5pt;
+        margin-bottom: 3px;
+    }
+    .ref-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 10.5pt;
+        margin-bottom: 14px;
+    }
+    .ref-row .ref strong { display: inline-block; min-width: 80px; }
+
+    /* Cover page */
+    .cover {
+        text-align: center;
+        padding: 30mm 0 20mm;
+        page-break-after: always;
+    }
+    .cover .badge {
+        display: inline-block;
+        background: #f5f8fb;
+        border: 1px solid #c8d0d8;
+        color: #0a5a8a;
+        padding: 4px 14px;
+        font-size: 9.5pt;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        font-weight: 700;
+        border-radius: 3px;
+        margin-bottom: 22px;
+    }
+    .cover h1 {
+        font-size: 26pt;
+        color: #0a5a8a;
+        font-weight: 700;
+        margin-bottom: 12px;
+        letter-spacing: 0.3px;
+        line-height: 1.2;
+    }
+    .cover h2.subtitle {
+        font-size: 15pt;
+        color: #1a1a1a;
+        font-weight: 400;
+        margin-bottom: 26px;
+    }
+    .cover .company-name {
+        font-size: 14pt;
+        font-weight: 700;
+        color: #1a1a1a;
+        margin-bottom: 6px;
+    }
+    .cover .meta {
+        font-size: 10.5pt;
+        color: #555;
+        line-height: 1.7;
+        margin-top: 24px;
+    }
+    .cover-footer {
+        position: fixed;
+        bottom: 14mm;
+        left: 22mm;
+        right: 22mm;
+        text-align: center;
+        font-size: 9pt;
+        color: #777;
+        border-top: 1px solid #c8d0d8;
+        padding-top: 6px;
+    }
+
+    /* Sections */
+    h2.section {
+        font-size: 13pt;
+        color: #0a5a8a;
+        margin: 16px 0 8px;
+        font-weight: 700;
+        border-bottom: 2px solid #0a5a8a;
+        padding-bottom: 4px;
+        page-break-after: avoid;
+    }
+    h3 {
+        font-size: 11pt;
+        color: #1a1a1a;
+        margin: 12px 0 5px;
+        font-weight: 700;
+        page-break-after: avoid;
+    }
+    p, li {
+        font-size: 10.5pt;
+        line-height: 1.55;
+        text-align: justify;
+    }
+    p { margin-bottom: 8px; }
+    .body-text { margin-bottom: 8px; }
+
+    ul.bullets {
+        list-style: none;
+        padding: 0;
+        margin: 6px 0 10px;
+    }
+    ul.bullets li {
+        padding: 4px 0 4px 22px;
+        position: relative;
+    }
+    ul.bullets li::before {
+        content: "";
+        position: absolute;
+        left: 4px;
+        top: 11px;
+        width: 6px;
+        height: 6px;
+        background: #0a5a8a;
+        border-radius: 50%;
+    }
+
+    .info-box {
+        background: #f5f8fb;
+        border-left: 4px solid #0a5a8a;
+        padding: 10px 14px;
+        font-size: 10pt;
+        line-height: 1.55;
+        margin: 8px 0 12px;
+        page-break-inside: avoid;
+    }
+
+    table.t {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 8px 0 14px;
+        font-size: 9.5pt;
+        page-break-inside: avoid;
+    }
+    table.t th {
+        background: #0a5a8a;
+        color: #fff;
+        padding: 7px 10px;
+        text-align: left;
+        font-weight: 700;
+    }
+    table.t td {
+        padding: 6px 10px;
+        border-bottom: 1px solid #d0d7de;
+        vertical-align: top;
+    }
+    table.t tr:nth-child(even) td { background: #f5f8fb; }
+    table.t td.num { text-align: right; font-family: "Courier New", monospace; }
+    table.t td.center { text-align: center; }
+    table.t tr.total td {
+        font-weight: 700;
+        background: #0a5a8a !important;
+        color: #fff;
+        border-bottom: none;
+    }
+
+    .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin: 8px 0 14px;
+    }
+    .info-card {
+        border: 1px solid #c8d0d8;
+        border-radius: 4px;
+        padding: 12px 14px;
+        page-break-inside: avoid;
+    }
+    .info-card .label {
+        color: #0a5a8a;
+        font-weight: 700;
+        font-size: 9pt;
+        letter-spacing: 0.4px;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+    }
+    .info-card .value {
+        font-size: 10.5pt;
+        line-height: 1.5;
+    }
+
+    .timeline {
+        margin: 10px 0 16px;
+        page-break-inside: avoid;
+    }
+    .timeline-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        padding: 8px 0;
+        border-bottom: 1px dashed #c8d0d8;
+    }
+    .timeline-item:last-child { border-bottom: none; }
+    .timeline-item .when {
+        flex: 0 0 60mm;
+        font-weight: 700;
+        color: #0a5a8a;
+        font-size: 10.5pt;
+    }
+    .timeline-item .what {
+        flex: 1 1 auto;
+        font-size: 10.5pt;
+        line-height: 1.5;
+    }
+
+    .signature-row {
+        margin-top: 28px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 40px;
+        page-break-inside: avoid;
+    }
+    .signature-row .sig-col {
+        width: 75mm;
+        font-size: 10.5pt;
+        line-height: 1.45;
+    }
+    .signature-row .sig-col .title { font-weight: 700; }
+    .signature-row .sig-col .subtitle { color: #555; font-size: 9.5pt; }
+    .signature-row .stamp-col {
+        width: 70mm;
+        text-align: center;
+        padding-top: 60px;
+        font-size: 10.5pt;
+        font-weight: 700;
+    }
+    .footer-line {
+        border-top: 1px solid #c8d0d8;
+        padding-top: 7px;
+        margin-top: 22px;
+        font-size: 8.5pt;
+        color: #666;
+        text-align: center;
+        line-height: 1.45;
+    }
+    .page-break { page-break-before: always; }
+</style>
+</head>
+<body>
+
+<!-- COVER PAGE -->
+<div class="cover">
+    <div style="margin-bottom: 30px;">
+        <img src="genomerlogo.png" alt="Genomer Biotechnology" style="height: 90px;">
+    </div>
+    <div class="badge">Confidential — Internal Use</div>
+    <h1>BUSINESS PLAN</h1>
+    <h2 class="subtitle">Berlin Liaison Office (Verbindungsbüro)</h2>
+    <div class="company-name">Genomer Biotechnology R&amp;D Industry and Trade Ltd. Co.</div>
+    <div style="font-size: 11pt; color: #555;">Türkiye</div>
+    <div class="meta">
+        Document Reference: GEN-DE-BP-2026/001<br>
+        Date: 22.04.2026<br>
+        Version: 1.0
+    </div>
+</div>
+
+<!-- 1. EXECUTIVE SUMMARY -->
+<div class="letterhead">
+    <div class="logo">
+        <img src="genomerlogo.png" alt="Genomer Biotechnology">
+    </div>
+    <div class="company">
+        <div class="name">GENOMER BIOTECHNOLOGY<br>R&amp;D INDUSTRY AND TRADE LTD. CO.</div>
+        Barış SB Mah. 5003 Sk.<br>
+        Kadir Has Building Section A No: 2 / Z14<br>
+        Gebze / Kocaeli / Türkiye<br>
+        www.genomer.com.tr &nbsp;|&nbsp; support@genomer.com.tr
+    </div>
+</div>
+
+<h2 class="section">1. Executive Summary</h2>
+
+<div class="body-text">
+    <p>
+        Genomer Biotechnology is a Türkiye-based <em>in vitro</em> diagnostic (IVD)
+        company that develops and manufactures real-time PCR (qPCR) kits in its
+        ISO 13485-certified production facility. The company is currently undergoing
+        IVDR 2017/746 conformity assessment for a defined portfolio of Class B and
+        Class C kits, with a Notified Body engagement already initiated.
+    </p>
+    <p>
+        In preparation for entry into the European Union market, Genomer will
+        establish a <strong>liaison office (Verbindungsbüro)</strong> in
+        <strong>Berlin, Germany</strong>. The liaison office will not engage in
+        commercial activity. Its objectives are limited to scientific relationship
+        building with Key Opinion Leaders (KOLs), market intelligence gathering,
+        promotional groundwork and on-the-ground coordination of the IVDR
+        certification process. Once IVDR certification is in place, the liaison
+        office will be converted into a <strong>GmbH</strong> with full commercial
+        capacity (Phase 2).
+    </p>
+</div>
+
+<div class="grid-2">
+    <div class="info-card">
+        <div class="label">Phase 1 — Now</div>
+        <div class="value">Liaison office in Berlin. Promotion, KOL engagement, market research, IVDR coordination. No revenue.</div>
+    </div>
+    <div class="info-card">
+        <div class="label">Phase 2 — ~12 months</div>
+        <div class="value">Conversion to GmbH following IVDR certification. Full commercial activity in Germany and EU.</div>
+    </div>
+    <div class="info-card">
+        <div class="label">Funding</div>
+        <div class="value">100% funded from the parent company's own resources. No external financing required for Phase 1.</div>
+    </div>
+    <div class="info-card">
+        <div class="label">Personnel</div>
+        <div class="value">Phase 1 operated remotely by Türkiye-based management. No local hire planned during Phase 1.</div>
+    </div>
+</div>
+
+<!-- 2. COMPANY PROFILE -->
+<h2 class="section">2. Company Profile</h2>
+
+<div class="body-text">
+    <p>
+        Genomer Biotechnology R&amp;D Industry and Trade Ltd. Co. (hereinafter
+        "Genomer") is a privately held Turkish company that designs, develops and
+        manufactures molecular diagnostic kits based on real-time PCR technology.
+        The company operates from its production facility in Gebze, Kocaeli, within
+        an established biotechnology cluster supported by Türkiye's national R&amp;D
+        infrastructure.
+    </p>
+</div>
+
+<table class="t">
+    <tbody>
+        <tr>
+            <td style="width: 40mm; font-weight: 700;">Legal Name</td>
+            <td>Genomer Biotechnology R&amp;D Industry and Trade Ltd. Co.</td>
+        </tr>
+        <tr>
+            <td style="font-weight: 700;">Country</td>
+            <td>Republic of Türkiye</td>
+        </tr>
+        <tr>
+            <td style="font-weight: 700;">Headquarters</td>
+            <td>Barış SB Mah. 5003 Sk. Kadir Has Building, Section A No: 2 / Z14, Gebze / Kocaeli</td>
+        </tr>
+        <tr>
+            <td style="font-weight: 700;">Quality System</td>
+            <td>ISO 13485 certified medical device quality management system</td>
+        </tr>
+        <tr>
+            <td style="font-weight: 700;">Regulatory Status</td>
+            <td>IVDR 2017/746 conformity assessment in progress with a designated Notified Body</td>
+        </tr>
+        <tr>
+            <td style="font-weight: 700;">Core Activity</td>
+            <td>R&amp;D, manufacturing and commercialisation of qPCR-based IVD kits</td>
+        </tr>
+        <tr>
+            <td style="font-weight: 700;">Domestic Market</td>
+            <td>Established commercial presence across private laboratory chains, university hospitals and state hospitals in Türkiye</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3>2.1 Strengths</h3>
+<ul class="bullets">
+    <li>Vertically integrated R&amp;D and production capability — kits are designed, validated and manufactured in-house.</li>
+    <li>Mature quality system with ISO 13485 certification and active IVDR transition.</li>
+    <li>Proven domestic commercial track record across the Turkish IVD market, including TJOD-active gynecology accounts and major laboratory groups.</li>
+    <li>Multilingual scientific and regulatory documentation already produced in English.</li>
+</ul>
+
+<!-- 3. PRODUCT PORTFOLIO -->
+<h2 class="section">3. Product Portfolio Targeted for the European Market</h2>
+
+<div class="body-text">
+    <p>
+        The product families listed below are within the scope of the current
+        IVDR 2017/746 conformity assessment. All products are developed and
+        manufactured by Genomer in Türkiye.
+    </p>
+</div>
+
+<table class="t">
+    <thead>
+        <tr>
+            <th>Product Family</th>
+            <th>Application Area</th>
+            <th class="center" style="width: 25mm;">IVD Class</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Femobiome qPCR Kit Family</td>
+            <td>Female urogenital microbiota assessment (screening, full quantitative profiling)</td>
+            <td class="center">B / C</td>
+        </tr>
+        <tr>
+            <td>Androbiome qPCR Kit Family</td>
+            <td>Male urogenital microbiota assessment</td>
+            <td class="center">C</td>
+        </tr>
+        <tr>
+            <td>Enterobiome Kids qPCR Kit</td>
+            <td>Paediatric intestinal microbiome analysis (children only)</td>
+            <td class="center">C</td>
+        </tr>
+        <tr>
+            <td>HPV Screening qPCR Kit</td>
+            <td>High-risk HPV screening</td>
+            <td class="center">C</td>
+        </tr>
+        <tr>
+            <td>HPV 21 Genotyping qPCR Kit</td>
+            <td>21-genotype HPV genotyping</td>
+            <td class="center">C</td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="info-box">
+    <strong>Differentiation.</strong> Genomer's kits combine quantitative microbiota
+    profiling with high-risk HPV detection from compatible sample types, enabling
+    laboratories to consolidate women's-health and microbiome workflows on a single
+    qPCR platform — a clinically relevant proposition for German laboratory chains
+    seeking workflow efficiency.
+</div>
+
+<!-- PAGE BREAK -->
+<div class="page-break"></div>
+
+<div class="letterhead">
+    <div class="logo">
+        <img src="genomerlogo.png" alt="Genomer Biotechnology">
+    </div>
+    <div class="company">
+        <div class="name">GENOMER BIOTECHNOLOGY<br>R&amp;D INDUSTRY AND TRADE LTD. CO.</div>
+        Barış SB Mah. 5003 Sk.<br>
+        Kadir Has Building Section A No: 2 / Z14<br>
+        Gebze / Kocaeli / Türkiye<br>
+        www.genomer.com.tr &nbsp;|&nbsp; support@genomer.com.tr
+    </div>
+</div>
+
+<!-- 4. STRATEGIC RATIONALE -->
+<h2 class="section">4. Strategic Rationale — Why Germany, Why Now</h2>
+
+<h3>4.1 Germany as the EU Entry Point</h3>
+<div class="body-text">
+    <p>
+        Germany is the largest healthcare market in the European Union and one of
+        the most regulated. Achieving credibility in Germany is widely regarded as a
+        prerequisite for sustainable expansion into other EU markets. The country
+        also hosts a dense network of university hospitals, reference laboratories
+        and Key Opinion Leaders in women's health, urology and gastroenterology —
+        the precise clinical disciplines addressed by Genomer's portfolio.
+    </p>
+</div>
+
+<h3>4.2 Berlin as the Office Location</h3>
+<div class="body-text">
+    <p>
+        Berlin offers immediate proximity to Charité — Universitätsmedizin Berlin,
+        one of Europe's leading academic medical centres, as well as easy access to
+        Munich (Technische Universität München) and Heidelberg (Universität
+        Heidelberg) — the three KOL clusters most relevant to Genomer's portfolio.
+        Berlin also provides a cost-efficient and internationally connected
+        operating base for a small representative office.
+    </p>
+</div>
+
+<h3>4.3 Timing — Aligned with IVDR Certification</h3>
+<div class="body-text">
+    <p>
+        The IVDR 2017/746 transition has fundamentally reshaped the European IVD
+        landscape, creating a window of opportunity for new entrants who arrive
+        with a fully certified, IVDR-native portfolio. Establishing the liaison
+        office now — during the certification period — enables Genomer to build
+        scientific awareness and customer pipelines in parallel with the regulatory
+        process, so that commercial conversion (Phase 2) can begin as soon as
+        certification is granted.
+    </p>
+</div>
+
+<!-- 5. PHASE 1 -->
+<h2 class="section">5. Phase 1 — Liaison Office Operations</h2>
+
+<h3>5.1 Scope</h3>
+<div class="body-text">
+    <p>
+        The Berlin liaison office will operate as a non-trading representative
+        office under German law (Verbindungsbüro). It will not place products on
+        the EU market, will not invoice customers and will not generate revenue.
+        Its activities are scientific, promotional and preparatory in nature.
+    </p>
+</div>
+
+<h3>5.2 Key Activities</h3>
+<ul class="bullets">
+    <li><strong>KOL engagement</strong> — structured outreach to clinicians and researchers at Charité, TU München and Universität Heidelberg (and adjacent centres) covering gynaecology, urology, paediatric gastroenterology and clinical microbiology.</li>
+    <li><strong>Scientific events</strong> — representation at key German and EU congresses (e.g. DGGG, MEDICA, ECCMID, EAU) for awareness and lead generation, with formal product promotion contingent on IVDR certification.</li>
+    <li><strong>Market research</strong> — mapping of laboratory chains, reimbursement frameworks (GKV / GOÄ), tendering practices and competitive positioning.</li>
+    <li><strong>Distributor pre-screening</strong> — identification and qualification of potential distribution partners for Phase 2.</li>
+    <li><strong>IVDR coordination</strong> — local interface with the Notified Body, regulatory consultants and clinical evaluation experts.</li>
+</ul>
+
+<h3>5.3 Operating Model</h3>
+<div class="body-text">
+    <p>
+        Phase 1 is a deliberately lean, low-overhead structure. No local employees
+        will be hired. All activities will be carried out by Genomer's Türkiye-based
+        management and scientific team through periodic visits to Germany combined
+        with structured digital coordination. The Berlin office will provide a
+        registered address and on-demand meeting infrastructure.
+    </p>
+</div>
+
+<!-- 6. PHASE 2 -->
+<h2 class="section">6. Phase 2 — Conversion into a GmbH</h2>
+
+<div class="body-text">
+    <p>
+        Following completion of IVDR certification (currently anticipated within
+        approximately 12 months), the liaison office will be converted into a
+        <strong>GmbH</strong>. The GmbH will assume full commercial capacity —
+        product distribution, sales, customer invoicing, distributor management and,
+        where appropriate, the role of <em>EU Authorised Representative</em> for
+        Genomer's products under IVDR Article 11. Conversion will be staged so that
+        commercial activity begins only after all regulatory prerequisites have
+        been satisfied.
+    </p>
+</div>
+
+<table class="t">
+    <thead>
+        <tr>
+            <th>Phase 2 Capability</th>
+            <th>Purpose</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Direct sales &amp; distributor management</td>
+            <td>Invoicing of customers, management of laboratory chain accounts and regional distributors</td>
+        </tr>
+        <tr>
+            <td>EU Authorised Representative role</td>
+            <td>Single point of regulatory responsibility for Genomer's IVDR-certified portfolio in the EU</td>
+        </tr>
+        <tr>
+            <td>Post-market surveillance</td>
+            <td>EUDAMED reporting, vigilance, customer feedback and clinical performance follow-up</td>
+        </tr>
+        <tr>
+            <td>Local hiring</td>
+            <td>Country Manager and Scientific Affairs lead, scaling with revenue</td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- PAGE BREAK -->
+<div class="page-break"></div>
+
+<div class="letterhead">
+    <div class="logo">
+        <img src="genomerlogo.png" alt="Genomer Biotechnology">
+    </div>
+    <div class="company">
+        <div class="name">GENOMER BIOTECHNOLOGY<br>R&amp;D INDUSTRY AND TRADE LTD. CO.</div>
+        Barış SB Mah. 5003 Sk.<br>
+        Kadir Has Building Section A No: 2 / Z14<br>
+        Gebze / Kocaeli / Türkiye<br>
+        www.genomer.com.tr &nbsp;|&nbsp; support@genomer.com.tr
+    </div>
+</div>
+
+<!-- 7. FINANCIAL PLAN -->
+<h2 class="section">7. Financial Plan — Phase 1</h2>
+
+<div class="body-text">
+    <p>
+        The Berlin liaison office will not generate revenue. Operating costs will
+        be funded entirely from Genomer's own resources and consolidated as a cost
+        line of the parent company. The indicative annual budget for Phase 1
+        operations is summarised below; figures represent the upper bound of
+        currently approved planning ranges and will be finalised by management
+        based on actual activity volume.
+    </p>
+</div>
+
+<table class="t">
+    <thead>
+        <tr>
+            <th>Cost Category</th>
+            <th>Description</th>
+            <th class="center" style="width: 30mm;">Indicative Annual (€)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Office &amp; administration</td>
+            <td>Registered Berlin address, serviced / virtual office, meeting room access, accounting, local advisory</td>
+            <td class="num">12,000 – 20,000</td>
+        </tr>
+        <tr>
+            <td>Travel &amp; field visits</td>
+            <td>Türkiye–Germany travel for management and scientific team; in-country mobility for KOL meetings and site visits</td>
+            <td class="num">25,000 – 40,000</td>
+        </tr>
+        <tr>
+            <td>KOL engagement &amp; hospitality</td>
+            <td>Scientific meetings, advisory boards, hospitality within compliant limits</td>
+            <td class="num">15,000 – 25,000</td>
+        </tr>
+        <tr>
+            <td>Congresses &amp; promotional materials</td>
+            <td>DGGG, MEDICA, ECCMID, EAU and similar; booth, brochures, monographs (DE / EN)</td>
+            <td class="num">15,000 – 30,000</td>
+        </tr>
+        <tr>
+            <td>Regulatory &amp; consulting</td>
+            <td>IVDR clinical evaluation experts, regulatory advisory, translation services</td>
+            <td class="num">10,000 – 20,000</td>
+        </tr>
+        <tr>
+            <td>Contingency (10%)</td>
+            <td>Unforeseen costs and exchange-rate buffer</td>
+            <td class="num">8,000 – 14,000</td>
+        </tr>
+        <tr class="total">
+            <td colspan="2">Total Phase 1 — Annual Operating Budget</td>
+            <td class="num">85,000 – 150,000</td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="info-box">
+    <strong>Funding source.</strong> The Phase 1 budget is fully covered from the
+    parent company's operating cash flow. No bank financing, equity round or
+    third-party funding is required for the Phase 1 establishment or operation
+    of the Berlin liaison office.
+</div>
+
+<!-- 8. MILESTONES -->
+<h2 class="section">8. Milestones &amp; Timeline</h2>
+
+<div class="timeline">
+    <div class="timeline-item">
+        <div class="when">Q2 2026</div>
+        <div class="what">Berlin liaison office registered. Service-office address activated. Initial KOL outreach plan finalised.</div>
+    </div>
+    <div class="timeline-item">
+        <div class="when">Q3 2026</div>
+        <div class="what">First wave of KOL engagement (Charité, TU München, Heidelberg). Market research baseline completed.</div>
+    </div>
+    <div class="timeline-item">
+        <div class="when">Q4 2026</div>
+        <div class="what">Distributor pre-screening shortlist established. First German / EU congress representation.</div>
+    </div>
+    <div class="timeline-item">
+        <div class="when">Q1 – Q2 2027</div>
+        <div class="what">IVDR Notified Body audit cycle. Awareness-building campaigns and scientific symposia.</div>
+    </div>
+    <div class="timeline-item">
+        <div class="when">Q2 – Q3 2027 <span style="font-weight: 400; color: #555;">(target)</span></div>
+        <div class="what">IVDR certification granted. Liaison office converted into GmbH; commercial operations begin.</div>
+    </div>
+</div>
+
+<!-- 9. RISK CONSIDERATIONS -->
+<h2 class="section">9. Risk Considerations &amp; Mitigation</h2>
+
+<table class="t">
+    <thead>
+        <tr>
+            <th style="width: 55mm;">Risk</th>
+            <th>Mitigation</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>IVDR certification delay</td>
+            <td>Phase 1 activities (KOL engagement, market research) are non-commercial and do not depend on certification timing. Phase 2 conversion is sequenced to follow certification, not predate it.</td>
+        </tr>
+        <tr>
+            <td>Currency / cost variation</td>
+            <td>Conservative budget ranges, 10% contingency line, and quarterly review against actuals.</td>
+        </tr>
+        <tr>
+            <td>Regulatory misclassification</td>
+            <td>Liaison office structured strictly as Verbindungsbüro under German law; legal counsel engaged to verify boundary conditions before Phase 2.</td>
+        </tr>
+        <tr>
+            <td>Reputation / unauthorised promotion</td>
+            <td>All product-level promotional content gated until IVDR certification is granted; pre-certification activities limited to scientific awareness and pipeline preparation.</td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- 10. CONCLUSION -->
+<h2 class="section">10. Conclusion</h2>
+
+<div class="body-text">
+    <p>
+        The establishment of a Berlin liaison office is a measured, low-risk and
+        regulation-aligned step that prepares Genomer's entry into the European
+        diagnostic market. Phase 1 builds the scientific credibility, customer
+        pipeline and regulatory presence necessary for a successful Phase 2
+        commercial launch through a German GmbH. The entire programme is funded
+        from the parent company's resources, requires no external financing, and
+        is governed by strict scope boundaries to ensure full compliance with
+        German and European Union legislation throughout.
+    </p>
+</div>
+
+<div class="signature-row">
+    <div class="sig-col">
+        <div class="title">Genomer Biotechnology</div>
+        <div class="subtitle">R&amp;D Industry and Trade Ltd. Co.</div>
+    </div>
+    <div class="stamp-col">Authorised Signature / Stamp</div>
+</div>
+
+<div class="footer-line">
+    Genomer Biotechnology R&amp;D Industry and Trade Ltd. Co. &nbsp;•&nbsp;
+    Barış SB Mah. 5003 Sk. Kadir Has Building Section A No:2, Gebze / Kocaeli / Türkiye<br>
+    www.genomer.com.tr &nbsp;•&nbsp; support@genomer.com.tr
+</div>
+
+</body>
+</html>

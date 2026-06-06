@@ -1,0 +1,1984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FEMOBIOME II Line - Women Microbiota Assessment</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&family=Noto+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Brand Colors - Deep Teal Theme */
+            --primary: #0F766E;
+            --primary-light: #14B8A6;
+            --primary-dark: #0D5D56;
+            --primary-bg: #F0FDFA;
+            --secondary: #14B8A6;
+            --accent: #0369A1;
+            --background: #FFFFFF;
+            --background-alt: #F0FDFA;
+            --text-primary: #134E4A;
+            --text-secondary: #1E5751;
+            --text-muted: #5B7B78;
+            --border: #99F6E4;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+
+            /* Typography */
+            --font-heading: 'Figtree', sans-serif;
+            --font-body: 'Noto Sans', sans-serif;
+
+            /* Spacing */
+            --page-padding: 60px;
+            --section-gap: 40px;
+        }
+
+        /* Reset */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Base Styles */
+        html {
+            font-size: 10pt;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--text-primary);
+            line-height: 1.6;
+            background: var(--background);
+        }
+
+        /* Print Page Setup - Fixed A4 dimensions */
+        @page {
+            size: 210mm 297mm;
+            margin: 0;
+        }
+
+        .page {
+            width: 210mm;
+            height: 297mm;
+            max-height: 297mm;
+            padding: 45px 50px;
+            background: var(--background);
+            page-break-after: always;
+            page-break-inside: avoid;
+            position: relative;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        .page:last-child {
+            page-break-after: auto;
+        }
+
+        /* Prevent breaks inside elements */
+        .comparison-table,
+        .clinical-table,
+        .traffic-table,
+        .specs-table,
+        .prep-section,
+        .prep-card,
+        .prep-group,
+        .report-feature,
+        .info-box,
+        .warning-box,
+        .step-card {
+            page-break-inside: avoid;
+        }
+
+        @media print {
+            html, body {
+                width: 210mm;
+                height: 297mm;
+            }
+
+            .page {
+                width: 210mm;
+                height: 297mm;
+                margin: 0;
+                padding: 45px 50px;
+                page-break-after: always;
+                overflow: hidden;
+            }
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-heading);
+            font-weight: 600;
+            line-height: 1.3;
+            color: var(--primary);
+        }
+
+        h1 { font-size: 2.5rem; }
+        h2 { font-size: 1.75rem; margin-bottom: 1.5rem; }
+        h3 { font-size: 1.25rem; margin-bottom: 1rem; }
+        h4 { font-size: 1.1rem; }
+
+        p {
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+
+        /* Cover Page */
+        .cover-page {
+            background: linear-gradient(135deg, var(--primary-bg) 0%, #FFFFFF 50%, var(--primary-bg) 100%);
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+        }
+
+        .cover-header {
+            padding: 40px var(--page-padding);
+        }
+
+        .logo {
+            height: 50px;
+            width: auto;
+        }
+
+        .cover-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 var(--page-padding);
+        }
+
+        .cover-visual {
+            width: 280px;
+            height: 280px;
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+            border-radius: 50%;
+            margin-bottom: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 20px 60px rgba(15, 118, 110, 0.3);
+            position: relative;
+        }
+
+        .cover-visual::before {
+            content: '';
+            position: absolute;
+            width: 320px;
+            height: 320px;
+            border: 2px solid var(--primary-light);
+            border-radius: 50%;
+            opacity: 0.3;
+        }
+
+        .cover-visual svg {
+            width: 140px;
+            height: 140px;
+            fill: white;
+        }
+
+        .cover-title {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .cover-title sup {
+            font-size: 1rem;
+            vertical-align: super;
+        }
+
+        .cover-subtitle {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .cover-tagline {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 400px;
+            margin-top: 20px;
+        }
+
+        .cover-footer {
+            background: var(--primary);
+            color: white;
+            padding: 50px var(--page-padding);
+            margin-top: auto;
+        }
+
+        .cover-footer h2 {
+            color: white;
+            font-size: 1.25rem;
+            margin-bottom: 5px;
+        }
+
+        .cover-footer p {
+            color: rgba(255,255,255,0.9);
+            margin: 0;
+        }
+
+        /* Page Header */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .page-header .logo {
+            height: 30px;
+        }
+
+        .page-number {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* Section Headers with Icons */
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .section-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--primary-bg);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .section-icon svg {
+            width: 18px;
+            height: 18px;
+            stroke: var(--primary);
+            fill: none;
+            stroke-width: 2;
+        }
+
+        /* Table of Contents */
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-item {
+            display: flex;
+            align-items: baseline;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .toc-item:last-child {
+            border-bottom: none;
+        }
+
+        .toc-title {
+            font-weight: 500;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        .toc-dots {
+            flex: 1;
+            border-bottom: 2px dotted var(--border);
+            margin: 0 15px 5px;
+        }
+
+        .toc-page {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        /* Feature List */
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 12px 0;
+        }
+
+        .feature-bullet {
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            margin-top: 8px;
+            flex-shrink: 0;
+        }
+
+        .feature-text {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Category Label */
+        .category-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+        }
+
+        /* Info Box */
+        .info-box {
+            background: var(--primary-bg);
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 25px 0;
+        }
+
+        .info-box h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .info-box p {
+            margin: 0;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+            margin-top: 15px;
+        }
+
+        .comparison-table thead {
+            background: var(--primary);
+            color: white;
+        }
+
+        .comparison-table th {
+            padding: 8px 6px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+
+        .comparison-table th:first-child {
+            text-align: left;
+            padding-left: 12px;
+        }
+
+        .comparison-table tbody tr {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .comparison-table tbody tr:nth-child(even) {
+            background: var(--background-alt);
+        }
+
+        .comparison-table td {
+            padding: 6px 6px;
+            text-align: center;
+        }
+
+        .comparison-table td:first-child {
+            text-align: left;
+            padding-left: 12px;
+            color: var(--text-secondary);
+        }
+
+        .comparison-table .category-row {
+            background: var(--primary-bg) !important;
+        }
+
+        .comparison-table .category-row td {
+            font-weight: 600;
+            color: var(--primary);
+            padding: 6px 12px;
+        }
+
+        .comparison-table .indent {
+            padding-left: 25px !important;
+        }
+
+        /* Dot Indicators */
+        .dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .dot-filled {
+            background: var(--primary);
+        }
+
+        .dot-outline {
+            border: 2px solid var(--primary);
+            background: transparent;
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: var(--primary);
+            color: white;
+            padding: 25px 30px;
+            border-radius: 12px;
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .highlight-box h3 {
+            color: white;
+            font-size: 1.2rem;
+            margin: 0;
+        }
+
+        /* Clinical Situations Table */
+        .clinical-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            margin-top: 15px;
+        }
+
+        .clinical-table thead {
+            background: var(--primary);
+            color: white;
+        }
+
+        .clinical-table th {
+            padding: 12px 10px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+
+        .clinical-table th:first-child {
+            text-align: left;
+            padding-left: 15px;
+        }
+
+        .clinical-table tbody tr {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .clinical-table .section-row {
+            background: var(--primary-bg);
+        }
+
+        .clinical-table .section-row td {
+            font-weight: 600;
+            color: var(--primary);
+            padding: 10px 15px;
+            text-align: center;
+        }
+
+        .clinical-table td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        .clinical-table td:first-child {
+            text-align: left;
+            padding-left: 15px;
+            color: var(--text-secondary);
+        }
+
+        /* Two Column Layout */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        /* Instruction Steps */
+        .instruction-steps {
+            list-style: none;
+            counter-reset: step;
+        }
+
+        .instruction-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .instruction-step:last-child {
+            border-bottom: none;
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-content p {
+            margin: 0;
+        }
+
+        /* Warning Box */
+        .warning-box {
+            background: #FEF3C7;
+            border: 1px solid #F59E0B;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .warning-box h4 {
+            color: #B45309;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .warning-box p {
+            color: #92400E;
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        /* Preparation Table - Redesigned as Cards */
+        .prep-section {
+            margin-top: 18px;
+        }
+
+        .prep-header {
+            display: flex;
+            background: var(--primary);
+            color: white;
+            border-radius: 10px 10px 0 0;
+            overflow: hidden;
+        }
+
+        .prep-header-left {
+            flex: 1;
+            padding: 10px 15px;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+
+        .prep-header-right {
+            width: 120px;
+            padding: 10px 12px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-align: center;
+            background: var(--primary-dark);
+            line-height: 1.3;
+        }
+
+        .prep-card {
+            display: flex;
+            align-items: stretch;
+            border: 1px solid var(--border);
+            border-top: none;
+            background: white;
+        }
+
+        .prep-card:last-child {
+            border-radius: 0 0 10px 10px;
+        }
+
+        .prep-card-content {
+            flex: 1;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .prep-card-icon {
+            width: 28px;
+            height: 28px;
+            background: #FEE2E2;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .prep-card-icon svg {
+            width: 14px;
+            height: 14px;
+            stroke: #DC2626;
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .prep-card-text {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .prep-card-time {
+            width: 120px;
+            padding: 10px 10px;
+            background: var(--primary-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border-left: 2px solid var(--primary-light);
+        }
+
+        .time-badge {
+            background: var(--primary);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            white-space: nowrap;
+        }
+
+        .time-badge-multi {
+            background: transparent;
+            color: var(--primary);
+            padding: 3px 0;
+            font-weight: 600;
+            font-size: 0.7rem;
+            line-height: 1.5;
+        }
+
+        /* Grouped prep cards for same timing */
+        .prep-group {
+            border: 1px solid var(--border);
+            border-top: none;
+            background: white;
+        }
+
+        .prep-group:last-child {
+            border-radius: 0 0 10px 10px;
+        }
+
+        .prep-group-items {
+            flex: 1;
+        }
+
+        .prep-group-item {
+            padding: 8px 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px dashed var(--border);
+        }
+
+        .prep-group-item:last-child {
+            border-bottom: none;
+        }
+
+        .prep-group-time {
+            width: 120px;
+            background: var(--primary-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-left: 2px solid var(--primary-light);
+            padding: 15px 10px;
+        }
+
+        /* Visual Steps Grid */
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .step-card {
+            background: var(--primary-bg);
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .step-card-number {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin: 0 auto 15px;
+        }
+
+        .step-card-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 15px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .step-card-icon svg {
+            width: 40px;
+            height: 40px;
+            stroke: var(--primary);
+        }
+
+        .step-card p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        /* Traffic Light System */
+        .traffic-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            margin-top: 20px;
+        }
+
+        .traffic-table thead {
+            background: var(--primary-bg);
+        }
+
+        .traffic-table th {
+            padding: 12px 10px;
+            text-align: center;
+            font-weight: 600;
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .traffic-table th:first-child {
+            text-align: left;
+            padding-left: 15px;
+        }
+
+        .traffic-table tbody tr {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .traffic-table td {
+            padding: 12px 10px;
+            text-align: center;
+        }
+
+        .traffic-table td:first-child {
+            text-align: left;
+            padding-left: 15px;
+            font-weight: 500;
+        }
+
+        /* Status Icons */
+        .status-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+        }
+
+        .status-green {
+            background: #D1FAE5;
+            color: #059669;
+        }
+
+        .status-yellow {
+            background: #FEF3C7;
+            color: #D97706;
+        }
+
+        .status-red {
+            background: #FEE2E2;
+            color: #DC2626;
+        }
+
+        .status-icon svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Legend Items */
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+            font-size: 0.85rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Report Features */
+        .report-features {
+            display: grid;
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .report-feature {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            padding: 20px;
+            background: var(--background-alt);
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .report-feature-number {
+            width: 36px;
+            height: 36px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .report-feature h4 {
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .report-feature p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        /* Tech Specs Table */
+        .specs-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .specs-table tr {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .specs-table th {
+            background: var(--primary-bg);
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--primary);
+            width: 200px;
+        }
+
+        .specs-table td {
+            padding: 12px 15px;
+            color: var(--text-secondary);
+        }
+
+        .specs-table .sub-item {
+            padding-left: 30px;
+            font-size: 0.9rem;
+        }
+
+        /* Back Cover */
+        .back-cover {
+            background: var(--primary);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: var(--page-padding);
+        }
+
+        .back-cover .logo-white {
+            filter: brightness(0) invert(1);
+            height: 60px;
+            margin-bottom: 30px;
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+            }
+
+            .page {
+                page-break-after: always;
+                page-break-inside: avoid;
+            }
+
+            .no-print {
+                display: none;
+            }
+        }
+
+        /* Screen Styles */
+        @media screen {
+            body {
+                background: #E5E7EB;
+                padding: 40px 0;
+            }
+
+            .page {
+                margin: 0 auto 40px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Page 1: Cover -->
+    <div class="page cover-page">
+        <div class="cover-header">
+            <img src="genomerlogo.png" alt="Genomer Logo" class="logo">
+        </div>
+        <div class="cover-content">
+            <div class="cover-visual">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <!-- DNA Helix Icon -->
+                    <path d="M30 10 Q50 25 30 40 Q10 55 30 70 Q50 85 30 100" stroke="white" stroke-width="4" fill="none"/>
+                    <path d="M70 10 Q50 25 70 40 Q90 55 70 70 Q50 85 70 100" stroke="white" stroke-width="4" fill="none"/>
+                    <line x1="30" y1="20" x2="70" y2="20" stroke="white" stroke-width="3"/>
+                    <line x1="35" y1="35" x2="65" y2="35" stroke="white" stroke-width="3"/>
+                    <line x1="30" y1="50" x2="70" y2="50" stroke="white" stroke-width="3"/>
+                    <line x1="35" y1="65" x2="65" y2="65" stroke="white" stroke-width="3"/>
+                    <line x1="30" y1="80" x2="70" y2="80" stroke="white" stroke-width="3"/>
+                </svg>
+            </div>
+            <h1 class="cover-title">FEMOBIOME<sup>&reg;</sup>II</h1>
+            <div class="cover-subtitle">FEMOBIOME<sup>&reg;</sup>PrimaScreen</div>
+            <div class="cover-subtitle">FEMOBIOME<sup>&reg;</sup>SecundaScreen</div>
+            <p class="cover-tagline">Line of tests for women microbiota assessment</p>
+        </div>
+        <div class="cover-footer">
+            <h2>Advanced Molecular Diagnostics</h2>
+            <p>Comprehensive microbiota profiling for women's health</p>
+        </div>
+    </div>
+
+    <!-- Page 2: Table of Contents -->
+    <div class="page">
+        <header class="page-header">
+            <img src="genomerlogo.png" alt="Genomer" class="logo">
+            <span class="page-number">2</span>
+        </header>
+
+        <h2>Content</h2>
+
+        <ul class="toc-list">
+            <li class="toc-item">
+                <span class="toc-title">What's new?</span>
+                <span class="toc-dots"></span>
+                <span class="toc-page">3</span>
+            </li>
+            <li class="toc-item">
+                <span class="toc-title">Comparison of FEMOBIOME<sup>&reg;</sup> tests</span>
+                <span class="toc-dots"></span>
+                <span class="toc-page">4</span>
+            </li>
+            <li class="toc-item">
+                <span class="toc-title">How to choose test?</span>
+                <span class="toc-dots"></span>
+                <span class="toc-page">6</span>
+            </li>
+            <li class="toc-item">
+                <span class="toc-title">Types of biomaterial</span>
+                <span class="toc-dots"></span>
+                <span class="toc-page">7</span>
+            </li>
+            <li class="toc-item">
+                <span class="toc-title">Preparation and sample collection</span>
+                <span class="toc-dots"></span>
+                <span class="toc-page">7</span>
+            </li>
+            <li class="toc-item">
+                <span class="toc-title">New test report</span>
+                <span class="toc-dots"></span>
+                <span class="toc-page">11</span>
+            </li>
+            <li class="toc-item">
+                <span class="toc-title">Main technological features</span>
+                <span class="toc-dots"></span>
+                <span class="toc-page">12</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Page 3: What's New -->
+    <div class="page">
+        <header class="page-header">
+            <img src="genomerlogo.png" alt="Genomer" class="logo">
+            <span class="page-number">3</span>
+        </header>
+
+        <div class="section-header">
+            <div class="section-icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 4v16m8-8H4" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <h2 style="margin-bottom: 0;">What's new?</h2>
+        </div>
+
+        <div class="category-label">Expanded and optimized panel of detectable microorganisms</div>
+        <p>enables to provide clinically significant description of microbiota composition</p>
+
+        <ul class="feature-list">
+            <li class="feature-item">
+                <span class="feature-bullet"></span>
+                <span class="feature-text">More informative evaluation of normobiota state for women of different ages;</span>
+            </li>
+            <li class="feature-item">
+                <span class="feature-bullet"></span>
+                <span class="feature-text">Quantitative assessment of Group B Streptococcus – especially important during pregnancy planning and gestation;</span>
+            </li>
+            <li class="feature-item">
+                <span class="feature-bullet"></span>
+                <span class="feature-text">Control of obligate pathogens presence to exclude asymptomatic and subclinical infections;</span>
+            </li>
+            <li class="feature-item">
+                <span class="feature-bullet"></span>
+                <span class="feature-text">Detection of viruses relevant to reproductive health.</span>
+            </li>
+        </ul>
+
+        <div class="category-label" style="margin-top: 30px;">System of visual markers for convenient clinical interpretation</div>
+        <ul class="feature-list">
+            <li class="feature-item">
+                <span class="feature-bullet"></span>
+                <span class="feature-text">Test report with personalized comments and infographics;</span>
+            </li>
+        </ul>
+
+        <div class="category-label" style="margin-top: 30px;">New types of biomaterial</div>
+        <ul class="feature-list">
+            <li class="feature-item">
+                <span class="feature-bullet"></span>
+                <span class="feature-text">Cervical swabs collected in transport medium for liquid-based cytology;</span>
+            </li>
+            <li class="feature-item">
+                <span class="feature-bullet"></span>
+                <span class="feature-text">Self-collected vaginal samples</span>
+            </li>
+        </ul>
+
+        <div class="category-label" style="margin-top: 30px;">Expanded line of FEMOBIOME<sup>&reg;</sup> test kits</div>
+        <ul class="feature-list">
+            <li class="feature-item">
+                <span class="feature-bullet"></span>
+                <span class="feature-text"><strong style="color: var(--primary);">FEMOBIOME II</strong> – universal test for assessment women microbiota state with the most comprehensive capabilities;</span>
+            </li>
+            <li class="feature-item">
+                <span class="feature-bullet"></span>
+                <span class="feature-text"><strong style="color: var(--primary);">FEMOBIOME<sup>&reg;</sup>PrimaScreen</strong> – a shortened version of FEMOBIOME<sup>&reg;</sup>II for diagnostics of bacterial vaginosis;</span>
+            </li>
+            <li class="feature-item">
+                <span class="feature-bullet"></span>
+                <span class="feature-text"><strong style="color: var(--primary);">FEMOBIOME<sup>&reg;</sup>SecundaScreen</strong> – a complex test for diagnostics of infectious and inflammatory urogenital diseases.</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Page 4: Comparison Table Part 1 -->
+    <div class="page">
+        <header class="page-header">
+            <img src="genomerlogo.png" alt="Genomer" class="logo">
+            <span class="page-number">4</span>
+        </header>
+
+        <div class="section-header">
+            <div class="section-icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="3" y="3" width="7" height="7" rx="1"/>
+                    <rect x="14" y="3" width="7" height="7" rx="1"/>
+                    <rect x="3" y="14" width="7" height="7" rx="1"/>
+                    <rect x="14" y="14" width="7" height="7" rx="1"/>
+                </svg>
+            </div>
+            <h2 style="margin-bottom: 0;">Comparing of FEMOBIOME<sup>&reg;</sup> tests</h2>
+        </div>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th style="width: 40%;"></th>
+                    <th colspan="3">FEMOBIOME<sup>&reg;</sup></th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th>FB<sup>&reg;</sup>II</th>
+                    <th>Prima<br>Screen</th>
+                    <th>Secunda<br>Screen</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Number of tubes</strong></td>
+                    <td>16</td>
+                    <td>8</td>
+                    <td>8</td>
+                </tr>
+                <tr class="category-row">
+                    <td colspan="4">Indicators</td>
+                </tr>
+                <tr>
+                    <td>Human genomic DNA</td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td><span class="dot dot-filled"></span></td>
+                </tr>
+                <tr>
+                    <td>Total bacterial load</td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td><span class="dot dot-filled"></span></td>
+                </tr>
+                <tr class="category-row">
+                    <td colspan="4">Normobiota</td>
+                </tr>
+                <tr>
+                    <td>Lactobacillus spp.</td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td><span class="dot dot-filled"></span></td>
+                </tr>
+                <tr>
+                    <td class="indent">L. crispatus</td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="indent">L. jensenii/ L. mulieris</td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="indent">L. gasseri/ L. paragasseri</td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="indent">L. iners</td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td><span class="dot dot-filled"></span></td>
+                </tr>
+                <tr>
+                    <td class="indent">L. non-iners</td>
+                    <td></td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td><span class="dot dot-filled"></span></td>
+                </tr>
+                <tr>
+                    <td>Bifidobacterium spp.</td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="category-row">
+                    <td colspan="4">Aerobes</td>
+                </tr>
+                <tr>
+                    <td>Staphylococcus spp.</td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td></td>
+                    <td><span class="dot dot-filled"></span></td>
+                </tr>
+                <tr>
+                    <td>Streptococcus spp.</td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td></td>
+                    <td><span class="dot dot-filled"></span></td>
+                </tr>
+                <tr>
+                    <td class="indent">Streptococcus agalactiae</td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Enterobacteriaceae</td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td></td>
+                    <td><span class="dot dot-filled"></span></td>
+                </tr>
+                <tr>
+                    <td>Enterococcus spp.</td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td></td>
+                    <td><span class="dot dot-filled"></span></td>
+                </tr>
+                <tr>
+                    <td>Haemophilus spp.</td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td></td>
+                    <td><span class="dot dot-filled"></span></td>
+                </tr>
+                <tr class="category-row">
+                    <td colspan="4">Anaerobes</td>
+                </tr>
+                <tr>
+                    <td>Gardnerella vaginalis</td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td><span class="dot dot-filled"></span></td>
+                </tr>
+                <tr>
+                    <td>Fannyhessea vaginae<br><small>(Atopobium vaginae)</small></td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td><span class="dot dot-filled"></span></td>
+                </tr>
+                <tr>
+                    <td>Mobiluncus spp.</td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td><span class="dot dot-filled"></span></td>
+                </tr>
+                <tr>
+                    <td>Anaerococcus spp.</td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td></td>
+                    <td><span class="dot dot-filled"></span></td>
+                </tr>
+                <tr>
+                    <td>Peptostreptococcus spp.</td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td></td>
+                    <td><span class="dot dot-filled"></span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Page 5: Comparison Table Part 2 -->
+    <div class="page">
+        <header class="page-header">
+            <img src="genomerlogo.png" alt="Genomer" class="logo">
+            <span class="page-number">5</span>
+        </header>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th style="width: 40%;"></th>
+                    <th>FB<sup>&reg;</sup>II</th>
+                    <th>Prima<br>Screen</th>
+                    <th>Secunda<br>Screen</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Bacteroides spp./Porphyromonas spp./Prevotella spp.</td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td></td>
+                    <td><span class="dot dot-filled"></span></td>
+                </tr>
+                <tr>
+                    <td>Sneathia spp./Leptotrichia spp./Fusobacterium spp.</td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td></td>
+                    <td><span class="dot dot-filled"></span></td>
+                </tr>
+                <tr>
+                    <td>Megasphaera spp./Veillonella spp./Dialister spp.</td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td></td>
+                    <td><span class="dot dot-filled"></span></td>
+                </tr>
+                <tr>
+                    <td>BVAB1 / BVAB2 / BVAB3</td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td></td>
+                    <td><span class="dot dot-filled"></span></td>
+                </tr>
+                <tr class="category-row">
+                    <td colspan="4">Mycoplasmas</td>
+                </tr>
+                <tr>
+                    <td>Ureaplasma urealyticum</td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td><span class="dot dot-filled"></span></td>
+                </tr>
+                <tr>
+                    <td>Ureaplasma parvum</td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td><span class="dot dot-filled"></span></td>
+                </tr>
+                <tr>
+                    <td>Mycoplasma hominis</td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td><span class="dot dot-filled"></span></td>
+                </tr>
+                <tr class="category-row">
+                    <td colspan="4">Yeast fungi</td>
+                </tr>
+                <tr>
+                    <td>Candida spp.</td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td><span class="dot dot-filled"></span></td>
+                </tr>
+                <tr>
+                    <td class="indent">Candida albicans</td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td><span class="dot dot-filled"></span></td>
+                </tr>
+                <tr class="category-row">
+                    <td colspan="4">SEXUALLY TRANSMITTED INFECTIONS (STI)</td>
+                </tr>
+                <tr>
+                    <td>Chlamydia trachomatis</td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td></td>
+                    <td><span class="dot dot-filled"></span></td>
+                </tr>
+                <tr>
+                    <td>Mycoplasma genitalium</td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td></td>
+                    <td><span class="dot dot-filled"></span></td>
+                </tr>
+                <tr>
+                    <td>Neisseria gonorrhoeae</td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td></td>
+                    <td><span class="dot dot-filled"></span></td>
+                </tr>
+                <tr>
+                    <td>Trichomonas vaginalis</td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td></td>
+                    <td><span class="dot dot-filled"></span></td>
+                </tr>
+                <tr class="category-row">
+                    <td colspan="4">Herpesviruses</td>
+                </tr>
+                <tr>
+                    <td>HSV-1</td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td></td>
+                    <td><span class="dot dot-filled"></span></td>
+                </tr>
+                <tr>
+                    <td>HSV-2</td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td></td>
+                    <td><span class="dot dot-filled"></span></td>
+                </tr>
+                <tr>
+                    <td>CMV</td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td></td>
+                    <td><span class="dot dot-filled"></span></td>
+                </tr>
+                <tr class="category-row">
+                    <td colspan="4">Human papillomaviruses</td>
+                </tr>
+                <tr>
+                    <td>HPV 16</td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>HPV 18</td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>HPV 45</td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>HPV 31/33/35/39/51/52/56/58/59/66/68</td>
+                    <td><span class="dot dot-filled"></span></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Page 6: How to Choose Test -->
+    <div class="page">
+        <header class="page-header">
+            <img src="genomerlogo.png" alt="Genomer" class="logo">
+            <span class="page-number">6</span>
+        </header>
+
+        <div class="highlight-box">
+            <h3>FEMOBIOME<sup>&reg;</sup>II – more clinically relevant information for the same price</h3>
+        </div>
+
+        <div class="section-header">
+            <div class="section-icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M12 16v-4M12 8h.01"/>
+                </svg>
+            </div>
+            <h2 style="margin-bottom: 0;">How to choose test?</h2>
+        </div>
+
+        <table class="clinical-table">
+            <thead>
+                <tr>
+                    <th style="width: 40%;">Clinical situation</th>
+                    <th colspan="3">FEMOBIOME<sup>&reg;</sup></th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th>FB<sup>&reg;</sup>II</th>
+                    <th>Prima<br>Screen</th>
+                    <th>Secunda<br>Screen</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="section-row">
+                    <td colspan="4">Infectious diseases of reproductive system</td>
+                </tr>
+                <tr>
+                    <td>Inflammatory symptoms</td>
+                    <td><span class="dot dot-outline"></span></td>
+                    <td><span class="dot dot-outline"></span></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Symptoms of BV</td>
+                    <td><span class="dot dot-outline"></span></td>
+                    <td></td>
+                    <td><span class="dot dot-outline"></span></td>
+                </tr>
+                <tr class="section-row">
+                    <td colspan="4">Asymptomatic cases</td>
+                </tr>
+                <tr>
+                    <td>Preparation for pelvic surgery</td>
+                    <td><span class="dot dot-outline"></span></td>
+                    <td><span class="dot dot-outline"></span></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Preventive screening</td>
+                    <td><span class="dot dot-outline"></span></td>
+                    <td><span class="dot dot-outline"></span></td>
+                    <td></td>
+                </tr>
+                <tr class="section-row">
+                    <td colspan="4">Treatment monitoring</td>
+                </tr>
+                <tr>
+                    <td>Treatment of infection diseases</td>
+                    <td><span class="dot dot-outline"></span></td>
+                    <td><span class="dot dot-outline"></span></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>BV treatment</td>
+                    <td><span class="dot dot-outline"></span></td>
+                    <td></td>
+                    <td><span class="dot dot-outline"></span></td>
+                </tr>
+                <tr class="section-row">
+                    <td colspan="4">Obstetrics</td>
+                </tr>
+                <tr>
+                    <td>Pregnancy planning, ART</td>
+                    <td><span class="dot dot-outline"></span></td>
+                    <td><span class="dot dot-outline"></span></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Prophylactic examinations during pregnancy</td>
+                    <td><span class="dot dot-outline"></span></td>
+                    <td><span class="dot dot-outline"></span></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Infertility, miscarriage</td>
+                    <td><span class="dot dot-outline"></span></td>
+                    <td><span class="dot dot-outline"></span></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Page 7: Types of Biomaterial & Sample Collection -->
+    <div class="page">
+        <header class="page-header">
+            <img src="genomerlogo.png" alt="Genomer" class="logo">
+            <span class="page-number">7</span>
+        </header>
+
+        <div class="section-header">
+            <div class="section-icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/>
+                </svg>
+            </div>
+            <h2 style="margin-bottom: 0;">Types of biomaterial</h2>
+        </div>
+
+        <ul class="feature-list">
+            <li class="feature-item">
+                <span class="feature-bullet"></span>
+                <span class="feature-text"><strong>Vaginal swab.</strong> The sample can be collected by a healthcare specialist or self-collected by woman using special devices.</span>
+            </li>
+            <li class="feature-item">
+                <span class="feature-bullet"></span>
+                <span class="feature-text"><strong>Cervical swab</strong> collected in transport medium, including transport medium for liquid cytology.</span>
+            </li>
+        </ul>
+
+        <div class="section-header" style="margin-top: 40px;">
+            <div class="section-icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>
+                </svg>
+            </div>
+            <h2 style="margin-bottom: 0;">Sample collection and preparation</h2>
+        </div>
+
+        <h3>Common recommendations</h3>
+
+        <p>PCR analysis is a direct method of laboratory research; therefore, the biological material needs to be collected from the foci of infection. The biomaterial type is selected by the physician based on the collected anamnesis and clinical picture of the disease.</p>
+
+        <p>The quality of sampling, sample storage, transport and pretreatment are crucial for obtaining correct results. Incorrect sampling may lead to unreliable results and, therefore, to the need to repeat the sampling procedure.</p>
+
+        <p>Sample collection is performed using specialized medical devices.</p>
+
+        <p>After sample collection put the swab into the tube with transport medium and rinse it thoroughly. Remove the swab from solution, press it to the wall of tube and squeeze the rest of the liquid.</p>
+
+        <p>Throw out the swab. Use a new swab if you need to repeat sampling or to take sample from another biotope.</p>
+    </div>
+
+    <!-- Page 8: Sample Collection Preparation -->
+    <div class="page">
+        <header class="page-header">
+            <img src="genomerlogo.png" alt="Genomer" class="logo">
+            <span class="page-number">8</span>
+        </header>
+
+        <h3>Sample collection and preparation</h3>
+
+        <p>Women must not perform hygiene procedures or syringing prior the sampling procedure. To interpret results successfully and robustly, sample must contain the largest possible number of epithelial cells with minimum amounts of mucus and blood. Before obtaining an epithelial cell swab from the posterior vaginal vault and cervical canal, the free-flowing secretion should be removed with a sterile cotton swab.</p>
+
+        <div class="warning-box">
+            <h4>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                </svg>
+                Important Note
+            </h4>
+            <p>Most microorganisms are localized on the epithelial surface in the form of biofilm. Therefore, the sample should include a scaring of the epithelial surface with adherent microbial layer, not the contents of the organ lumen.</p>
+        </div>
+
+        <div class="prep-section">
+            <div class="prep-header">
+                <div class="prep-header-left">BEFORE THE TEST, IT IS NOT ALLOWED TO</div>
+                <div class="prep-header-right">Wait Time If Not Followed</div>
+            </div>
+
+            <!-- 24 Hours Group -->
+            <div class="prep-group" style="display: flex;">
+                <div class="prep-group-items">
+                    <div class="prep-group-item">
+                        <div class="prep-card-icon">
+                            <svg viewBox="0 0 24 24"><path d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
+                        </div>
+                        <span class="prep-card-text">Perform syringing and vaginal douching with antiseptics</span>
+                    </div>
+                    <div class="prep-group-item">
+                        <div class="prep-card-icon">
+                            <svg viewBox="0 0 24 24"><path d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
+                        </div>
+                        <span class="prep-card-text">Use tampons</span>
+                    </div>
+                    <div class="prep-group-item">
+                        <div class="prep-card-icon">
+                            <svg viewBox="0 0 24 24"><path d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
+                        </div>
+                        <span class="prep-card-text">Use PCR-inhibiting substances (ultrasound gel, heparin, chlorhexidine, other chlorine-containing products)</span>
+                    </div>
+                    <div class="prep-group-item">
+                        <div class="prep-card-icon">
+                            <svg viewBox="0 0 24 24"><path d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
+                        </div>
+                        <span class="prep-card-text">Undergo transvaginal ultrasound examination</span>
+                    </div>
+                    <div class="prep-group-item">
+                        <div class="prep-card-icon">
+                            <svg viewBox="0 0 24 24"><path d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
+                        </div>
+                        <span class="prep-card-text">Engage in protected sexual contacts</span>
+                    </div>
+                </div>
+                <div class="prep-group-time">
+                    <span class="time-badge">24 hours</span>
+                </div>
+            </div>
+
+            <!-- 48 Hours -->
+            <div class="prep-card">
+                <div class="prep-card-content">
+                    <div class="prep-card-icon">
+                        <svg viewBox="0 0 24 24"><path d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
+                    </div>
+                    <span class="prep-card-text">Undergo colposcopy</span>
+                </div>
+                <div class="prep-card-time">
+                    <span class="time-badge">48 hours</span>
+                </div>
+            </div>
+
+            <!-- 72 Hours -->
+            <div class="prep-card">
+                <div class="prep-card-content">
+                    <div class="prep-card-icon">
+                        <svg viewBox="0 0 24 24"><path d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
+                    </div>
+                    <span class="prep-card-text">Engage in unprotected sexual contacts</span>
+                </div>
+                <div class="prep-card-time">
+                    <span class="time-badge">72 hours</span>
+                </div>
+            </div>
+
+            <!-- Antibiotics - Multiple times -->
+            <div class="prep-card" style="border-radius: 0 0 10px 10px;">
+                <div class="prep-card-content">
+                    <div class="prep-card-icon">
+                        <svg viewBox="0 0 24 24"><path d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
+                    </div>
+                    <span class="prep-card-text">Take and/or use antibacterial medications, probiotics</span>
+                </div>
+                <div class="prep-card-time" style="border-radius: 0 0 10px 0;">
+                    <div class="time-badge-multi">
+                        <div><strong>2 weeks</strong><br><small>after therapy</small></div>
+                        <div style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--primary-light);"><strong>4 weeks</strong><br><small>after STI therapy</small></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-box" style="margin-top: 15px;">
+            <p style="font-size: 0.85rem;">The test can be prescribed to patients on antibiotic therapy (for therapy monitoring). However, antibiotics can influence the outcome. Results should be interpreted by the doctor based on the purpose of testing and patient's medical history.</p>
+        </div>
+    </div>
+
+    <!-- Page 9: Sampling Guidelines -->
+    <div class="page">
+        <header class="page-header">
+            <img src="genomerlogo.png" alt="Genomer" class="logo">
+            <span class="page-number">9</span>
+        </header>
+
+        <h3>Vaginal sampling</h3>
+        <p>The sample must be taken prior to physical examination. Speculum can be treated with warm water before the procedure. Antiseptics and oil-based lubricants (like Vaseline) must not be used for speculum treatment. The sample must be taken from the lateral or posterolateral vaginal wall.</p>
+
+        <h3 style="margin-top: 20px;">Self-sampling</h3>
+        <p>Self-sampling is performed using specialized medical devices. Follow the manufacturer's instructions for correct use.</p>
+
+        <h3 style="margin-top: 20px;">Self-sampling Instructions</h3>
+
+        <div class="steps-grid">
+            <div class="step-card">
+                <div class="step-card-number">1</div>
+                <div class="step-card-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 8V5a2 2 0 00-2-2H5a2 2 0 00-2 2v3m18 0v11a2 2 0 01-2 2H5a2 2 0 01-2-2V8m18 0H3"/>
+                    </svg>
+                </div>
+                <p>Open the package and remove the swab</p>
+            </div>
+            <div class="step-card">
+                <div class="step-card-number">2</div>
+                <div class="step-card-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M12 8v8m-4-4h8"/>
+                    </svg>
+                </div>
+                <p>Insert the swab into the vagina up to the marked line</p>
+            </div>
+            <div class="step-card">
+                <div class="step-card-number">3</div>
+                <div class="step-card-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/>
+                    </svg>
+                </div>
+                <p>Rinse the swab for 10-30 seconds</p>
+            </div>
+            <div class="step-card">
+                <div class="step-card-number">4</div>
+                <div class="step-card-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9"/>
+                    </svg>
+                </div>
+                <p>Place the swab into the sterile container</p>
+            </div>
+        </div>
+
+        <ol class="instruction-steps">
+            <li class="instruction-step">
+                <span class="step-number">5</span>
+                <div class="step-content">
+                    <p><strong>Deliver the sample to the laboratory</strong></p>
+                </div>
+            </li>
+        </ol>
+
+        <h3 style="margin-top: 20px;">Cervical sampling</h3>
+        <p>Insert the swab 0.5–1.5 cm into the cervical canal. <strong>Avoid any contact with the vaginal walls.</strong></p>
+    </div>
+
+    <!-- Page 10: New Test Report -->
+    <div class="page">
+        <header class="page-header">
+            <img src="genomerlogo.png" alt="Genomer" class="logo">
+            <span class="page-number">10</span>
+        </header>
+
+        <div class="section-header">
+            <div class="section-icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+            </div>
+            <h2 style="margin-bottom: 0;">New test report</h2>
+        </div>
+
+        <h3>Indicator icon color code – traffic light system</h3>
+
+        <table class="traffic-table">
+            <thead>
+                <tr>
+                    <th rowspan="2"></th>
+                    <th colspan="3">PATHOGENS</th>
+                </tr>
+                <tr>
+                    <th>Yes</th>
+                    <th colspan="2">No</th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th>Viruses or<br>Mycoplasmas* ≥ 4 lg GE/ml or<br>Candida** ≥ 4 lg GE/ml<br><strong>Yes</strong></th>
+                    <th>No</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="color: var(--success);">Eubiosis</td>
+                    <td><span class="status-icon status-red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg></span></td>
+                    <td><span class="status-icon status-yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg></span></td>
+                    <td><span class="status-icon status-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg></span></td>
+                </tr>
+                <tr>
+                    <td style="color: var(--warning);">Moderate dysbiosis</td>
+                    <td><span class="status-icon status-red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg></span></td>
+                    <td><span class="status-icon status-yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg></span></td>
+                    <td><span class="status-icon status-yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg></span></td>
+                </tr>
+                <tr>
+                    <td style="color: var(--danger);">Severe dysbiosis</td>
+                    <td><span class="status-icon status-red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg></span></td>
+                    <td><span class="status-icon status-red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg></span></td>
+                    <td><span class="status-icon status-red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg></span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="legend">
+            <div class="legend-item">
+                <span>* Ureaplasma urealyticum, Ureaplasma parvum, Mycoplasma hominis</span>
+            </div>
+            <div class="legend-item">
+                <span>** Candida spp., Candida albicans</span>
+            </div>
+        </div>
+
+        <div class="report-features">
+            <div class="report-feature">
+                <span class="report-feature-number">1</span>
+                <div>
+                    <h4>Indicator icon</h4>
+                    <p>Visual summary of the microbiota status and presence of pathogens, based on the traffic light system (see table above)</p>
+                </div>
+            </div>
+            <div class="report-feature">
+                <span class="report-feature-number">2</span>
+                <div>
+                    <h4>Linear histogram</h4>
+                    <p>A graphical representation of the proportion of normobiota, anaerobes, aerobes and mycoplasmas in the microbiota composition. Color indicate the total quantity of microorganisms in each group</p>
+                </div>
+            </div>
+            <div class="report-feature">
+                <span class="report-feature-number">3</span>
+                <div>
+                    <h4>Columnar histogram</h4>
+                    <p>Microorganisms profile showing detailed distribution of conditionally pathogenic microorganisms within their groups</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page 12: Main Technological Features -->
+    <div class="page">
+        <header class="page-header">
+            <img src="genomerlogo.png" alt="Genomer" class="logo">
+            <span class="page-number">11</span>
+        </header>
+
+        <div class="section-header">
+            <div class="section-icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                </svg>
+            </div>
+            <h2 style="margin-bottom: 0;">Main technological features</h2>
+        </div>
+
+        <ul class="feature-list">
+            <li class="feature-item">
+                <span class="feature-bullet"></span>
+                <span class="feature-text">All-in-one solution – from sample collection to interpretation the test report;</span>
+            </li>
+            <li class="feature-item">
+                <span class="feature-bullet"></span>
+                <span class="feature-text">Two PCR setup formats – automated (384-well) and manual (96-well);</span>
+            </li>
+            <li class="feature-item">
+                <span class="feature-bullet"></span>
+                <span class="feature-text">Fast nucleic acid extraction, optimized for Allsheng Auto-Pure 96 and KingFisher Flex (PREP-MB-RAPID II);</span>
+            </li>
+        </ul>
+
+        <table class="specs-table" style="margin-top: 30px;">
+            <tr>
+                <th>Biomaterial</th>
+                <td>epithelial swab from the mucous membrane of cervical canal, vagina</td>
+            </tr>
+            <tr>
+                <th>Transport medium</th>
+                <td>
+                    <div>STOR-F</div>
+                    <div>STOR-M</div>
+                </td>
+            </tr>
+            <tr>
+                <th>Transport medium for liquid cytology</th>
+                <td>
+                    <div>PreservCyt<sup>&reg;</sup>, Hologic Inc., USA</div>
+                    <div>BD SurePath&trade; Liquid-Based Pap Test, Becton, Dickinson and Company, USA;</div>
+                    <div>EASYPREP, YD Diagnostics, South Korea;</div>
+                    <div>CellPrep, CP Biodyne, South Korea;</div>
+                    <div>Cell Preservative Solution, Human Lituo Biotechnology Co.Ltd, China</div>
+                </td>
+            </tr>
+            <tr>
+                <th>Sample pretreatment</th>
+                <td>PREP-PK (for scrapes taken in the transport & fixation medium for liquid cytology BD SurePath&trade; Liquid-Based Pap Test and CellPrep)</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Page 13: Additional Technical Info -->
+    <div class="page">
+        <header class="page-header">
+            <img src="genomerlogo.png" alt="Genomer" class="logo">
+            <span class="page-number">12</span>
+        </header>
+
+        <table class="specs-table">
+            <tr>
+                <th>Time of analysis</th>
+                <td>From 2,5 hours (with sample pretreatment)</td>
+            </tr>
+            <tr>
+                <th>Number of samples</th>
+                <td>
+                    <div>12 (24)** tests for package S, including control samples</div>
+                    <div style="margin-top: 10px;">24 (48)** tests for package A and A-TL, including control samples</div>
+                </td>
+            </tr>
+            <tr>
+                <th>Storage conditions</th>
+                <td>
+                    <div>+2 °С … 8 °С – packages S, А, A-TL</div>
+                    <div style="margin-top: 10px;">-18 °С …-22 °С – TechnoTaq МАХ polymerase (part of package A)</div>
+                    <div style="margin-top: 10px;"><strong>12 months</strong></div>
+                </td>
+            </tr>
+        </table>
+
+        <p style="margin-top: 30px; font-size: 0.9rem; color: var(--text-muted);">**for FEMOBIOME<sup>&reg;</sup>PrimaScreen and FEMOBIOME<sup>&reg;</sup>SecundaScreen</p>
+    </div>
+
+    <!-- Page 14: Back Cover -->
+    <div class="page back-cover">
+        <img src="genomerlogo.png" alt="Genomer" class="logo-white" style="height: 80px; margin-bottom: 40px;">
+        <div style="color: rgba(255,255,255,0.9);">
+            <p style="font-size: 1.1rem; margin-bottom: 10px;">Biyoteknoloji Arge San. ve Tic. Ltd. Şti.</p>
+        </div>
+    </div>
+</body>
+</html>

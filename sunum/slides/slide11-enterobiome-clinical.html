@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+html { background: #FFFFFF; }
+body {
+  width: 720pt; height: 405pt; margin: 0; padding: 0;
+  font-family: Arial, sans-serif;
+  display: flex; background: #FFFFFF;
+}
+.container { width: 100%; height: 100%; position: relative; }
+.header { position: absolute; top: 0; left: 0; right: 0; height: 48pt; background: #0891B2; }
+.header-text { position: absolute; top: 12pt; left: 40pt; }
+.logo-top { position: absolute; top: 12pt; right: 40pt; }
+.logo-top img { height: 22pt; }
+.content { position: absolute; top: 60pt; left: 30pt; right: 30pt; }
+.columns { display: flex; gap: 24pt; }
+.col { flex: 1; }
+.section-title { font-size: 10pt; color: #0891B2; font-weight: bold; margin: 0 0 8pt 0; }
+.sub-header { font-size: 8.5pt; color: #333; font-weight: bold; margin: 10pt 0 4pt 0; }
+ul { margin: 0 0 4pt 0; padding-left: 14pt; }
+ul li { font-size: 8pt; color: #4A4A5A; line-height: 1.6; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header"></div>
+  <div class="header-text">
+    <h2 style="color: #FFFFFF; font-size: 15pt; margin: 0;">ENTEROBIOME KIDS — Clinical Relevance</h2>
+  </div>
+  <div class="logo-top"><img src="genomerlogo.png"></div>
+  <div class="content">
+    <div class="columns">
+      <div class="col">
+        <p class="section-title">Key Clinical Markers</p>
+        <ul>
+          <li><b>Bacillota/Bacteroidota ratio:</b> Shift toward Bacteroidota may indicate inflammatory process</li>
+          <li><b>F. prausnitzii:</b> Anti-inflammatory biomarker. Promotes IL-10/IL-12 secretion, inhibits IL-8. Decreased in inflammatory bowel disease</li>
+          <li><b>Akkermansia muciniphila:</b> Main mucin metabolizer. Enhances barrier function. Produces propionate and acetate for butyrate production</li>
+          <li><b>Bifidobacterium species:</b> Child species (B. bifidum, B. longum, B. infantis, B. breve) ferment breast milk oligosaccharides, activate T-regulatory cells. Adult species ferment plant polysaccharides</li>
+        </ul>
+      </div>
+      <div class="col">
+        <p class="section-title">Disease Associations &amp; Markers</p>
+        <p class="sub-header">Pathogenicity Markers</p>
+        <ul>
+          <li><b>mecA</b> — methicillin resistance in Staphylococcus; strains resistant to methicillin</li>
+          <li><b>srr2</b> — S. agalactiae invasiveness; promotes bloodstream and CNS invasion, causing meningitis</li>
+          <li><b>tcdA / tcdB</b> — C. difficile enterotoxins A and B; cause acute inflammation, intestinal barrier damage, fluid influx</li>
+        </ul>
+        <p class="sub-header">Disease Associations</p>
+        <ul>
+          <li>IBD (UC, Crohn's): ↑ Bacteroides/Prevotella, ↓ F. prausnitzii</li>
+          <li>Celiac disease: ↓ Lactobacillus/Bifidobacteria, ↑ pro-inflammatory Veillonellaceae</li>
+          <li>Necrotizing enterocolitis (preterm): associated with C. perfringens and Enterobacterales</li>
+          <li>C. difficile carriage: up to 61% in children &lt;1 year; normally eliminated by ~2 years</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

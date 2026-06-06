@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ENTEROBIOME Kids - Çocuklarda Bağırsak Mikrobiyota Analizi</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Varela+Round&family=Nunito+Sans:wght@300;400;500;600;700&family=Figtree:wght@300;400;500;600;700&family=Noto+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Brand Colors - Teal Healthcare Theme */
+            --primary: #0891B2;
+            --primary-light: #22D3EE;
+            --primary-dark: #0E7490;
+            --primary-bg: #ECFEFF;
+            --secondary: #22D3EE;
+            --accent: #059669;
+            --accent-light: #10B981;
+            --background: #FFFFFF;
+            --background-alt: #F0FDFA;
+            --text-primary: #164E63;
+            --text-secondary: #0F766E;
+            --text-muted: #5EEAD4;
+            --border: #A5F3FC;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+
+            --font-heading: 'Figtree', sans-serif;
+            --font-body: 'Noto Sans', sans-serif;
+            --page-padding: 50px;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 10pt;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--text-primary);
+            line-height: 1.5;
+            background: var(--background);
+        }
+
+        @page {
+            size: 210mm 297mm;
+            margin: 0;
+        }
+
+        .page {
+            width: 210mm;
+            height: 297mm;
+            max-height: 297mm;
+            padding: 40px 45px;
+            background: var(--background);
+            page-break-after: always;
+            page-break-inside: avoid;
+            position: relative;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        .page:last-child {
+            page-break-after: auto;
+        }
+
+        @media print {
+            html, body { width: 210mm; height: 297mm; }
+            .page { width: 210mm; height: 297mm; margin: 0; padding: 40px 45px; page-break-after: always; overflow: hidden; }
+        }
+
+        h1, h2, h3, h4 {
+            font-family: var(--font-heading);
+            font-weight: 600;
+            line-height: 1.3;
+            color: var(--primary);
+        }
+
+        h2 { font-size: 1.4rem; margin-bottom: 12px; }
+        h3 { font-size: 1.1rem; margin-bottom: 8px; color: var(--primary-dark); }
+
+        p { margin-bottom: 10px; font-size: 0.9rem; line-height: 1.5; }
+
+        /* Cover Page - Clean design without problematic CSS */
+        .cover-page {
+            background: #B2EBF2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 40px 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* SVG gradient background - safe for PDF */
+        .cover-gradient-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        /* Hide CSS-based background patterns - they cause artifacts */
+        .cover-bg-pattern {
+            display: none;
+        }
+
+        .cover-header {
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+            position: relative;
+            z-index: 2;
+        }
+
+        .cover-header .logo {
+            height: 42px;
+        }
+
+        .logo { height: 40px; width: auto; }
+
+        /* Central Card - No background */
+        .cover-card {
+            background: transparent;
+            padding: 50px 60px;
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 480px;
+        }
+
+        /* Gut illustration - border-radius OK without box-shadow */
+        .gut-illustration {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 25px;
+            background: #0891B2;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            border: 4px solid rgba(255,255,255,0.3);
+        }
+
+        .gut-illustration-gradient {
+            display: none;
+        }
+
+        .gut-illustration svg {
+            width: 100px;
+            height: 100px;
+        }
+
+        .cover-title {
+            font-family: 'Varela Round', sans-serif;
+            font-size: 3.2rem;
+            color: #164E63;
+            margin-bottom: 8px;
+            letter-spacing: -1px;
+            font-weight: 400;
+            line-height: 1.1;
+        }
+
+        .cover-title sup {
+            font-size: 0.9rem;
+            vertical-align: super;
+            letter-spacing: 0;
+        }
+
+        .cover-kids-badge {
+            display: inline-block;
+            background: #059669;
+            color: white;
+            font-family: 'Varela Round', sans-serif;
+            font-size: 1.8rem;
+            padding: 8px 28px;
+            border-radius: 50px;
+            margin-bottom: 25px;
+        }
+
+        .cover-divider {
+            width: 60px;
+            height: 4px;
+            background: #0E7490;
+            margin: 0 auto 20px;
+            border-radius: 2px;
+        }
+
+        .cover-subtitle {
+            font-family: 'Nunito Sans', sans-serif;
+            font-size: 0.85rem;
+            color: #164E63;
+            font-weight: 500;
+            max-width: 380px;
+            line-height: 1.7;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 0 auto;
+        }
+
+        /* Footer badge */
+        .cover-footer {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .cover-footer-badge {
+            background: rgba(255,255,255,0.9);
+            padding: 12px 28px;
+            border-radius: 12px;
+        }
+
+        .cover-footer-badge p {
+            font-family: 'Nunito Sans', sans-serif;
+            font-size: 0.75rem;
+            color: #0E7490;
+            margin: 0;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .cover-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 100px;
+            padding: 10px 24px;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .cover-badge svg {
+            width: 18px;
+            height: 18px;
+            stroke: white;
+            fill: none;
+            stroke-width: 2;
+        }
+
+        /* Page Header */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .page-header .logo {
+            height: 30px;
+        }
+
+        .page-number {
+            font-size: 2rem;
+            color: var(--primary-bg);
+            font-weight: 700;
+            position: absolute;
+            bottom: 30px;
+            right: 45px;
+        }
+
+        /* Content bullets with teal circles */
+        .content-block {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .content-bullet {
+            width: 12px;
+            height: 12px;
+            background: var(--primary);
+            border-radius: 50%;
+            flex-shrink: 0;
+            margin-top: 4px;
+        }
+
+        .content-text {
+            flex: 1;
+            font-size: 0.88rem;
+            line-height: 1.55;
+        }
+
+        /* Section title with underline */
+        .section-title {
+            font-size: 1.4rem;
+            color: var(--primary);
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+        }
+
+        .subsection-title {
+            font-size: 1.1rem;
+            color: var(--primary-dark);
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        /* Data Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+            font-size: 0.8rem;
+        }
+
+        .data-table thead {
+            background: var(--primary);
+            color: white;
+        }
+
+        .data-table th {
+            padding: 8px 10px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.78rem;
+        }
+
+        .data-table td {
+            padding: 8px 10px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+            font-size: 0.8rem;
+        }
+
+        .data-table tbody tr:nth-child(even) { background: var(--primary-bg); }
+
+        .organism { font-weight: 600; color: var(--primary-dark); font-style: italic; }
+        .ref { color: #999; font-size: 0.7rem; text-align: right; }
+
+        /* Diagram styles for page 3 - Modern Card-Based Timeline */
+        .diagram-container {
+            margin: 12px 0;
+            font-size: 0.75rem;
+        }
+
+        .diagram-header-bar {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            text-align: center;
+            padding: 10px 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .diagram-subheader-bar {
+            background: var(--primary-bg);
+            color: var(--primary);
+            text-align: center;
+            padding: 8px;
+            font-weight: 500;
+            font-size: 0.78rem;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .diagram-main {
+            display: flex;
+            background: white;
+            border: 1px solid var(--border);
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            overflow: hidden;
+        }
+
+        .diagram-sidebar {
+            width: 90px;
+            background: linear-gradient(180deg, var(--primary-bg) 0%, #f0fdfa 100%);
+            border-right: 2px dashed var(--border);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 15px 10px;
+            text-align: center;
+        }
+
+        .diagram-sidebar-title {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            line-height: 1.3;
+        }
+
+        .diagram-sidebar-subtitle {
+            font-size: 0.62rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+            font-style: italic;
+        }
+
+        .diagram-timeline-wrapper {
+            flex: 1;
+            padding: 18px 15px;
+            position: relative;
+        }
+
+        /* Timeline connector line */
+        .timeline-connector {
+            position: absolute;
+            top: 50px;
+            left: 55px;
+            right: 55px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-light) 0%, var(--primary) 50%, var(--accent) 100%);
+            border-radius: 2px;
+        }
+
+        .timeline-connector::after {
+            content: '';
+            position: absolute;
+            right: -6px;
+            top: -4px;
+            width: 0;
+            height: 0;
+            border-left: 10px solid var(--accent);
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+        }
+
+        .timeline-stages {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            z-index: 1;
+        }
+
+        .timeline-card {
+            width: 105px;
+            text-align: center;
+        }
+
+        .timeline-icon-wrapper {
+            width: 56px;
+            height: 56px;
+            margin: 0 auto 10px;
+            background: white;
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 8px rgba(8, 145, 178, 0.2);
+            position: relative;
+        }
+
+        .timeline-icon-wrapper svg {
+            width: 28px;
+            height: 28px;
+            stroke: var(--primary);
+            fill: none;
+            stroke-width: 1.8;
+        }
+
+        .timeline-card:last-child .timeline-icon-wrapper {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .timeline-card:last-child .timeline-icon-wrapper svg {
+            stroke: white;
+        }
+
+        .timeline-card-label {
+            font-weight: 600;
+            color: var(--primary-dark);
+            font-size: 0.72rem;
+            margin-bottom: 6px;
+            line-height: 1.25;
+            min-height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .timeline-card-bacteria {
+            background: var(--primary-bg);
+            border-radius: 6px;
+            padding: 8px 6px;
+            font-size: 0.62rem;
+            color: var(--text-secondary);
+            font-style: italic;
+            line-height: 1.4;
+            min-height: 70px;
+        }
+
+        .timeline-card:last-child .timeline-card-bacteria {
+            background: rgba(5, 150, 105, 0.1);
+            font-style: normal;
+            font-weight: 500;
+            color: var(--accent);
+        }
+
+        /* Info box */
+        .info-box {
+            background: var(--primary-bg);
+            border-left: 4px solid var(--primary);
+            padding: 12px 15px;
+            margin: 12px 0;
+            font-size: 0.85rem;
+        }
+
+        .info-box p { margin: 0; }
+
+        /* Bullet list */
+        .bullet-list {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0;
+        }
+
+        .bullet-list li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+        }
+
+        .bullet-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 6px;
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+        }
+
+        /* Feature grid for page 11 */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .feature-item {
+            font-size: 0.85rem;
+        }
+
+        .feature-item strong {
+            color: var(--primary);
+        }
+
+        /* Back cover */
+        .back-cover {
+            background: var(--primary);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 60px;
+        }
+
+        .back-cover .logo {
+            height: 60px;
+            filter: invert(1) brightness(2);
+            -webkit-filter: invert(1) brightness(2);
+            margin-bottom: 40px;
+        }
+
+        .back-cover-tagline {
+            color: rgba(255,255,255,0.85);
+            font-size: 1.1rem;
+            font-style: italic;
+            margin-top: 40px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: white;
+            margin: 12px 0;
+            font-size: 1rem;
+        }
+
+        .contact-item svg {
+            width: 22px;
+            height: 22px;
+            stroke: white;
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .footnote {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-top: 15px;
+            line-height: 1.4;
+        }
+
+        /* Screen Styles - Document Preview Mode */
+        @media screen {
+            body {
+                background: #E5E7EB;
+                padding: 40px 0;
+            }
+
+            .page {
+                margin: 0 auto 40px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Page 1: Cover - Friendly Design for Kids -->
+    <div class="page cover-page">
+        <!-- SVG Gradient Background - avoids Chrome PDF bug with CSS gradient + border-radius -->
+        <svg class="cover-gradient-bg" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 100 100">
+            <defs>
+                <linearGradient id="coverGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#E0F7FA"/>
+                    <stop offset="50%" stop-color="#B2EBF2"/>
+                    <stop offset="100%" stop-color="#80DEEA"/>
+                </linearGradient>
+            </defs>
+            <rect width="100" height="100" fill="url(#coverGradient)"/>
+        </svg>
+
+        <!-- Background Pattern - Soft bubbles and friendly bacteria -->
+        <div class="cover-bg-pattern">
+            <!-- Soft bubbles -->
+            <div class="bubble b1"></div>
+            <div class="bubble b2"></div>
+            <div class="bubble b3"></div>
+            <div class="bubble b4"></div>
+            <div class="bubble b5"></div>
+            <div class="bubble b6"></div>
+            <div class="bubble b7"></div>
+            <div class="bubble b8"></div>
+            <!-- Friendly microbes -->
+            <div class="friendly-microbe fm1"></div>
+            <div class="friendly-microbe fm2"></div>
+            <div class="friendly-microbe fm3"></div>
+            <div class="friendly-microbe fm4"></div>
+            <!-- Accent dots -->
+            <div class="accent-dot ad1"></div>
+            <div class="accent-dot ad2"></div>
+            <div class="accent-dot ad3"></div>
+            <div class="accent-dot ad4"></div>
+        </div>
+
+        <!-- Header with logo -->
+        <div class="cover-header">
+            <img src="genomerlogo.png" alt="Genomer" class="logo">
+        </div>
+
+        <!-- Central Neumorphic Card -->
+        <div class="cover-card">
+            <!-- Simple Microbiome Icon -->
+            <div class="gut-illustration">
+                <!-- SVG gradient background for the circle -->
+                <svg class="gut-illustration-gradient" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+                    <defs>
+                        <linearGradient id="gutGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#22D3EE"/>
+                            <stop offset="100%" stop-color="#0891B2"/>
+                        </linearGradient>
+                    </defs>
+                    <rect width="100" height="100" fill="url(#gutGrad)"/>
+                </svg>
+                <!-- Microbiome icon -->
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="position: relative; z-index: 1;">
+                    <!-- Simple bacteria/microbiome circles - white for contrast -->
+                    <circle cx="50" cy="50" r="18" fill="white" fill-opacity="0.9"/>
+                    <circle cx="30" cy="35" r="10" fill="white" fill-opacity="0.7"/>
+                    <circle cx="70" cy="35" r="9" fill="white" fill-opacity="0.8"/>
+                    <circle cx="35" cy="65" r="7" fill="white" fill-opacity="0.6"/>
+                    <circle cx="65" cy="68" r="10" fill="white" fill-opacity="0.7"/>
+                    <circle cx="50" cy="25" r="5" fill="white" fill-opacity="0.8"/>
+                    <circle cx="75" cy="55" r="6" fill="white" fill-opacity="0.6"/>
+                    <circle cx="25" cy="50" r="4" fill="white" fill-opacity="0.7"/>
+                </svg>
+            </div>
+
+            <h1 class="cover-title">ENTEROBIOME<sup>&reg;</sup></h1>
+            <div class="cover-kids-badge">KIDS</div>
+            <div class="cover-divider"></div>
+            <p class="cover-subtitle">ÇOCUK DIŞKI ÖRNEKLERİNDE BAĞIRSAK MİKROBİYOTA KOMPOZİSYONUNUN REAL-TIME PCR İLE ANALİZİ</p>
+        </div>
+
+        <!-- Footer badge -->
+        <div class="cover-footer">
+            <div class="cover-footer-badge">
+                <p>Moleküler Tanıda Öncü Teknoloji</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page 2: Gut Microbiota -->
+    <div class="page">
+        <header class="page-header">
+            <img src="genomerlogo.png" alt="Genomer" class="logo">
+        </header>
+
+        <h2 class="section-title">BAĞIRSAK MİKROBİYOTASI</h2>
+
+        <div class="content-block">
+            <div class="content-bullet"></div>
+            <div class="content-text">İnsan bağırsak mikrobiyotası; bakteri, mantar, arkea ve virüsler dahil olmak üzere çok sayıda farklı mikroorganizmayı barındıran karmaşık ve dinamik bir ekosistemdir. Bu mikroorganizmalar birbirleriyle ve insan organizmasıyla etkileşime girerek çeşitli metabolik süreçlere katılırlar. İnsan bağırsaklarındaki toplam mikrobiyal hücre sayısı, vücut hücrelerinin sayısını kat kat aşabilir [1]. Ayrıca, mikrobiyotadaki protein kodlayan genlerin toplam sayısı, insan gen sayısından yüzlerce kat fazladır [2]. Bu durum, bağırsak mikrobiyomunun insan vücudu hücrelerinin gerçekleştiremeyeceği bir dizi işlevi yerine getirmesini sağlar.</div>
+        </div>
+
+        <div class="content-block">
+            <div class="content-bullet"></div>
+            <div class="content-text">Bağırsak mikrobiyotası; karbonhidrat ve protein metabolizması, lipid değişimi ile kısa zincirli yağ asitleri (KZYA), sekonder safra asitleri, vitaminler ve lipopolisakkaritler gibi önemli metabolik ara ürünlerin üretimine katılır. Bu metabolitler sinyalizasyon molekülleri olarak görev yapar ve insan organizmasının tüm sistemlerinin işleyişinde rol oynar. Özellikle iştah düzenlenmesi, bağırsak motilitesi, enerji tüketimi ve depolanmasında görev alırlar. Bağırsak mikrobiyotası bağışıklık sisteminin olgunlaşmasını uyarır ve bağırsakların bariyer işlevini destekleyerek patojenlerin kolonizasyonunu engeller.</div>
+        </div>
+
+        <div class="content-block">
+            <div class="content-bullet"></div>
+            <div class="content-text">Tür düzeyinde, çoğu insanda (popülasyonun %50'sinden fazlasında) bulunan baskın mikroorganizmalardan oluşan filogenetik "çekirdek mikrobiyota"yı belirlemek güçtür. Bu durum, mikrobiyotanın işlevsel fazlalığı ile açıklanabilir — bazı işlevler farklı taksonların üyeleri tarafından gerçekleştirilebilir. Ayrıca, mikroorganizmaların metabolik işlevleri bir aile içinde bile homojen olabilir; bu nedenle farklı türler birbirlerinin yerini alabilir ve biyosenozu bozmadan farklı sağlıklı bireylerin mikrobiyotasında baskın hale gelebilir.</div>
+        </div>
+
+        <h3 class="subsection-title">ÇOCUKLUK DÖNEMİ: BAĞIRSAK MİKROBİYOMUNUN ŞEKİLLENDİĞİ DÖNEM</h3>
+
+        <p>Mekonyum "mikrobiyotası"nın varlığı ve kökeni tartışmalıdır [3–5]. Normal koşullarda, fetal bağırsakta mikrobiyota bulunmaz çünkü beslenme için substrat yoktur. Yenidoğanın mekonyumundaki mikroorganizmaların kaynağı hem annenin vajinal, deri ve fekal mikrobiyotası hem de uterus boşluğu ve koryonik villüs dış yüzeyinin mikrobiyotası olabilir. Her durumda, bebek beslenmeden önce mekonyum mikrobiyotası geçicidir.</p>
+
+        <p>Bebekte kendi bağırsak mikrobiyotasının oluşumu, dört ardışık evrenin ayırt edildiği uzun ve dinamik bir süreçtir [6].</p>
+
+        <span class="page-number">02</span>
+    </div>
+
+    <!-- Page 3: Diagram and factors -->
+    <div class="page">
+        <header class="page-header">
+            <img src="genomerlogo.png" alt="Genomer" class="logo">
+        </header>
+
+        <!-- Modern Card-Based Timeline Diagram -->
+        <div class="diagram-container">
+            <div class="diagram-header-bar">ANTİBİYOTİK KULLANIMI</div>
+            <div class="diagram-subheader-bar">BESLENME TÜRÜ, DİYET</div>
+            <div class="diagram-main">
+                <div class="diagram-sidebar">
+                    <div class="diagram-sidebar-title">DOĞUM ŞEKLİ</div>
+                    <div class="diagram-sidebar-subtitle">Gestasyonel yaş</div>
+                </div>
+                <div class="diagram-timeline-wrapper">
+                    <div class="timeline-connector"></div>
+                    <div class="timeline-stages">
+                        <div class="timeline-card">
+                            <div class="timeline-icon-wrapper">
+                                <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/></svg>
+                            </div>
+                            <div class="timeline-card-label">Doğum</div>
+                            <div class="timeline-card-bacteria">Streptococcus spp.<br>Enterobacterales</div>
+                        </div>
+                        <div class="timeline-card">
+                            <div class="timeline-icon-wrapper">
+                                <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="18" cy="8" r="2" stroke-dasharray="2 1"/></svg>
+                            </div>
+                            <div class="timeline-card-label">14. gün</div>
+                            <div class="timeline-card-bacteria">Lactobacillaceae<br>Bifidobacterium spp.<br>Clostridium<br>Bacteroidota*</div>
+                        </div>
+                        <div class="timeline-card">
+                            <div class="timeline-icon-wrapper">
+                                <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="6" cy="5" r="1.5"/><circle cx="18" cy="5" r="1.5"/></svg>
+                            </div>
+                            <div class="timeline-card-label">Tamamlayıcı gıdalara geçiş</div>
+                            <div class="timeline-card-bacteria">Bacteroidota,<br>Bacillota,<br>Verrucomicrobiota<br>Actinomycetota,<br>Pseudomonadota*</div>
+                        </div>
+                        <div class="timeline-card">
+                            <div class="timeline-icon-wrapper">
+                                <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                            </div>
+                            <div class="timeline-card-label">Anne sütü veya formül mama ile beslenmenin sona ermesi</div>
+                            <div class="timeline-card-bacteria">Mikrobiyota kompozisyonunun stabilizasyonu</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <p class="footnote">* — Uluslararası Prokaryot Sistematiği Komitesi tarafından onaylanan nomenklatüre göre aşağıdaki isimler kabul edilmiştir (Şubat 2021): Bacillota (önceki ad: Firmicutes), Pseudomonadota (önceki ad: Proteobacteria), Bacteroidota (önceki ad: Bacteroidetes), Actinomycetota (önceki ad: Actinobacteria), Fusobacteriota (önceki ad: Fusobacteria), Verrucomicrobiota (önceki ad: Verrucomicrobia)</p>
+
+        <p style="margin-top: 15px;">Çocuklarda bağırsak mikrobiyotasının oluşumu; gestasyonel yaş, doğum şekli, beslenme türü ve antibiyotik kullanımına bağlı olarak değişir. Bu nedenle aynı yaştaki çocuklarda mikrobiyota kompozisyonu farklılık gösterebilir.</p>
+
+        <ul class="bullet-list">
+            <li>Doğal yolla doğan bebeklerin bağırsak mikrobiyotası, düşük çeşitlilik ancak kararlı kompozisyon ile karakterizedir; çünkü çocuk doğum sürecinde annenin vajinal, deri ve fekal mikrobiyotasıyla temas eder [7-8]. Sezaryen ile doğan çocuklarda bağırsak mikrobiyotasının oluşumu daha uzun sürer. Ayrıca bu çocuklarda <em>Clostridium difficile</em>, <em>Enterococcus spp.</em>, <em>Klebsiella spp.</em>, <em>Streptococcus spp.</em> ve <em>Veillonella spp.</em> gibi fırsatçı mikroorganizmalar daha sık tespit edilir.</li>
+            <li>Anne sütü ile beslenen bebeklerde bağırsak mikrobiyotası esas olarak <em>Bifidobacterium spp.</em> (özellikle <em>Bifidobacterium breve</em>, <em>Bifidobacterium bifidum</em> ve <em>Bifidobacterium longum</em>), <em>Lactobacillus spp.</em>, <em>Streptococcus spp.</em>, <em>Enterococcus spp.</em> ve <em>Lactococcus spp.</em> tarafından temsil edilir [9]. Formül mama ile beslenen çocuklarda ise bağırsak mikrobiyotasında <em>Bacteroides</em> ve <em>Clostridium</em> cinslerinden anaeroblar baskındır ve bifidobakteri sayısı azalmıştır [10-11].</li>
+        </ul>
+
+        <span class="page-number">03</span>
+    </div>
+
+    <!-- Page 4: Diversity and Normal Microbiota -->
+    <div class="page">
+        <header class="page-header">
+            <img src="genomerlogo.png" alt="Genomer" class="logo">
+        </header>
+
+        <ul class="bullet-list">
+            <li>Gestasyonel yaş, bağırsak mikrobiyotasının oluşumunu etkileyen bir diğer anahtar faktördür. Prematüre bebeklerde sindirim ve bağışıklık sistemlerinin gelişimi tamamlanmamıştır. Bu çocuklar için genellikle gerekli olan hastaneye yatış, yapay beslenme ve antibiyotik kullanımı, bağırsak kolonizasyonunun doğal sürecinde ve intestinal mikrobiyotanın gelişiminde geri dönüşü olmayan değişikliklere yol açabilir [12]. Özellikle prematüre bebeklerde anaerobik kolonizasyon gecikmiş olup, dışkılarında zamanında doğan bebeklere kıyasla daha yüksek miktarda <em>Enterobacteriaceae</em>, <em>Enterococcus</em> ve fırsatçı mikroorganizmalar bulunur [13].</li>
+            <li>Antibiyotik kullanımı mikrobiyotanın genel çeşitliliğini azaltır; <em>Enterobacteriaceae</em> ve <em>Clostridium</em> taksonlarından ilaca dirençli ve potansiyel patojen bakterilerin artışına, aynı zamanda <em>Bifidobacteriaceae</em>, <em>Bacilli</em> ve <em>Lactobacillales</em> sayısının azalmasına yol açar [14].</li>
+        </ul>
+
+        <h2 class="section-title">BAĞIRSAK MİKROBİYOTASININ ÇEŞİTLİLİĞİ</h2>
+
+        <p>Evrimsel süreçte, makroorganizmanın birçok metabolik işlevi bağırsak mikrobiyotasına devredilmiştir. En çeşitli mikrobiyota kompozisyonu, insan organizması için en "faydalı" olandır çünkü mümkün olan en fazla metabolik yolu sağlar. Bağırsak mikrobiyotasının çeşitliliğini değerlendirirken, farklı mikroorganizmaların maddeleri birlikte metabolize etme yeteneklerini ve farklı mikroorganizma taksonlarında bulunan enzimlerin katılımını gerektiren maddelerin kullanılmasını dikkate almak önemlidir.</p>
+
+        <p>Anahtar bir mikroorganizma türündeki azalma (örneğin antibiyotik tedavisi sonucunda), diğer mikroorganizmaların sayısında azalmaya ve bağırsak mikrobiyotasının bazı işlevlerinin kısmen veya tamamen kaybına yol açabilir.</p>
+
+        <p>Azalmış mikrobiyota çeşitliliği ile hastalığın varlığı arasındaki ilişki, tür açısından zengin bir bağırsak ekosisteminin olumsuz çevresel streslere karşı daha dirençli olduğunu göstermektedir [15].</p>
+
+        <div class="info-box">
+            <p><strong>Bağırsak mikrobiyotasının insan sağlığını nasıl etkilediğini anlamak, bireysel patojenlerden, bağırsak mikrobiyotasını bir bütün olarak ve konak ile etkileşimi çerçevesinde ele alan ekolojik bir yaklaşıma odaklanmayı gerektirir.</strong></p>
+        </div>
+
+        <h2 class="section-title">NORMAL MİKROBİYOTA</h2>
+
+        <p>Normal bağırsak mikrobiyotası, esas olarak üç filumun temsilcileri olan geniş bir mikroorganizma yelpazesiyle temsil edilir: <em>Bacillota (Firmicutes)</em>, <em>Bacteroidota (Bacteroidetes)</em>, <em>Actinomycetota (Actinobacteria)</em>.</p>
+
+        <span class="page-number">04</span>
+    </div>
+
+    <!-- Page 5: Actinomycetota -->
+    <div class="page">
+        <header class="page-header">
+            <img src="genomerlogo.png" alt="Genomer" class="logo">
+        </header>
+
+        <h2 class="section-title">ACTINOMYCETOTA (ACTINOBACTERIA)</h2>
+
+        <p>Çocukların bağırsak mikrobiyotasında <em>Actinomycetota (Actinobacteria)</em> filumu, <em>Bifidobacterium</em> cinsi ve <em>Coriobacteriia</em> sınıfı ile temsil edilir. Bifidobakteriler, doğumdan sonra çocuğun bağırsaklarını kolonize eden ilk mikroorganizmalar arasındadır. Yaşamın ilk aylarında bağırsak mikrobiyotasının baskın grubunu oluştururlar. Yaşla birlikte mikrobiyota kompozisyon olarak daha çeşitli hale gelir, ancak bifidobakteriler insan sağlığının korunmasındaki önemli rollerini sürdürürler. Bifidobakteriler, bağırsak enfeksiyonlarına neden olan patojenlerin istilasını önlemeye yardımcı olur ve böylece bağırsakların patojenler tarafından kolonize edilmesini engeller [16].</p>
+
+        <table class="data-table">
+            <thead>
+                <tr><th colspan="3">ACTINOMYCETOTA (ACTINOBACTERIA)</th></tr>
+            </thead>
+            <tbody>
+                <tr><td colspan="3" style="background: var(--primary-bg);"><strong><em>Bifidobacterium spp.</em></strong></td></tr>
+                <tr>
+                    <td style="width:18%"><strong>metabolik olarak aktif "çocuk" türleri</strong></td>
+                    <td>Tamamlayıcı gıdaların başlangıcından önce bağırsak mikrobiyotasındaki baskın grup. Bu bakteriler anne sütü oligosakkaritlerini fermente eder, laktobasillerin biyosenozda çoğalması ve yerleşimini, hücresel bağışıklık ve T-regülatör hücrelerin aktivasyonunu teşvik eder. Olgunlaşmamış bağırsak epitel hücrelerinin gelişimine katkı sağlar</td>
+                    <td class="ref">[17-20]</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><em>B. bifidum</em> — Anne sütü oligosakkaritlerini fermente eder, tamamlayıcı gıdalar başladığında bitkisel polisakkaritleri metabolize eder. Müsinlerin karbonhidrat kısımlarını parçalar</td>
+                    <td class="ref">[16, 21]</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><em>B. longum subsp. longum</em> — En yaygın bifidobakteri türü. Hem anne sütü hem de formül ile beslenen çocukların bağırsaklarında baskındır</td>
+                    <td class="ref">[22]</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><em>B. longum subsp. infantis</em> — Anne sütüyle beslenen çocukların intestinal mikrobiyotasında baskın</td>
+                    <td class="ref"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><em>B. breve</em> — Anne sütü oligosakkaritlerini fermente eder, tamamlayıcı gıdalar başladığında bitkisel polisakkaritleri metabolize eder</td>
+                    <td class="ref"></td>
+                </tr>
+                <tr>
+                    <td><strong>metabolik olarak aktif "erişkin" türleri</strong></td>
+                    <td>Tamamlayıcı gıdaların başlangıcından ve anne sütüyle beslenmenin sona ermesinden sonra bağırsak mikrobiyotasındaki bifidobakteriler arasında baskındır<br><br><em>Bifidobacterium adolescentis<br>Bifidobacterium catenulatum subspp<br>Bifidobacterium animalis subsp. lactis<br>Bifidobacterium dentium</em><br><br>Bitkisel kaynaklı polisakkarit ve oligosakkaritleri fermente ederek humoral bağışıklık ve pro-inflamatuvar T17 aktivasyonuna katkı sağlar</td>
+                    <td class="ref">[23]</td>
+                </tr>
+                <tr><td colspan="3" style="background: var(--primary-bg);"><strong><em>Coriobacteriia</em></strong></td></tr>
+                <tr>
+                    <td><em>Coriobacteriia</em></td>
+                    <td>Doğal antioksidanlar olan polifenollerin biyotransformasyonunda rol alır: ligninler, flavonoidler, taninler</td>
+                    <td class="ref"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <span class="page-number">05</span>
+    </div>
+
+    <!-- Page 6: Bacillota -->
+    <div class="page">
+        <header class="page-header">
+            <img src="genomerlogo.png" alt="Genomer" class="logo">
+        </header>
+
+        <h2 class="section-title">BACILLOTA (FIRMICUTES)</h2>
+
+        <p><em>Bacillota (Firmicutes)</em> filumunun bağırsak mikroorganizmalarının çoğu <em>Clostridia</em> sınıfına aittir. Bu, insan bağırsaklarında en çok temsil edilen takson olup, üyeleri hem normal mikrobiyotada hem de fırsatçı hatta patojen mikrobiyotada yer alabilir.</p>
+
+        <p>Normal floranın <em>Clostridia</em>'sı protein ve yağları parçalayarak diğer mikroorganizmalara besin substratları sağlar. <em>Clostridia</em>, kolonun epitel hücreleri için ana enerji kaynağı olan bütirat (KZYA) üretir. <em>Clostridium</em> cinsi içinde, bağırsak normobiyotasında en yaygın olanlar <em>Clostridium leptum</em> gr. ve <em>Lachnospiraceae</em> (<em>Clostridium coccoides</em> gr.) olup, toplam bakteri sayısının sırasıyla %40'ı ve %35'ini oluşturur [24].</p>
+
+        <table class="data-table">
+            <thead>
+                <tr><th colspan="3">BACILLOTA (FIRMICUTES)</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="width:25%"><em>Clostridium leptum</em> gr (küme IV)</td>
+                    <td>Dört türü içerir: <em>C. leptum</em>, <em>C. sporosphaeroides</em>, <em>C. cellulosi</em> ve <em>Faecalibacterium prausnitzii</em></td>
+                    <td class="ref">[24-25]</td>
+                </tr>
+                <tr>
+                    <td><em>Faecalibacterium prausnitzii</em></td>
+                    <td><em>Clostridium leptum</em> gr.'nin en yaygın temsilcisi. Anti-inflamatuvar interlökinler IL-10 ve IL-12'nin salgılanmasını teşvik eder ve pro-inflamatuvar IL-8 üretimini inhibe eder. Bağırsak hastalıklarının bir biyobelirteci olarak kabul edilir: inflamatuvar patolojilerde mikrobiyotadaki varlığı azalır</td>
+                    <td class="ref">[25-27]</td>
+                </tr>
+                <tr>
+                    <td><em>Dialister spp./Allisonella spp./Megaspherae spp./Veillonella spp.</em></td>
+                    <td>Propiyonat üreten bakteriler olan <em>Veillonellaceae</em> ailesine dahildir</td>
+                    <td class="ref">[28]</td>
+                </tr>
+                <tr>
+                    <td><em>Lachnospiraceae</em> (<em>Clostridium coccoides</em> gr, küme XIVa)</td>
+                    <td><em>Clostridium</em>, <em>Butyrivibrio</em>, <em>Dorea</em>, <em>Coprococcus</em>, <em>Eubacterium</em>, <em>Ruminococcus</em> ve <em>Roseburia</em>'yı içerir. Beş müsin monosakkaritinin tamamını metabolize edebilirler. <em>Lachnospiraceae</em> erken yaştaki çocuklarda bulunur</td>
+                    <td class="ref">[25-29]</td>
+                </tr>
+                <tr>
+                    <td><em>Lactobacillaceae</em></td>
+                    <td>Probiyotik açıdan önemli bir grup. Mikrobiyomu kolonize eder ve laktat üreterek patojenlerin çoğalmasını önler. Gastrointestinal sistemin bariyer işlevini artırır ve bağırsak bozukluklarında homeostazın yeniden sağlanmasına katılır</td>
+                    <td class="ref">[30]</td>
+                </tr>
+                <tr>
+                    <td><em>Lactococcus lactis</em></td>
+                    <td>Diyette hayvansal süt varlığının belirteci, örneğin yapay süt formüllerinin kullanımı. Laktobasiller arasında ana laktat üreticilerinden biri</td>
+                    <td class="ref"></td>
+                </tr>
+                <tr>
+                    <td><em>Streptococcus spp.</em></td>
+                    <td>Laktik asit bakterilerine aittir, karbonhidratları fermente eder</td>
+                    <td class="ref">[31]</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <span class="page-number">06</span>
+    </div>
+
+    <!-- Page 7: Bacteroidota and Other Bacteria -->
+    <div class="page">
+        <header class="page-header">
+            <img src="genomerlogo.png" alt="Genomer" class="logo">
+        </header>
+
+        <h2 class="section-title">BACTEROIDOTA (BACTEROIDETES)</h2>
+
+        <p><em>Bacteroidota (Bacteroidetes)</em> taksonu, bağırsak mikrobiyotasındaki ikinci en büyük filumdur. <em>Bacteroidota (Bacteroidetes)</em> filumunun temsilcileri polisakkaritlerin metabolizmasında önemli rol oynar. Ayrıca bağırsakta anti-inflamatuvar kısa zincirli yağ asitlerinin (KZYA) ana üreticileridir ve bağışıklık ile sinir sistemlerinin işleyişinin düzenlenmesinde rol alan metabolitleri salgılarlar.</p>
+
+        <table class="data-table">
+            <thead>
+                <tr><th colspan="3">BACTEROIDOTA (BACTEROIDETES)</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="width:20%"><em>Bacteroides spp.</em></td>
+                    <td>Yüksek hayvansal protein ve yağ alımı ile ilişkilidir. Bitkisel karbonhidrat eksikliğinde, bağırsak hücreleri tarafından üretilen polisakkaritleri kullanabilirler; bu durum beslenme yetersizliklerinde önemlidir. K vitamininin ana üreticileridir</td>
+                    <td class="ref">[32-33]</td>
+                </tr>
+                <tr>
+                    <td><em>Prevotella spp.</em></td>
+                    <td>Yüksek lifli karma diyette polisakkaritleri parçalayabilir ve kırsal popülasyonlarda bağırsak mikrobiyotasında baskındır. Propiyonat sentezler</td>
+                    <td class="ref">[34]</td>
+                </tr>
+                <tr>
+                    <td><em>Parabacteroides spp.</em></td>
+                    <td>Antimikrobiyal maddeler sentezleyerek bağırsağın patojen bakteriler tarafından kolonize edilmesini önler. En sık doğal yolla doğan zamanında doğmuş bebeklerde bulunur. Safra asitlerinin dönüşümünde öncü rol oynar; bu da lipid ve glukoz metabolizmasını düzenleyerek insülin direnci ve obeziteyi önler</td>
+                    <td class="ref">[35]</td>
+                </tr>
+                <tr>
+                    <td><em>Alistipes spp.</em></td>
+                    <td>Asetat ve propiyonat üretir</td>
+                    <td class="ref">[36]</td>
+                </tr>
+                <tr>
+                    <td><em>Butyricimonas spp.</em></td>
+                    <td>Asetat, propiyonat ve süksinat üretir</td>
+                    <td class="ref"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>Dolayısıyla, iki yaş üstü çocuklarda bağırsak mikrobiyotasının büyük bölümü <em>Bacillota (Firmicutes)</em> filumunun bakterileri ile temsil edilir. Bunların azalması ve <em>Bacillota (Firmicutes)/Bacteroidota (Bacteroidetes)</em> oranının <em>Bacteroidota (Bacteroidetes)</em> lehine kayması, inflamatuvar sürecin gelişimi ile ilişkili olabilir.</p>
+
+        <p>Ülseratif kolit ve Crohn hastalığı genellikle <em>Bacteroides</em> ve <em>Prevotella</em> temsilcilerinde belirgin artış, bifidobakteri sayısında değişiklik ve Firmicutes – <em>C. leptum</em> gr, özellikle <em>F. prausnitzii</em>'de azalma ile ilişkilidir [37-38]. Çölyak hastalığında <em>Lactobacillus</em> ve <em>Bifidobacteria</em>'da azalma ve <em>Veillonellaceae</em> ailesi dahil pro-inflamatuvar bakterilerde artış görülür.</p>
+
+        <h2 class="section-title">DİĞER BAKTERİLER</h2>
+
+        <p>Bağırsaktaki çoğu biyokimyasal reaksiyonun son ürünü moleküler hidrojendir. Mikrobiyotanın metabolik aktivitesini sürdürmek için hidrojenin oksidasyonu önemlidir. Bu işlev bağırsak biyosenozunda üç mikroorganizma grubu tarafından gerçekleştirilir: asetojenler (<em>Blautia spp.</em>, <em>Lachnospiraceae</em> ailesi), sülfat indirgeyen bakteriler (<em>Desulfovibrio spp.</em>) ve metanojenler (<em>Methanobacteriaceae</em> grubundan arkealar, özellikle <em>Methanobrevibacter</em> ve/veya <em>Methanosphaera</em>) [39]. Normal koşullarda dışkı örnekleri birkaç grubun temsilcilerini veya yalnızca birini içerebilir [40].</p>
+
+        <span class="page-number">07</span>
+    </div>
+
+    <!-- Page 8: Akkermansia and Opportunistic Microbiota -->
+    <div class="page">
+        <header class="page-header">
+            <img src="genomerlogo.png" alt="Genomer" class="logo">
+        </header>
+
+        <p>İki yaş üstü çocuklarda ve yetişkinlerde ana müsin metabolize edicisi <em>Akkermansia muciniphila</em>'dır (<em>Verrucomicrobiota</em> filumu (<em>Verrucomicrobia</em>)). <em>A. muciniphila</em> insan kalın bağırsağının mukozal tabakasını kolonize eder ve bariyer işlevini güçlendirir.</p>
+
+        <p><em>A. muciniphila</em> bağırsak müsinini esas olarak propiyonik ve asetik asitlere parçalar; bunlar, bağırsakta inflamatuvar süreçlerin baskılanmasına katkıda bulunan ana bütirat üreticilerinden biri olan <em>F. prausnitzii</em> için substrat haline gelir [41-42].</p>
+
+        <h2 class="section-title">FIRSATÇI MİKROBİYOTA (PATOBİYONTLAR) VE PATOJENİTE VE DİRENÇ BELİRTEÇLERİ</h2>
+
+        <table class="data-table">
+            <tbody>
+                <tr>
+                    <td style="width:22%"><em>Clostridium difficile</em> gr.<br><em>Clostridioides difficile</em><br>tcdA, tcdB<br>(patojenite belirteçleri)</td>
+                    <td><em>Clostridioides difficile</em>, akut inflamasyona, bağırsak bariyerinin hasar görmesine ve sıvı akışına neden olan enterotoksin A (tcdA) ve B (tcdB) üretebilir. Çoklu antibiyotik direncine sahiptir ve hastane kaynaklı enfeksiyöz ishale neden olur. Belirtiler hafif ishalden şiddetli kolite ve bağırsak perforasyonlarına kadar değişebilir</td>
+                    <td class="ref">[25]</td>
+                </tr>
+                <tr>
+                    <td><em>C. perfringens</em> gr.</td>
+                    <td>Prematüre bebeklerde bağırsak mikrobiyotasının bir parçasını oluşturur ve bunların %30'unda <em>C. perfringens</em> gr. yoğun bakım ünitesinde zaten tespit edilir. Çok sayıda toksin üretme kapasitesine sahiptir. <em>C. perfringens</em> gr., prematüre bebeklerde genellikle ölümcül olan nekrotizan enterokolit gelişimi ile ilişkilidir</td>
+                    <td class="ref">[25, 43, 44]</td>
+                </tr>
+                <tr>
+                    <td><em>Enterobacterales</em></td>
+                    <td>Bu grubun temsilcileri inflamasyon belirteçleri olarak kabul edilir. İnflamasyon sırasında <em>Enterobacterales</em> takımından fakültatif anaerobların sayısında artış ve normobiyota temsilcilerinin sayısında azalma görülür. <em>Enterobacterales</em>, irritabl bağırsak sendromu, inflamatuvar bağırsak hastalığı ve nekrotizan enterokolit ile ilişkili olabilir</td>
+                    <td class="ref">[45-46]</td>
+                </tr>
+                <tr>
+                    <td><em>Enterococcus spp.</em></td>
+                    <td>Hem kommensal türleri hem de yenidoğanlarda ishale neden olabilen türleri içerir. Kommensal türler bağışıklık sistemini uyarabilir ve bağırsak homeostazının korunmasını etkileyebilir. <em>E. faecalis</em> ve <em>E. faecium</em> insanlarda en sık bulunan türlerdir</td>
+                    <td class="ref">[47]</td>
+                </tr>
+                <tr>
+                    <td><em>Erysipelotrichaceae</em></td>
+                    <td>Yüksek immünojeniteye, pro-inflamatuvar etkiye ve muhtemelen antimikrobiyal ilaçlara karşı çoklu dirence sahiptir. İnflamatuvar bağırsak hastalıklarında <em>Erysipelotrichaceae</em> temsilcilerinin sayısı belirgin şekilde artar</td>
+                    <td class="ref">[48-49]</td>
+                </tr>
+                <tr>
+                    <td><em>Staphylococcus spp.</em></td>
+                    <td>Özellikle prematüre bebeklerde, yenidoğanın bağırsağını kolonize eden ilk mikroorganizmalar arasındadır. <em>Staphylococcus spp.</em> (genellikle <em>S. epidermidis</em>), sezaryen ile doğan çocuklarda erken yaşta mikrobiyotanın önemli bir bölümünü oluşturur</td>
+                    <td class="ref"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <span class="page-number">08</span>
+    </div>
+
+    <!-- Page 9: More Pathobionts and C. difficile info -->
+    <div class="page">
+        <header class="page-header">
+            <img src="genomerlogo.png" alt="Genomer" class="logo">
+        </header>
+
+        <table class="data-table">
+            <tbody>
+                <tr>
+                    <td style="width:22%"><em>Staphylococcus aureus</em><br>mecA (metisilin direnç belirteci)</td>
+                    <td>Normal deri mikrobiyotasının temsilcisi. Bağırsakta bulunduğunda normal mikrobiyotanın oluşumunu yavaşlatır. Sepsise kadar değişen şiddette hastalıklara neden olabilir. mecA genini taşıyan suşlar metisiline dirençlidir</td>
+                    <td class="ref">[50]</td>
+                </tr>
+                <tr>
+                    <td><em>Streptococcus agalactiae</em><br>srr2</td>
+                    <td>Normal insan mikrobiyotasının bir parçası; ancak srr2 genini taşıyan <em>S. agalactiae</em> suşları artmış virülansa sahiptir. srr2 geninin ürünü, <em>S. agalactiae</em>'nin kan dolaşımına ve ardından beynin damar zarlarına invazyonunu teşvik ederek menenjit gelişimine neden olur</td>
+                    <td class="ref">[51]</td>
+                </tr>
+                <tr>
+                    <td><em>Candida spp.</em></td>
+                    <td>Normal insan bağırsak mikrobiyotasının bir parçası. Sayıları diyette karbonhidrat baskınlığı ile pozitif korelasyon gösterir</td>
+                    <td class="ref"></td>
+                </tr>
+                <tr>
+                    <td><em>Candida albicans</em></td>
+                    <td>Sağlıklı insanların %30-60'ında bulunur, laktat ve sitrat dahil farklı substratları aynı anda kullanabilir. Antibiyotik tedavisi <em>C. albicans</em> kolonizasyonunu teşvik eder. Bağışıklık sisteminin baskılanması ve bağırsak duvarı geçirgenliğinin bozulması gibi belirli koşullarda, hastane kaynaklı enfeksiyonlar dahil invaziv enfeksiyonlara neden olabilir</td>
+                    <td class="ref">[52-53]</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p style="margin-top: 20px;"><em>C. difficile</em>'nin neden olduğu enfeksiyon, hastane kaynaklı ishalin ana nedenlerinden biridir ve genellikle bağırsak mikrobiyotasının çeşitliliğinde ve <em>Bacillota (Firmicutes)</em>, <em>Bacteroidota (Bacteroidetes)</em> ve <em>Actinomycetota (Actinobacteria)</em> filumlarının temsilcilerinin sayısında azalmaya yol açan antibiyotik tedavisi ile ilişkilidir. Üç yaş ve üzeri çocuklarda ve yetişkinlerde <em>C. difficile</em> taşıyıcılık sıklığı yaklaşık %0-3'tür. Buna karşın, bir yaşından küçük çocuklarda taşıyıcılık sıklığı %61'e ulaşabilir [55].</p>
+
+        <p>Bu yaş grubundaki çocuklarda toksijenik olmayan suşların bulunma olasılığı daha yüksektir ve herhangi bir enfeksiyon belirtisi gelişmez. Bir hipoteze göre bu durum, yenidoğanlarda enterotoksin A için reseptörlerin bulunmamasından kaynaklanmaktadır [56]. Çocuğun bağışıklık sistemi olgunlaştıkça, <em>C. difficile</em> normal şartlarda yaklaşık iki yaşına kadar bağırsak mikrobiyotasından elimine edilir.</p>
+
+        <span class="page-number">09</span>
+    </div>
+
+    <!-- Page 10: Methods -->
+    <div class="page">
+        <header class="page-header">
+            <img src="genomerlogo.png" alt="Genomer" class="logo">
+        </header>
+
+        <h2 class="section-title">İNSAN BAĞIRSAK MİKROBİYOTASI KOMPOZİSYONUNUN İNCELENMESİ İÇİN YÖNTEMLER</h2>
+
+        <div class="content-block">
+            <div class="content-bullet"></div>
+            <div class="content-text">İnsan mikrobiyotası kompozisyonunun incelenmesi için standart yöntem bakteriyel kültürdür. Ancak bağırsak mikrobiyotasını oluşturan mikroorganizmaların %50-80'i kültürü zor yapılan organizmalardır ve mikrobiyolojik yöntemle tespit edilemez. Ayrıca bakteriyel kültür sonuçları, mikroorganizmaların canlılığının korunmasına doğrudan bağlıdır.</div>
+        </div>
+
+        <div class="content-block">
+            <div class="content-bullet"></div>
+            <div class="content-text">Yeni nesil dizileme (NGS) yöntemi, mikroorganizmaları tür düzeyinde doğrulukla tanımlamanın yanı sıra türler arasındaki oranları hesaplamaya da olanak tanır. Ancak NGS kullanılarak elde edilen bilgiler genellikle fazla detaylıdır ve yorumlanması için yüksek nitelikli personel gerektirir; bu durum dizilemenin rutin bir araştırma yöntemi olarak kullanılmasını zorlaştırır. Bununla birlikte, NGS diğer yöntemlerle analiz için en uygun taksonların belirlenmesinde kullanılmıştır.</div>
+        </div>
+
+        <div class="content-block">
+            <div class="content-bullet"></div>
+            <div class="content-text">Günümüzde mikrobiyotanın incelenmesi için en optimal yaklaşım Real-Time PCR kullanımıdır. Bu yöntem, türe özgü veya gruba özgü primerler kullanılarak bir örnekteki mikroorganizmaların doğru ve hızlı kantitatif tayinidir; ardından elde edilen sonuçlar hedef genlerin kopya sayısına göre normalize edilir. Çoklu tüp ve multipleks test formatı, büyük taksonların tanımlanmasını birkaç anahtar mikrobiyota türünün ve/veya alt popülasyonların tespiti ile birleştirmeyi mümkün kılar.</div>
+        </div>
+
+        <div class="info-box">
+            <p><strong>ENTEROBIOME Kids reaktif kiti, bir çocuğun dışkısındaki toplam prokaryotik kütlenin en az %99,9'unu oluşturan mikrobiyal taksonları tespit eder.</strong> Yayınlanmış verilere göre, ana metabolik özelliklere ve konak organizma üzerindeki etkilere göre birleştirilen fonksiyonel taksonomik gruplar tanımlanmıştır. Böylece, ENTEROBIOME Kids reaktif kitinde tanımlanan taksonlar, çocuğun yaşı dikkate alınarak klinik öneme sahip düzeyde detaylandırılmıştır.</p>
+        </div>
+
+        <p><strong>ENTEROBIOME Kids reaktif kiti</strong>, kalın bağırsak mikrobiyotası kompozisyonunun değerlendirilmesi amacıyla çocuk dışkı örneklerinden elde edilen DNA preparatlarında Real-Time PCR ile kolon ile ilişkili bakteri DNA'sının (<em>Bacillota (Firmicutes)</em>, <em>Pseudomonadota (Proteobacteria)</em>, <em>Bacteroidota (Bacteroidetes)</em>, <em>Actinomycetota (Actinobacteria)</em>, <em>Fusobacteriota (Fusobacteria)</em>, <em>Verrucomicrobiota (Verrucomicrobia)</em>), <em>Euryarchaeota</em> filumları), <em>Candida</em> mantarları, ayrıca metisilin dirençli <em>Staphylococcus spp.</em> geni (mecA), enterotoksin A ve B'li <em>Cl. difficile</em> (tcdA, tcdB), invazivlik belirteç geni taşıyan <em>Str. agalactiae</em> (srr2) tespiti için tasarlanmıştır.</p>
+
+        <span class="page-number">10</span>
+    </div>
+
+    <!-- Page 11: Study Recommendations and Kit Features -->
+    <div class="page">
+        <header class="page-header">
+            <img src="genomerlogo.png" alt="Genomer" class="logo">
+        </header>
+
+        <div class="info-box" style="background: var(--primary); color: white; border-left-color: var(--primary-dark);">
+            <p style="margin: 0;"><strong>ÇALIŞMA ÖNERİLİR</strong></p>
+        </div>
+
+        <p>tıbbi ve tanısal prosedürler kapsamında kalın bağırsak mikrobiyotasının kalitatif kompozisyonunun ve kantitatif değerlendirmesinin belirlenmesi gerektiğinde</p>
+
+        <div class="info-box" style="background: var(--primary); color: white; border-left-color: var(--primary-dark); margin-top: 20px;">
+            <p style="margin: 0;"><strong>TEST İÇİN BİYOMATERYAL</strong></p>
+        </div>
+
+        <p>dışkı (mekonyum dahil)</p>
+
+        <h2 class="section-title">REAKTİF KİTİNİN ÖZELLİKLERİ</h2>
+
+        <p><strong>Toplam bakteri kütlesi (TBK) içinde normobiyota ve fırsatçı mikrobiyotanın göreli bolluğuna göre bağırsak mikrobiyotası durumunun (normosenoz/disbiyoz) belirlenmesi:</strong></p>
+
+        <ul class="bullet-list">
+            <li>normobiyotanın (<em>Actinomycetota (Actinobacteria)</em>, <em>Bacillota (Firmicutes)</em>, <em>Bacteroidota (Bacteroidetes)</em>, <em>Pseudomonadota (Proteobacteria)</em> filumları), fırsatçı mikrobiyota ve <em>Candida</em> cinsinden maya mantarlarının kantitatif tahmini;</li>
+            <li>normal mikrobiyota çeşitliliğinin değerlendirilmesi;</li>
+            <li>bifidobakteri ve laktobasil sayısının belirlenmesi;</li>
+            <li>bifidobakteri türlerinin belirlenmesi;</li>
+            <li><em>Bacillota (Firmicutes)</em>, <em>Bacteroidota (Bacteroidetes)</em> oranının hesaplanması;</li>
+            <li><em>Bacteroidetes</em> taksonlarının temsilcilerinin varlığının değerlendirilmesi;</li>
+            <li>patojenite ve direnç belirteçlerinin tespiti: mecA, srr2, tcdA, tcdB</li>
+        </ul>
+
+        <div class="feature-grid">
+            <div class="feature-item"><strong>Multipleks format</strong> — birden fazla DNA hedefi tek bir test tüpünde eş zamanlı olarak tespit edilir;</div>
+            <div class="feature-item"><strong>Sonuçların otomatik oluşturulması</strong> — önerilen Real-Time PCR cihazları ve RealTime_PCR yazılımı kullanıldığında;</div>
+            <div class="feature-item"><strong>İç kontrol</strong> — DNA ekstraksiyonu ve PCR kalitesinin değerlendirilmesi;</div>
+            <div class="feature-item"><strong>Önceden ayarlanmış şablonların mevcudiyeti</strong> — gerekli ayarları otomatik olarak yapan ve sonuçları hesaplayan test parametreleri ile.</div>
+        </div>
+
+        <span class="page-number">11</span>
+    </div>
+
+    <!-- Page 12: Back Cover -->
+    <div class="page back-cover">
+        <img src="genomerlogo.png" alt="Genomer" class="logo">
+
+        <div class="contact-item">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            <span>www.genomer.com.tr</span>
+        </div>
+
+        <div class="contact-item">
+            <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <span>info@genomer.com.tr</span>
+        </div>
+
+        <p class="back-cover-tagline">Çocuk Bağırsak Sağlığı için<br>İleri Moleküler Tanı</p>
+    </div>
+
+</body>
+</html>

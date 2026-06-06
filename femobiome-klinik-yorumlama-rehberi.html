@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Femobiome II — Rapor Okuma ve Yorumlama Rehberi</title>
+<style>
+    @page { size: A4; margin: 16mm 18mm 14mm 18mm; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+        font-family: "Times New Roman", Times, serif;
+        color: #1a1a1a;
+        background: #fff;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        font-size: 10.5pt;
+        line-height: 1.5;
+    }
+    /* ---------- KAPAK ---------- */
+    .cover {
+        page-break-after: always;
+        text-align: center;
+        padding-top: 24mm;
+        position: relative;
+        min-height: 255mm;
+    }
+    .cover::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 8px;
+        background: linear-gradient(90deg, #0a5a8a 0%, #1a7ab0 60%, #0a5a8a 100%);
+    }
+    .cover .eyebrow {
+        font-size: 11pt; letter-spacing: 4px; color: #555;
+        text-transform: uppercase; margin-bottom: 10mm;
+    }
+    .cover .title {
+        font-size: 25pt; font-weight: 700; color: #0a5a8a;
+        letter-spacing: 0.5px; line-height: 1.2; margin-bottom: 6mm;
+    }
+    .cover .subtitle {
+        font-size: 12.5pt; color: #333; font-style: italic; margin-bottom: 14mm;
+    }
+    .cover .audience {
+        font-size: 10.5pt; background: #f5f8fb; border-left: 3px solid #0a5a8a;
+        text-align: left; padding: 10px 14px; margin: 0 22mm 12mm; line-height: 1.55;
+    }
+    .cover .toc-card {
+        margin: 0 22mm; background: #fff; border: 1px solid #c8d0d8; border-radius: 6px;
+        text-align: left; padding: 14px 18px; font-size: 10pt; line-height: 1.5;
+    }
+    .cover .toc-card .toc-head {
+        font-weight: 700; color: #0a5a8a; font-size: 11pt; letter-spacing: 0.5px;
+        text-transform: uppercase; margin-bottom: 8px;
+        border-bottom: 1px solid #e3e8ee; padding-bottom: 5px;
+    }
+    .cover .toc-card .toc-row {
+        display: flex; gap: 10px; padding: 4px 0; border-bottom: 1px dotted #e3e8ee;
+    }
+    .cover .toc-card .toc-row:last-child { border-bottom: none; }
+    .cover .toc-card .toc-num {
+        flex-shrink: 0; width: 18px; color: #0a5a8a; font-weight: 700; font-family: Georgia, serif;
+    }
+    .cover .toc-card .toc-text { flex: 1; color: #333; }
+    .cover .toc-card .toc-text strong { color: #1a4a6a; }
+    .cover .bottom-band {
+        position: absolute; bottom: 0; left: 0; right: 0; background: #0a5a8a;
+        color: #fff; padding: 10px 14px; font-size: 9.5pt; font-style: italic;
+        letter-spacing: 0.3px; text-align: center;
+    }
+
+    .doc-title-band {
+        background: #0a5a8a; color: #fff; padding: 4px 12px; font-size: 10pt;
+        font-weight: 600; letter-spacing: 0.4px; margin-bottom: 12px;
+    }
+
+    h2 {
+        font-size: 12.5pt; font-weight: 700; color: #0a5a8a; margin: 14px 0 6px;
+        border-bottom: 1px solid #c8d0d8; padding-bottom: 3px; page-break-after: avoid;
+    }
+    h3 { font-size: 11pt; font-weight: 700; color: #1a4a6a; margin: 10px 0 4px; page-break-after: avoid; }
+    h4 { font-size: 10.5pt; font-weight: 700; color: #333; margin: 8px 0 3px; page-break-after: avoid; }
+    p { text-align: justify; margin-bottom: 6px; orphans: 3; widows: 3; }
+    ul, ol { margin-left: 18px; margin-bottom: 6px; }
+    li { margin-bottom: 3px; text-align: justify; }
+
+    .info-box {
+        background: #f5f8fb; border-left: 3px solid #0a5a8a; padding: 8px 12px;
+        margin: 8px 0; font-size: 10pt; line-height: 1.5; page-break-inside: avoid;
+    }
+    .warn-box {
+        background: #fef3c7; border-left: 3px solid #b45309; padding: 8px 12px;
+        margin: 8px 0; font-size: 10pt; line-height: 1.5; page-break-inside: avoid;
+    }
+    .key-box {
+        background: #ecf7f0; border-left: 3px solid #15803d; padding: 8px 12px;
+        margin: 8px 0; font-size: 10pt; line-height: 1.5; page-break-inside: avoid;
+    }
+    .disclaimer-box {
+        background: #fef2f2; border: 1.5px solid #dc2626; border-radius: 4px;
+        padding: 10px 14px; margin: 10px 0; font-size: 10pt; line-height: 1.5; page-break-inside: avoid;
+    }
+
+    table { width: 100%; border-collapse: collapse; margin: 6px 0 10px; font-size: 9.5pt; page-break-inside: avoid; }
+    table th { background: #0a5a8a; color: #fff; padding: 5px 8px; text-align: left; font-weight: 700; font-size: 9pt; }
+    table td { padding: 5px 8px; border: 1px solid #c8d0d8; vertical-align: top; }
+    table tr:nth-child(even) td { background: #f5f8fb; }
+    .light-table th { background: #e7ecf1; color: #1a4a6a; }
+
+    /* ---------- Trafik ışığı ---------- */
+    .traffic { display: inline-block; width: 14px; height: 14px; border-radius: 50%;
+        margin-right: 6px; vertical-align: middle; border: 1px solid rgba(0,0,0,0.15); }
+    .traffic.green { background: #22c55e; }
+    .traffic.yellow { background: #f59e0b; }
+    .traffic.red { background: #dc2626; }
+
+    /* ---------- Okuma akışı ---------- */
+    .flow { margin: 8px 0 10px; page-break-inside: avoid; }
+    .flow-step {
+        display: flex; align-items: flex-start; gap: 10px; padding: 6px 0;
+        border-bottom: 1px dotted #d3dbe3;
+    }
+    .flow-step:last-child { border-bottom: none; }
+    .flow-num {
+        flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%;
+        background: #0a5a8a; color: #fff; font-weight: 700; font-size: 10pt;
+        display: flex; align-items: center; justify-content: center; font-family: Georgia, serif;
+    }
+    .flow-step .flow-body { flex: 1; }
+    .flow-step .flow-body strong { color: #1a4a6a; }
+
+    /* ---------- Pattern kartları ---------- */
+    .pattern {
+        border: 1px solid #c8d0d8; border-radius: 5px; margin: 9px 0; overflow: hidden;
+        page-break-inside: avoid;
+    }
+    .pattern .pat-head {
+        background: #eef3f7; padding: 5px 12px; font-weight: 700; color: #0a5a8a;
+        font-size: 10.5pt; border-bottom: 1px solid #c8d0d8;
+        display: flex; align-items: center; gap: 8px;
+    }
+    .pattern .pat-head .dot { width: 12px; height: 12px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.15); }
+    .pattern .pat-body { padding: 7px 12px; }
+    .pattern .pat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .pattern .pat-col h4 { margin-top: 2px; color: #0a5a8a; font-size: 9.5pt; text-transform: uppercase; letter-spacing: 0.3px; }
+    .pattern ul { margin-left: 16px; font-size: 9.7pt; }
+    .pattern li { margin-bottom: 2px; }
+
+    /* ---------- Anotasyonlu rapor mock ---------- */
+    .report-mock {
+        border: 1.5px solid #0a5a8a; border-radius: 5px; overflow: hidden;
+        margin: 8px 0; page-break-inside: avoid;
+    }
+    .report-mock {
+        border: 1.5px solid #c8d0d8;
+    }
+    .report-mock .rm-title {
+        background: #0a5a8a; color: #fff; padding: 5px 12px; font-weight: 700; font-size: 10pt;
+        display: flex; justify-content: space-between; align-items: center;
+    }
+    .report-mock .rm-title .rm-tag { font-weight: 600; font-size: 8.5pt; opacity: 0.85; font-style: italic; }
+    .report-mock .rm-title .rm-status { font-size: 9pt; font-weight: 600; }
+    .report-mock table { margin: 0; font-size: 9pt; }
+    .report-mock table th { background: #1a4a6a; font-size: 8.5pt; padding: 3px 6px; }
+    .report-mock table td { padding: 2.5px 6px; border: 1px solid #d8dee4; }
+    .report-mock .grp td { background: #e7ecf1; font-weight: 700; color: #1a4a6a; font-style: italic; }
+    .report-mock .ind { padding-left: 16px; font-style: italic; }
+    .report-mock .neg { color: #999; }
+    .report-mock .hot { color: #c0392b; font-weight: 700; }
+    .report-mock .num-col { text-align: center; width: 16mm; }
+    .report-mock .pct-col { text-align: center; width: 20mm; }
+    .anno {
+        display: inline-block; min-width: 15px; height: 15px; line-height: 15px;
+        text-align: center; border-radius: 50%; background: #d35400; color: #fff;
+        font-size: 8pt; font-weight: 700; font-family: Georgia, serif; padding: 0 3px;
+        vertical-align: middle; margin-left: 4px;
+    }
+    .anno-list { margin: 6px 0 4px; page-break-inside: avoid; }
+    .anno-item { display: flex; align-items: flex-start; gap: 8px; padding: 4px 0; border-bottom: 1px dotted #d3dbe3; font-size: 9.7pt; }
+    .anno-item:last-child { border-bottom: none; }
+    .anno-item .anno-badge {
+        flex-shrink: 0; min-width: 17px; height: 17px; line-height: 17px; text-align: center;
+        border-radius: 50%; background: #d35400; color: #fff; font-size: 8.5pt; font-weight: 700;
+        font-family: Georgia, serif; padding: 0 3px;
+    }
+    .anno-item .anno-text { flex: 1; }
+    .anno-item .anno-text strong { color: #1a4a6a; }
+
+    .ref-list { font-size: 9pt; line-height: 1.45; }
+    .ref-list li { margin-bottom: 5px; }
+    sup.ref { color: #0a5a8a; font-weight: 700; }
+
+    .footer-note {
+        margin-top: 12px; font-size: 8.5pt; color: #777; text-align: center;
+        font-style: italic; border-top: 1px solid #c8d0d8; padding-top: 6px;
+    }
+    .section-break { page-break-before: always; }
+</style>
+</head>
+<body>
+
+<!-- ============== KAPAK ============== -->
+<div class="cover">
+    <div class="eyebrow">Klinisyenler İçin</div>
+    <div class="title">FEMOBIOME II<br>Rapor Okuma ve Yorumlama Rehberi</div>
+    <div class="subtitle">Kadın Ürogenital Mikrobiyota Raporunun Adım Adım Değerlendirilmesi</div>
+
+    <div class="audience">
+        <strong>Amaç:</strong> Bu rehber, Femobiome II raporunun klinik pratikte değerlendirilmesine yöneliktir. Raporun hangi sırayla incelendiği, kantitatif ve rölatif değerlerin ne ifade ettiği ve sık karşılaşılan rapor görünümlerinin nasıl yorumlandığı, gerçek rapor örnekleri üzerinden ele alınmaktadır.<br>
+        <strong>Hedef Kitle:</strong> Femobiome II raporunu değerlendiren kadın hastalıkları ve doğum, üreme endokrinolojisi, dermatovenereoloji, aile hekimliği ve enfeksiyon hastalıkları uzmanları.
+    </div>
+
+    <div class="toc-card">
+        <div class="toc-head">Bu Rehberde Neler Var?</div>
+        <div class="toc-row"><span class="toc-num">1.</span><span class="toc-text"><strong>Test ve Rapor Kısaca</strong> — ne ölçer, panelde ne var, örnek kalitesi neden önemli</span></div>
+        <div class="toc-row"><span class="toc-num">2.</span><span class="toc-text"><strong>Raporu Adım Adım Okuma</strong> — okuma akışı, renk göstergesi, kantitatif/rölatif değerler, kontrol parametreleri, işaretler</span></div>
+        <div class="toc-row"><span class="toc-num">3.</span><span class="toc-text"><strong>Rapor Görünümleri ve Yorumları</strong> — öbiyoz, anaerobik disbiyoz (BV), aerobik tablo, Candida, mikoplazma, patojen ve viral pozitiflik</span></div>
+        <div class="toc-row"><span class="toc-num">4.</span><span class="toc-text"><strong>Örnek Değerlendirmeler Üzerinden Yorumlama</strong> — iki anotasyonlu temsili tablo (normal ve patolojik)</span></div>
+        <div class="toc-row"><span class="toc-num">5.</span><span class="toc-text"><strong>Özel Durumlar ve Tekrar Test</strong> — düşük yük, yetersiz örnek, eşik altı, zamanlama</span></div>
+        <div class="toc-row"><span class="toc-num">6.</span><span class="toc-text"><strong>Sınırlamalar, Klinik Karar Notu ve Seçilmiş Kaynaklar</strong></span></div>
+    </div>
+
+    <div class="bottom-band">Bilgilendirme materyalidir — tedavi önerisi içermez. Klinik karar hekime aittir.</div>
+</div>
+
+<!-- ============== GÖVDE ============== -->
+<div class="doc-title-band">FEMOBIOME II — RAPOR OKUMA VE YORUMLAMA REHBERİ</div>
+
+<!-- ===== 1 ===== -->
+<h2>1. Test ve Rapor Kısaca</h2>
+<p><strong>Femobiome II</strong>, kadın ürogenital mikrobiyotasını real-time PCR (qPCR) ile değerlendiren çoklu hedefli bir testtir. Tek bir örnekten normobiyota (<em>Lactobacillus</em> tür düzeyi dahil), fırsatçı aerob/anaerob bakteriler, genital mikoplazmalar, mayalar, zorunlu patojenler ve üreme sağlığını ilgilendiren virüsleri eş zamanlı ölçer. Sonuç, her hedef için <strong>kantitatif bir değer (lg GE/ml)</strong> ve toplam bakteri kütlesine göre <strong>rölatif bir oran (%)</strong> şeklinde verilir.</p>
+
+<h3>1.1 Panelde Ne Var?</h3>
+<table class="light-table">
+    <thead><tr><th style="width:42mm;">Grup</th><th>İçerik (raporda görünen başlıklar)</th></tr></thead>
+    <tbody>
+        <tr><td><strong>Normobiyota</strong></td><td><em>Lactobacillus</em> spp. (tür düzeyi: <em>L. crispatus, L. gasseri/paragasseri, L. jensenii/mulieris, L. iners</em>), <em>Bifidobacterium</em> spp.</td></tr>
+        <tr><td><strong>Aeroblar</strong><br>(fakültatif fırsatçı)</td><td><em>Staphylococcus, Streptococcus, Enterobacteriaceae, Enterococcus, Haemophilus</em></td></tr>
+        <tr><td><strong>Anaeroblar</strong><br>(obligat fırsatçı)</td><td><em>Gardnerella vaginalis, Fannyhessea (Atopobium) vaginae, Mobiluncus, Anaerococcus, Peptostreptococcus, Bacteroides/Porphyromonas/Prevotella, Sneathia/Leptotrichia/Fusobacterium, Megasphaera/Veillonella/Dialister, BVAB1/2/3</em></td></tr>
+        <tr><td><strong>Mikoplazmalar</strong><br>(fırsatçı)</td><td><em>Ureaplasma urealyticum, Ureaplasma parvum, Mycoplasma hominis</em></td></tr>
+        <tr><td><strong>Maya</strong></td><td><em>Candida</em> spp., <em>Candida albicans</em></td></tr>
+        <tr><td><strong>Grup B streptokok</strong></td><td><em>Streptococcus agalactiae</em> (GBS)</td></tr>
+        <tr><td><strong>Zorunlu patojenler (CYBE)</strong></td><td><em>Chlamydia trachomatis, Mycoplasma genitalium, Neisseria gonorrhoeae, Trichomonas vaginalis</em></td></tr>
+        <tr><td><strong>Virüsler</strong></td><td>HSV-1, HSV-2, CMV; HPV 16, HPV 18, HPV 45, HPV 31/33/35/39/51/52/56/58/59/66/68 (11 tip birleşik)</td></tr>
+    </tbody>
+</table>
+
+<div class="info-box">
+    <strong>Örnek alma kalitesi sonucu doğrudan belirler.</strong> Mikroorganizmaların çoğu epitel yüzeyinde biyofilm halinde bulunur; bu nedenle organ boşluğu içeriği değil <strong>epitel kazıntısı</strong> tercih edilir. Mukus ve kan kontaminasyonu en aza indirilmelidir. Örneğin yeterli alınıp alınmadığı raporda <strong>İnsan genomik DNA</strong> parametresiyle kontrol edilir (bkz. 2.4).<sup class="ref">(FBII Ürün Broşürü §7-8)</sup>
+</div>
+
+<!-- ===== 2 ===== -->
+<h2>2. Raporu Adım Adım Okuma</h2>
+
+<h3>2.1 Önerilen Değerlendirme Sırası</h3>
+<p>Raporun belirli bir sırayla incelenmesi, yorumda oluşabilecek yanılgıları büyük ölçüde önler. Aşağıdaki sıralama pratik bir yaklaşım sunmaktadır:</p>
+<div class="flow">
+    <div class="flow-step"><div class="flow-num">1</div><div class="flow-body"><strong>Renk göstergesi.</strong> Sağ üstte yer alan renk göstergesi (yeşil, sarı veya kırmızı), mikrobiyota durumunun ilk özetini verir: öbiyoz, orta ya da şiddetli disbiyoz.</div></div>
+    <div class="flow-step"><div class="flow-num">2</div><div class="flow-body"><strong>Kontrol parametreleri.</strong> İnsan genomik DNA (≥ 3,5) ve Toplam Bakteri Yükü (TBM ≥ 4,0) değerlerinin eşik üstünde olması, örneğin yeterli alındığını ve yorumun güvenilir olduğunu gösterir.</div></div>
+    <div class="flow-step"><div class="flow-num">3</div><div class="flow-body"><strong>Normobiyota oranı.</strong> Normobiyotanın toplam oranı %80 ve üzerindeyse normobiyota hâkimdir. <em>Lactobacillus</em> tür dağılımı ise hangi türün baskın olduğunu ortaya koyar.</div></div>
+    <div class="flow-step"><div class="flow-num">4</div><div class="flow-body"><strong>Fırsatçı gruplar.</strong> Yükün aerob, anaerob ya da mikoplazma gruplarından hangisine kaydığı, klinik tabloyu yönlendiren temel bilgidir.</div></div>
+    <div class="flow-step"><div class="flow-num">5</div><div class="flow-body"><strong>Patojen sayfası.</strong> Zorunlu patojenler ve virüsler ayrı bir sayfada "SAPTANDI" veya "—" olarak listelenir; bu hedefler mikrobiyota renginden bağımsız olarak değerlendirilir.</div></div>
+</div>
+
+<h3>2.2 Renk Göstergesi</h3>
+<table>
+    <thead><tr><th style="width:28mm;">Gösterge</th><th style="width:38mm;">Durum</th><th>Anlamı</th></tr></thead>
+    <tbody>
+        <tr><td><span class="traffic green"></span>Yeşil</td><td><strong>Öbiyoz</strong></td><td>Normobiyota (<em>Lactobacillus</em>) hakim; fırsatçılar düşük; patojen/viral hedefler negatif.</td></tr>
+        <tr><td><span class="traffic yellow"></span>Sarı</td><td><strong>Orta Disbiyoz</strong></td><td>Normobiyota azalmış, fırsatçı yük orta düzeyde artmış. Eşik üstü mikoplazma/Candida bu kategoriyi tetikleyebilir.</td></tr>
+        <tr><td><span class="traffic red"></span>Kırmızı</td><td><strong>Şiddetli Disbiyoz / Patojen (+)</strong></td><td>Normobiyota ciddi azalmış veya kaybolmuş, fırsatçılar baskın; ve/veya zorunlu patojen ya da viral hedef pozitif.</td></tr>
+    </tbody>
+</table>
+<p style="font-size:9.5pt;color:#555;">Renk göstergesi yalnızca biyomateryal alma lokusu (V veya C) belirtildiğinde ve TBM yeterli olduğunda oluşur.</p>
+
+<h3>2.3 Sayıları Okuma: Kantitatif (Lg) ve Rölatif (%)</h3>
+<ul>
+    <li><strong>Kantitatif (Lg GE/ml):</strong> Mililitre başına genom eşdeğeri sayısının onluk logaritmasıdır. Örneğin "6,2" değeri yaklaşık 10<sup>6,2</sup> GE/ml'ye karşılık gelir ve mikroorganizmanın mutlak yükünü ifade eder.</li>
+    <li><strong>Rölatif (%):</strong> İlgili mikroorganizmanın toplam bakteri kütlesine oranıdır; kompozisyonu yansıtır ve raporda yüzde aralığı olarak (örneğin %32-44) verilir.</li>
+</ul>
+<div class="key-box">
+    <strong>Yorumda gözden kaçırılmaması gereken nokta:</strong> Mutlak değer (Lg) tek başına yanıltıcı olabilir. Bir <em>Lactobacillus</em>'un Lg değeri yüksek görünse bile, rölatif oranı düşükse normobiyota baskınlığı kaybolmuş demektir. Bu nedenle yorumda öncelik rölatif orana verilir. Bunun gerçek bir örneği Bölüm 4.2'de yer almaktadır.
+</div>
+
+<h3>2.4 Kontrol Parametreleri: İnsan DNA ve TBM</h3>
+<table>
+    <thead><tr><th style="width:48mm;">Parametre</th><th>Nasıl okunur</th></tr></thead>
+    <tbody>
+        <tr><td><strong>İnsan genomik DNA</strong> (≥ 3,5)</td><td>Eşik üstündeyse örnek alımı yeterlidir ve yorum güvenilirdir. Eşik altındaysa örnekleme kalitesi düşüktür ve tekrar örnekleme önerilir.</td></tr>
+        <tr><td><strong>Toplam Bakteri Yükü (TBM)</strong> (≥ 4,0)</td><td>Mevcut bakteri yükünün ölçüsüdür. 10<sup>4</sup>'ün altındaysa rölatif hesaplamalar güvenilir olmaz ve renk göstergesi oluşmayabilir.</td></tr>
+    </tbody>
+</table>
+<div class="warn-box">
+    <strong>Sık karşılaşılan iki yanılgı:</strong><br>
+    (1) Düşük TBM'nin kötü örneklemeye işaret ettiği düşünülebilir. Oysa İnsan DNA'sı eşik üstündeyse örnek yeterlidir; düşük TBM gerçek bir düşük bakteri yükünü yansıtır (örneğin düşük östrojen durumu veya yakın dönemde antibiyotik kullanımı).<br>
+    (2) Yüksek TBM'nin tek başına sağlıklı bir tabloyu gösterdiği düşünülebilir. Yüksek TBM yalnızca bakteri yükünün fazla olduğunu ifade eder; kompozisyon anaeroblara kaymış olabilir. Renk göstergesi ve rölatif oranlar değerlendirilmeden TBM tek başına olumlu ya da olumsuz olarak yorumlanamaz.
+</div>
+
+<h3>2.5 İşaretler</h3>
+<table>
+    <thead><tr><th style="width:35mm;">İşaret</th><th>Anlamı</th></tr></thead>
+    <tbody>
+        <tr><td><strong>—</strong> (tire)</td><td>Negatif sonuç (hedef saptanmadı).</td></tr>
+        <tr><td><strong>&lt; 4,0 lg</strong></td><td>Hedef saptandı ancak klinik ilgi eşiğinin altında (eşik altı kolonizasyon).</td></tr>
+        <tr><td><strong>SAPTANDI</strong></td><td>Patojen sayfasında: hedef pozitif. Yanında varsa kantitatif değer (lg GE/ml) verilir.</td></tr>
+        <tr><td><strong>"/" ile birleşik</strong></td><td>Birden çok yakın türün birlikte (ayrım yapılmadan) saptanması (ör. Bacteroides/Porphyromonas/Prevotella).</td></tr>
+    </tbody>
+</table>
+
+<!-- ===== 3 ===== -->
+<h2 class="section-break">3. Rapor Görünümleri ve Yorumları</h2>
+<p>Aşağıdaki tablolarda, sık karşılaşılan rapor görünümleri ve bunların klinik karşılıkları bir arada sunulmaktadır. Tüm bulgular, hastanın klinik tablosu ve öyküsüyle birlikte değerlendirilmelidir.</p>
+
+<div class="pattern">
+    <div class="pat-head"><span class="dot" style="background:#22c55e;"></span>3.1 Öbiyoz (Normobiyota Hakim)</div>
+    <div class="pat-body"><div class="pat-row">
+        <div class="pat-col"><h4>Rapor görünümü</h4><ul>
+            <li>Renk: <strong>yeşil</strong></li>
+            <li>Normobiyota toplam ≥ %80</li>
+            <li><em>Lactobacillus</em> baskın; fırsatçılar &lt; %1</li>
+            <li>Patojen/viral hedefler "—"</li>
+        </ul></div>
+        <div class="pat-col"><h4>Yorum</h4><ul>
+            <li>Sağlıklı üreme çağı profili.</li>
+            <li><strong>Tür düzeyi önemlidir:</strong> <em>L. crispatus</em> baskınlığı en stabil ve koruyucu profildir.<sup class="ref">1</sup></li>
+            <li><em>L. iners</em> baskınlığı geçişken ve daha az stabil bir profil olarak kabul edilir; antibiyotik sonrasında ve disbiyoza geçiş döneminde sık görülür.</li>
+        </ul></div>
+    </div></div>
+</div>
+
+<div class="pattern">
+    <div class="pat-head"><span class="dot" style="background:#dc2626;"></span>3.2 Anaerobik Disbiyoz / Bakteriyel Vajinozis (BV) Görünümü</div>
+    <div class="pat-body"><div class="pat-row">
+        <div class="pat-col"><h4>Rapor görünümü</h4><ul>
+            <li>Renk: sarı veya <strong>kırmızı</strong></li>
+            <li>Normobiyota rölatif belirgin azalmış (sık &lt; %20)</li>
+            <li>TBM normal veya artmış</li>
+            <li>Anaeroblar baskın: <em>Gardnerella, Fannyhessea, Sneathia/Leptotrichia/Fusobacterium, Bacteroides/Porphyromonas/Prevotella, Megasphaera/Veillonella/Dialister, Mobiluncus</em>, BVAB1-3</li>
+        </ul></div>
+        <div class="pat-col"><h4>Yorum</h4><ul>
+            <li>Anaerob ağırlıklı disbiyoz; klinik BV ile uyumlu moleküler tablo.</li>
+            <li>Klasik tanı klinikte Amsel kriterleri, referans yöntemde Nugent skoru ile konur; bu rapor onları tamamlayan kantitatif bir tablo sunar.</li>
+            <li>Kantitatif değerler tedavi sonrası yanıtın izlenmesinde kullanılabilir.</li>
+        </ul></div>
+    </div></div>
+</div>
+
+<div class="pattern">
+    <div class="pat-head"><span class="dot" style="background:#f59e0b;"></span>3.3 Aerobik (AV) Görünümü</div>
+    <div class="pat-body"><div class="pat-row">
+        <div class="pat-col"><h4>Rapor görünümü</h4><ul>
+            <li><em>Lactobacillus</em> azalmış</li>
+            <li>BV-anaerobları belirgin <strong>değil</strong></li>
+            <li>Aerob fırsatçılar artmış: <em>Staphylococcus, Streptococcus, Enterobacteriaceae, Enterococcus</em></li>
+            <li>Gebelikte <em>Streptococcus agalactiae</em> (GBS) ayrıca dikkat</li>
+        </ul></div>
+        <div class="pat-col"><h4>Yorum</h4><ul>
+            <li>BV'den ayrı bir antite (Donders); kompozisyon anaeroblara değil aeroblara kaymıştır.</li>
+            <li>Klinik tablo BV'ye benzeyebilir; ayırıcı tanıda moleküler profil ile mikroskopik bulgular birlikte değerlendirilir.</li>
+        </ul></div>
+    </div></div>
+</div>
+
+<div class="pattern">
+    <div class="pat-head"><span class="dot" style="background:#f59e0b;"></span>3.4 Candida (VVK) Görünümü</div>
+    <div class="pat-body"><div class="pat-row">
+        <div class="pat-col"><h4>Rapor görünümü</h4><ul>
+            <li><em>Candida</em> spp. ve/veya <em>C. albicans</em> ≥ 10<sup>4</sup> GE/ml</li>
+            <li>Normobiyota çoğunlukla korunmuş (saf VVK)</li>
+            <li>BV/AV ile birliktelik (karışık form) olabilir</li>
+        </ul></div>
+        <div class="pat-col"><h4>Yorum</h4><ul>
+            <li>Tanı klinik bulgularla (kaşıntı, peynirimsi akıntı, vulvar eritem) birlikte konur.</li>
+            <li>Eşik altı <em>Candida</em> asemptomatik kadında sıktır ve tek başına tedavi endikasyonu değildir.</li>
+        </ul></div>
+    </div></div>
+</div>
+
+<div class="pattern">
+    <div class="pat-head"><span class="dot" style="background:#f59e0b;"></span>3.5 Mikoplazma Eşik Üstü Görünümü</div>
+    <div class="pat-body"><div class="pat-row">
+        <div class="pat-col"><h4>Rapor görünümü</h4><ul>
+            <li><em>U. urealyticum</em>, <em>U. parvum</em> veya <em>M. hominis</em> ≥ 10<sup>4</sup> GE/ml</li>
+        </ul></div>
+        <div class="pat-col"><h4>Yorum</h4><ul>
+            <li>Fırsatçı genital mikoplazmalar; düşük miktarda asemptomatik kolonizasyon sıktır.</li>
+            <li><strong>Ayrım önemlidir:</strong> fırsatçı mikoplazmalar, zorunlu patojen olan <em>Mycoplasma genitalium</em> ile karıştırılmamalıdır. <em>M. genitalium</em> patojen sayfasında listelenir ve herhangi bir miktarda saptanması patolojik kabul edilir.</li>
+        </ul></div>
+    </div></div>
+</div>
+
+<div class="pattern">
+    <div class="pat-head"><span class="dot" style="background:#dc2626;"></span>3.6 Zorunlu Patojen / Viral Pozitif Görünümü</div>
+    <div class="pat-body"><div class="pat-row">
+        <div class="pat-col"><h4>Rapor görünümü</h4><ul>
+            <li>Patojen sayfasında <em>Chlamydia, N. gonorrhoeae, M. genitalium, T. vaginalis</em> için "SAPTANDI" (+ lg değeri)</li>
+            <li>Virüsler (HSV-1/2, CMV, HPV tipleri) için "SAPTANDI" (+ lg değeri)</li>
+        </ul></div>
+        <div class="pat-col"><h4>Yorum</h4><ul>
+            <li><strong>CYBE etkenleri:</strong> herhangi bir miktarda saptanması patolojik kabul edilir; tedavi planlamasında güncel CDC ve IUSTI/WHO kılavuzları esas alınır.<sup class="ref">2,3</sup></li>
+            <li><strong>Virüsler:</strong> DNA saptanması aktif enfeksiyonu doğrudan kanıtlamaz. HSV ve CMV klinik tablo ile serolojik bulgular, HPV ise sitoloji ve kolposkopi eşliğinde değerlendirilir.</li>
+        </ul></div>
+    </div></div>
+</div>
+
+<!-- ===== 4 ===== -->
+<h2 class="section-break">4. Örnek Değerlendirmeler Üzerinden Yorumlama</h2>
+<p>Aşağıda iki temsili değerlendirme tablosu, üzerlerine yerleştirilen numaralı işaretlerle açıklanmaktadır. Tablolardaki değerler, gerçek rapor verilerinden alınmış (kimlik bilgisi içermeyen) örnek profillerdir; her işaret, tablonun altındaki ilgili açıklamaya karşılık gelmektedir.</p>
+
+<h3>4.1 Örnek A — Öbiyoz (Normal) Görünümü</h3>
+<div class="report-mock">
+    <div class="rm-title"><span>Temsili Değerlendirme Tablosu <span class="rm-tag">(örnek)</span></span><span class="rm-status"><span class="traffic green" style="width:11px;height:11px;"></span>ÖBİYOZ <span class="anno">1</span></span></div>
+    <table>
+        <thead><tr><th>Parametre</th><th class="num-col">lg GE/ml</th><th class="pct-col">%</th><th class="num-col">Referans</th></tr></thead>
+        <tbody>
+            <tr><td>İnsan genomik DNA <span class="anno">2</span></td><td class="num-col">4,9</td><td class="pct-col">—</td><td class="num-col">≥ 3,5</td></tr>
+            <tr><td>Toplam Bakteri Yükü <span class="anno">2</span></td><td class="num-col">6,2</td><td class="pct-col">—</td><td class="num-col">≥ 4,0</td></tr>
+            <tr class="grp"><td>NORMOBİYOTA, toplam <span class="anno">3</span></td><td class="num-col">—</td><td class="pct-col">99,8%</td><td class="num-col">≥80%</td></tr>
+            <tr><td class="ind">Lactobacillus spp.</td><td class="num-col">6,2</td><td class="pct-col">99,8%</td><td class="num-col"></td></tr>
+            <tr><td class="ind">Bifidobacterium spp.</td><td class="num-col">1,7</td><td class="pct-col">&lt;1%</td><td class="num-col"></td></tr>
+            <tr class="grp"><td>AEROBLAR, toplam</td><td class="num-col"></td><td class="pct-col">&lt;1%</td><td class="num-col"></td></tr>
+            <tr><td class="ind">Haemophilus spp.</td><td class="num-col">2,4</td><td class="pct-col">&lt;1%</td><td class="num-col"></td></tr>
+            <tr class="grp"><td>ANAEROBLAR, toplam <span class="anno">5</span></td><td class="num-col"></td><td class="pct-col">&lt;1%</td><td class="num-col"></td></tr>
+            <tr><td class="ind">Anaerococcus / Peptostreptococcus / Bacteroides…</td><td class="num-col">2,4–3,3</td><td class="pct-col">&lt;1%</td><td class="num-col"></td></tr>
+            <tr class="grp"><td>MİKOPLAZMALAR, toplam</td><td class="num-col"></td><td class="pct-col">&lt;1%</td><td class="num-col"></td></tr>
+            <tr><td><em>Lactobacillus</em> türleri <span class="anno">4</span></td><td class="num-col" colspan="3" style="text-align:left;"><em>L. crispatus</em> 5,9 (%50) · <em>L. iners</em> 4,7 (%3) · <em>L. jensenii</em> 4,2 (%1)</td></tr>
+            <tr><td>Candida spp. / C. albicans · GBS</td><td class="num-col neg" colspan="3" style="text-align:left;">— (negatif)</td></tr>
+            <tr><td>Patojen sayfası (CYBE + virüsler) <span class="anno">5</span></td><td class="num-col neg" colspan="3" style="text-align:left;">Tümü — (negatif)</td></tr>
+        </tbody>
+    </table>
+</div>
+<div class="anno-list">
+    <div class="anno-item"><span class="anno-badge">1</span><span class="anno-text">Renk göstergesi yeşildir; mikrobiyota durumu öbiyoz olarak değerlendirilir.</span></div>
+    <div class="anno-item"><span class="anno-badge">2</span><span class="anno-text">Kontrol parametreleri eşik değerlerin üzerindedir (İnsan DNA 4,9; TBM 6,2). Örnek yeterli alınmıştır ve yorum güvenilirdir.</span></div>
+    <div class="anno-item"><span class="anno-badge">3</span><span class="anno-text">Normobiyota oranı %99,8 olup referans değer olan %80'in belirgin biçimde üzerindedir; normobiyota güçlü şekilde hâkimdir.</span></div>
+    <div class="anno-item"><span class="anno-badge">4</span><span class="anno-text">Tür dağılımında <em>L. crispatus</em> baskındır (5,9 lg). Bu, en stabil ve koruyucu profildir (CST I).<sup class="ref">1</sup></span></div>
+    <div class="anno-item"><span class="anno-badge">5</span><span class="anno-text">Tüm fırsatçı gruplar %1'in altındadır ve patojen sayfası tümüyle negatiftir. Bulgular sağlıklı bir üreme çağı profiliyle uyumludur.</span></div>
+</div>
+
+<h3 class="section-break">4.2 Örnek B — Şiddetli Anaerobik Disbiyoz ve HPV (Patolojik) Görünümü</h3>
+<div class="report-mock">
+    <div class="rm-title"><span>Temsili Değerlendirme Tablosu <span class="rm-tag">(örnek)</span></span><span class="rm-status"><span class="traffic red" style="width:11px;height:11px;"></span>ŞİDDETLİ DİSBİYOZ <span class="anno">1</span></span></div>
+    <table>
+        <thead><tr><th>Parametre</th><th class="num-col">lg GE/ml</th><th class="pct-col">%</th><th class="num-col">Referans</th></tr></thead>
+        <tbody>
+            <tr><td>İnsan genomik DNA <span class="anno">2</span></td><td class="num-col">3,8</td><td class="pct-col">—</td><td class="num-col">≥ 3,5</td></tr>
+            <tr><td>Toplam Bakteri Yükü <span class="anno">2</span></td><td class="num-col">7,3</td><td class="pct-col">—</td><td class="num-col">≥ 4,0</td></tr>
+            <tr class="grp"><td>NORMOBİYOTA, toplam <span class="anno">3</span></td><td class="num-col">—</td><td class="pct-col hot">5-7%</td><td class="num-col">≥80%</td></tr>
+            <tr><td class="ind">Lactobacillus spp. <span class="anno">4</span></td><td class="num-col">5,9</td><td class="pct-col">3-5%</td><td class="num-col"></td></tr>
+            <tr><td class="ind">Bifidobacterium spp.</td><td class="num-col">5,6</td><td class="pct-col">1-3%</td><td class="num-col"></td></tr>
+            <tr class="grp"><td>ANAEROBLAR, toplam <span class="anno">5</span></td><td class="num-col"></td><td class="pct-col hot">80-100%</td><td class="num-col"></td></tr>
+            <tr><td class="ind hot">Gardnerella vaginalis</td><td class="num-col">6,9</td><td class="pct-col">32-44%</td><td class="num-col"></td></tr>
+            <tr><td class="ind hot">Sneathia / Leptotrichia / Fusobacterium</td><td class="num-col">6,8</td><td class="pct-col">25-35%</td><td class="num-col"></td></tr>
+            <tr><td class="ind hot">BVAB1 / BVAB2 / BVAB3</td><td class="num-col">6,6</td><td class="pct-col">16-22%</td><td class="num-col"></td></tr>
+            <tr><td class="ind">Bacteroides / Porphyromonas / Prevotella</td><td class="num-col">6,1</td><td class="pct-col">5-7%</td><td class="num-col"></td></tr>
+            <tr><td><em>Lactobacillus</em> türleri <span class="anno">4</span></td><td class="num-col" colspan="3" style="text-align:left;"><span class="hot"><em>L. iners</em> 6,1 (%97)</span> · <em>L. crispatus</em> 4,4 (%2) · <em>L. jensenii</em> 4,2 (%1)</td></tr>
+            <tr><td>Patojen sayfası — HPV <span class="anno">6</span></td><td class="num-col" colspan="3" style="text-align:left;"><span class="hot">HPV 16: SAPTANDI (&lt;3,0)</span> · <span class="hot">HPV 31-68: SAPTANDI (5,9)</span> · CYBE/diğer virüsler —</td></tr>
+        </tbody>
+    </table>
+</div>
+<div class="anno-list">
+    <div class="anno-item"><span class="anno-badge">1</span><span class="anno-text">Renk göstergesi kırmızıdır; tablo şiddetli disbiyoz olarak değerlendirilir.</span></div>
+    <div class="anno-item"><span class="anno-badge">2</span><span class="anno-text">Kontrol parametreleri eşik üstündedir (İnsan DNA 3,8; TBM 7,3, oldukça yüksek) ve örnek yeterlidir. Ancak yüksek TBM tek başına olumlu bir bulgu değildir; bakteri yükü fazla olsa da kompozisyon bozulmuştur.</span></div>
+    <div class="anno-item"><span class="anno-badge">3</span><span class="anno-text">Normobiyota oranı yalnızca %5-7'dir ve referans değer olan %80'in çok altındadır; normobiyota baskınlığı kaybolmuştur.</span></div>
+    <div class="anno-item"><span class="anno-badge">4</span><span class="anno-text"><strong>Bu örnekteki en kritik nokta:</strong> <em>Lactobacillus</em>'un mutlak değeri 5,9 lg ile görece yüksek görünse de, rölatif oranı yalnızca %3-5'tir. Dahası, mevcut <em>Lactobacillus</em>'un %97'sini geçişken ve daha az stabil bir tür olan <em>L. iners</em> oluşturmaktadır. Yalnızca mutlak değere dayanarak normobiyotanın korunduğu sonucuna varmak yanıltıcı olur; kompozisyonu rölatif oran yansıtmaktadır.</span></div>
+    <div class="anno-item"><span class="anno-badge">5</span><span class="anno-text">Anaeroblar kompozisyonun %80-100'üne hâkimdir; <em>Gardnerella</em> (%32-44), <em>Sneathia/Leptotrichia/Fusobacterium</em> (%25-35) ve BVAB (%16-22) öne çıkmaktadır. Tablo anaerobik disbiyozla, klinik olarak da bakteriyel vajinozisle uyumludur.</span></div>
+    <div class="anno-item"><span class="anno-badge">6</span><span class="anno-text">Patojen sayfasında HPV 16 ve HPV 31-68 saptanmıştır. Bu bulgu mikrobiyota durumundan bağımsızdır ve sitoloji ya da kolposkopi ile ayrı bir klinik takip gerektirir.</span></div>
+</div>
+
+<!-- ===== 5 ===== -->
+<h2 class="section-break">5. Özel Durumlar ve Tekrar Test</h2>
+
+<h3>5.1 Sık Karşılaşılan Özel Durumlar</h3>
+<table>
+    <thead><tr><th style="width:52mm;">Durum</th><th>Nasıl yorumlanır</th></tr></thead>
+    <tbody>
+        <tr><td><strong>Düşük TBM</strong> (&lt; 10<sup>4</sup>), İnsan DNA eşik üstü</td><td>Örnek yeterlidir; tablo gerçek bir düşük bakteri yükünü yansıtır. Düşük östrojen durumu, menstrüel siklus zamanlaması, yakın dönemde antibiyotik veya antiseptik yıkama ve postpartum dönemde görülebilir. Renk göstergesi oluşmayabilir; rölatif değerlerin güvenilirliği düşük olduğundan yorum klinik tabloyla birlikte yapılır.</td></tr>
+        <tr><td><strong>Yetersiz biyomateryal</strong> (İnsan DNA eşik altı)</td><td>Örnekleme kalitesi düşüktür ve sonuç güvenilir değildir; tekrar örnekleme önerilir. Vajinal duş, antiseptik veya kayganlaştırıcı kalıntısı PCR inhibisyonuna yol açabilir.</td></tr>
+        <tr><td><strong>Eşik altı bildirim</strong> ("&lt; 4,0 lg")</td><td>Hedef saptanmış ancak klinik ilgi eşiğini geçmemiştir. Asemptomatik kolonizasyon söz konusu olabilir; semptomatik olguda diğer bulgularla birlikte değerlendirilir.</td></tr>
+        <tr><td><strong>Karışık profil</strong> (örneğin BV ve Candida birlikteliği)</td><td>Aynı örnekte birden çok tablo bir arada bulunabilir. Zorunlu patojen varlığında öncelik bu etkenin tedavisindedir.</td></tr>
+    </tbody>
+</table>
+
+<h3>5.2 Tekrar Test Zamanlaması</h3>
+<table>
+    <thead><tr><th style="width:62mm;">Durum</th><th>Önerilen süre</th></tr></thead>
+    <tbody>
+        <tr><td>Yetersiz biyomateryal / kontaminasyon şüphesi</td><td>En kısa sürede, kurallara uygun yeni örnekleme</td></tr>
+        <tr><td>Antibiyotik tedavisi sonrası takip (BV / AV)</td><td>Tedavi bitiminden 2 hafta sonra</td></tr>
+        <tr><td>CYBE tedavisi sonrası test of cure</td><td>Tedaviden 4 hafta sonra</td></tr>
+        <tr><td>Gebelik planlaması / YÜT öncesi</td><td>Planlanan girişimden 1-2 ay önce</td></tr>
+    </tbody>
+</table>
+
+<h3>5.3 Test Öncesi Bekleme Süreleri</h3>
+<table>
+    <thead><tr><th style="width:70mm;">Test öncesi etken</th><th>Bekleme süresi</th></tr></thead>
+    <tbody>
+        <tr><td>Korunmalı cinsel ilişki</td><td>24 saat</td></tr>
+        <tr><td>Kolposkopi</td><td>48 saat</td></tr>
+        <tr><td>Korunmasız cinsel ilişki</td><td>72 saat</td></tr>
+        <tr><td>Antibiyotik/probiyotik (BV/AV tedavisi)</td><td>Tedavi bitiminden 2 hafta sonra</td></tr>
+        <tr><td>CYBE tedavisi</td><td>Tedavi bitiminden 4 hafta sonra</td></tr>
+        <tr><td>Vajinal duş/yıkama, tampon, PCR inhibitörleri (ultrason jeli, heparin, klorheksidin, klor içeren ürünler), transvajinal USG</td><td>En az 24 saat (uygulamaya göre)</td></tr>
+    </tbody>
+</table>
+
+<!-- ===== 6 ===== -->
+<h2>6. Sınırlamalar, Klinik Karar Notu ve Kaynaklar</h2>
+<ul>
+    <li>Femobiome II nükleik asit tabanlı bir testtir; <strong>canlı/ölü ayrımı yapmaz.</strong> Yakın geçmişte tedavi almış hastada artık DNA tespit edilebilir.</li>
+    <li>Panel dışı mikroorganizmaları değerlendirmez.</li>
+    <li>Rölatif yorum düşük bakteri yükünde güvenilir değildir (bkz. 5.1).</li>
+    <li>Sonuç, klinik bulgular ve hasta öyküsü olmadan tek başına tedavi kararı dayanağı olamaz.</li>
+</ul>
+
+<div class="disclaimer-box">
+    <strong>KLİNİK KARAR HEKİME AİTTİR.</strong> Bu rehber Femobiome II raporunun okunup yorumlanmasına yardımcı olmak amacıyla hazırlanmış bilgilendirme materyalidir; <strong>tedavi önerisi içermez</strong> ve hekimin klinik muhakemesinin yerine geçmez. Tedavi kararları için güncel ulusal/uluslararası kılavuzlara ve hastanın bireysel tablosuna göre karar verilmelidir.
+</div>
+
+<h3>Seçilmiş Kaynaklar</h3>
+<ol class="ref-list">
+    <li><strong>Ravel J, Gajer P, Abdo Z, et al.</strong> Vaginal microbiome of reproductive-age women. <em>Proc Natl Acad Sci USA</em>. 2011;108 Suppl 1:4680-4687. DOI: 10.1073/pnas.1002611107. <em>— Lactobacillus tür düzeyinde topluluk durum tipleri (CST).</em></li>
+    <li><strong>Workowski KA, Bachmann LH, Chan PA, et al.</strong> Sexually Transmitted Infections Treatment Guidelines, 2021. <em>MMWR Recomm Rep</em>. 2021;70(4):1-187. <em>— CYBE tanı/tedavi.</em></li>
+    <li><strong>Sherrard J, Wilson J, Donders G, et al.</strong> 2018 European (IUSTI/WHO) guideline on the management of vaginal discharge. <em>Int J STD AIDS</em>. 2018;29(13):1258-1272. <em>— Vajinal akıntı yönetimi; BV/AV/VVK ve AV tanımı.</em></li>
+    <li><strong>Femobiome II Üretici Ürün Broşürü</strong>, 2026. <em>— Panel, eşik değerleri ve örnek alma yönlendirmeleri (FBII Ürün Broşürü).</em></li>
+</ol>
+
+<div class="footer-note">
+    Bu rehber, Femobiome II raporlarının değerlendirilmesinde hekimlere yardımcı bilgilendirme materyali olarak hazırlanmıştır. Tedavi önerisi içermez.
+</div>
+
+</body>
+</html>

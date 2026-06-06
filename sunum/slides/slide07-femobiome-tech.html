@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+html { background: #FFFFFF; }
+body {
+  width: 720pt; height: 405pt; margin: 0; padding: 0;
+  font-family: Arial, sans-serif;
+  display: flex; background: #FFFFFF;
+}
+.container { width: 100%; height: 100%; position: relative; }
+.header { position: absolute; top: 0; left: 0; right: 0; height: 48pt; background: #7B4B94; }
+.header-text { position: absolute; top: 12pt; left: 40pt; }
+.logo-top { position: absolute; top: 12pt; right: 40pt; }
+.logo-top img { height: 22pt; }
+.content { position: absolute; top: 60pt; left: 30pt; right: 30pt; }
+.columns { display: flex; gap: 24pt; }
+.col { flex: 1; }
+.section-title { font-size: 10pt; color: #7B4B94; font-weight: bold; margin: 0 0 8pt 0; }
+.sub-header { font-size: 8.5pt; color: #333; font-weight: bold; margin: 10pt 0 4pt 0; }
+ul { margin: 0 0 4pt 0; padding-left: 14pt; }
+ul li { font-size: 8pt; color: #4A4A5A; line-height: 1.6; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header"></div>
+  <div class="header-text">
+    <h2 style="color: #FFFFFF; font-size: 16pt; margin: 0;">FEMOBIOME II — Technical Specifications</h2>
+  </div>
+  <div class="logo-top"><img src="genomerlogo.png"></div>
+  <div class="content">
+    <div class="columns">
+      <div class="col">
+        <p class="section-title">Kit Specifications</p>
+        <ul>
+          <li>Analysis time: from 2.5 hours (with sample pretreatment)</li>
+          <li>PCR formats: Automated (384-well) and manual (96-well)</li>
+          <li>Package S: 12 tests (24 for PrimaScreen/SecundaScreen)</li>
+          <li>Package A / A-TL: 24 tests (48 for PrimaScreen/SecundaScreen)</li>
+          <li>Storage: +2 to +8°C (packages S, A, A-TL)</li>
+          <li>Storage: -18 to -22°C (TechnoTaq MAX polymerase)</li>
+          <li>Shelf life: 12 months</li>
+          <li>Transport medium: STOR-F, STOR-M</li>
+        </ul>
+      </div>
+      <div class="col">
+        <p class="section-title">Compatible Platforms</p>
+        <p class="sub-header">Extraction Platforms</p>
+        <ul>
+          <li>Allsheng Auto-Pure 96</li>
+          <li>KingFisher Flex (PREP-MB-RAPID II)</li>
+        </ul>
+        <p class="sub-header">Liquid Cytology Media</p>
+        <ul>
+          <li>PreservCyt (Hologic Inc., USA)</li>
+          <li>BD SurePath (Becton, Dickinson, USA)</li>
+          <li>EASYPREP (YD Diagnostics, South Korea)</li>
+          <li>CellPrep (CP Biodyne, South Korea)</li>
+          <li>Cell Preservative Solution (Human Lituo, China)</li>
+        </ul>
+        <p class="sub-header">Sample Pretreatment</p>
+        <ul>
+          <li>PREP-PK for scrapes in BD SurePath and CellPrep media</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

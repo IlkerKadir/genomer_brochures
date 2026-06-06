@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genomer Price List 2025</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @page {
+            size: A4;
+            margin: 20mm;
+        }
+
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            @page {
+                margin-top: 0;
+                margin-bottom: 0;
+            }
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 10pt;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: #fff;
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 20mm;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #e5e5e5;
+            margin-bottom: 32px;
+        }
+
+        .logo {
+            height: 36px;
+            width: auto;
+        }
+
+        .header-right {
+            text-align: right;
+        }
+
+        .document-title {
+            font-size: 11pt;
+            font-weight: 600;
+            color: #1a1a1a;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .document-date {
+            font-size: 9pt;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        /* Section */
+        .section {
+            margin-bottom: 28px;
+        }
+
+        .section-title {
+            font-size: 9pt;
+            font-weight: 600;
+            color: #1a1a1a;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #1a1a1a;
+            margin-bottom: 0;
+        }
+
+        .section-note {
+            font-size: 8pt;
+            color: #888;
+            margin-top: 6px;
+            margin-bottom: 12px;
+        }
+
+        /* Table */
+        .price-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9pt;
+        }
+
+        .price-table th {
+            font-weight: 500;
+            color: #666;
+            padding: 12px 0;
+            text-align: left;
+            border-bottom: 1px solid #e5e5e5;
+            font-size: 8pt;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .price-table th:nth-child(3),
+        .price-table th:nth-child(4) {
+            text-align: right;
+        }
+
+        .price-table td {
+            padding: 14px 0;
+            border-bottom: 1px solid #f0f0f0;
+            vertical-align: top;
+        }
+
+        .price-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .product-name {
+            font-weight: 500;
+            color: #1a1a1a;
+        }
+
+        .product-note {
+            display: block;
+            font-size: 8pt;
+            color: #888;
+            margin-top: 2px;
+        }
+
+        .catalog-number {
+            font-family: 'SF Mono', 'Menlo', monospace;
+            font-size: 7pt;
+            color: #666;
+        }
+
+        .tests-count {
+            text-align: right;
+            color: #1a1a1a;
+            font-weight: 500;
+        }
+
+        .price {
+            text-align: right;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .price-na {
+            text-align: right;
+            font-size: 8pt;
+            color: #888;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e5e5;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .footer-left {
+            font-size: 8pt;
+            color: #888;
+            line-height: 1.8;
+        }
+
+        .footer-right {
+            text-align: right;
+            font-size: 8pt;
+            color: #888;
+        }
+
+        .footer-right .website {
+            font-weight: 500;
+            color: #1a1a1a;
+            font-size: 9pt;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <img src="genomerlogo.png" alt="Genomer" class="logo">
+        <div class="header-right">
+            <div class="document-title">Price List</div>
+            <div class="document-date">January 2025</div>
+        </div>
+    </header>
+
+    <section class="section">
+        <h2 class="section-title">Microbiome Diagnostic Kits</h2>
+        <table class="price-table">
+            <thead>
+                <tr>
+                    <th style="width: 44%;">Product</th>
+                    <th style="width: 24%;">Cat. No.</th>
+                    <th style="width: 12%;">Tests</th>
+                    <th style="width: 20%;">Price (USD)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="product-name">Femobiome II Multiplex qPCR Kit</span></td>
+                    <td><span class="catalog-number">M-FBII-0701v01-12</span></td>
+                    <td class="tests-count">12</td>
+                    <td class="price">309.60</td>
+                </tr>
+                <tr>
+                    <td><span class="product-name">Femobiome PrimaScreen Multiplex qPCR Kit</span></td>
+                    <td><span class="catalog-number">M-FBPS-0601v01-24</span></td>
+                    <td class="tests-count">24</td>
+                    <td class="price">340.80</td>
+                </tr>
+                <tr>
+                    <td><span class="product-name">Femobiome SecundaScreen Multiplex qPCR Kit</span></td>
+                    <td><span class="catalog-number">M-FBSS-0701v01-24</span></td>
+                    <td class="tests-count">24</td>
+                    <td class="price">340.80</td>
+                </tr>
+                <tr>
+                    <td><span class="product-name">Androbiome Multiplex qPCR Kit</span></td>
+                    <td><span class="catalog-number">M-AB-0701v01-12</span></td>
+                    <td class="tests-count">12</td>
+                    <td class="price">309.60</td>
+                </tr>
+                <tr>
+                    <td><span class="product-name">Androbiome Screen Multiplex qPCR Kit</span></td>
+                    <td><span class="catalog-number">M-ABS-0701v01-24</span></td>
+                    <td class="tests-count">24</td>
+                    <td class="price">374.40</td>
+                </tr>
+                <tr>
+                    <td><span class="product-name">Enterobiome Kids Multiplex qPCR Kit</span></td>
+                    <td><span class="catalog-number">M-EBK-0701v01-12</span></td>
+                    <td class="tests-count">12</td>
+                    <td class="price">384.00</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title">Automated Extraction Kits</h2>
+        <p class="section-note">Validated for KingFisher Flex 96, Auto-Pure 96 (Thermo Fisher Scientific) and AllSheng Instruments</p>
+        <table class="price-table">
+            <thead>
+                <tr>
+                    <th style="width: 44%;">Product</th>
+                    <th style="width: 24%;">Cat. No.</th>
+                    <th style="width: 12%;">Tests</th>
+                    <th style="width: 20%;">Price (USD)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="product-name">PREP-MB RAPID II DNA/RNA Extraction Kit</span></td>
+                    <td><span class="catalog-number">I-MBR-v01-96</span></td>
+                    <td class="tests-count">96</td>
+                    <td class="price">240.00</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title">Manual Extraction Kits</h2>
+        <table class="price-table">
+            <thead>
+                <tr>
+                    <th style="width: 44%;">Product</th>
+                    <th style="width: 24%;">Cat. No.</th>
+                    <th style="width: 12%;">Tests</th>
+                    <th style="width: 20%;">Price (USD)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <span class="product-name">PREP-NA PLUS DNA/RNA Extraction Kit</span>
+                        <span class="product-note">All sample types except semen</span>
+                    </td>
+                    <td><span class="catalog-number">I-NAP-v01-50</span></td>
+                    <td class="tests-count">50</td>
+                    <td class="price">80.00</td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="product-name">PREP-MB MAX DNA Extraction Kit</span>
+                        <span class="product-note">Optimized for semen samples</span>
+                    </td>
+                    <td><span class="catalog-number">I-MBM-v01-48</span></td>
+                    <td class="tests-count">48</td>
+                    <td class="price">134.40</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section class="section" style="padding-top: 20px;">
+        <h2 class="section-title">Transport Medium</h2>
+        <table class="price-table">
+            <thead>
+                <tr>
+                    <th style="width: 44%;">Product</th>
+                    <th style="width: 24%;">Cat. No.</th>
+                    <th style="width: 12%;">Tests</th>
+                    <th style="width: 20%;">Price (USD)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="product-name">STOR F Transport Medium</span></td>
+                    <td><span class="catalog-number">S-STRF-v01-100</span></td>
+                    <td class="tests-count">100</td>
+                    <td class="price">60.00</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-left">
+            Prices in USD<br>
+            Subject to change without notice<br>
+            For research and professional diagnostic use
+        </div>
+        <div class="footer-right">
+            <div class="website">www.genomer.com.tr</div>
+            sales@genomer.com.tr
+        </div>
+    </footer>
+
+</body>
+</html>

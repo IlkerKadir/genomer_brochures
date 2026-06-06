@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+html { background: #FFFFFF; }
+body {
+  width: 720pt; height: 405pt; margin: 0; padding: 0;
+  font-family: Arial, sans-serif;
+  display: flex; background: #FFFFFF;
+}
+.container { width: 100%; height: 100%; position: relative; }
+.header { position: absolute; top: 0; left: 0; right: 0; height: 48pt; background: #0EA5E9; }
+.header-text { position: absolute; top: 12pt; left: 40pt; }
+.logo-top { position: absolute; top: 12pt; right: 40pt; }
+.logo-top img { height: 22pt; }
+.content { position: absolute; top: 56pt; left: 24pt; right: 24pt; bottom: 6pt; display: flex; gap: 10pt; }
+.col-left { flex: 1.6; display: flex; flex-direction: column; gap: 4pt; }
+.col-right { flex: 1; display: flex; flex-direction: column; gap: 6pt; }
+.sample-label { font-size: 6pt; color: #94A3B8; font-style: italic; margin: 0 0 2pt 0; }
+.conclusion-card {
+  background: #FEF2F2; border-left: 2pt solid #EF4444; border-radius: 0 3pt 3pt 0; padding: 8pt;
+}
+.conclusion-title { font-size: 8pt; font-weight: bold; color: #991B1B; margin: 0 0 4pt 0; }
+.conclusion-text { font-size: 7pt; color: #4A4A5A; line-height: 1.5; margin: 0; }
+.interpret-card {
+  background: #F8FAFC; border: 0.5pt solid #E2E8F0; border-radius: 3pt; padding: 8pt;
+}
+.interpret-title { font-size: 7.5pt; font-weight: bold; color: #0284C7; margin: 0 0 4pt 0; }
+.legend-text { font-size: 5.5pt; color: #94A3B8; margin: 4pt 0 0 0; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header"></div>
+  <div class="header-text">
+    <h2 style="color: #FFFFFF; font-size: 15pt; margin: 0;">ANDROBIOME &#8212; Sample Result Form</h2>
+  </div>
+  <div class="logo-top"><img src="genomerlogo.png"></div>
+
+  <div class="content">
+    <div class="col-left">
+      <p class="sample-label">Example: Androbiome Screen &#8212; <i>N. gonorrhoeae</i> detected</p>
+      <div id="result-table" class="placeholder" style="width: 100%; flex: 1; background: #F8FAFC;"></div>
+    </div>
+
+    <div class="col-right">
+      <div class="conclusion-card">
+        <p class="conclusion-title">Conclusion</p>
+        <p class="conclusion-text">
+          <b>DETECTED:</b> <i>Neisseria gonorrhoeae</i>.<br>
+          Urgent antibiotic treatment required per local guidelines.<br>
+          Partner notification mandatory.<br>
+          Test of cure recommended 2 weeks post-treatment.
+        </p>
+      </div>
+
+      <div class="interpret-card">
+        <p class="interpret-title">6-Step Interpretation Scheme</p>
+        <ol style="margin:0; padding-left:12pt; font-size:7pt; color:#475569; line-height:1.7;">
+          <li>Biomaterial quantity estimation</li>
+          <li>Transient microbiota assessment</li>
+          <li>Microbiota structure assessment</li>
+          <li>Yeast fungi assessment</li>
+          <li>Obligate pathogens (STIs)</li>
+          <li>Laboratory conclusion</li>
+        </ol>
+      </div>
+
+      <div class="interpret-card">
+        <p class="interpret-title">Control Indicators</p>
+        <p style="font-size: 6.5pt; color: #334155; margin: 0; line-height: 1.5;">
+          <b>Human DNA:</b> adequate (lg 5.7)<br>
+          <b>Total Bacterial Mass:</b> high (lg 6.9)<br>
+          <b>Other pathogens:</b> not detected
+        </p>
+      </div>
+
+      <p class="legend-text">Footnote: Quantitative Analysis Lg(X)</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>

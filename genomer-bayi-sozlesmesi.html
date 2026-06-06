@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Standart Bayi Sözleşmesi - Genomer Biyoteknoloji</title>
+<style>
+    @page {
+        size: A4;
+        margin: 18mm 20mm 16mm 20mm;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+        font-family: "Times New Roman", Times, serif;
+        color: #1a1a1a;
+        background: #fff;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        font-size: 10.5pt;
+        line-height: 1.45;
+    }
+    .cover {
+        page-break-after: always;
+        text-align: center;
+        padding-top: 35mm;
+    }
+    .cover .logo img { height: 90px; width: auto; margin-bottom: 24mm; }
+    .cover .title {
+        font-size: 22pt;
+        font-weight: 700;
+        color: #0a5a8a;
+        letter-spacing: 1.2px;
+        margin-bottom: 10mm;
+        line-height: 1.25;
+    }
+    .cover .subtitle {
+        font-size: 12pt;
+        color: #333;
+        font-style: italic;
+        margin-bottom: 22mm;
+    }
+    .cover .parties {
+        font-size: 11pt;
+        line-height: 1.8;
+        margin-bottom: 22mm;
+    }
+    .cover .parties .between { color: #555; font-style: italic; margin: 3mm 0; }
+    .cover .parties .name {
+        font-weight: 700;
+        color: #0a5a8a;
+        font-size: 12pt;
+    }
+    .cover .meta {
+        margin-top: 18mm;
+        font-size: 10.5pt;
+        color: #333;
+        line-height: 1.7;
+    }
+    .cover .meta strong { display: inline-block; min-width: 40mm; text-align: left; }
+    .letterhead {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        border-bottom: 2.5px solid #0a5a8a;
+        padding-bottom: 8px;
+        margin-bottom: 12px;
+    }
+    .letterhead .logo img { height: 50px; width: auto; }
+    .letterhead .company {
+        text-align: right;
+        font-size: 9pt;
+        color: #333;
+        line-height: 1.5;
+    }
+    .letterhead .company .name {
+        font-weight: 700;
+        color: #0a5a8a;
+        font-size: 10pt;
+    }
+    h1.doc-title {
+        font-size: 14pt;
+        font-weight: 700;
+        color: #0a5a8a;
+        text-align: center;
+        letter-spacing: 0.8px;
+        margin: 4px 0 14px;
+    }
+    h2 {
+        font-size: 11pt;
+        font-weight: 700;
+        color: #0a5a8a;
+        margin: 14px 0 6px;
+        border-bottom: 1px solid #c8d0d8;
+        padding-bottom: 3px;
+        page-break-after: avoid;
+    }
+    h3 {
+        font-size: 10.5pt;
+        font-weight: 700;
+        color: #333;
+        margin: 8px 0 4px;
+        page-break-after: avoid;
+    }
+    p {
+        text-align: justify;
+        margin-bottom: 6px;
+        orphans: 3;
+        widows: 3;
+        page-break-inside: avoid;
+    }
+    ol.clauses {
+        margin-left: 0;
+        list-style: none;
+        counter-reset: clause;
+    }
+    ol.clauses > li {
+        counter-increment: clause;
+        margin-bottom: 6px;
+        padding-left: 14mm;
+        position: relative;
+        text-align: justify;
+    }
+    ol.clauses > li::before {
+        content: counter(clause) ".";
+        position: absolute;
+        left: 0;
+        font-weight: 700;
+        color: #0a5a8a;
+        width: 13mm;
+        text-align: left;
+    }
+    ol.sub {
+        margin-left: 6mm;
+        list-style: none;
+        counter-reset: subclause;
+    }
+    ol.sub > li {
+        counter-increment: subclause;
+        margin: 3px 0;
+        padding-left: 10mm;
+        position: relative;
+        text-align: justify;
+    }
+    ol.sub > li::before {
+        content: counter(clause) "." counter(subclause) ".";
+        position: absolute;
+        left: 0;
+        font-weight: 600;
+        color: #555;
+        width: 9mm;
+    }
+    .parties-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 6px 0 10px;
+        font-size: 10pt;
+    }
+    .parties-table td {
+        vertical-align: top;
+        width: 50%;
+        padding: 8px 10px;
+        border: 1px solid #c8d0d8;
+        line-height: 1.45;
+    }
+    .parties-table .role {
+        background: #0a5a8a;
+        color: #fff;
+        font-weight: 700;
+        padding: 5px 10px;
+        font-size: 9.5pt;
+        letter-spacing: 0.5px;
+    }
+    .parties-table .name { font-weight: 700; color: #0a5a8a; margin-bottom: 4px; }
+    .parties-table .row { margin: 1px 0; font-size: 9.5pt; }
+    .parties-table .row strong { display: inline-block; min-width: 30mm; color: #555; font-weight: 600; }
+    .annex-page { page-break-before: always; }
+    .closing-page { page-break-before: always; }
+    .annex-title {
+        text-align: center;
+        font-size: 13pt;
+        font-weight: 700;
+        color: #0a5a8a;
+        margin-bottom: 4px;
+        letter-spacing: 0.6px;
+    }
+    .annex-subtitle {
+        text-align: center;
+        font-size: 10pt;
+        color: #555;
+        font-style: italic;
+        margin-bottom: 14px;
+    }
+    table.annex {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 10pt;
+        margin-bottom: 10px;
+    }
+    table.annex th {
+        background: #0a5a8a;
+        color: #fff;
+        padding: 7px 10px;
+        font-size: 9.5pt;
+        text-align: left;
+        font-weight: 700;
+    }
+    table.annex td {
+        padding: 7px 10px;
+        border: 1px solid #c8d0d8;
+        vertical-align: top;
+    }
+    table.annex td.label {
+        background: #f5f8fb;
+        font-weight: 700;
+        color: #333;
+        width: 35%;
+    }
+    table.price {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 9.5pt;
+    }
+    table.price th, table.price td {
+        border: 1px solid #c8d0d8;
+        padding: 6px 9px;
+    }
+    table.price th {
+        background: #0a5a8a;
+        color: #fff;
+        text-align: left;
+        font-weight: 700;
+    }
+    table.price td.num { text-align: right; }
+    table.price td.center { text-align: center; }
+    .signature-block {
+        margin-top: 20px;
+        display: flex;
+        justify-content: space-between;
+        gap: 30px;
+        page-break-inside: avoid;
+    }
+    .signature-block .sig-col {
+        flex: 1;
+        font-size: 10pt;
+        line-height: 1.5;
+    }
+    .signature-block .role {
+        font-weight: 700;
+        color: #0a5a8a;
+        margin-bottom: 5px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-size: 9.5pt;
+    }
+    .signature-block .org { font-weight: 700; margin-bottom: 2px; }
+    .signature-block .field { margin-bottom: 7px; }
+    .signature-block .field-label {
+        font-size: 8.5pt;
+        color: #666;
+        display: block;
+        margin-bottom: 1px;
+    }
+    .signature-block .line {
+        border-bottom: 1px solid #555;
+        height: 14px;
+    }
+    .signature-block .stamp-area {
+        margin-top: 14px;
+        height: 55px;
+        border: 1px dashed #c8d0d8;
+        text-align: center;
+        font-size: 9pt;
+        color: #999;
+        padding-top: 22px;
+        font-style: italic;
+    }
+    .note-box {
+        background: #f5f8fb;
+        border-left: 3px solid #0a5a8a;
+        padding: 8px 12px;
+        font-size: 9.5pt;
+        line-height: 1.5;
+        margin: 8px 0;
+    }
+    .footer-note {
+        margin-top: 10px;
+        font-size: 8.5pt;
+        color: #777;
+        text-align: center;
+        line-height: 1.45;
+        font-style: italic;
+    }
+    .checkbox-block {
+        background: #f5f8fb;
+        border: 1px solid #c8d0d8;
+        padding: 10px 14px;
+        margin: 6px 0 10px;
+        font-size: 10pt;
+        page-break-inside: avoid;
+    }
+    .checkbox-block .opt { margin: 4px 0; }
+    .note-box,
+    table.annex,
+    table.parties-table,
+    .signature-block,
+    .parties-table tr {
+        page-break-inside: avoid;
+    }
+    ol.clauses > li:has(.checkbox-block),
+    ol.clauses > li:has(ol.sub) {
+        page-break-inside: avoid;
+    }
+    .checkbox-block .box {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border: 1.5px solid #0a5a8a;
+        margin-right: 8px;
+        vertical-align: middle;
+    }
+    .placeholder {
+        color: #888;
+        font-style: italic;
+    }
+</style>
+</head>
+<body>
+
+<!-- ============== KAPAK ============== -->
+<div class="cover">
+    <div class="logo"><img src="genomerlogo.png" alt="Genomer Biyoteknoloji"></div>
+    <div class="title">STANDART<br>BAYİ SÖZLEŞMESİ</div>
+    <div class="subtitle">Standard Distributor Agreement</div>
+
+    <div class="parties">
+        <div class="name">GENOMER BİYOTEKNOLOJİ ARGE SAN. VE TİC. LTD. ŞTİ.</div>
+        <div class="between">— ile —</div>
+        <div class="name">.................................................................</div>
+        <div style="font-size:9.5pt;color:#888;font-style:italic;">(Bayi Unvanı)</div>
+    </div>
+
+    <div class="meta">
+        <div><strong>Sözleşme No:</strong> GEN-BYI-2026/...........</div>
+        <div><strong>Düzenleme Tarihi:</strong> ......./......./...........</div>
+        <div><strong>Yürürlük Tarihi:</strong> ......./......./...........</div>
+        <div><strong>Süre:</strong> 1 (bir) yıl, otomatik uzatma maddesi ile</div>
+    </div>
+</div>
+
+<!-- ============== SÖZLEŞME GÖVDESİ ============== -->
+
+<div class="letterhead">
+    <div class="logo"><img src="genomerlogo.png" alt="Genomer Biyoteknoloji"></div>
+    <div class="company">
+        <div class="name">GENOMER BİYOTEKNOLOJİ ARGE SAN. VE TİC. LTD. ŞTİ.</div>
+        Dumlupınar Mah. Nur Cad. No: 7/3, Kartepe / Kocaeli / Türkiye<br>
+        Tel: 0262 373 70 05 &nbsp;•&nbsp; www.genomer.com.tr &nbsp;•&nbsp; support@genomer.com.tr
+    </div>
+</div>
+
+<h1 class="doc-title">STANDART BAYİ SÖZLEŞMESİ</h1>
+
+<h2>1. TARAFLAR</h2>
+<p>İşbu Bayi Sözleşmesi ("<strong>Sözleşme</strong>"), aşağıda unvanları ve adresleri yer alan taraflar arasında, aşağıda belirtilen şartlar dahilinde akdedilmiştir.</p>
+
+<table class="parties-table">
+    <tr>
+        <td class="role">TEDARİKÇİ ("Genomer")</td>
+        <td class="role">BAYİ</td>
+    </tr>
+    <tr>
+        <td>
+            <div class="name">Genomer Biyoteknoloji Arge San. ve Tic. Ltd. Şti.</div>
+            <div class="row"><strong>Adres:</strong> Dumlupınar Mah. Nur Cad. No: 7/3, Kartepe / Kocaeli</div>
+            <div class="row"><strong>Vergi Dairesi / VKN:</strong> Alemdar V.D. / 3941111048</div>
+            <div class="row"><strong>Mersis No:</strong> 0394111104800001</div>
+            <div class="row"><strong>Tic. Sicil No:</strong> 31056</div>
+            <div class="row"><strong>Telefon:</strong> 0262 373 70 05</div>
+            <div class="row"><strong>E-posta:</strong> support@genomer.com.tr</div>
+        </td>
+        <td>
+            <div class="name"><span class="placeholder">[Bayi Unvanı]</span></div>
+            <div class="row"><strong>Adres:</strong> <span class="placeholder">...........................................</span></div>
+            <div class="row"><strong>Vergi Dairesi / VKN:</strong> <span class="placeholder">............................. / .............................</span></div>
+            <div class="row"><strong>Mersis No:</strong> <span class="placeholder">.............................</span></div>
+            <div class="row"><strong>Tic. Sicil No:</strong> <span class="placeholder">.............................</span></div>
+            <div class="row"><strong>Telefon:</strong> <span class="placeholder">.............................</span></div>
+            <div class="row"><strong>E-posta:</strong> <span class="placeholder">.............................</span></div>
+        </td>
+    </tr>
+</table>
+
+<p>Genomer ve Bayi, bundan böyle ayrı ayrı "<strong>Taraf</strong>", birlikte "<strong>Taraflar</strong>" olarak anılacaktır.</p>
+
+<h2>2. TANIMLAR</h2>
+<ol class="clauses">
+    <li><strong>Ürün(ler):</strong> Genomer tarafından üretilen ve/veya Genomer markalı tüm in vitro diyagnostik (IVD) test kitleri, ekstraksiyon kitleri, transport medium ürünleri, gerçek zamanlı PCR (qPCR) cihazları ile bunların aksesuar ve sarflarını ifade eder.</li>
+    <li><strong>Bayilik Bölgesi:</strong> Bayi'nin Ürünleri pazarlama, tanıtım ve satış faaliyetlerini yürüteceği, Ek-1'de belirtilen coğrafi alanı ifade eder.</li>
+    <li><strong>Bayi Fiyat Tarifesi:</strong> Genomer'in, Bayi'ye uygulayacağı satış fiyatlarını içeren ve Ek-2'de yer alan fiyat listesini ifade eder.</li>
+    <li><strong>Minimum Alım Taahhüdü:</strong> Bayi'nin, Sözleşme dönemi içinde Genomer'den gerçekleştirmeyi taahhüt ettiği ve Ek-3'te yer alan asgari satın alma miktarı veya tutarını ifade eder.</li>
+    <li><strong>Son Kullanıcı:</strong> Ürünleri kendi laboratuvarında veya kurumunda kullanmak üzere Bayi'den satın alan hastane, laboratuvar, klinik veya benzeri sağlık kuruluşunu ifade eder.</li>
+</ol>
+
+<h2>3. SÖZLEŞME'NİN KONUSU</h2>
+<p>İşbu Sözleşme'nin konusu; Genomer'in, Ek-1'de tanımlı Bayilik Bölgesi içinde Bayi'yi yetkili satış noktası olarak ataması; Bayi'nin bu bölge içinde Ürünleri Son Kullanıcılara satması, tanıtımını ve satış sonrası desteğini sağlaması; Tarafların karşılıklı hak, yükümlülük ve sorumluluklarının düzenlenmesidir.</p>
+
+<h2>4. BAYİLİK STATÜSÜ VE BÖLGE</h2>
+<ol class="clauses">
+    <li>Bayi'nin bayilik statüsü, Taraflarca aşağıdaki seçeneklerden biri olarak belirlenmiş ve işbu Sözleşme'ye işlenmiştir:
+        <div class="checkbox-block">
+            <div class="opt"><span class="box"></span> <strong>Münhasır (Tek Yetkili) Bayilik:</strong> Genomer; Sözleşme süresince Ek-1'de tanımlı Bayilik Bölgesi içinde başka bir bayi atamayacaktır.</div>
+            <div class="opt"><span class="box"></span> <strong>Münhasır Olmayan Bayilik:</strong> Genomer; Sözleşme süresince Bayilik Bölgesi içinde birden fazla bayi atama hakkını saklı tutar.</div>
+        </div>
+    </li>
+    <li>Bayilik Bölgesi; Ek-1'de iller, ilçeler veya coğrafi bölgeler düzeyinde tanımlanır. Bayi, Bölge dışında doğrudan satış veya tanıtım faaliyeti yürütemez; Bölge dışından gelen siparişleri Genomer'e yönlendirir.</li>
+    <li>Münhasır bayilikte, Bayi'nin Minimum Alım Taahhüdü'nü gerçekleştirememesi halinde Genomer; 30 (otuz) gün önceden yazılı bildirimde bulunmak suretiyle Bayilik statüsünü münhasır olmayana çevirme veya Sözleşme'yi feshetme hakkına sahiptir.</li>
+    <li>Genomer; resmi internet sitesi, fuar, ulusal/uluslararası tanıtım faaliyetleri ve doğrudan kurumsal anlaşmalar üzerinden yapılan satışlardan dolayı Bayi'ye karşı herhangi bir sorumluluk taşımaz.</li>
+</ol>
+
+<h2>5. ÜRÜNLER</h2>
+<p>Bayi; Genomer'in mevcut ve gelecekte piyasaya sürülecek tüm Ürünlerini bu Sözleşme kapsamında pazarlama ve satma yetkisine sahiptir. Genomer; herhangi bir Ürünü üretimden kaldırma, teknik özelliklerini güncelleme veya yeni Ürünler portföye ekleme hakkını saklı tutar; bu tür değişiklikler Bayi'ye makul süre önceden yazılı olarak bildirilir.</p>
+
+<h2>6. SİPARİŞ, TESLİM VE FİYATLANDIRMA</h2>
+<ol class="clauses">
+    <li>Bayi; siparişlerini yazılı (e-posta veya resmi sipariş formu) olarak sales@genomer.com.tr adresine iletir. Genomer, sipariş onayını ve proforma faturayı 3 (üç) iş günü içinde Bayi'ye bildirir.</li>
+    <li>Bayi'ye uygulanacak fiyatlar, Ek-2'de yer alan Bayi Fiyat Tarifesi'nde belirtilmiştir. Fiyatlar ABD Doları (USD) cinsinden ve KDV hariç olarak listelenir.</li>
+    <li>Faturalama, faturanın düzenlendiği tarihteki Türkiye Cumhuriyet Merkez Bankası (TCMB) döviz satış kuru üzerinden Türk Lirası (TL) olarak yapılır ve 3065 sayılı KDV Kanunu hükümlerine göre KDV tahakkuk ettirilir.</li>
+    <li>Genomer; piyasa koşulları, hammadde maliyetleri, döviz kuru değişimleri ve sair ticari gerekçelere bağlı olarak Bayi Fiyat Tarifesi'ni güncelleme hakkını saklı tutar. Güncellenmiş tarife, yürürlük tarihinden en az 30 gün önce Bayi'ye yazılı olarak bildirilir; bildirim tarihinden önce verilmiş ve onaylanmış siparişler için eski fiyatlar geçerliliğini korur.</li>
+    <li>Teslimat, Ürünlerin gerektirdiği soğuk zincir koşulları korunarak Bayi'nin Ek-1'de belirtilen sevkiyat adresine yapılır. Teslim alındığında "<em>Kit Teslim Tutanağı</em>" iki nüsha olarak düzenlenir.</li>
+    <li>Bayi; ambalaj, etiket, lot numarası ve son kullanma tarihi bilgilerini teslim anında kontrol etmekle, kabul edilmeyen veya soğuk zinciri bozulmuş ürünleri 24 saat içinde Genomer'e yazılı bildirmekle yükümlüdür.</li>
+</ol>
+
+<h2>7. MİNİMUM ALIM TAAHHÜDÜ</h2>
+<ol class="clauses">
+    <li>Bayi; Ek-3'te belirtilen Minimum Alım Taahhüdü'nü Sözleşme dönemi içinde yerine getirmeyi kabul ve taahhüt eder.</li>
+    <li>Taahhüdün gerçekleşip gerçekleşmediği her Sözleşme yılı sonunda Genomer tarafından değerlendirilir; sonuçlar yazılı olarak Bayi'ye bildirilir.</li>
+    <li>Minimum Alım Taahhüdü'nün yerine getirilmemesi halinde Genomer; aşağıdaki tedbirlerden birini veya birkaçını uygulama hakkına sahiptir:
+        <ol class="sub">
+            <li>Bayilik statüsünün münhasırdan münhasır olmayana çevrilmesi (varsa);</li>
+            <li>Bayi Fiyat Tarifesi'nde uygulanan iskontoların gözden geçirilmesi;</li>
+            <li>Bayilik Bölgesi'nin daraltılması;</li>
+            <li>30 gün önceden yazılı bildirim ile Sözleşme'nin feshi.</li>
+        </ol>
+    </li>
+    <li>Mücbir sebep, salgın hastalık, regülasyon değişiklikleri veya Genomer kaynaklı tedarik kesintileri gibi Bayi'nin kontrolü dışındaki durumlarda taahhüt değerlendirmesi iyi niyet çerçevesinde yeniden ele alınır.</li>
+</ol>
+
+<h2>8. ÖDEME VE FATURALAMA</h2>
+<ol class="clauses">
+    <li>Ödeme şartları, her sipariş için Genomer tarafından düzenlenen proforma faturada belirtilir. Standart ödeme şartı: <strong>peşin / 30 gün vade</strong> (her bayi için ayrıca Ek-2'de belirlenecektir).</li>
+    <li>Bayi; faturalanan tutarları, fatura tarihinden itibaren öngörülen süre içinde Genomer'in bildireceği banka hesabına TL olarak öder.</li>
+    <li>Gecikmiş ödemelerde, Türkiye Cumhuriyet Merkez Bankası tarafından ilan edilen yıllık avans faiz oranı üzerinden gecikme faizi tahakkuk ettirilir.</li>
+    <li>Bayi'nin ödeme yükümlülüğünü ihlal etmesi halinde Genomer; açık sipariş ve sevkiyatları durdurma, ödemenin tamamlanmasını öncül koşul olarak talep etme veya Sözleşme'yi feshetme hakkına sahiptir.</li>
+</ol>
+
+<h2>9. BAYİ'NİN YÜKÜMLÜLÜKLERİ</h2>
+<ol class="clauses">
+    <li>Bayi; Ürünleri yalnızca Bayilik Bölgesi içindeki Son Kullanıcılara, üretici talimatlarına uygun şekilde satar ve tanıtır.</li>
+    <li>Bayi; Genomer'in tanıtım malzemelerini, kullanım kılavuzlarını, IFU'larını ve eğitim materyallerini Son Kullanıcılara orijinal halinde ve eksiksiz olarak ulaştırır.</li>
+    <li>Bayi; satış sonrası temel teknik destek, kurulum koordinasyonu ve Son Kullanıcı eğitimlerinin organizasyonunu sağlar; teknik kapsamı aşan talepleri Genomer'e iletir.</li>
+    <li>Bayi; pazar geri bildirimlerini, şikayet ve uyumsuzlukları 5 iş günü içinde Genomer'e yazılı olarak iletir. İlgili IVDR/TİTCK mevzuatı kapsamındaki advers olay bildirimleri 24 saat içinde iletilir.</li>
+    <li>Bayi; Ürünlerin uygun saklama koşulları (soğuk zincir dahil) sağlanmış depolarda muhafaza edilmesini, son kullanma tarihi yaklaşan stokların öncelikli olarak satılmasını ve Genomer kalite gerekliliklerine uygun stok takibinin tutulmasını sağlar.</li>
+    <li>Bayi; satışlarını Genomer markası altında ve Genomer marka rehberine uygun şekilde gerçekleştirir; Genomer'in yazılı izni olmadan Ürünler üzerinde herhangi bir etiket, kaplama veya değişiklik yapamaz.</li>
+</ol>
+
+<h2>10. GENOMER'İN YÜKÜMLÜLÜKLERİ</h2>
+<ol class="clauses">
+    <li>Genomer; siparişleri kabul tarihinden itibaren makul lojistik süresi içinde, soğuk zincir koşullarını koruyarak teslim eder.</li>
+    <li>Genomer; Bayi personeline yılda en az bir kez ücretsiz ürün eğitimi sağlar; ihtiyaç halinde uzaktan/yerinde teknik destek verir.</li>
+    <li>Genomer; tanıtım malzemelerini, dijital içerikleri, kullanım kılavuzlarını ve IFU'ları güncel halleriyle Bayi'ye ulaştırır.</li>
+    <li>Genomer; Bayi'nin pazarlama faaliyetlerini desteklemek üzere fuar, kongre ve seminerlerde ortak görünürlük imkânları sağlayabilir.</li>
+    <li>Genomer; ulusal/uluslararası regülasyon gereği yapılan teknik veya etiket güncellemelerini Bayi'ye zamanında bildirir.</li>
+</ol>
+
+<h2>11. MARKA, LOGO VE TANITIM</h2>
+<ol class="clauses">
+    <li>Bayi; "Genomer" markası, logosu ve ticari unvanını yalnızca işbu Sözleşme kapsamındaki Ürünlerin tanıtım ve satışı amacıyla, Genomer'in yazılı marka rehberi doğrultusunda kullanabilir.</li>
+    <li>Bayi; Genomer'in markasını üçüncü kişilere devredemez, alt-lisanslayamaz ve marka tescili adına başvuruda bulunamaz.</li>
+    <li>Sözleşme'nin sona ermesi halinde Bayi; Genomer markasını, logosunu ve ilgili tüm görsel/yazılı materyallerini kullanımı 30 gün içinde durdurur.</li>
+</ol>
+
+<h2>12. ALT-BAYİLİK</h2>
+<p>Bayi; Genomer'in <strong>yazılı ön onayını</strong> almak kaydıyla, Bayilik Bölgesi içinde alt-bayi atayabilir. Atanan alt-bayilerin işbu Sözleşme'deki yükümlülüklere uyumundan Bayi sorumludur. Genomer; alt-bayilik talebini gerekçesiz reddetme hakkına sahiptir.</p>
+
+<h2>13. GİZLİLİK VE KİŞİSEL VERİLER</h2>
+<ol class="clauses">
+    <li>Taraflar; Sözleşme süresince edindikleri ticari, teknik, finansal, fiyat ve kişisel verileri gizli tutmakla, üçüncü kişilere ifşa etmemekle yükümlüdür. Bu yükümlülük Sözleşme'nin sona ermesinden sonra 5 (beş) yıl süreyle devam eder.</li>
+    <li>Bayi'ye özel uygulanan fiyat tarifesi ve iskontolar tamamen gizli olup, başka bayilere, müşterilere veya rakiplere ifşa edilemez.</li>
+    <li>Taraflar; 6698 sayılı KVKK ve ilgili mevzuat kapsamında, kendi sorumlulukları dahilindeki kişisel verilerin işlenmesi, saklanması ve aktarılması konusunda yasal yükümlülüklere uymayı kabul eder.</li>
+</ol>
+
+<h2>14. GARANTİ VE SORUMLULUK SINIRI</h2>
+<ol class="clauses">
+    <li>Genomer; Ürünlerin geçerli IVDR / TİTCK düzenlemelerine uygun olarak üretildiğini ve teslim anında ürün spesifikasyonlarına uygun olduğunu taahhüt eder.</li>
+    <li>Ürünlerin kullanım amacı dışındaki uygulamalarından, hatalı örnek alımı, taşıma veya saklama koşullarına uyulmamasından, Son Kullanıcı kaynaklı uygulama hatalarından kaynaklanan sonuçlardan Genomer sorumlu tutulamaz.</li>
+    <li>Tarafların doğrudan zararlar dışındaki dolaylı, sonuçsal veya kâr kaybı niteliğindeki taleplerden sorumluluğu bulunmamaktadır; her halükarda Genomer'in toplam sorumluluğu, son 12 ayda Bayi tarafından ödenen Ürün bedelinin toplamı ile sınırlıdır.</li>
+    <li>Ürün geri çağırma (recall) durumlarında Bayi; Genomer'in talimatları doğrultusunda derhal ilgili Son Kullanıcıları bilgilendirmek ve Ürünleri geri toplamakla yükümlüdür; bu kapsamda makul masraflar Genomer tarafından karşılanır.</li>
+</ol>
+
+<h2>15. SÜRE, UZAMA VE FESİH</h2>
+<ol class="clauses">
+    <li>İşbu Sözleşme, yürürlük tarihinden itibaren <strong>1 (bir) yıl</strong> süreyle geçerlidir.</li>
+    <li>Sözleşme; Taraflardan herhangi birinin bitiş tarihinden en az 60 (altmış) gün önce yazılı fesih bildiriminde bulunmaması halinde, aynı şartlarla birer yıllık dönemler halinde otomatik olarak uzar.</li>
+    <li>Taraflardan biri; karşı tarafın esaslı bir yükümlülüğünü ihlal etmesi ve 30 günlük makul süreye rağmen ihlali gidermemesi halinde, Sözleşme'yi yazılı bildirim ile derhal feshetme hakkına sahiptir.</li>
+    <li>Sözleşme'nin herhangi bir sebeple sona ermesi halinde Bayi; mevcut stokları Genomer'in yazılı onayı doğrultusunda satmaya devam edebilir veya Genomer'in talebi üzerine iade edebilir. Açık siparişler için doğmuş bedeller ödenmekle yükümlüdür.</li>
+    <li>Sözleşme'nin sona ermesi, Tarafların önceden doğmuş hak ve yükümlülüklerini etkilemez.</li>
+</ol>
+
+<h2>16. MÜCBİR SEBEP</h2>
+<p>Tarafların kontrolü dışındaki doğal afet, salgın, savaş, ayaklanma, resmi makam kararları, lojistik kesintileri ve benzeri olaylar mücbir sebep sayılır. Mücbir sebep nedeniyle yükümlülüklerini yerine getiremeyen Taraf, durumu 7 gün içinde diğer Tarafa yazılı olarak bildirir; mücbir sebebin 60 günden uzun sürmesi halinde her iki Taraf da Sözleşme'yi feshetme hakkına sahiptir.</p>
+
+<h2>17. TEBLİGAT</h2>
+<p>Tarafların işbu Sözleşme'de belirtilen adres ve e-posta bilgileri yasal tebligat adresleri olarak kabul edilir. Adres veya iletişim bilgisi değişiklikleri 7 gün içinde yazılı olarak bildirilmediği takdirde, mevcut adrese yapılan tebligatlar geçerli sayılır.</p>
+
+<h2>18. UYUŞMAZLIKLARIN ÇÖZÜMÜ VE YETKİLİ MAHKEME</h2>
+<p>İşbu Sözleşme'nin yorumu, uygulanması ve ifasından doğacak uyuşmazlıklarda Türk Hukuku uygulanır. Tarafların uzlaşı yoluyla çözüm sağlayamadığı uyuşmazlıklarda <strong>Kocaeli Mahkemeleri ve İcra Daireleri</strong> yetkili olacaktır.</p>
+
+<h2>19. ÇEŞİTLİ HÜKÜMLER</h2>
+<ol class="clauses">
+    <li><strong>Devir:</strong> Hiçbir Taraf, diğer Tarafın yazılı onayı olmaksızın işbu Sözleşme'den doğan hak ve yükümlülüklerini üçüncü kişilere devredemez.</li>
+    <li><strong>Bütünlük:</strong> Ekler dahil işbu Sözleşme, Taraflar arasındaki tüm anlaşmayı yansıtır; sözleşme öncesi yazılı veya sözlü tüm beyan ve mutabakatların yerine geçer.</li>
+    <li><strong>Bölünebilirlik:</strong> Sözleşme'nin herhangi bir hükmünün geçersiz veya uygulanamaz hale gelmesi, diğer hükümlerin geçerliliğini etkilemez.</li>
+    <li><strong>Tadiller:</strong> Sözleşme'nin değiştirilmesi yalnızca Tarafların yetkili temsilcilerince imzalanacak yazılı zeyilname ile mümkündür.</li>
+    <li><strong>Ekler:</strong> Aşağıdaki ekler Sözleşme'nin ayrılmaz parçasıdır:
+        <ol class="sub">
+            <li>Ek-1: Bayilik Bölgesi ve Sevkiyat Adresi</li>
+            <li>Ek-2: Bayi Fiyat Tarifesi ve Ödeme Şartları</li>
+            <li>Ek-3: Minimum Alım Taahhüdü</li>
+        </ol>
+    </li>
+</ol>
+
+<!-- ============== İMZA SAYFASI ============== -->
+<div class="closing-page">
+    <div class="letterhead">
+        <div class="logo"><img src="genomerlogo.png" alt="Genomer Biyoteknoloji"></div>
+        <div class="company">
+            <div class="name">GENOMER BİYOTEKNOLOJİ ARGE SAN. VE TİC. LTD. ŞTİ.</div>
+            Dumlupınar Mah. Nur Cad. No: 7/3, Kartepe / Kocaeli / Türkiye<br>
+            Tel: 0262 373 70 05 &nbsp;•&nbsp; www.genomer.com.tr &nbsp;•&nbsp; support@genomer.com.tr
+        </div>
+    </div>
+
+    <h2>20. YÜRÜRLÜK VE İMZA</h2>
+    <p>İşbu Sözleşme, 19 (on dokuz) ana madde ve 3 (üç) ek'ten oluşmakta olup, Tarafların yetkili temsilcilerince <strong>....../....../..........</strong> tarihinde iki nüsha olarak imzalanmış ve imza tarihinde yürürlüğe girmiştir. Ekler, işbu Sözleşme'nin ayrılmaz parçası olup taraflarca bu sayfadaki imza ile birlikte kabul edilmiştir.</p>
+
+    <div class="signature-block" style="margin-top: 40px;">
+        <div class="sig-col">
+            <div class="role">Tedarikçi / Supplier</div>
+            <div class="org">Genomer Biyoteknoloji Arge San. ve Tic. Ltd. Şti.</div>
+            <div class="field"><span class="field-label">Yetkili Ad - Soyad:</span><div class="line"></div></div>
+            <div class="field"><span class="field-label">Görev / Unvan:</span><div class="line"></div></div>
+            <div class="field"><span class="field-label">İmza:</span><div class="line"></div></div>
+            <div class="stamp-area" style="height: 75px; padding-top: 32px;">Kaşe</div>
+        </div>
+        <div class="sig-col">
+            <div class="role">Bayi / Distributor</div>
+            <div class="org"><span class="placeholder">[Bayi Unvanı]</span></div>
+            <div class="field"><span class="field-label">Yetkili Ad - Soyad:</span><div class="line"></div></div>
+            <div class="field"><span class="field-label">Görev / Unvan:</span><div class="line"></div></div>
+            <div class="field"><span class="field-label">İmza:</span><div class="line"></div></div>
+            <div class="stamp-area" style="height: 75px; padding-top: 32px;">Kaşe</div>
+        </div>
+    </div>
+</div>
+
+<!-- ============== EK-1 ============== -->
+<div class="annex-page">
+    <div class="letterhead">
+        <div class="logo"><img src="genomerlogo.png" alt="Genomer Biyoteknoloji"></div>
+        <div class="company">
+            <div class="name">GENOMER BİYOTEKNOLOJİ ARGE SAN. VE TİC. LTD. ŞTİ.</div>
+            Dumlupınar Mah. Nur Cad. No: 7/3, Kartepe / Kocaeli / Türkiye<br>
+            Tel: 0262 373 70 05 &nbsp;•&nbsp; www.genomer.com.tr &nbsp;•&nbsp; support@genomer.com.tr
+        </div>
+    </div>
+
+    <div class="annex-title">EK-1: BAYİLİK BÖLGESİ VE SEVKİYAT ADRESİ</div>
+    <div class="annex-subtitle">Annex 1 — Territory &amp; Shipping Address</div>
+
+    <h3>Bayilik Statüsü</h3>
+    <div class="checkbox-block">
+        <div class="opt"><span class="box"></span> <strong>Münhasır Bayilik:</strong> Aşağıda tanımlı bölge içinde tek yetkili bayi.</div>
+        <div class="opt"><span class="box"></span> <strong>Münhasır Olmayan Bayilik:</strong> Aşağıda tanımlı bölge içinde Genomer birden fazla bayi atayabilir.</div>
+    </div>
+
+    <h3>Bayilik Bölgesi</h3>
+    <table class="annex">
+        <tr>
+            <td class="label">İller / Bölgeler</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="label">İlçeler (varsa)</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="label">Bölgeye İlişkin Özel Notlar</td>
+            <td>&nbsp;</td>
+        </tr>
+    </table>
+
+    <h3>Bayi Sevkiyat Adresi</h3>
+    <table class="annex">
+        <tr>
+            <td class="label">Sevkiyat Adresi</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="label">Sevkiyat Sorumlusu</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="label">Telefon</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="label">E-posta</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="label">Soğuk Zincir Saklama Kapasitesi</td>
+            <td>&nbsp;</td>
+        </tr>
+    </table>
+
+    <div class="footer-note">
+        İşbu Ek, Sözleşme'nin ayrılmaz parçası olup Tarafların Madde 20 kapsamındaki imzaları ile birlikte hüküm doğurur.
+    </div>
+</div>
+
+<!-- ============== EK-2 ============== -->
+<div class="annex-page">
+    <div class="letterhead">
+        <div class="logo"><img src="genomerlogo.png" alt="Genomer Biyoteknoloji"></div>
+        <div class="company">
+            <div class="name">GENOMER BİYOTEKNOLOJİ ARGE SAN. VE TİC. LTD. ŞTİ.</div>
+            Dumlupınar Mah. Nur Cad. No: 7/3, Kartepe / Kocaeli / Türkiye<br>
+            Tel: 0262 373 70 05 &nbsp;•&nbsp; www.genomer.com.tr &nbsp;•&nbsp; support@genomer.com.tr
+        </div>
+    </div>
+
+    <div class="annex-title">EK-2: BAYİ FİYAT TARİFESİ VE ÖDEME ŞARTLARI</div>
+    <div class="annex-subtitle">Annex 2 — Distributor Price Schedule &amp; Payment Terms</div>
+
+    <p style="font-size:9.5pt;">Aşağıdaki fiyat tarifesi, işbu Sözleşme süresince bu Bayi'ye özel olarak uygulanacak fiyatları kapsar. Fiyatlar ABD Doları (USD) cinsinden ve KDV hariç olarak belirtilmiştir. Genomer; Madde 6 hükümleri uyarınca fiyat tarifesini güncelleme hakkını saklı tutar.</p>
+
+    <table class="price">
+        <thead>
+            <tr>
+                <th style="width:8mm;">No</th>
+                <th>Ürün Adı</th>
+                <th style="width:38mm;">Katalog No</th>
+                <th style="width:22mm;">Test /<br>Paket</th>
+                <th style="width:32mm;">Bayi Fiyatı<br>(USD)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td class="center">1</td><td>&nbsp;</td><td class="center">&nbsp;</td><td class="center">&nbsp;</td><td class="num">&nbsp;</td></tr>
+            <tr><td class="center">2</td><td>&nbsp;</td><td class="center">&nbsp;</td><td class="center">&nbsp;</td><td class="num">&nbsp;</td></tr>
+            <tr><td class="center">3</td><td>&nbsp;</td><td class="center">&nbsp;</td><td class="center">&nbsp;</td><td class="num">&nbsp;</td></tr>
+            <tr><td class="center">4</td><td>&nbsp;</td><td class="center">&nbsp;</td><td class="center">&nbsp;</td><td class="num">&nbsp;</td></tr>
+            <tr><td class="center">5</td><td>&nbsp;</td><td class="center">&nbsp;</td><td class="center">&nbsp;</td><td class="num">&nbsp;</td></tr>
+            <tr><td class="center">6</td><td>&nbsp;</td><td class="center">&nbsp;</td><td class="center">&nbsp;</td><td class="num">&nbsp;</td></tr>
+            <tr><td class="center">7</td><td>&nbsp;</td><td class="center">&nbsp;</td><td class="center">&nbsp;</td><td class="num">&nbsp;</td></tr>
+            <tr><td class="center">8</td><td>&nbsp;</td><td class="center">&nbsp;</td><td class="center">&nbsp;</td><td class="num">&nbsp;</td></tr>
+            <tr><td class="center">9</td><td>&nbsp;</td><td class="center">&nbsp;</td><td class="center">&nbsp;</td><td class="num">&nbsp;</td></tr>
+            <tr><td class="center">10</td><td>&nbsp;</td><td class="center">&nbsp;</td><td class="center">&nbsp;</td><td class="num">&nbsp;</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Ödeme Şartları</h3>
+    <table class="annex">
+        <tr>
+            <td class="label">Ödeme Şekli</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="label">Vade (varsa)</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="label">Kredi Limiti (varsa)</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="label">Banka / IBAN Bilgisi</td>
+            <td>Sipariş onayı ile birlikte Bayi'ye iletilir.</td>
+        </tr>
+    </table>
+
+    <div class="note-box">
+        <strong>Not:</strong> Faturalama, faturanın düzenlendiği tarihteki TCMB döviz satış kuru üzerinden TL olarak yapılır ve KDV ayrıca tahakkuk ettirilir. Bayi'ye özel fiyatlandırma ve ödeme şartları gizlilik kapsamında olup, üçüncü kişilere ifşa edilemez.
+    </div>
+
+    <div class="footer-note">
+        İşbu Ek, Sözleşme'nin ayrılmaz parçası olup Tarafların Madde 20 kapsamındaki imzaları ile birlikte hüküm doğurur.
+    </div>
+</div>
+
+<!-- ============== EK-3 ============== -->
+<div class="annex-page">
+    <div class="letterhead">
+        <div class="logo"><img src="genomerlogo.png" alt="Genomer Biyoteknoloji"></div>
+        <div class="company">
+            <div class="name">GENOMER BİYOTEKNOLOJİ ARGE SAN. VE TİC. LTD. ŞTİ.</div>
+            Dumlupınar Mah. Nur Cad. No: 7/3, Kartepe / Kocaeli / Türkiye<br>
+            Tel: 0262 373 70 05 &nbsp;•&nbsp; www.genomer.com.tr &nbsp;•&nbsp; support@genomer.com.tr
+        </div>
+    </div>
+
+    <div class="annex-title">EK-3: MİNİMUM ALIM TAAHHÜDÜ</div>
+    <div class="annex-subtitle">Annex 3 — Minimum Purchase Commitment</div>
+
+    <p style="font-size:9.5pt;">Aşağıda, Bayi'nin Sözleşme dönemi içinde Genomer'den gerçekleştirmeyi taahhüt ettiği asgari alım hedefi belirtilmiştir. Hedeflerin değerlendirilmesi ve sonuçların doğurabileceği yaptırımlar Sözleşme Madde 7 hükümlerine tabidir.</p>
+
+    <table class="annex">
+        <tr>
+            <td class="label">Taahhüt Türü</td>
+            <td>
+                <span class="box" style="display:inline-block;width:11px;height:11px;border:1.5px solid #0a5a8a;margin-right:6px;vertical-align:middle;"></span>Yıllık Tutar (USD) &nbsp;&nbsp;
+                <span class="box" style="display:inline-block;width:11px;height:11px;border:1.5px solid #0a5a8a;margin-right:6px;vertical-align:middle;"></span>Yıllık Adet
+            </td>
+        </tr>
+        <tr>
+            <td class="label">Minimum Alım Hedefi (Yıllık)</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="label">Çeyreklik Ara Hedef (varsa)</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="label">Ölçüm Dönemi</td>
+            <td>Sözleşme yıldönümünden 12 ay önceki dönem.</td>
+        </tr>
+        <tr>
+            <td class="label">Değerlendirme Tarihi</td>
+            <td>Her Sözleşme yılı sonunda Genomer tarafından yapılır.</td>
+        </tr>
+    </table>
+
+    <h3>Ürün Bazlı Hedefler (Opsiyonel)</h3>
+    <table class="price">
+        <thead>
+            <tr>
+                <th style="width:8mm;">No</th>
+                <th>Ürün Adı / Kategori</th>
+                <th style="width:32mm;">Asgari Adet</th>
+                <th style="width:32mm;">Asgari Tutar (USD)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td class="center">1</td><td>&nbsp;</td><td class="center">&nbsp;</td><td class="num">&nbsp;</td></tr>
+            <tr><td class="center">2</td><td>&nbsp;</td><td class="center">&nbsp;</td><td class="num">&nbsp;</td></tr>
+            <tr><td class="center">3</td><td>&nbsp;</td><td class="center">&nbsp;</td><td class="num">&nbsp;</td></tr>
+            <tr><td class="center">4</td><td>&nbsp;</td><td class="center">&nbsp;</td><td class="num">&nbsp;</td></tr>
+            <tr><td class="center">5</td><td>&nbsp;</td><td class="center">&nbsp;</td><td class="num">&nbsp;</td></tr>
+        </tbody>
+    </table>
+
+    <div class="note-box">
+        <strong>Not:</strong> Minimum Alım Taahhüdü'nün gerçekleşmemesi halinde Genomer; bayilik statüsünün değiştirilmesi, iskontoların gözden geçirilmesi, bölgenin daraltılması veya Sözleşme'nin feshi tedbirlerinden birini veya birkaçını uygulama hakkına sahiptir (Md. 7.3). Bayi'nin kontrolü dışındaki mücbir sebep veya tedarik kesintisi gibi hallerde değerlendirme iyi niyet çerçevesinde yapılır.
+    </div>
+
+    <div class="footer-note">
+        İşbu Ek, Sözleşme'nin ayrılmaz parçası olup Tarafların Madde 20 kapsamındaki imzaları ile birlikte hüküm doğurur.
+    </div>
+</div>
+
+</body>
+</html>

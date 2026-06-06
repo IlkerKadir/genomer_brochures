@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+html { background: #FFFFFF; }
+body {
+  width: 720pt; height: 405pt; margin: 0; padding: 0;
+  font-family: Arial, sans-serif;
+  display: flex; background: #FFFFFF;
+}
+.container { width: 100%; height: 100%; position: relative; }
+.header { position: absolute; top: 0; left: 0; right: 0; height: 48pt; background: #7B4B94; }
+.header-text { position: absolute; top: 12pt; left: 40pt; }
+.logo-top { position: absolute; top: 12pt; right: 40pt; }
+.logo-top img { height: 22pt; }
+.sample-label { position: absolute; top: 52pt; right: 30pt; font-size: 6pt; color: #94A3B8; font-style: italic; }
+.content { position: absolute; top: 58pt; left: 28pt; right: 28pt; bottom: 8pt; display: flex; gap: 12pt; }
+.col-left { flex: 1; display: flex; flex-direction: column; gap: 4pt; }
+.col-right { flex: 1.3; display: flex; flex-direction: column; gap: 4pt; }
+.status-card {
+  background: #D1FAE5; border: 1pt solid #A7F3D0; border-radius: 4pt; padding: 8pt;
+}
+.status-text { font-size: 11pt; font-weight: bold; color: #065F46; margin: 0 0 2pt 0; }
+.status-sub { font-size: 7pt; color: #065F46; margin: 0; }
+.conclusion-card {
+  background: #F5EBF8; border-left: 3pt solid #7B4B94; padding: 8pt; border-radius: 0 4pt 4pt 0;
+}
+.conclusion-title { font-size: 8pt; font-weight: bold; color: #5C3470; margin: 0 0 4pt 0; }
+.conclusion-text { font-size: 7pt; color: #4A4A5A; line-height: 1.5; margin: 0; }
+.param-card {
+  background: #F8FAFC; border: 1pt solid #E2E8F0; border-radius: 4pt; padding: 8pt;
+}
+.param-title { font-size: 7.5pt; font-weight: bold; color: #5C3470; margin: 0 0 4pt 0; }
+.param-line { font-size: 6.5pt; color: #334155; margin: 0 0 2pt 0; line-height: 1.4; }
+.pathogen-card {
+  background: #F0FDF4; border: 1pt solid #BBF7D0; border-radius: 4pt; padding: 5pt 8pt;
+}
+.pathogen-title { font-size: 7pt; font-weight: bold; color: #065F46; margin: 0 0 2pt 0; }
+.pathogen-group { font-size: 5.5pt; font-weight: bold; color: #065F46; margin: 3pt 0 1pt 0; text-transform: uppercase; }
+.pathogen-item { font-size: 5.5pt; color: #64748B; margin: 0 0 0 4pt; line-height: 1.3; }
+.section-label { font-size: 8pt; font-weight: bold; color: #5C3470; margin: 0 0 4pt 0; }
+.comp-bar {
+  background: #0891B2; height: 16pt; border-radius: 3pt;
+}
+.comp-text { margin: 0; color: #FFFFFF; font-size: 7pt; font-weight: bold; text-align: center; line-height: 16pt; }
+.legend-text { font-size: 5.5pt; color: #94A3B8; margin: 2pt 0 0 0; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header"></div>
+  <div class="header-text">
+    <h2 style="color: #FFFFFF; font-size: 15pt; margin: 0;">FEMOBIOME II &#8212; Sample Report</h2>
+  </div>
+  <div class="logo-top"><img src="genomerlogo.png"></div>
+  <p class="sample-label">Example: Eubiosis case &#8212; vaginal swab</p>
+
+  <div class="content">
+    <div class="col-left">
+      <div class="status-card">
+        <p class="status-text">&#10003; Eubiosis</p>
+        <p class="status-sub">Normal microbiota dominance</p>
+      </div>
+
+      <div class="conclusion-card">
+        <p class="conclusion-title">Conclusion</p>
+        <p class="conclusion-text">
+          <b>Microbiota status &#8212; eubiosis:</b> normobiota dominance, Lactobacillus spp. relative proportion 99.8% (L. crispatus, L. iners, L. jensenii).<br><br>
+          No pathogens detected.
+        </p>
+      </div>
+
+      <div class="param-card">
+        <p class="param-title">Biomaterial Control Parameters</p>
+        <p class="param-line"><b>Human genomic DNA:</b> 4.9 lg GE/ml (Ref: &#8805;3.5)</p>
+        <p class="param-line"><b>Total bacterial load:</b> 6.2 lg GE/ml (Ref: &#8805;4.0)</p>
+      </div>
+
+      <div class="pathogen-card">
+        <p class="pathogen-title">Pathogens &#8212; All Not Detected</p>
+        <p class="pathogen-group">Sexually Transmitted Infections</p>
+        <p class="pathogen-item"><i>Chlamydia trachomatis</i> &#8212; not detected</p>
+        <p class="pathogen-item"><i>Mycoplasma genitalium</i> &#8212; not detected</p>
+        <p class="pathogen-item"><i>Neisseria gonorrhoeae</i> &#8212; not detected</p>
+        <p class="pathogen-item"><i>Trichomonas vaginalis</i> &#8212; not detected</p>
+        <p class="pathogen-group">Herpesviruses</p>
+        <p class="pathogen-item">HSV-1 &#8212; not detected</p>
+        <p class="pathogen-item">HSV-2 &#8212; not detected</p>
+        <p class="pathogen-item">CMV &#8212; not detected</p>
+        <p class="pathogen-group">Human Papillomaviruses (HPV)</p>
+        <p class="pathogen-item">HPV 16 &#8212; not detected</p>
+        <p class="pathogen-item">HPV 18 &#8212; not detected</p>
+        <p class="pathogen-item">HPV 45 &#8212; not detected</p>
+        <p class="pathogen-item">HPV 31/33/35/39/51/52/56/58/59/66/68 &#8212; not detected</p>
+      </div>
+    </div>
+
+    <div class="col-right">
+      <p class="section-label">Microbiota Composition</p>
+      <div class="comp-bar">
+        <p class="comp-text">Normobiota 99.8%</p>
+      </div>
+      <p class="legend-text">Threshold: &#8805;80% normobiota = eubiosis</p>
+      <div id="micro-table" class="placeholder" style="width: 100%; flex: 1; background: #FAFAFA;"></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

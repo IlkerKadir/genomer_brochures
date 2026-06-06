@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kadin Mikrobiyota Degerlendirmesi</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            font-size: 10px;
+            line-height: 1.3;
+            color: #333;
+            background: white;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .page {
+            width: 210mm;
+            height: 297mm;
+            padding: 12mm 15mm 10mm 15mm;
+            margin: 0 auto;
+            background: white;
+            position: relative;
+            page-break-after: always;
+            overflow: hidden;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .logo {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-main {
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #9333EA 0%, #06B6D4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2px;
+        }
+
+        .logo-sub {
+            font-size: 7px;
+            color: #666;
+            margin-top: -2px;
+        }
+
+        /* Title Bar */
+        .title-bar {
+            background: linear-gradient(90deg, #9333EA 0%, #A855F7 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 12px;
+        }
+
+        /* Main content area */
+        .main-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 10px;
+        }
+
+        .left-col {
+            flex: 0 0 280px;
+        }
+
+        .right-col {
+            flex: 1;
+        }
+
+        /* Patient Info */
+        .patient-info {
+            margin-bottom: 15px;
+        }
+
+        .patient-row {
+            display: flex;
+            border-bottom: 1px solid #ccc;
+            padding: 5px 0;
+            font-size: 10px;
+        }
+
+        .patient-label {
+            color: #333;
+            min-width: 160px;
+        }
+
+        .patient-value {
+            flex: 1;
+        }
+
+        /* Conclusion Box */
+        .conclusion-box {
+            position: relative;
+        }
+
+        .conclusion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .conclusion-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .checkmark-circle {
+            width: 40px;
+            height: 40px;
+            background: #22C55E;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+
+        .checkmark-circle svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+
+        .conclusion-content {
+            font-size: 10px;
+            line-height: 1.5;
+        }
+
+        .conclusion-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 6px;
+        }
+
+        .conclusion-bullet {
+            width: 8px;
+            height: 8px;
+            background: #9333EA;
+            margin-right: 8px;
+            margin-top: 3px;
+            flex-shrink: 0;
+        }
+
+        /* Control Parameters */
+        .control-section {
+            margin-bottom: 8px;
+        }
+
+        .control-title {
+            color: #9333EA;
+            font-size: 10px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .control-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9px;
+        }
+
+        .control-table th {
+            text-align: left;
+            font-weight: normal;
+            color: #666;
+            padding: 3px 8px 3px 0;
+        }
+
+        .control-table td {
+            padding: 4px 8px 4px 0;
+        }
+
+        /* Legend */
+        .legend-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 6px;
+            font-size: 9px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .legend-box {
+            width: 12px;
+            height: 12px;
+        }
+
+        .legend-purple { background: #9333EA; }
+        .legend-red { background: #DC2626; }
+        .legend-orange { background: #F97316; }
+        .legend-blue { background: #3B82F6; }
+
+        .legend-text-gray {
+            color: #666;
+        }
+
+        /* Horizontal Bar */
+        .hbar-container {
+            height: 18px;
+            background: #E5E7EB;
+            border-radius: 2px;
+            margin-bottom: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hbar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #9333EA 0%, #A855F7 100%);
+            border-radius: 2px;
+        }
+
+        .hbar-threshold {
+            position: absolute;
+            right: 20%;
+            top: -4px;
+            bottom: -4px;
+            border-right: 2px dashed #666;
+        }
+
+        /* Microbiota State Section */
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        /* Main Data Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9px;
+        }
+
+        .data-table th {
+            text-align: left;
+            font-weight: normal;
+            color: #666;
+            padding: 4px 4px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .data-table td {
+            padding: 3px 4px;
+            border-bottom: 1px solid #eee;
+            vertical-align: middle;
+        }
+
+        .data-table .category-row td {
+            font-weight: 600;
+            background: #F9FAFB;
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+
+        .data-table .species-row td:first-child {
+            padding-left: 12px;
+            font-style: italic;
+        }
+
+        .col-name { width: 42%; }
+        .col-lg { width: 10%; text-align: center; }
+        .col-percent { width: 8%; text-align: center; }
+        .col-ref { width: 10%; text-align: center; }
+        .col-bar { width: 30%; }
+
+        .scale-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 8px;
+            color: #666;
+            padding: 0 2px;
+        }
+
+        /* Mini bar charts */
+        .mini-bar-container {
+            width: 100%;
+            height: 10px;
+            background: #F3F4F6;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .mini-bar {
+            height: 100%;
+            border-radius: 2px;
+        }
+
+        .bar-purple { background: #9333EA; }
+        .bar-red { background: #DC2626; }
+        .bar-orange { background: #F97316; }
+        .bar-blue { background: #3B82F6; }
+
+        /* Footnote Tables */
+        .footnotes {
+            display: flex;
+            gap: 20px;
+            margin-top: 12px;
+        }
+
+        .footnote-box {
+            flex: 1;
+        }
+
+        .footnote-title {
+            font-size: 9px;
+            font-weight: 600;
+            color: #9333EA;
+            margin-bottom: 4px;
+        }
+
+        .footnote-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 8px;
+        }
+
+        .footnote-table th {
+            text-align: left;
+            font-weight: normal;
+            color: #666;
+            padding: 2px 4px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .footnote-table td {
+            padding: 2px 4px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .footnote-table .italic {
+            font-style: italic;
+        }
+
+        /* Page 2 Styles */
+        .pathogens-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #333;
+            margin: 15px 0 10px 0;
+        }
+
+        .pathogens-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10px;
+        }
+
+        .pathogens-table th {
+            text-align: left;
+            font-weight: normal;
+            color: #666;
+            padding: 6px 8px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .pathogens-table td {
+            padding: 5px 8px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .pathogens-table .section-header td {
+            font-weight: 600;
+            color: #9333EA;
+            padding-top: 10px;
+            background: transparent;
+        }
+
+        .pathogens-table .pathogen-row td:first-child {
+            padding-left: 16px;
+            font-style: italic;
+        }
+
+        .note-section {
+            margin: 20px 0;
+            font-size: 10px;
+        }
+
+        .note-label {
+            font-weight: 600;
+        }
+
+        /* Signature Section */
+        .signature-section {
+            margin-top: 40px;
+        }
+
+        .date-row {
+            margin-bottom: 30px;
+            font-size: 10px;
+        }
+
+        .date-label {
+            color: #666;
+        }
+
+        .date-value {
+            margin-left: 20px;
+        }
+
+        .sig-row {
+            margin-bottom: 25px;
+        }
+
+        .sig-label {
+            font-size: 10px;
+            margin-bottom: 20px;
+        }
+
+        .sig-line {
+            display: flex;
+            gap: 80px;
+        }
+
+        .sig-field {
+            text-align: center;
+            font-size: 9px;
+            color: #666;
+        }
+
+        .sig-field::before {
+            content: '';
+            display: block;
+            width: 120px;
+            border-top: 1px solid #333;
+            margin-bottom: 4px;
+        }
+
+        /* Footer Notes */
+        .footer-notes {
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            font-size: 8px;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .footer-title {
+            font-weight: 600;
+            margin-top: 10px;
+            margin-bottom: 3px;
+        }
+
+        .footer-list {
+            margin-left: 0;
+        }
+
+        .footer-list-item {
+            margin-bottom: 2px;
+        }
+
+        @media print {
+            body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .page { margin: 0; padding: 12mm 15mm 10mm 15mm; }
+        }
+    </style>
+</head>
+<body>
+    <!-- SAYFA 1 -->
+    <div class="page">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <div class="logo-main">GENOMER</div>
+                <div class="logo-sub">Biyoteknoloji Arge San. ve Tic. Ltd. Sti.</div>
+            </div>
+        </div>
+
+        <!-- Title Bar -->
+        <div class="title-bar">Kadin mikrobiyota degerlendirmesi</div>
+
+        <!-- Main Content Row -->
+        <div class="main-row">
+            <!-- Left Column - Patient Info -->
+            <div class="left-col">
+                <div class="patient-info">
+                    <div class="patient-row">
+                        <span class="patient-label">Ad Soyad:</span>
+                        <span class="patient-value"></span>
+                    </div>
+                    <div class="patient-row">
+                        <span class="patient-label">Yas:</span>
+                        <span class="patient-value"></span>
+                    </div>
+                    <div class="patient-row">
+                        <span class="patient-label">Numune alim tarihi:</span>
+                        <span class="patient-value"></span>
+                    </div>
+                    <div class="patient-row">
+                        <span class="patient-label">Biyomateryal alim bolgesi:</span>
+                        <span class="patient-value">V</span>
+                    </div>
+                    <div class="patient-row">
+                        <span class="patient-label">Konteyner No:</span>
+                        <span class="patient-value"></span>
+                    </div>
+                    <div class="patient-row">
+                        <span class="patient-label">Doktor:</span>
+                        <span class="patient-value"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column - Conclusion -->
+            <div class="right-col">
+                <div class="conclusion-box">
+                    <div class="checkmark-circle">
+                        <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+                    </div>
+                    <div class="conclusion-header">
+                        <div class="conclusion-title">Sonuc</div>
+                    </div>
+                    <div class="conclusion-content">
+                        <div class="conclusion-item">
+                            <div class="conclusion-bullet"></div>
+                            <div><strong>Mikrobiyota durumu – obiyoz:</strong> normal mikrobiyota hakimiyeti, Lactobacillus spp. goreceli miktari %100 (L.crispatus, L.iners, L.jensenii/L.mulieris), Bifidobacterium spp. <%1.</div>
+                        </div>
+                        <div class="conclusion-item">
+                            <div class="conclusion-bullet"></div>
+                            <div>Patojen saptanmadi.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Control Parameters & Legend Row -->
+        <div class="main-row">
+            <div class="left-col">
+                <div class="control-section">
+                    <div class="control-title">Biyomateryal kontrol parametreleri</div>
+                    <table class="control-table">
+                        <tr>
+                            <th></th>
+                            <th>lg GE/ml</th>
+                            <th>Referans</th>
+                        </tr>
+                        <tr>
+                            <td>Insan genomik DNA</td>
+                            <td>4,9</td>
+                            <td>≥ 3,5</td>
+                        </tr>
+                        <tr>
+                            <td>Toplam bakteriyel yuk</td>
+                            <td>6,2</td>
+                            <td>≥ 4,0</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="right-col">
+                <div class="legend-section">
+                    <div class="legend-item">
+                        <div class="legend-box legend-purple"></div>
+                        <span>Normobiyota</span>
+                    </div>
+                    <span class="legend-text-gray">Normobiyota alt esigi %80</span>
+                </div>
+                <div class="legend-section">
+                    <div class="legend-item">
+                        <div class="legend-box legend-red"></div>
+                        <span>Aeroblar</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-box legend-orange"></div>
+                        <span>Anaeroblar</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-box legend-blue"></div>
+                        <span>Mikoplazmalar</span>
+                    </div>
+                </div>
+                <div class="hbar-container">
+                    <div class="hbar-fill" style="width: 99.8%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Microbiota State Section -->
+        <div class="section-title">Mikrobiyota durumu</div>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th class="col-name"></th>
+                    <th class="col-lg">lg GE/ml</th>
+                    <th class="col-percent">%</th>
+                    <th class="col-ref">Referans</th>
+                    <th class="col-bar">
+                        <div class="scale-row">
+                            <span>%1</span>
+                            <span>%10</span>
+                            <span>%100</span>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="category-row">
+                    <td>NORMOBIYOTA, toplam oran</td>
+                    <td></td>
+                    <td>%99,8</td>
+                    <td>≥%80</td>
+                    <td><div class="mini-bar-container"><div class="mini-bar bar-purple" style="width: 99.8%;"></div></div></td>
+                </tr>
+                <tr class="species-row">
+                    <td>Lactobacillus spp.<sup>1</sup></td>
+                    <td style="text-align:center">6,2</td>
+                    <td>%99,8</td>
+                    <td></td>
+                    <td><div class="mini-bar-container"><div class="mini-bar bar-purple" style="width: 99.8%;"></div></div></td>
+                </tr>
+                <tr class="species-row">
+                    <td>Bifidobacterium spp.</td>
+                    <td style="text-align:center">1,7</td>
+                    <td><%1</td>
+                    <td></td>
+                    <td><div class="mini-bar-container"><div class="mini-bar bar-purple" style="width: 1%;"></div></div></td>
+                </tr>
+                <tr class="category-row">
+                    <td>AEROBLAR, toplam oran</td>
+                    <td></td>
+                    <td><%1</td>
+                    <td></td>
+                    <td><div class="mini-bar-container"><div class="mini-bar bar-red" style="width: 1%;"></div></div></td>
+                </tr>
+                <tr class="species-row">
+                    <td>Staphylococcus spp.</td>
+                    <td style="text-align:center">—</td>
+                    <td>—</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="species-row">
+                    <td>Streptococcus spp.<sup>2</sup></td>
+                    <td style="text-align:center">—</td>
+                    <td>—</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="species-row">
+                    <td>Enterobacteriaceae</td>
+                    <td style="text-align:center">—</td>
+                    <td>—</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="species-row">
+                    <td>Enterococcus spp.</td>
+                    <td style="text-align:center">2,4</td>
+                    <td><%1</td>
+                    <td></td>
+                    <td><div class="mini-bar-container"><div class="mini-bar bar-red" style="width: 1%;"></div></div></td>
+                </tr>
+                <tr class="species-row">
+                    <td>Haemophilus spp.</td>
+                    <td style="text-align:center">—</td>
+                    <td>—</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="category-row">
+                    <td>ANAEROBLAR, toplam oran</td>
+                    <td></td>
+                    <td><%1</td>
+                    <td></td>
+                    <td><div class="mini-bar-container"><div class="mini-bar bar-orange" style="width: 1%;"></div></div></td>
+                </tr>
+                <tr class="species-row">
+                    <td>Gardnerella vaginalis</td>
+                    <td style="text-align:center">—</td>
+                    <td>—</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="species-row">
+                    <td>Fannyhessea (Atopobium) vaginae</td>
+                    <td style="text-align:center">—</td>
+                    <td>—</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="species-row">
+                    <td>Mobiluncus spp.</td>
+                    <td style="text-align:center">—</td>
+                    <td>—</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="species-row">
+                    <td>Anaerococcus spp.</td>
+                    <td style="text-align:center">2,9</td>
+                    <td><%1</td>
+                    <td></td>
+                    <td><div class="mini-bar-container"><div class="mini-bar bar-orange" style="width: 1%;"></div></div></td>
+                </tr>
+                <tr class="species-row">
+                    <td>Peptostreptococcus spp.</td>
+                    <td style="text-align:center">2,6</td>
+                    <td><%1</td>
+                    <td></td>
+                    <td><div class="mini-bar-container"><div class="mini-bar bar-orange" style="width: 1%;"></div></div></td>
+                </tr>
+                <tr class="species-row">
+                    <td>Bacteroides spp. / Porphyromonas spp. / Prevotella spp.</td>
+                    <td style="text-align:center">3,3</td>
+                    <td><%1</td>
+                    <td></td>
+                    <td><div class="mini-bar-container"><div class="mini-bar bar-orange" style="width: 1%;"></div></div></td>
+                </tr>
+                <tr class="species-row">
+                    <td>Sneathia spp. / Leptotrichia spp. / Fusobacterium spp.</td>
+                    <td style="text-align:center">—</td>
+                    <td>—</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="species-row">
+                    <td>Megasphaera spp. / Veillonella spp. / Dialister spp.</td>
+                    <td style="text-align:center">2,4</td>
+                    <td><%1</td>
+                    <td></td>
+                    <td><div class="mini-bar-container"><div class="mini-bar bar-orange" style="width: 1%;"></div></div></td>
+                </tr>
+                <tr class="species-row">
+                    <td>BVAB1 / BVAB2 / BVAB3</td>
+                    <td style="text-align:center">—</td>
+                    <td>—</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="category-row">
+                    <td>MIKOPLAZMALAR, toplam oran</td>
+                    <td></td>
+                    <td><%1</td>
+                    <td></td>
+                    <td><div class="mini-bar-container"><div class="mini-bar bar-blue" style="width: 1%;"></div></div></td>
+                </tr>
+                <tr class="species-row">
+                    <td>Ureaplasma urealyticum</td>
+                    <td style="text-align:center">—</td>
+                    <td>—</td>
+                    <td>< 4,0 lg</td>
+                    <td></td>
+                </tr>
+                <tr class="species-row">
+                    <td>Ureaplasma parvum</td>
+                    <td style="text-align:center">< 4,0</td>
+                    <td><%1</td>
+                    <td>< 4,0 lg</td>
+                    <td><div class="mini-bar-container"><div class="mini-bar bar-blue" style="width: 1%;"></div></div></td>
+                </tr>
+                <tr class="species-row">
+                    <td>Mycoplasma hominis</td>
+                    <td style="text-align:center">—</td>
+                    <td>—</td>
+                    <td>< 4,0 lg</td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Footnotes -->
+        <div class="footnotes">
+            <div class="footnote-box">
+                <div class="footnote-title"><sup>1</sup> Lactobacillus spp.</div>
+                <table class="footnote-table">
+                    <tr>
+                        <th></th>
+                        <th>lg GE/ml</th>
+                        <th>Lactobacillus spp. icindeki tur orani, %</th>
+                    </tr>
+                    <tr>
+                        <td class="italic">L.crispatus</td>
+                        <td>5,9</td>
+                        <td>%50</td>
+                    </tr>
+                    <tr>
+                        <td class="italic">L.gasseri/L. paragasseri</td>
+                        <td>—</td>
+                        <td>—</td>
+                    </tr>
+                    <tr>
+                        <td class="italic">L.jensenii/L. mulieris</td>
+                        <td>4,2</td>
+                        <td>%1</td>
+                    </tr>
+                    <tr>
+                        <td class="italic">L.iners</td>
+                        <td>4,7</td>
+                        <td>%3</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="footnote-box">
+                <div class="footnote-title" style="color: #F97316;">Maya mantarlari</div>
+                <table class="footnote-table">
+                    <tr>
+                        <th></th>
+                        <th>lg GE/ml</th>
+                        <th>Referans</th>
+                    </tr>
+                    <tr>
+                        <td class="italic">Candida spp.</td>
+                        <td>—</td>
+                        <td>< 4,0</td>
+                    </tr>
+                    <tr>
+                        <td class="italic">Candida albicans</td>
+                        <td>—</td>
+                        <td>< 4,0</td>
+                    </tr>
+                </table>
+                <div class="footnote-title" style="margin-top: 8px;"><sup>2</sup> Grup B streptokok</div>
+                <table class="footnote-table">
+                    <tr>
+                        <td class="italic">Streptococcus agalactiae</td>
+                        <td>—</td>
+                        <td>—</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- SAYFA 2 -->
+    <div class="page">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <div class="logo-main">GENOMER</div>
+                <div class="logo-sub">Biyoteknoloji Arge San. ve Tic. Ltd. Sti.</div>
+            </div>
+        </div>
+
+        <!-- Title Bar -->
+        <div class="title-bar">Kadin mikrobiyota degerlendirmesi</div>
+
+        <!-- Patient Info -->
+        <div style="margin-bottom: 15px;">
+            <div class="patient-row" style="width: 300px;">
+                <span class="patient-label">Ad Soyad:</span>
+                <span class="patient-value"></span>
+            </div>
+            <div class="patient-row" style="width: 300px;">
+                <span class="patient-label">Konteyner No:</span>
+                <span class="patient-value"></span>
+            </div>
+        </div>
+
+        <!-- Pathogens Title -->
+        <div class="pathogens-title">PATOJENLER</div>
+
+        <!-- Pathogens Table -->
+        <table class="pathogens-table">
+            <thead>
+                <tr>
+                    <th style="width: 50%;"></th>
+                    <th style="width: 16%;">Sonuc</th>
+                    <th style="width: 17%;">lg GE/ml</th>
+                    <th style="width: 17%;">Referans</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="section-header">
+                    <td colspan="4">CINSEL YOLLA BULASAN ENFEKSIYONLAR (CYBE)</td>
+                </tr>
+                <tr class="pathogen-row">
+                    <td>Chlamydia trachomatis</td>
+                    <td style="text-align:center">—</td>
+                    <td style="text-align:center">—</td>
+                    <td style="text-align:center">—</td>
+                </tr>
+                <tr class="pathogen-row">
+                    <td>Mycoplasma genitalium</td>
+                    <td style="text-align:center">—</td>
+                    <td style="text-align:center">—</td>
+                    <td style="text-align:center">—</td>
+                </tr>
+                <tr class="pathogen-row">
+                    <td>Neisseria gonorrhoeae</td>
+                    <td style="text-align:center">—</td>
+                    <td style="text-align:center">—</td>
+                    <td style="text-align:center">—</td>
+                </tr>
+                <tr class="pathogen-row">
+                    <td>Trichomonas vaginalis</td>
+                    <td style="text-align:center">—</td>
+                    <td style="text-align:center">—</td>
+                    <td style="text-align:center">—</td>
+                </tr>
+                <tr class="section-header">
+                    <td colspan="4">HERPESVIRUSLER</td>
+                </tr>
+                <tr class="pathogen-row">
+                    <td>HSV-1</td>
+                    <td style="text-align:center">—</td>
+                    <td style="text-align:center">—</td>
+                    <td style="text-align:center">—</td>
+                </tr>
+                <tr class="pathogen-row">
+                    <td>HSV-2</td>
+                    <td style="text-align:center">—</td>
+                    <td style="text-align:center">—</td>
+                    <td style="text-align:center">—</td>
+                </tr>
+                <tr class="pathogen-row">
+                    <td>CMV</td>
+                    <td style="text-align:center">—</td>
+                    <td style="text-align:center">—</td>
+                    <td style="text-align:center">—</td>
+                </tr>
+                <tr class="section-header">
+                    <td colspan="4">INSAN PAPILLOMAVIRUSLERI (HPV)</td>
+                </tr>
+                <tr class="pathogen-row">
+                    <td>HPV 16</td>
+                    <td style="text-align:center">—</td>
+                    <td style="text-align:center">—</td>
+                    <td style="text-align:center">—</td>
+                </tr>
+                <tr class="pathogen-row">
+                    <td>HPV 18</td>
+                    <td style="text-align:center">—</td>
+                    <td style="text-align:center">—</td>
+                    <td style="text-align:center">—</td>
+                </tr>
+                <tr class="pathogen-row">
+                    <td>HPV 45</td>
+                    <td style="text-align:center">—</td>
+                    <td style="text-align:center">—</td>
+                    <td style="text-align:center">—</td>
+                </tr>
+                <tr class="pathogen-row">
+                    <td>HPV 31/33/35/39/51/52/56/58/59/66/68</td>
+                    <td style="text-align:center">—</td>
+                    <td style="text-align:center">—</td>
+                    <td style="text-align:center">—</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Note Section -->
+        <div class="note-section">
+            <span class="note-label">NOT:</span><br>
+            Otomatik sonuc yalnizca biyomateryal alim bolgesi (V veya C) belirtildiginde olusturulur. Sonuc yorumu hekim tarafindan yapilir.
+        </div>
+
+        <!-- Signature Section -->
+        <div class="signature-section">
+            <div class="date-row">
+                <span class="date-label">Rapor tarihi</span>
+                <span class="date-value">2025-08-13</span>
+            </div>
+
+            <div class="sig-row">
+                <div class="sig-label">Testi yapan</div>
+                <div class="sig-line">
+                    <div class="sig-field">Ad Soyad</div>
+                    <div class="sig-field">Imza</div>
+                </div>
+            </div>
+
+            <div class="sig-row">
+                <div class="sig-label">Laboratuvar muduru</div>
+                <div class="sig-line">
+                    <div class="sig-field">Ad Soyad</div>
+                    <div class="sig-field">Imza</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Notes -->
+        <div class="footer-notes">
+            <div class="footer-title">Not</div>
+            <div>Streptococcus agalactiae referansi:</div>
+            <div>Gebelik haftasi 37-38 uzerinde – negatif sonuc, diger tum durumlar – <4,0 lg GE/ml.</div>
+
+            <div class="footer-title">Test raporundaki infografik turleri</div>
+            <div class="footer-list">
+                <div class="footer-list-item">- Renk gostergesi – mikrobiyota durumunun genel degerlendirmesi (obiyoz / orta veya siddetli disbiyoz);</div>
+                <div class="footer-list-item">- Cizgisel histogram – mikrobiyotadaki normobiyota, aerob, anaerob ve mikoplazma oranlarinin gosterimi;</div>
+                <div class="footer-list-item">- Sutun histogram – mikroorganizmalarin bireysel profili.</div>
+            </div>
+
+            <div class="footer-title">Terminoloji ve isaretlemeler</div>
+            <div>Aeroblar – fakultatif anaerobik firsatci mikroorganizmalar. Anaeroblar – zorunlu anaerobik firsatci mikroorganizmalar. Mikoplazmalar – firsatci genital mikoplazmalar.</div>
+            <div style="margin-top: 4px;">HPV 31-68 (11 tip) – HPV 31/33/35/39/51/52/56/58/59/66/68 toplam tespiti, ayrim yapilmadan.</div>
+            <div style="margin-top: 4px;">Tire isareti (—) negatif sonucu belirtir; "/" ile ayrilan listeler toplu tespiti gosterir.</div>
+        </div>
+    </div>
+</body>
+</html>

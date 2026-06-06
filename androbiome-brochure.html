@@ -1,0 +1,2965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Androbiome - A Brief Guide to Results Interpretation | Genomer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0EA5E9;
+            --primary-dark: #0284C7;
+            --primary-light: #38BDF8;
+            --secondary: #0F172A;
+            --accent-green: #10B981;
+            --accent-yellow: #F59E0B;
+            --accent-red: #EF4444;
+            --bg-white: #FFFFFF;
+            --bg-light: #F8FAFC;
+            --bg-muted: #F1F5F9;
+            --bg-primary-subtle: #E0F2FE;
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --text-muted: #64748B;
+            --text-white: #FFFFFF;
+            --border-light: #E2E8F0;
+            --border-medium: #CBD5E1;
+            --result-normal: #10B981;
+            --result-normal-bg: #D1FAE5;
+            --result-moderate: #F59E0B;
+            --result-moderate-bg: #FEF3C7;
+            --result-abnormal: #EF4444;
+            --result-abnormal-bg: #FEE2E2;
+            --font-heading: 'Figtree', sans-serif;
+            --font-body: 'Noto Sans', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            font-size: 10pt;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--text-primary);
+            line-height: 1.6;
+            background: var(--bg-muted);
+        }
+
+        .page {
+            width: 210mm;
+            height: 297mm;
+            margin: 0 auto 20px;
+            padding: 15mm;
+            background: var(--bg-white);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            page-break-after: always;
+        }
+
+        .page-content { height: 100%; display: flex; flex-direction: column; }
+
+        h1, h2, h3, h4, h5 {
+            font-family: var(--font-heading);
+            font-weight: 600;
+            color: var(--primary-dark);
+            line-height: 1.3;
+        }
+
+        h1 { font-size: 2.2em; }
+        h2 { font-size: 1.5em; margin-bottom: 12px; }
+        h3 { font-size: 1.2em; margin-bottom: 8px; }
+        h4 { font-size: 1.05em; }
+
+        p { margin-bottom: 10px; }
+
+        /* Cover Page */
+        .cover-page {
+            padding: 0;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        }
+
+        .cover-page .page-content {
+            padding: 15mm;
+            justify-content: space-between;
+            color: var(--text-white);
+        }
+
+        .cover-header { display: flex; justify-content: flex-start; }
+        .cover-logo { height: 50px; filter: brightness(0) invert(1); }
+
+        .cover-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            text-align: left;
+            padding-right: 200px;
+        }
+
+        .cover-title { font-size: 3.5em; font-weight: 700; margin-bottom: 16px; color: white; }
+        .cover-subtitle { font-size: 1.4em; font-weight: 400; opacity: 0.95; max-width: 380px; }
+        .cover-footer { text-align: left; font-size: 0.9em; opacity: 0.8; }
+
+        .cover-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-top: 24px;
+            backdrop-filter: blur(4px);
+        }
+
+        /* DNA Helix Hero */
+        .dna-helix-container {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 90%;
+            width: 280px;
+            opacity: 0.9;
+        }
+
+        .dna-helix { height: 100%; width: 100%; }
+
+        /* Cover Decorative Shapes */
+        .cover-shapes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+        }
+
+        .blob-2 {
+            width: 280px;
+            height: 280px;
+            background: rgba(16, 185, 129, 0.12);
+            bottom: -60px;
+            left: -60px;
+        }
+
+        .blob-3 {
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.08);
+            top: 40%;
+            left: -50px;
+        }
+
+        .molecular-dots {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Page Header */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary);
+            margin-bottom: 16px;
+        }
+
+        .header-logo { height: 30px; }
+        .header-title { font-size: 1em; color: var(--primary-dark); font-weight: 600; }
+
+        /* Section Headers */
+        .section-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--text-white);
+            padding: 10px 16px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+        }
+
+        .section-header h2 { color: var(--text-white); margin: 0; font-size: 1.3em; }
+
+        .section-header-light {
+            background: var(--bg-primary-subtle);
+            color: var(--primary-dark);
+            padding: 8px 12px;
+            border-left: 4px solid var(--primary);
+            margin-bottom: 12px;
+            margin-top: 16px;
+        }
+
+        .section-header-light h3 { color: var(--primary-dark); margin: 0; font-size: 1.05em; }
+
+        /* Callouts */
+        .callout {
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin: 16px 0;
+        }
+
+        .callout-info { background: var(--bg-primary-subtle); border-left: 4px solid var(--primary); }
+        .callout-warning { background: var(--result-moderate-bg); border-left: 4px solid var(--accent-yellow); }
+        .callout-success { background: var(--result-normal-bg); border-left: 4px solid var(--accent-green); }
+        .callout-danger { background: var(--result-abnormal-bg); border-left: 4px solid var(--accent-red); }
+        .callout-title { font-weight: 600; margin-bottom: 6px; }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 12px;
+            font-size: 0.9em;
+        }
+
+        th, td {
+            padding: 8px 10px;
+            text-align: left;
+            border: 1px solid var(--border-light);
+        }
+
+        th {
+            background: var(--bg-muted);
+            font-weight: 600;
+        }
+
+        .comparison-table th { background: var(--primary); color: var(--text-white); }
+        .comparison-table th:first-child { background: var(--bg-muted); color: var(--text-primary); }
+        .comparison-table td:first-child { font-weight: 500; background: var(--bg-light); }
+
+        .check-icon { color: var(--accent-green); font-weight: bold; }
+        .cross-icon { color: var(--text-muted); }
+
+        /* Result Tables */
+        .result-table { font-size: 0.75em; }
+        .result-table th {
+            background: var(--primary-dark);
+            color: var(--text-white);
+            font-size: 0.85em;
+            padding: 4px 6px;
+        }
+
+        .result-table td { padding: 3px 6px; vertical-align: middle; }
+        .result-table-compact td { padding: 2px 4px; }
+        .result-table-compact th { padding: 3px 4px; }
+        .result-table-compact .group-header td, .result-table-compact .subgroup-header td { padding: 2px 4px; }
+        .result-table .group-header { background: var(--bg-primary-subtle); font-weight: 600; color: var(--primary-dark); }
+        .result-table .subgroup-header { background: var(--bg-muted); font-weight: 500; font-style: italic; font-size: 0.9em; }
+
+        .status-normal { background: var(--result-normal-bg); color: var(--result-normal); font-weight: 600; text-align: center; }
+        .status-moderate { background: var(--result-moderate-bg); color: #B45309; font-weight: 600; text-align: center; }
+        .status-abnormal { background: var(--result-abnormal-bg); color: var(--result-abnormal); font-weight: 600; text-align: center; }
+        .status-detected { background: var(--result-abnormal-bg); color: var(--result-abnormal); font-weight: 600; text-align: center; }
+        .status-not-detected { color: var(--text-secondary); text-align: center; }
+        .value-cell { text-align: right; font-family: 'Courier New', monospace; }
+
+        /* Form Header */
+        .form-header {
+            background: var(--bg-light);
+            border: 1px solid var(--border-light);
+            border-radius: 6px;
+            padding: 10px;
+            margin-bottom: 12px;
+        }
+
+        .form-header-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+        .form-field { display: flex; gap: 8px; }
+        .form-label { font-weight: 500; color: var(--text-secondary); min-width: 100px; font-size: 0.9em; }
+        .form-value { color: var(--text-primary); font-size: 0.9em; }
+
+        /* Legend */
+        .legend {
+            display: flex;
+            gap: 16px;
+            padding: 8px 12px;
+            background: var(--bg-light);
+            border-radius: 4px;
+            margin-bottom: 12px;
+            font-size: 0.8em;
+            flex-wrap: wrap;
+        }
+
+        .legend-item { display: flex; align-items: center; gap: 4px; }
+        .legend-color { width: 14px; height: 14px; border-radius: 2px; }
+        .legend-normal { background: var(--result-normal-bg); border: 1px solid var(--result-normal); }
+        .legend-moderate { background: var(--result-moderate-bg); border: 1px solid var(--accent-yellow); }
+        .legend-abnormal { background: var(--result-abnormal-bg); border: 1px solid var(--result-abnormal); }
+
+        /* Lists */
+        ul, ol { margin-left: 20px; margin-bottom: 12px; }
+        li { margin-bottom: 6px; }
+
+        /* TOC */
+        .toc-list { list-style: none; margin-left: 0; }
+        .toc-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dotted var(--border-light); }
+        .toc-item.toc-sub { padding-left: 20px; }
+        .toc-title { font-weight: 500; }
+        .toc-page { color: var(--primary); font-weight: 600; }
+        .toc-list-compact .toc-item { padding: 2px 0; font-size: 0.85em; }
+        .toc-list-compact .toc-item.toc-sub { padding-left: 14px; }
+        .toc-list-compact .toc-item[style*="padding-left: 40px"] { padding-left: 28px !important; }
+
+        /* Footer */
+        .page-footer {
+            margin-top: auto;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8em;
+            color: var(--text-muted);
+        }
+
+        /* Back Cover */
+        .back-cover {
+            padding: 0;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        }
+
+        .back-cover .page-content {
+            padding: 15mm;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-white);
+            text-align: center;
+        }
+
+        .back-logo { height: 70px; filter: brightness(0) invert(1); margin-bottom: 32px; }
+        .back-tagline { font-size: 1.3em; margin-bottom: 40px; opacity: 0.95; }
+        .contact-info { font-size: 0.95em; opacity: 0.9; }
+        .contact-info p { margin-bottom: 8px; }
+
+        @media print {
+            body { background: white; }
+            .page { margin: 0; box-shadow: none; page-break-after: always; }
+            @page { size: A4; margin: 0; }
+        }
+
+        .small-text { font-size: 0.9em; }
+        .tiny-text { font-size: 0.8em; }
+        .mt-auto { margin-top: auto; }
+        .mb-0 { margin-bottom: 0; }
+        .text-center { text-align: center; }
+        .text-italic { font-style: italic; }
+
+        /* Sampling Table */
+        .sampling-table th { background: var(--primary); color: white; font-size: 0.85em; }
+        .sampling-table td { font-size: 0.85em; vertical-align: top; }
+        .sampling-table td:first-child { font-weight: 600; color: var(--primary-dark); }
+
+        /* Scheme boxes */
+        .scheme-box {
+            border: 2px solid var(--border-medium);
+            border-radius: 6px;
+            padding: 10px;
+            margin: 8px 0;
+            background: var(--bg-light);
+        }
+        .scheme-title { font-weight: 600; color: var(--primary-dark); margin-bottom: 6px; }
+        .scheme-arrow { text-align: center; color: var(--primary); font-size: 1.5em; margin: 4px 0; }
+
+        /* Conclusion box */
+        .conclusion-box {
+            background: var(--bg-primary-subtle);
+            border: 1px solid var(--primary);
+            border-radius: 6px;
+            padding: 12px;
+            margin-top: 12px;
+        }
+        .conclusion-title { font-weight: 600; color: var(--primary-dark); margin-bottom: 4px; }
+    </style>
+</head>
+<body>
+
+    <!-- PAGE 1: Cover -->
+    <div class="page cover-page">
+        <!-- Decorative Shapes -->
+        <div class="cover-shapes">
+            <div class="blob blob-2"></div>
+            <div class="blob blob-3"></div>
+            <svg class="molecular-dots" viewBox="0 0 800 1100" fill="none" preserveAspectRatio="xMidYMid slice">
+                <circle cx="80" cy="180" r="2" fill="rgba(255,255,255,0.12)"/>
+                <circle cx="120" cy="220" r="1.5" fill="rgba(255,255,255,0.08)"/>
+                <circle cx="60" cy="280" r="2.5" fill="rgba(255,255,255,0.1)"/>
+                <circle cx="100" cy="850" r="3" fill="rgba(255,255,255,0.12)"/>
+                <circle cx="140" cy="900" r="2" fill="rgba(255,255,255,0.1)"/>
+                <line x1="80" y1="180" x2="120" y2="220" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+                <line x1="100" y1="850" x2="140" y2="900" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+            </svg>
+        </div>
+
+        <!-- DNA Helix Hero Visual -->
+        <div class="dna-helix-container">
+            <svg class="dna-helix" viewBox="0 0 200 800" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+                <defs>
+                    <linearGradient id="helixGradient1" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="rgba(255,255,255,0.1)"/>
+                        <stop offset="50%" stop-color="rgba(255,255,255,0.4)"/>
+                        <stop offset="100%" stop-color="rgba(255,255,255,0.1)"/>
+                    </linearGradient>
+                    <linearGradient id="helixGradient2" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="rgba(56,189,248,0.15)"/>
+                        <stop offset="50%" stop-color="rgba(56,189,248,0.5)"/>
+                        <stop offset="100%" stop-color="rgba(56,189,248,0.15)"/>
+                    </linearGradient>
+                </defs>
+                <path d="M 40 0 Q 120 50, 40 100 Q -40 150, 40 200 Q 120 250, 40 300 Q -40 350, 40 400 Q 120 450, 40 500 Q -40 550, 40 600 Q 120 650, 40 700 Q -40 750, 40 800" stroke="url(#helixGradient1)" stroke-width="4" fill="none" stroke-linecap="round"/>
+                <path d="M 160 0 Q 80 50, 160 100 Q 240 150, 160 200 Q 80 250, 160 300 Q 240 350, 160 400 Q 80 450, 160 500 Q 240 550, 160 600 Q 80 650, 160 700 Q 240 750, 160 800" stroke="url(#helixGradient2)" stroke-width="4" fill="none" stroke-linecap="round"/>
+                <line x1="65" y1="25" x2="135" y2="25" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>
+                <circle cx="65" cy="25" r="4" fill="rgba(16,185,129,0.7)"/>
+                <circle cx="135" cy="25" r="4" fill="rgba(56,189,248,0.7)"/>
+                <line x1="40" y1="75" x2="160" y2="75" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+                <circle cx="40" cy="75" r="5" fill="rgba(255,255,255,0.8)"/>
+                <circle cx="160" cy="75" r="5" fill="rgba(255,255,255,0.8)"/>
+                <line x1="65" y1="125" x2="135" y2="125" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>
+                <circle cx="65" cy="125" r="4" fill="rgba(56,189,248,0.7)"/>
+                <circle cx="135" cy="125" r="4" fill="rgba(16,185,129,0.7)"/>
+                <line x1="40" y1="175" x2="160" y2="175" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+                <circle cx="40" cy="175" r="5" fill="rgba(255,255,255,0.8)"/>
+                <circle cx="160" cy="175" r="5" fill="rgba(255,255,255,0.8)"/>
+                <line x1="65" y1="225" x2="135" y2="225" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>
+                <circle cx="65" cy="225" r="4" fill="rgba(16,185,129,0.7)"/>
+                <circle cx="135" cy="225" r="4" fill="rgba(56,189,248,0.7)"/>
+                <line x1="40" y1="275" x2="160" y2="275" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
+                <circle cx="40" cy="275" r="5" fill="rgba(255,255,255,0.9)"/>
+                <circle cx="160" cy="275" r="5" fill="rgba(255,255,255,0.9)"/>
+                <line x1="65" y1="325" x2="135" y2="325" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>
+                <circle cx="65" cy="325" r="4" fill="rgba(56,189,248,0.7)"/>
+                <circle cx="135" cy="325" r="4" fill="rgba(16,185,129,0.7)"/>
+                <line x1="40" y1="375" x2="160" y2="375" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
+                <circle cx="40" cy="375" r="5" fill="rgba(255,255,255,0.9)"/>
+                <circle cx="160" cy="375" r="5" fill="rgba(255,255,255,0.9)"/>
+                <line x1="65" y1="425" x2="135" y2="425" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+                <circle cx="65" cy="425" r="4" fill="rgba(16,185,129,0.7)"/>
+                <circle cx="135" cy="425" r="4" fill="rgba(56,189,248,0.7)"/>
+                <line x1="40" y1="475" x2="160" y2="475" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
+                <circle cx="40" cy="475" r="5" fill="rgba(255,255,255,0.9)"/>
+                <circle cx="160" cy="475" r="5" fill="rgba(255,255,255,0.9)"/>
+                <line x1="65" y1="525" x2="135" y2="525" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>
+                <circle cx="65" cy="525" r="4" fill="rgba(56,189,248,0.7)"/>
+                <circle cx="135" cy="525" r="4" fill="rgba(16,185,129,0.7)"/>
+                <line x1="40" y1="575" x2="160" y2="575" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+                <circle cx="40" cy="575" r="5" fill="rgba(255,255,255,0.8)"/>
+                <circle cx="160" cy="575" r="5" fill="rgba(255,255,255,0.8)"/>
+                <line x1="65" y1="625" x2="135" y2="625" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>
+                <circle cx="65" cy="625" r="4" fill="rgba(16,185,129,0.7)"/>
+                <circle cx="135" cy="625" r="4" fill="rgba(56,189,248,0.7)"/>
+                <line x1="40" y1="675" x2="160" y2="675" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+                <circle cx="40" cy="675" r="5" fill="rgba(255,255,255,0.8)"/>
+                <circle cx="160" cy="675" r="5" fill="rgba(255,255,255,0.8)"/>
+                <line x1="65" y1="725" x2="135" y2="725" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+                <circle cx="65" cy="725" r="4" fill="rgba(56,189,248,0.6)"/>
+                <circle cx="135" cy="725" r="4" fill="rgba(16,185,129,0.6)"/>
+                <line x1="40" y1="775" x2="160" y2="775" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+                <circle cx="40" cy="775" r="4" fill="rgba(255,255,255,0.6)"/>
+                <circle cx="160" cy="775" r="4" fill="rgba(255,255,255,0.6)"/>
+            </svg>
+        </div>
+
+        <div class="page-content">
+            <div class="cover-header">
+                <img src="genomerlogo.png" alt="Genomer" class="cover-logo">
+            </div>
+            <div class="cover-main">
+                <h1 class="cover-title">ANDROBIOME<sup style="font-size:0.4em;">&#174;</sup>:</h1>
+                <p class="cover-subtitle">a brief guide to results interpretation</p>
+            </div>
+            <div class="cover-footer">
+                <p>www.genomer.com.tr</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 2: Introduction -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-title">Androbiome<sup>&#174;</sup></span>
+            </div>
+
+            <div class="section-header">
+                <h2>ANDROBIOME<sup>&#174;</sup>: a brief guide to results interpretation</h2>
+            </div>
+
+            <ul style="margin-top: 20px;">
+                <li>Androbiome<sup>&#174;</sup> is a comprehensive real-time PCR-based assay for the assessment of the state of the male urogenital tract microbiota and detection of obligate pathogens &mdash; causative agents of sexually transmitted infections (STIs).</li>
+                <li style="margin-top: 12px;">The Androbiome<sup>&#174;</sup> test has no analogues in the world.</li>
+                <li style="margin-top: 12px;">Androbiome<sup>&#174;</sup> allows rapid* quantitative determination of normal and opportunistic microbiota components, including anaerobic microorganisms that are difficult to culture, as well as detection of obligate pathogens <em>Chlamydia trachomatis</em>, <em>Mycoplasma genitalium</em>, <em>Neisseria gonorrhoeae</em> and <em>Trichomonas vaginalis</em>.</li>
+            </ul>
+
+            <p style="margin-top: 30px;">This guide discusses the options for choosing a test from the Androbiome<sup>&#174;</sup> product line, the specifics of biomaterial sampling and interpretation of the results.</p>
+
+            <p class="tiny-text" style="margin-top: auto; color: var(--text-muted);">* hands-on time: from 3 hours</p>
+
+            <div class="page-footer">
+                <span>www.genomer.com.tr</span>
+                <span>1</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 3: Table of Contents -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-title">Androbiome<sup>&#174;</sup></span>
+            </div>
+
+            <div class="section-header">
+                <h2>CONTENT</h2>
+            </div>
+
+            <ul class="toc-list toc-list-compact" style="margin-top: 12px;">
+                <li class="toc-item">
+                    <span class="toc-title" style="color: var(--primary-dark); font-weight: 600;">CHOOSING A TEST FROM THE ANDROBIOME<sup>&#174;</sup> PRODUCT LINE</span>
+                    <span class="toc-page">3</span>
+                </li>
+                <li class="toc-item">
+                    <span class="toc-title" style="color: var(--primary-dark); font-weight: 600;">BIOMATERIAL SAMPLING</span>
+                    <span class="toc-page">7</span>
+                </li>
+                <li class="toc-item toc-sub">
+                    <span class="toc-title" style="color: var(--primary);">Specifics of biomaterial sampling for Androbiome<sup>&#174;</sup> assay</span>
+                    <span class="toc-page">7</span>
+                </li>
+                <li class="toc-item toc-sub">
+                    <span class="toc-title" style="color: var(--primary);">Biomaterial storage and transportation conditions</span>
+                    <span class="toc-page">10</span>
+                </li>
+                <li class="toc-item toc-sub">
+                    <span class="toc-title">Information for laboratories on ejaculate testing</span>
+                    <span class="toc-page">10</span>
+                </li>
+                <li class="toc-item">
+                    <span class="toc-title" style="color: var(--primary-dark); font-weight: 600;">ANALYSIS OF RESULTS</span>
+                    <span class="toc-page">11</span>
+                </li>
+                <li class="toc-item toc-sub">
+                    <span class="toc-title" style="color: var(--primary);">Guidance note for the result form interpretation</span>
+                    <span class="toc-page">12</span>
+                </li>
+                <li class="toc-item toc-sub">
+                    <span class="toc-title" style="color: var(--primary);">Control indicators of the biomaterial sampling quality</span>
+                    <span class="toc-page">14</span>
+                </li>
+                <li class="toc-item toc-sub">
+                    <span class="toc-title" style="color: var(--primary);">Microbiome composition of the male urogenital tract</span>
+                    <span class="toc-page">15</span>
+                </li>
+                <li class="toc-item toc-sub">
+                    <span class="toc-title" style="color: var(--primary);">Obligate pathogens</span>
+                    <span class="toc-page">16</span>
+                </li>
+                <li class="toc-item toc-sub">
+                    <span class="toc-title" style="color: var(--primary);">Scheme of the results interpretation</span>
+                    <span class="toc-page">16</span>
+                </li>
+                <li class="toc-item">
+                    <span class="toc-title" style="color: var(--primary-dark); font-weight: 600;">EXAMPLES OF RESULTS FORM</span>
+                    <span class="toc-page">18</span>
+                </li>
+                <li class="toc-item toc-sub">
+                    <span class="toc-title" style="color: var(--primary);">1. The bacterial microbiome composition is normal</span>
+                    <span class="toc-page">18</span>
+                </li>
+                <li class="toc-item toc-sub" style="padding-left: 40px;">
+                    <span class="toc-title">What is considered as a norm for the male urogenital tract?</span>
+                    <span class="toc-page">18</span>
+                </li>
+                <li class="toc-item toc-sub" style="padding-left: 40px;">
+                    <span class="toc-title">If TBM is low, should the collection of biomaterial be repeated?</span>
+                    <span class="toc-page">21</span>
+                </li>
+                <li class="toc-item toc-sub" style="padding-left: 40px;">
+                    <span class="toc-title">Why TBM might be missing?</span>
+                    <span class="toc-page">22</span>
+                </li>
+                <li class="toc-item toc-sub" style="padding-left: 40px;">
+                    <span class="toc-title">Why is there no color indication on the results form?</span>
+                    <span class="toc-page">25</span>
+                </li>
+                <li class="toc-item toc-sub">
+                    <span class="toc-title" style="color: var(--primary);">2. The bacterial microbiome composition is abnormal</span>
+                    <span class="toc-page">26</span>
+                </li>
+                <li class="toc-item toc-sub" style="padding-left: 40px;">
+                    <span class="toc-title">Absolute predominance of one of the groups of normal microbiota (microflora)</span>
+                    <span class="toc-page">26</span>
+                </li>
+                <li class="toc-item toc-sub" style="padding-left: 40px;">
+                    <span class="toc-title">The balance of normal and opportunistic microbiota is moderately disturbed</span>
+                    <span class="toc-page">27</span>
+                </li>
+                <li class="toc-item toc-sub" style="padding-left: 40px;">
+                    <span class="toc-title">The balance of normal and opportunistic microbiota is severely disturbed</span>
+                    <span class="toc-page">31</span>
+                </li>
+                <li class="toc-item toc-sub" style="padding-left: 40px;">
+                    <span class="toc-title">Significant decrease/absence of normal microbiota is not proportional to the absence/slight increase of opportunistic microbiota</span>
+                    <span class="toc-page">34</span>
+                </li>
+                <li class="toc-item toc-sub" style="padding-left: 40px;">
+                    <span class="toc-title">STIs DNA is detected (obligate pathogens are present)</span>
+                    <span class="toc-page">36</span>
+                </li>
+                <li class="toc-item toc-sub">
+                    <span class="toc-title" style="color: var(--primary);">3. Cases when no conclusion is issued</span>
+                    <span class="toc-page">37</span>
+                </li>
+                <li class="toc-item toc-sub" style="padding-left: 40px;">
+                    <span class="toc-title">Insufficient amount of biomaterial: TBM and Human DNA are both not detected or below threshold</span>
+                    <span class="toc-page">37</span>
+                </li>
+                <li class="toc-item toc-sub" style="padding-left: 40px;">
+                    <span class="toc-title">Exceeding the threshold values of transient microbiota</span>
+                    <span class="toc-page">38</span>
+                </li>
+                <li class="toc-item toc-sub" style="padding-left: 40px;">
+                    <span class="toc-title">Will obligate pathogens be detected, if human DNA and TBM are not detected?</span>
+                    <span class="toc-page">40</span>
+                </li>
+            </ul>
+
+            <div class="page-footer">
+                <span>www.genomer.com.tr</span>
+                <span>2</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 4: Choosing a Test (Page 3 of PDF) -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-title">Androbiome<sup>&#174;</sup></span>
+            </div>
+
+            <div class="section-header">
+                <h2>CHOOSING A TEST FROM THE ANDROBIOME<sup>&#174;</sup> PRODUCT LINE</h2>
+            </div>
+
+            <p>The Androbiome<sup>&#174;</sup> line includes the Androbiome<sup>&#174;</sup> and Androbiome<sup>&#174;</sup> Screen assays. Both assays are used to detect the obligate pathogens <em>Chlamydia trachomatis</em>, <em>Mycoplasma genitalium</em>, <em>Neisseria gonorrhoeae</em>, <em>Trichomonas vaginalis</em> and to quantify components of the normal and opportunistic microbiota (bacteria and yeast fungi of the genus <em>Candida</em>).</p>
+
+            <p>The main difference between the assays is the profile of the determined opportunistic microorganisms (OM) and, therefore, the indications for prescribing the tests.</p>
+
+            <p><strong>Androbiome<sup>&#174;</sup> Screen</strong> is a shortened version of the assay, which is intended for screening and differential diagnosis of acute forms of urogenital tract diseases.</p>
+
+            <p><strong>Androbiome<sup>&#174;</sup></strong> is a detailed assay for accessing of microbiome structure, which detects a wide range of opportunistic microorganisms. This assay is recommended to prescribe for patients with chronic forms of diseases or complaints of ineffective treatment. Also, it can help to determine the possible impact of infections on reproductive function while preparing for IVF.</p>
+
+            <!-- Comparison Table -->
+            <table class="comparison-table" style="margin-top: 16px; font-size: 0.8em;">
+                <thead>
+                    <tr>
+                        <th style="width: 50%;">Androbiome<sup>&#174;</sup> Screen</th>
+                        <th style="width: 50%;">Androbiome<sup>&#174;</sup></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="background: #f0fdf4;">
+                        <td><em>Staphylococcus</em> spp.<br><em>Streptococcus</em> spp.<br><em>Corynebacterium</em> spp.</td>
+                        <td><em>Staphylococcus</em> spp.<br><em>Streptococcus</em> spp.<br><em>Corynebacterium</em> spp.</td>
+                    </tr>
+                    <tr style="background: #ecfdf5;">
+                        <td><em>Lactobacillus</em> spp.</td>
+                        <td><em>Lactobacillus</em> spp.</td>
+                    </tr>
+                    <tr style="background: #fef3c7;">
+                        <td><em>Gardnerella vaginalis</em><br><em>Ureaplasma urealyticum</em><br><em>Ureaplasma parvum</em><br><em>Mycoplasma hominis</em><br><em>Enterobacteriaceae</em> / <em>Enterococcus</em> spp.<br><em>Candida</em> spp.</td>
+                        <td><em>Gardnerella vaginalis</em><br><em>Megasphaera</em> spp. / <em>Veillonella</em> spp. / <em>Dialister</em> spp.<br><em>Sneathia</em> spp. / <em>Leptotrichia</em> spp. / <em>Fusobacterium</em> spp.<br><em>Ureaplasma urealyticum</em><br><em>Ureaplasma parvum</em><br><em>Mycoplasma hominis</em><br><em>Atopobium</em> cluster<br><em>Bacteroides</em> spp. / <em>Porphyromonas</em> spp. / <em>Prevotella</em> spp.<br><em>Anaerococcus</em> spp.<br><em>Peptostreptococcus</em> spp. / <em>Parvimonas</em> spp.<br><em>Eubacterium</em> spp.<br><em>Haemophilus</em> spp.<br><em>Pseudomonas aeruginosa</em> / <em>Ralstonia</em> spp. / <em>Burkholderia</em> spp.<br><em>Enterobacteriaceae</em> spp. / <em>Enterococcus</em> spp.<br><em>Candida</em> spp.</td>
+                    </tr>
+                    <tr style="background: #fee2e2;">
+                        <td><em>Mycoplasma genitalium</em><br><em>Trichomonas vaginalis</em><br><em>Neisseria gonorrhoeae</em><br><em>Chlamydia trachomatis</em></td>
+                        <td><em>Mycoplasma genitalium</em><br><em>Trichomonas vaginalis</em><br><em>Neisseria gonorrhoeae</em><br><em>Chlamydia trachomatis</em></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="page-footer">
+                <span>www.genomer.com.tr</span>
+                <span>3</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 5: Additional PCR tests info (Page 4 of PDF) -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-title">Androbiome<sup>&#174;</sup></span>
+            </div>
+
+            <p>Depending on the specifics of the clinical situation and the objectives of the examination, other PCR tests may be prescribed in addition to the Androbiome<sup>&#174;</sup> test at the discretion of the physician, for example, detection of <em>HSV1/HSV2/CMV</em> herpesviruses (HSV1, HSV2, CMV Multiplex) or human papillomaviruses (HPVQuant-21).</p>
+
+            <div class="callout callout-info">
+                <p class="callout-title">NB! Please consult with your medical diagnostic laboratory on the possibility of conducting multiple PCR tests using a single biomaterial sample.</p>
+            </div>
+
+            <p style="margin-top: 16px;">For differential diagnostics of chronic recurrent diseases in a couple and searching for possible causes of infertility, it is advisable to carry out a comprehensive quantitative assessment of reproductive tract microbiota for both partners using Androbiome<sup>&#174;</sup> and Femobiome<sup>&#174;</sup> line assays.</p>
+
+            <div class="section-header-light" style="margin-top: 24px;">
+                <h3>Example of a couple examination using the Androbiome<sup>&#174;</sup> and Femobiome<sup>&#174;</sup>16 assays</h3>
+            </div>
+
+            <p>A male patient presented with complains on pain in the area of the glans of the penis and redness of the foreskin. His female partner had itching and genital irritation after sexual intercourse.</p>
+
+            <p>A sample of urethral scrape obtained from the male was examined using the Androbiome<sup>&#174;</sup> test system. A vaginal scrape sample from the female was examined using the Femobiome<sup>&#174;</sup>16 test system.</p>
+
+            <div class="page-footer">
+                <span>www.genomer.com.tr</span>
+                <span>4</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 6: Example Androbiome Result (Page 5 of PDF) -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-title">Androbiome<sup>&#174;</sup></span>
+            </div>
+
+            <p class="small-text" style="text-align: center; color: var(--primary-dark); font-weight: 600; margin-bottom: 8px;">Urogenital microbiome composition test Androbiome<sup>&#174;</sup></p>
+
+            <table class="result-table result-table-compact" style="font-size: 0.7em;">
+                <thead>
+                    <tr>
+                        <th style="width: 5%;">&#8470;</th>
+                        <th style="width: 50%;">Test title</th>
+                        <th style="width: 15%;">Quantitative</th>
+                        <th style="width: 15%;">Relative Lg(X/TBM)</th>
+                        <th style="width: 15%;">% of TBM</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td>Human DNA</td>
+                        <td class="value-cell">10<sup>5.7</sup></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>Total Bacterial Mass</td>
+                        <td class="value-cell">10<sup>4.5</sup></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr class="group-header">
+                        <td colspan="5">Transit microorganisms</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td><em>Lactobacillus</em> spp.</td>
+                        <td class="status-not-detected">not detected</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr class="group-header">
+                        <td colspan="5">Commensals</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td><em>Staphylococcus</em> spp.</td>
+                        <td class="status-not-detected">not detected</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td><em>Streptococcus</em> spp.</td>
+                        <td class="status-not-detected">not detected</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td><em>Corynebacterium</em> spp.</td>
+                        <td class="value-cell">10<sup>3.1</sup></td>
+                        <td>-1.4 (3-5%)</td>
+                        <td class="status-normal" style="width:30px;"></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><strong>Commensals, sum</strong></td>
+                        <td class="value-cell">10<sup>3.1</sup></td>
+                        <td>-1.4 (3-5%)</td>
+                        <td class="status-normal" style="width:30px;"></td>
+                    </tr>
+                    <tr class="group-header">
+                        <td colspan="5">BV-associated opportunistic microorganisms</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td><em>Gardnerella vaginalis</em></td>
+                        <td class="status-not-detected">not detected</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td><em>Megasphaera</em> spp. / <em>Veillonella</em> spp. / <em>Dialister</em> spp.</td>
+                        <td class="value-cell">10<sup>3.6</sup></td>
+                        <td>-0.9 (11-14%)</td>
+                        <td class="status-moderate" style="width:40px;"></td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td><em>Sneathia</em> spp. / <em>Leptotrichia</em> spp. / <em>Fusobacterium</em> spp.</td>
+                        <td class="status-not-detected">not detected</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td><em>Ureaplasma urealyticum</em> *</td>
+                        <td class="status-not-detected">not detected</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td><em>Ureaplasma parvum</em> *</td>
+                        <td class="status-not-detected">not detected</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>11</td>
+                        <td><em>Mycoplasma hominis</em> *</td>
+                        <td class="status-not-detected">not detected</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>12</td>
+                        <td><em>Atopobium</em> cluster</td>
+                        <td class="status-not-detected">not detected</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><strong>BV-associated opportunistic microorganisms, sum</strong></td>
+                        <td class="value-cell">10<sup>3.6</sup></td>
+                        <td>-0.9 (11-14%)</td>
+                        <td class="status-moderate" style="width:40px;"></td>
+                    </tr>
+                    <tr class="group-header">
+                        <td colspan="5">Opportunistic anaerobes</td>
+                    </tr>
+                    <tr>
+                        <td>13</td>
+                        <td><em>Bacteroides</em> spp. / <em>Porphyromonas</em> spp. / <em>Prevotella</em> spp.</td>
+                        <td class="value-cell">10<sup>4.3</sup></td>
+                        <td>-0.2 (54-73%)</td>
+                        <td class="status-abnormal" style="width:60px;"></td>
+                    </tr>
+                    <tr>
+                        <td>14</td>
+                        <td><em>Anaerococcus</em> spp.</td>
+                        <td class="value-cell">10<sup>3.8</sup></td>
+                        <td>-0.7 (17-23%)</td>
+                        <td class="status-moderate" style="width:45px;"></td>
+                    </tr>
+                    <tr>
+                        <td>15</td>
+                        <td><em>Peptostreptococcus</em> spp. / <em>Parvimonas</em> spp.</td>
+                        <td class="value-cell">10<sup>3.4</sup></td>
+                        <td>-1.1 (7-9%)</td>
+                        <td class="status-normal" style="width:35px;"></td>
+                    </tr>
+                    <tr>
+                        <td>16</td>
+                        <td><em>Eubacterium</em> spp.</td>
+                        <td class="value-cell">10<sup>4.3</sup></td>
+                        <td>-0.2 (54-73%)</td>
+                        <td class="status-abnormal" style="width:60px;"></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><strong>Opportunistic anaerobes, sum</strong></td>
+                        <td class="value-cell">10<sup>4.7</sup></td>
+                        <td>0.2 (85-100%)</td>
+                        <td class="status-abnormal" style="width:80px;"></td>
+                    </tr>
+                    <tr class="subgroup-header">
+                        <td colspan="5">Opportunistic microorganisms <em>Haemophilus</em> spp.</td>
+                    </tr>
+                    <tr>
+                        <td>17</td>
+                        <td><em>Haemophilus</em> spp.</td>
+                        <td class="status-not-detected">not detected</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr class="subgroup-header">
+                        <td colspan="5">Opportunistic microorganisms <em>Pseudomonas aeruginosa</em> / <em>Ralstonia</em> spp. / <em>Burkholderia</em> spp.</td>
+                    </tr>
+                    <tr>
+                        <td>18</td>
+                        <td><em>Pseudomonas aeruginosa</em> / <em>Ralstonia</em> spp. / <em>Burkholderia</em> spp.</td>
+                        <td class="status-not-detected">not detected</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr class="subgroup-header">
+                        <td colspan="5">Opportunistic microorganisms <em>Enterobacteriaceae</em> spp. / <em>Enterococcus</em> spp.</td>
+                    </tr>
+                    <tr>
+                        <td>19</td>
+                        <td><em>Enterobacteriaceae</em> spp. / <em>Enterococcus</em> spp.</td>
+                        <td class="value-cell">10<sup>3.3</sup></td>
+                        <td>-1.2 (5-7%)</td>
+                        <td class="status-normal" style="width:35px;"></td>
+                    </tr>
+                    <tr class="group-header">
+                        <td colspan="5">Yeast-like fungi</td>
+                    </tr>
+                    <tr>
+                        <td>20</td>
+                        <td><em>Candida</em> spp. *</td>
+                        <td class="value-cell">10<sup>3.2</sup></td>
+                        <td></td>
+                        <td class="status-moderate" style="width:30px;"></td>
+                    </tr>
+                    <tr class="group-header">
+                        <td colspan="5">Sexually transmitted infections</td>
+                    </tr>
+                    <tr>
+                        <td>21</td>
+                        <td><em>Mycoplasma genitalium</em> **</td>
+                        <td class="status-not-detected">not detected</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>22</td>
+                        <td><em>Trichomonas vaginalis</em> **</td>
+                        <td class="status-not-detected">not detected</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>23</td>
+                        <td><em>Neisseria gonorrhoeae</em> **</td>
+                        <td class="status-not-detected">not detected</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>24</td>
+                        <td><em>Chlamydia trachomatis</em> **</td>
+                        <td class="status-not-detected">not detected</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p class="tiny-text" style="margin-top: 4px;">* Quantitative Analysis Lg(X) &nbsp;&nbsp; ** Qualitative Analysis &nbsp;&nbsp; *** Below threshold</p>
+
+            <div class="conclusion-box">
+                <p class="conclusion-title">Conclusion:</p>
+                <p class="small-text">STIs DNA is not detected.<br>
+                DETECTED: <em>Candida</em> spp.<br>
+                The bacterial microbiome composition is abnormal: opportunistic bacteria are detected.</p>
+            </div>
+
+            <div class="page-footer">
+                <span>www.genomer.com.tr</span>
+                <span>5</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 7: Femobiome16 Example (Page 6 of PDF) -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-title">Androbiome<sup>&#174;</sup></span>
+            </div>
+
+            <p class="small-text" style="text-align: center; color: var(--primary-dark); font-weight: 600; margin-bottom: 8px;">Urogenital microbiome composition test Femobiome<sup>&#174;</sup>16</p>
+
+            <table class="result-table">
+                <thead>
+                    <tr>
+                        <th style="width: 5%;">&#8470;</th>
+                        <th style="width: 50%;">Test title</th>
+                        <th style="width: 15%;">Quantitative</th>
+                        <th style="width: 15%;">Relative Lg(X/TMD)</th>
+                        <th style="width: 15%;">% of TMD</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td>Sample intake control</td>
+                        <td class="value-cell">10<sup>6.8</sup></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>Total Bacterial Mass</td>
+                        <td class="value-cell">10<sup>7.7</sup></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr class="group-header">
+                        <td colspan="5">NORMAL MICROFLORA</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td><em>Lactobacillus</em> spp.</td>
+                        <td class="value-cell">10<sup>7.3</sup></td>
+                        <td>-0.3 (39-53%)</td>
+                        <td class="status-normal" style="width:50px;"></td>
+                    </tr>
+                    <tr class="group-header">
+                        <td colspan="5">FACULTATIVE ANAEROBIC MICROORGANISMS</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td><em>Enterobacteriaceae</em></td>
+                        <td class="status-not-detected">not detected</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td><em>Streptococcus</em> spp.</td>
+                        <td class="status-not-detected">not detected</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td><em>Staphylococcus</em> spp.</td>
+                        <td class="value-cell">10<sup>3.3</sup></td>
+                        <td>-4.3 (&lt;0.1%)</td>
+                        <td></td>
+                    </tr>
+                    <tr class="group-header">
+                        <td colspan="5">OBLIGATE ANAEROBIC MICROORGANISMS</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td><em>Gardnerella vaginalis</em> + <em>Prevotella bivia</em> + <em>Porphyromonas</em> spp.</td>
+                        <td class="value-cell">10<sup>7.2</sup></td>
+                        <td>-0.4 (31-42%)</td>
+                        <td class="status-abnormal" style="width:40px;"></td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td><em>Eubacterium</em> spp.</td>
+                        <td class="value-cell">10<sup>6.8</sup></td>
+                        <td>-0.8 (12-17%)</td>
+                        <td class="status-moderate" style="width:35px;"></td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td><em>Sneathia</em> spp. + <em>Leptotrichia</em> spp. + <em>Fusobacterium</em> spp.</td>
+                        <td class="status-not-detected">not detected</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td><em>Megasphaera</em> spp. + <em>Veillonella</em> spp. + <em>Dialister</em> spp.</td>
+                        <td class="value-cell">10<sup>6.0</sup></td>
+                        <td>-1.6 (2.0-2.7%)</td>
+                        <td class="status-normal" style="width:25px;"></td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td><em>Lachnobacterium</em> spp. + <em>Clostridium</em> spp.</td>
+                        <td class="status-not-detected">not detected</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>11</td>
+                        <td><em>Mobiluncus</em> spp. + <em>Corynebacterium</em> spp.</td>
+                        <td class="status-not-detected">not detected</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>12</td>
+                        <td><em>Peptostreptococcus</em> spp.</td>
+                        <td class="status-not-detected">not detected</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>13</td>
+                        <td><em>Atopobium vaginae</em></td>
+                        <td class="status-not-detected">not detected</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr class="group-header">
+                        <td colspan="5">YEAST-LIKE FUNGI</td>
+                    </tr>
+                    <tr>
+                        <td>14</td>
+                        <td><em>Candida</em> spp. *</td>
+                        <td class="value-cell">10<sup>5.6</sup></td>
+                        <td></td>
+                        <td class="status-abnormal" style="width:50px;"></td>
+                    </tr>
+                    <tr class="group-header">
+                        <td colspan="5">MYCOPLASMAS</td>
+                    </tr>
+                    <tr>
+                        <td>15</td>
+                        <td><em>Mycoplasma hominis</em> *</td>
+                        <td class="status-not-detected">not detected</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>16</td>
+                        <td><em>Ureaplasma</em> (urealyticum + parvum) *</td>
+                        <td class="status-not-detected">not detected</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr class="group-header">
+                        <td colspan="5">PATHOGENIC MICROORGANISMS</td>
+                    </tr>
+                    <tr>
+                        <td>17</td>
+                        <td><em>Mycoplasma genitalium</em> **</td>
+                        <td class="status-not-detected">not detected</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p class="tiny-text" style="margin-top: 4px;">* Quantitative Analysis Lg(X) &nbsp;&nbsp; ** Qualitative Analysis &nbsp;&nbsp; *** Below threshold</p>
+
+            <div class="conclusion-box">
+                <p class="conclusion-title">Conclusion:</p>
+                <p class="small-text">MODERATE ANAEROBIC DYSBIOSIS</p>
+            </div>
+
+            <p style="margin-top: 12px;">Pathogenic microorganisms were not detected in both partners.</p>
+
+            <p>Both patients had a decrease in the amount of normal microbiota with an increase in the number of anaerobic opportunistic microorganisms. In the female patient <em>Candida</em> spp. were present in clinically significant amounts.</p>
+
+            <p>Based on the results of Androbiome<sup>&#174;</sup> and Femobiome<sup>&#174;</sup>16, effective etiotropic therapy was prescribed and carried out in both partners.</p>
+
+            <div class="page-footer">
+                <span>www.genomer.com.tr</span>
+                <span>6</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 8: Biomaterial Sampling (Page 7 of PDF) -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-title">Androbiome<sup>&#174;</sup></span>
+            </div>
+
+            <div class="section-header">
+                <h2>BIOMATERIAL SAMPLING</h2>
+            </div>
+
+            <p>To obtain correct real-time PCR results, the pre-analytical stage is of great importance: preparation of a patient for the study, selection of biomaterial type and quality of biomaterial collection, conditions of sample storage and transportation to the laboratory.</p>
+
+            <p>The choice of biomaterial for Androbiome<sup>&#174;</sup> and Androbiome<sup>&#174;</sup> Screen assays depends on the diagnostic goals (Table 1).</p>
+
+            <div class="callout callout-info">
+                <p>It is important to take into account <strong>the special rules of preparation for the study:</strong></p>
+                <ul style="margin-top: 8px; margin-bottom: 0;">
+                    <li><strong>Sexual abstinence or use of barrier contraception for 3 days</strong> before the study is recommended to minimize the risk of contamination of the biomaterial with the microbiota of a sexual partner.</li>
+                    <li style="margin-top: 8px;">The use of <strong>antiseptics</strong>, including antibacterial soaps, <strong>should be avoided</strong>.</li>
+                </ul>
+            </div>
+
+            <p style="margin-top: 16px;">Prescription of the Androbiome<sup>&#174;</sup> study while taking antibiotics is possible (for example, to monitor therapy), but it should be taken into account that antibiotic therapy can affect the results.</p>
+
+            <div class="section-header-light" style="margin-top: 20px;">
+                <h3>Specifics of biomaterial sampling for Androbiome<sup>&#174;</sup> assay</h3>
+            </div>
+
+            <p>The study of microorganisms' DNA by real-time PCR is a direct laboratory method, so the biomaterial should be obtained from localizations as close as possible to the suspected focus of the infectious process.</p>
+
+            <div class="page-footer">
+                <span>www.genomer.com.tr</span>
+                <span>7</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 9: Table 1 - Biomaterial Sampling Part 1 (Page 8 of PDF) -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-title">Androbiome<sup>&#174;</sup></span>
+            </div>
+
+            <p class="small-text" style="margin-bottom: 8px;"><strong>Table 1:</strong> recommended biomaterial and technique of its sampling for study by Androbiome<sup>&#174;</sup> assay</p>
+
+            <table class="sampling-table" style="font-size: 0.8em;">
+                <thead>
+                    <tr>
+                        <th style="width: 18%;">BIOMATERIAL</th>
+                        <th style="width: 22%;">PURPOSE OF DIAGNOSTICS</th>
+                        <th style="width: 25%;">SPECIFICS OF PREPARATION</th>
+                        <th style="width: 35%;">RULES OF SAMPLING</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Epithelial scrapes</strong> from the glans of the penis (penis balanus), foreskin, preputial sac, urethra</td>
+                        <td>Identification of etiology of acute and chronic infectious-inflammatory processes of lower urogenital tract (urethritis, balanoposthitis)</td>
+                        <td>A patient is recommended to avoid urinating within 1.5-2 hours prior to sampling procedure.<br><br>It is important to take the maximum amount of epithelial cells and the minimum amount of mucus</td>
+                        <td>The scraping is performed with a sterile, disposable urogenital swab.<br><br>After biomaterial taking, the swab should be put into a 1.5 ml plastic tube with transport medium.<br><br>Rinse the swab thoroughly, then remove the swab from solution, press it to the wall of tube and squeeze the rest of the liquid. A swab shouldn't be broken off or left in the tube.<br><br><strong>Features of the urethral sampling</strong><br>The external urethral orifice must be treated with a swab moistened with sterile physiological saline solution just prior to the sampling procedure.<br><br>In the case of purulent discharge, the sample must be taken 15-20 minutes after urinating. Carefully insert the swab into the urethra to a depth up to 5 cm, then carefully rotate to the external urethral orifice</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Urine</strong></td>
+                        <td>Identification of the etiology of acute inflammatory processes (<strong>STIs only</strong>) associated with pronounced pain on insertion of a swab into the urethra</td>
+                        <td>In the absence of acute inflammation, the number of human cells in a sample may be very low and the Human DNA indicator value can be below the threshold</td>
+                        <td><strong>The first portion of morning urine</strong> in the minimum possible amount of 10-15 ml is collected into a special dry sterile container with a volume of up to 60 ml, equipped with a hermetically screw-cap</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Diagnosis of urinary infections</td>
+                        <td colspan="2">It is more preferable to prescribe the <strong>BacScreen OM</strong> assay, as it includes microorganisms associated with urinary tract infections</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ejaculate</strong></td>
+                        <td>Diagnosis of epididymitis, prostatitis, STIs with asymptomatic course, male infertility</td>
+                        <td>Ejaculate should not be obtained by interrupted sexual intercourse (as an admixture of transient microbiota is possible) or from a condom (as lubricant components inhibit PCR)</td>
+                        <td>Ejaculate is collected by a patient only by manual masturbation into a sterile container of up to 60 ml and can be obtained in the laboratory or at home.<br><br>The collected biomaterial should be stored in the refrigerator for no more than 24 hours or frozen</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="page-footer">
+                <span>www.genomer.com.tr</span>
+                <span>8</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 10: Table 1 - Biomaterial Sampling Part 2 (Page 9 of PDF) -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-title">Androbiome<sup>&#174;</sup></span>
+            </div>
+
+            <table class="sampling-table" style="font-size: 0.8em;">
+                <thead>
+                    <tr>
+                        <th style="width: 18%;">BIOMATERIAL</th>
+                        <th style="width: 22%;">PURPOSE OF DIAGNOSTICS</th>
+                        <th style="width: 25%;">SPECIFICS OF PREPARATION</th>
+                        <th style="width: 35%;">RULES OF SAMPLING</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Prostatic fluid</strong></td>
+                        <td>Diagnosis of epididymitis, prostatitis, STIs with asymptomatic course, male infertility</td>
+                        <td>Sexual abstinence is recommended for 3 days before the examination.<br><br><span style="color: var(--accent-red); font-weight: 600;">If acute prostatitis is suspected, prostate massage is strictly prohibited!</span></td>
+                        <td>The glans of the penis (penis balanus) is treated with a sterile cotton swab moistened with saline solution.<br><br>Prostatic fluid is collected after preliminary prostate massage through the rectum. The massage is performed by a doctor through a vigorous pressing movement from the base to the top of the gland. The released prostatic fluid in the form of a free-flowing drop (0.5-1.0 ml) is collected in a disposable sterile dry tube with a volume of 2 ml or in a container with a volume of up to 60 ml</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Residual urine after prostate massage</strong></td>
+                        <td>Diagnosis of epididymitis, prostatitis, STIs with asymptomatic course, male infertility</td>
+                        <td>Sexual abstinence is recommended for 3 days before the examination.<br><br><span style="color: var(--accent-red); font-weight: 600;">If acute prostatitis is suspected, prostate massage is strictly prohibited!</span></td>
+                        <td>A patient should urinate in a toilet, leaving some urine in the bladder.<br><br>Before collecting urine, the glans of the penis is treated with a sterile cotton swab moistened with saline solution.<br><br>After this, the patient is subjected to prostate massage for 1-3 minutes. The intensity of massage depends on the density of the prostate: if the prostate is soft, gentle pressure is applied, if the prostate is dense, the intensity of pressure should be increased.<br><br>After prostate massage, the patient collects the first 10-15 ml of urine into a sterile plastic container with a volume of up to 60 ml</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Biopsy samples from prostatic tissues</strong></td>
+                        <td>Diagnosis of epididymitis, prostatitis, STIs with asymptomatic course, male infertility</td>
+                        <td></td>
+                        <td>Biopsy sample is placed in a sterile tube with sterile saline solution or water (in volume no more than 0.5 ml), or in an empty sterile tube</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="page-footer">
+                <span>www.genomer.com.tr</span>
+                <span>9</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 11: Biomaterial Storage (Page 10 of PDF) -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-title">Androbiome<sup>&#174;</sup></span>
+            </div>
+
+            <div class="section-header-light">
+                <h3>Biomaterial storage and transportation conditions</h3>
+            </div>
+
+            <div style="display: flex; align-items: flex-start; gap: 16px; margin: 16px 0;">
+                <div style="flex-shrink: 0; width: 60px; height: 60px; background: var(--result-abnormal-bg); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <span style="font-size: 2em; color: var(--accent-red);">&#128695;</span>
+                </div>
+                <div>
+                    <p>Biomaterial for PCR examination can be stored at a temperature from <strong>2 &deg;C to 8 &deg;C for 24 hours</strong>, so the sample should be transferred to the laboratory within a day or else frozen.</p>
+                    <p style="margin-top: 8px;">Frozen material can be stored at temperatures from <strong>-18 &deg;C to -22 &deg;C for no more than one month</strong>.</p>
+                </div>
+            </div>
+
+            <div class="section-header-light" style="margin-top: 32px;">
+                <h3>INFORMATION FOR LABORATORIES ON EJACULATE TESTING</h3>
+            </div>
+
+            <p style="margin-top: 16px;">When extracting DNA from ejaculate, it is recommended to use 100 &mu;l of sample.</p>
+
+            <p>For DNA extraction from ejaculate it is recommended to use the PREP-MB MAX kit.</p>
+
+            <p>It is also possible to perform DNA extraction using PREP-NA PLUS and PREP-GS PLUS kits.</p>
+
+            <div class="page-footer">
+                <span>www.genomer.com.tr</span>
+                <span>10</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 12: Analysis of Results (Page 11 of PDF) -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-title">Androbiome<sup>&#174;</sup></span>
+            </div>
+
+            <div class="section-header">
+                <h2>ANALYSIS OF RESULTS</h2>
+            </div>
+
+            <div style="display: flex; align-items: flex-start; gap: 16px; margin: 16px 0;">
+                <div style="flex-shrink: 0; width: 60px; height: 60px; background: var(--bg-primary-subtle); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                    <span style="font-size: 2em;">&#9878;</span>
+                </div>
+                <div>
+                    <p>The Androbiome<sup>&#174;</sup> assay uses genome-equivalent (GE)/sample as a unit of measurement. The GE is the amount of genetic material corresponding to one genome of a microorganism. This unit of measurement of the PCR method is similar to the CFU in a microbiological culture. If it is necessary to establish the ratios of microorganisms in the microbiota, relative values, or proportions, are used.</p>
+                </div>
+            </div>
+
+            <p style="margin-top: 16px;">In the Androbiome<sup>&#174;</sup> assay line, indicator values are represented in two formats: absolute and relative.</p>
+
+            <ul>
+                <li><strong>Absolute values</strong> are expressed in genome-equivalents (GE/sample) and are proportional to the urogenital biotope microbial load for each detected microorganism.</li>
+                <li style="margin-top: 12px;"><strong>Relative values</strong> are expressed in % and represent the proportion of each taxon in the total bacterial mass. Values are presented as ranges to account for method inaccuracy. PCR is performed independently for each of the microorganisms, including the TBM (total bacterial mass), so the sum of the relative values will not be necessarily equal to 100%, thus it is not correct to sum the relative values.</li>
+            </ul>
+
+            <div class="page-footer">
+                <span>www.genomer.com.tr</span>
+                <span>11</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 13: Guidance Note for Result Form (Page 12-13 of PDF) -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-title">Androbiome<sup>&#174;</sup></span>
+            </div>
+
+            <div class="section-header-light">
+                <h3>Guidance note for the result form interpretation</h3>
+            </div>
+
+            <p class="small-text">The diagrams below show the handouts for interpreting the Androbiome<sup>&#174;</sup> and Androbiome<sup>&#174;</sup>Screen result forms.</p>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px;">
+                <div class="scheme-box">
+                    <p class="scheme-title">1. Estimation of biomaterial quantity</p>
+                    <ul class="small-text" style="margin-bottom: 0;">
+                        <li>The number of human cells</li>
+                        <li>The number of bacteria</li>
+                    </ul>
+                </div>
+                <div class="scheme-box">
+                    <p class="scheme-title">2. Assessment of transient microbiota</p>
+                    <ul class="small-text" style="margin-bottom: 0;">
+                        <li>Marker of admixture of female urogenital microbiota</li>
+                        <li>It is called &laquo;Transit microorganisms&raquo; in the report form</li>
+                    </ul>
+                </div>
+                <div class="scheme-box">
+                    <p class="scheme-title">3. Assessment of microbiota structure</p>
+                    <ul class="small-text" style="margin-bottom: 0;">
+                        <li>Amount of normal microbiota</li>
+                        <li>Number of opportunistic microorganisms</li>
+                    </ul>
+                </div>
+                <div class="scheme-box">
+                    <p class="scheme-title">4. Assessment of yeast fungi</p>
+                </div>
+                <div class="scheme-box">
+                    <p class="scheme-title">5. Assessment of obligate pathogens (STIs)</p>
+                </div>
+                <div class="scheme-box">
+                    <p class="scheme-title">6. Laboratory conclusion</p>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px;">
+                <div class="scheme-box">
+                    <p class="scheme-title">7. Absolute values</p>
+                    <p class="small-text" style="margin-bottom: 0;">The number of genome equivalents/sample</p>
+                </div>
+                <div class="scheme-box">
+                    <p class="scheme-title">8. Relative values</p>
+                    <p class="small-text" style="margin-bottom: 0;">The proportion of the microorganisms group in TMD or TBM<br><br>Percentage of a microorganism in a sample, taking into account the measurement error</p>
+                </div>
+            </div>
+
+            <div class="callout callout-info" style="margin-top: 16px;">
+                <ul class="small-text" style="margin-bottom: 0;">
+                    <li>The value in the &laquo;Relative Lg&raquo; column turns negative if the microorganism's DNA amount is less than total bacterial mass.</li>
+                    <li style="margin-top: 8px;">Summing the percentages in the &laquo;Relative Lg&raquo; column does not give an informative result. The sum of the percentages may not be equal to 100% due to method specificities.</li>
+                </ul>
+            </div>
+
+            <div class="page-footer">
+                <span>www.genomer.com.tr</span>
+                <span>12</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 14: Control Indicators (Page 14-15 of PDF) -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-title">Androbiome<sup>&#174;</sup></span>
+            </div>
+
+            <div class="section-header-light">
+                <h3>Control indicators of the biomaterial sampling quality</h3>
+            </div>
+
+            <p><strong>Parameter &laquo;Human DNA&raquo;</strong> shows the amount of human genomic DNA in a sample. Human DNA value can vary in different types of biomaterial, for example, in urine it can be very low (may be as a norm or in case of chronic forms of prostatitis) or high (in acute urethritis).</p>
+
+            <p><strong>Total Bacterial Mass (TBM)</strong> is the total number of bacteria in a sample. This indicator is used to assess the structure of the microbiome by determining the proportion of specific microorganisms and groups of microorganisms in the number of all bacteria.</p>
+
+            <p>It should be taken into account that <em>Candida</em> spp. (yeast fungi) and <em>Trichomonas vaginalis</em> (protozoan, a unicellular parasite) are not bacteria and thus are not included in TBM.</p>
+
+            <p><strong>Total Microorganisms Detected (TMD)</strong> is a mathematically calculated parameter that is used to estimate the ratios of microorganism groups in a sample.</p>
+
+            <div class="callout callout-warning">
+                <p><strong>NB!</strong> If TBM and Human DNA indicators are both below the threshold values in the results, no further analysis of the microbiome composition is performed, as there is no verification of correct biomaterial sampling. In this case the results of the assay can be interpreted only by an attending physician, based on the specifics of a clinical situation. At the same time, correct results will be obtained for the detection of obligate pathogens and <em>Candida</em> fungi, which will be reported in the conclusion. In these cases, a repeated biomaterial sampling and retesting can be recommended, with the requirement of compliance with the rules of patient preparation for the study.</p>
+            </div>
+
+            <div class="callout callout-success">
+                <p>If <strong>at least one</strong> of TBM and Human DNA indicators is above the threshold, the automatic analysis of the microbiome composition is performed.</p>
+            </div>
+
+            <p class="small-text" style="font-style: italic;">Examples of result forms interpretation are provided on page 18.</p>
+
+            <div class="section-header-light" style="margin-top: 16px;">
+                <h3>Transit microorganisms (<em>Lactobacillus</em> spp.)</h3>
+            </div>
+
+            <p>The presence of <em>Lactobacillus</em> spp. and their proportion in TBM are assessed as a marker of presence of a female partner's microbiota in a male patient's urogenital tract.</p>
+
+            <p><em>Lactobacillus</em> spp. can be detected within several days after an unprotected sexual intercourse when analyzing biomaterial of a male patient using Androbiome<sup>&#174;</sup> and Androbiome<sup>&#174;</sup> Screen test systems.</p>
+
+            <div class="page-footer">
+                <span>www.genomer.com.tr</span>
+                <span>14</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 15: Microbiome Composition (Page 15 of PDF) -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-title">Androbiome<sup>&#174;</sup></span>
+            </div>
+
+            <p>If a relative amount of <em>Lactobacillus</em> spp. in a sample is above the threshold value (10% of TBM), the microbiome composition is not analyzed in the Androbiome<sup>&#174;</sup> tests. The reason is that actual composition of male microbiota may be distorted by presence of significant amounts of female microbiota. This factor is especially important in the diagnosis of chronic diseases of urogenital tract. The automatic conclusion for these cases issues an indication of improper patient preparation for the examination and recommends to repeat biomaterial sampling under the condition of protected sexual contacts or sexual abstinence within 3 days.</p>
+
+            <p>It is worth noting that there are patients in clinical practice who have a significant amount of <em>Lactobacillus</em> spp. in their ejaculate, even if preparation for the examination is carried out properly. The presence of <em>Lactobacillus</em> spp. in ejaculate may serve as an additional marker of hormonal disturbance in men, even in those with normal spermogram indicators [1].</p>
+
+            <p>It should also be taken into account that detected opportunistic microorganisms, including those associated with bacterial vaginosis, may be a part of a female partner's microbiota and cause acute inflammation of the lower urogenital tract in a man.</p>
+
+            <div class="section-header-light" style="margin-top: 20px;">
+                <h3>Microbiome composition of the male urogenital tract</h3>
+            </div>
+
+            <h4 style="margin-top: 12px;">Normal microbiota (commensals)</h4>
+            <p>Normal microbiota of male urogenital tract is represented by bacteria of the genera <em>Staphylococcus</em>, <em>Streptococcus</em> and <em>Corynebacterium</em>. Normally all the three groups should together constitute a major part of TBM. At the same time, predominance of only one group in simultaneously with significant TBM value is not considered as a variant of norm and indicates a disturbance in the bacterial microbiome composition.</p>
+
+            <h4 style="margin-top: 16px;">Opportunistic microorganisms (OM)</h4>
+            <p>Opportunistic microorganisms can be categorized into several groups:</p>
+            <ul>
+                <li>Opportunistic microorganisms associated with bacterial vaginosis (BV)</li>
+                <li>Opportunistic anaerobes</li>
+                <li>OM <em>Haemophilus</em> spp.</li>
+                <li>OM <em>Pseudomonas aeruginosa</em> / <em>Ralstonia</em> spp. / <em>Burkholderia</em> spp.</li>
+                <li>OM <em>Enterobacteriaceae</em> spp. / <em>Enterococcus</em> spp.</li>
+            </ul>
+
+            <p>BV-associated opportunistic microorganisms include some obligate anaerobes and genital mycoplasmas, which are common causative agents of bacterial vaginosis in women, and may cause inflammation in the male urogenital tract as well.</p>
+
+            <p class="tiny-text" style="margin-top: auto;">[1] Pochernikov DG, Postovoytenko NT, Getman VV, Galkina IS. Diagnostic significance of Lactobacillus spp. identification in ejaculate. Bulletin of RSMU, 2020, 3. DOI: 10.24075/vrgmu.2020.039</p>
+
+            <div class="page-footer">
+                <span>www.genomer.com.tr</span>
+                <span>15</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 16: Obligate Pathogens & Scheme (Page 16-17 of PDF) -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-title">Androbiome<sup>&#174;</sup></span>
+            </div>
+
+            <p>The results for opportunistic mycoplasmas (<em>Ureaplasma urealyticum</em>, <em>Ureaplasma parvum</em>, <em>Mycoplasma hominis</em>) and yeast fungi of the genus <em>Candida</em> are given only in absolute values in the result form. Relative assessment is not carried out, as their clinical significance is determined by their quantity in a sample, regardless of their proportion in TBM.</p>
+
+            <p>For other representatives of opportunistic microorganisms, the proportion in TBM is determined.</p>
+
+            <div class="callout callout-warning">
+                <p><strong>NB!</strong> <em>Candida</em> spp. yeast fungi are not considered as a part of bacterial microbiome composition (that is, the indicator &laquo;<em>Candida</em> spp.&raquo; is not a component of TBM).</p>
+            </div>
+
+            <div class="section-header-light" style="margin-top: 16px;">
+                <h3>Obligate pathogens</h3>
+            </div>
+
+            <p><strong>Obligate pathogens</strong> (<em>Mycoplasma genitalium</em>, <em>Trichomonas vaginalis</em>, <em>Neisseria gonorrhoeae</em>, <em>Chlamydia trachomatis</em>) are causative agents of STIs. Their presence in any quantity is considered a pathology, so the results of their detection are reported in a qualitative format. The results of obligate pathogens detection do not depend on other test values, including control indicators (TBM, Human DNA, transit microorganisms).</p>
+
+            <div class="section-header-light" style="margin-top: 16px;">
+                <h3>Scheme of the result form interpretation</h3>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="width: 40px; height: 40px; background: var(--bg-primary-subtle); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2em;">?</div>
+                    <p class="small-text" style="margin: 0;"><strong>Human DNA</strong> is the amount of human DNA (cells) in a biomaterial sample. This indicator is determined by PCR results.</p>
+                </div>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="width: 40px; height: 40px; background: var(--bg-primary-subtle); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2em;">?</div>
+                    <p class="small-text" style="margin: 0;"><strong>TBM</strong> is the total number of all bacteria in a biomaterial sample. This indicator is determined by PCR results.</p>
+                </div>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="width: 40px; height: 40px; background: var(--bg-primary-subtle); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2em;">?</div>
+                    <p class="small-text" style="margin: 0;"><strong>TMD</strong> is the sum of the quantities of all microorganisms specifically detected by the Androbiome<sup>&#174;</sup> or Androbiome<sup>&#174;</sup> Screen test. This indicator is calculated mathematically by the software. It may not be equal to the TBM.</p>
+                </div>
+            </div>
+
+            <div class="page-footer">
+                <span>www.genomer.com.tr</span>
+                <span>16</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 17: Scheme of Interpretation (Page 17 of PDF) -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-title">Androbiome<sup>&#174;</sup></span>
+            </div>
+
+            <div style="background: #fdf4ff; border: 2px solid #d946ef; border-radius: 8px; padding: 12px; margin-bottom: 12px;">
+                <p class="small-text" style="margin-bottom: 8px;"><strong>The 1st step &mdash; assessment of the obligate pathogens and <em>Candida</em> spp. presence</strong></p>
+                <p class="tiny-text" style="margin-bottom: 8px;">These microorganisms are reported in the conclusion even in case of insufficient amount of biomaterial</p>
+                <table style="font-size: 0.8em; margin-bottom: 0;">
+                    <tr>
+                        <td style="width: 40%;"><strong>Obligate pathogens</strong></td>
+                        <td style="text-align: center;">Not detected</td>
+                        <td style="text-align: center; background: var(--result-abnormal-bg); color: var(--accent-red); font-weight: 600;">DETECTED</td>
+                    </tr>
+                    <tr>
+                        <td><strong><em>Candida</em> spp.</strong></td>
+                        <td style="text-align: center;">below TH*</td>
+                        <td style="text-align: center; background: var(--result-moderate-bg);">10<sup>3</sup>-10<sup>4</sup></td>
+                        <td style="text-align: center; background: var(--result-abnormal-bg);">&gt;10<sup>4</sup></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div style="background: #ecfeff; border: 2px solid #06b6d4; border-radius: 8px; padding: 12px; margin-bottom: 12px;">
+                <p class="small-text" style="margin-bottom: 8px;"><strong>The 2nd step &mdash; control of biomaterial compliance with the analysis requirements</strong></p>
+                <table style="font-size: 0.8em; margin-bottom: 0;">
+                    <tr>
+                        <td>1. Human DNA</td>
+                        <td style="text-align: center;">&gt;10<sup>3</sup></td>
+                        <td rowspan="2" style="background: var(--result-abnormal-bg); font-size: 0.85em; text-align: center;">If both TBM and Human DNA are below TH, an insufficient amount of biomaterial is reported in the conclusion</td>
+                    </tr>
+                    <tr>
+                        <td>2. TBM</td>
+                        <td style="text-align: center;">&gt;10<sup>4</sup></td>
+                    </tr>
+                    <tr>
+                        <td>! TBM</td>
+                        <td style="text-align: center;">10<sup>4</sup>-10<sup>5</sup></td>
+                        <td style="font-size: 0.85em;">Mathematical inaccuracies are possible in samples with these low values</td>
+                    </tr>
+                    <tr>
+                        <td>3. <em>Lactobacillus</em> spp.</td>
+                        <td colspan="2" style="font-size: 0.85em;">Not detected &rarr; 10<sup>n</sup> &rarr; &gt;10% (threshold exceeded)</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div style="background: #fef3c7; border: 2px solid #f59e0b; border-radius: 8px; padding: 12px; margin-bottom: 12px;">
+                <p class="small-text" style="margin-bottom: 8px;"><strong>The 3rd step &mdash; assessment of the balance between normal and opportunistic microbiota</strong></p>
+                <table style="font-size: 0.8em; margin-bottom: 0;">
+                    <tr style="background: var(--result-normal-bg);">
+                        <td style="width: 50%;"><strong>The bacterial microbiome composition is normal</strong></td>
+                        <td>&#10003; Predominance of normal microbiota<br>&#10003; Normal microbiota is represented by 2 or more genera at TBM &gt;10<sup>5</sup><br>&#10003; Normal microbiota is represented by a single genus at TBM &lt;10<sup>5</sup><br>&#10003; Low bacterial load in a sample</td>
+                    </tr>
+                    <tr style="background: var(--result-abnormal-bg);">
+                        <td><strong>The bacterial microbiome composition is abnormal</strong></td>
+                        <td>&#10007; The proportion of normal microbiota is decreased<br>&#10007; Predominance of opportunistic microorganisms<br>&#10007; Normal microbiota is represented by a single genus at TBM &gt;10<sup>5</sup></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div style="background: #f0fdf4; border: 2px solid #10b981; border-radius: 8px; padding: 12px;">
+                <p class="small-text" style="margin-bottom: 8px;"><strong>The 4th step &mdash; generation of an automatic conclusion</strong></p>
+                <ul class="small-text" style="margin-bottom: 0;">
+                    <li>Presence of obligate pathogens</li>
+                    <li>Presence of <em>Candida</em> spp.</li>
+                    <li>Assessment of the bacterial microbiome structure with the determination of a predominant group of microorganisms</li>
+                </ul>
+            </div>
+
+            <p class="tiny-text" style="margin-top: 8px;">* below TH (below threshold value) &ndash; below the level of significance</p>
+
+            <div class="page-footer">
+                <span>www.genomer.com.tr</span>
+                <span>17</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 18: Examples of Results Form - Introduction (Page 18 of PDF) -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-title">Androbiome<sup>&#174;</sup></span>
+            </div>
+
+            <div class="section-header">
+                <h2>EXAMPLES OF RESULTS FORM</h2>
+            </div>
+
+            <h3 style="margin-top: 16px;">1. The bacterial microbiome composition is normal</h3>
+
+            <div class="section-header-light" style="margin-top: 12px;">
+                <h3>WHAT IS CONSIDERED AS A NORM FOR THE MALE UROGENITAL TRACT?</h3>
+            </div>
+
+            <p>The dominance of normal microbiota (commensals) in a sample in the absence of pathogens is considered as a norm. A minor content of opportunistic microorganisms is acceptable.</p>
+
+            <p>At the same time, normal microbiota should be represented by more than one group of microorganisms (Example 1). If only one representative of the normal microbiota is observed in a sample with a high level of bacterial load (TBM), it is concluded that the microbiome composition is disturbed (Example 7).</p>
+
+            <div class="callout callout-info">
+                <p class="callout-title">Specifics of norm interpretation in case of low bacterial load in the sample (TBM &lt;10<sup>5</sup>)</p>
+                <ul class="small-text" style="margin-bottom: 0;">
+                    <li>In some cases, when human DNA content is sufficient for analysis (at &laquo;Human DNA&raquo; value above threshold values), no microorganisms are detected in a sample. This is especially common in ejaculate examination. These results are considered as a norm (Examples 3-5).</li>
+                    <li style="margin-top: 8px;">In case of low TBM, presence of only one group of normal microbiota is also interpreted as a variant of norm (Example 6).</li>
+                </ul>
+            </div>
+
+            <div class="callout callout-warning">
+                <p><strong>!</strong> The presence of <em>Candida</em> spp. is reported separately and is not considered as part of the bacterial microbiome composition. Clinical interpretation of the result of <em>Candida</em> spp. detection is made by an attending physician (Example 2).</p>
+            </div>
+
+            <div class="page-footer">
+                <span>www.genomer.com.tr</span>
+                <span>18</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 19: Example 1 - Androflor assay (Normal composition) -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-title">Androbiome<sup>&reg;</sup></span>
+            </div>
+
+            <div class="example-header">
+                <h3>Example 1. Androbiome<sup>&reg;</sup> assay</h3>
+            </div>
+
+            <table class="result-table result-table-compact" style="font-size: 0.65em;">
+                <thead>
+                    <tr>
+                        <th style="width: 5%;">&numero;</th>
+                        <th style="width: 40%;">Test title</th>
+                        <th colspan="2" style="width: 25%;">Result</th>
+                        <th style="width: 30%;">% of TMD</th>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th>Quantitative</th>
+                        <th>Relative Lg (X/TMD)</th>
+                        <th><small>10 &nbsp;&nbsp;&nbsp; 100</small></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td></td><td>Human DNA</td><td>10<sup>4,6</sup></td><td></td><td><div class="bar-container"><div class="bar bar-normal" style="width: 80%;"></div></div></td></tr>
+                    <tr><td>1</td><td>Total Bacterial Mass</td><td>10<sup>4,8</sup></td><td></td><td><div class="bar-container"><div class="bar bar-normal" style="width: 85%;"></div></div></td></tr>
+                    <tr class="section-header-row"><td colspan="5">Transit microorganisms</td></tr>
+                    <tr><td>2</td><td><em>Lactobacillus</em> spp.</td><td>10<sup>3,1</sup></td><td>-1,5 (3-4%)</td><td><div class="bar-container"><div class="bar bar-moderate" style="width: 4%;"></div></div></td></tr>
+                    <tr class="section-header-row"><td colspan="5">Commensals</td></tr>
+                    <tr><td>3</td><td><em>Staphylococcus</em> spp.</td><td>10<sup>4,8</sup></td><td>0,2 (85-100%)</td><td><div class="bar-container"><div class="bar bar-normal" style="width: 90%;"></div></div></td></tr>
+                    <tr><td>4</td><td><em>Streptococcus</em> spp.</td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>5</td><td><em>Corynebacterium</em> spp.</td><td>10<sup>4,5</sup></td><td>-0,1 (68-91%)</td><td><div class="bar-container"><div class="bar bar-normal" style="width: 75%;"></div></div></td></tr>
+                    <tr class="sum-row"><td></td><td>Commensals, sum</td><td>10<sup>5,0</sup></td><td>0,4 (85-100%)</td><td><div class="bar-container"><div class="bar bar-normal" style="width: 95%;"></div></div></td></tr>
+                    <tr class="section-header-row"><td colspan="5">BV-associated opportunistic microorganisms</td></tr>
+                    <tr><td>6</td><td><em>Gardnerella vaginalis</em></td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>7</td><td><em>Megasphaera</em> spp. / <em>Veillonella</em> spp. / <em>Dialister</em> spp.</td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>8</td><td><em>Sneathia</em> spp. / <em>Leptotrichia</em> spp. / <em>Fusobacterium</em> spp.</td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>9</td><td><em>Ureaplasma urealyticum</em> *</td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>10</td><td><em>Ureaplasma parvum</em> *</td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>11</td><td><em>Mycoplasma hominis</em> *</td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>12</td><td>Atopobium cluster</td><td>not detected</td><td></td><td></td></tr>
+                    <tr class="sum-row"><td></td><td>BV-associated opportunistic microorganisms, sum</td><td>not detected</td><td></td><td></td></tr>
+                    <tr class="section-header-row"><td colspan="5">Opportunistic anaerobes</td></tr>
+                    <tr><td>13</td><td><em>Bacteroides</em> spp. / <em>Porphyromonas</em> spp. / <em>Prevotella</em> spp.</td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>14</td><td><em>Anaerococcus</em> spp.</td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>15</td><td><em>Peptostreptococcus</em> spp. / <em>Parvimonas</em> spp.</td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>16</td><td><em>Eubacterium</em> spp.</td><td>10<sup>3,4</sup></td><td>-1,2 (5-7%)</td><td><div class="bar-container"><div class="bar bar-moderate" style="width: 6%;"></div></div></td></tr>
+                    <tr class="sum-row"><td></td><td>Opportunistic anaerobes, sum</td><td>10<sup>3,4</sup></td><td>-1,2 (5-7%)</td><td><div class="bar-container"><div class="bar bar-moderate" style="width: 6%;"></div></div></td></tr>
+                    <tr class="section-header-row"><td colspan="5">Opportunistic microorganisms <em>Haemophilus</em> spp.</td></tr>
+                    <tr><td>17</td><td><em>Haemophilus</em> spp.</td><td>not detected</td><td></td><td></td></tr>
+                    <tr class="section-header-row"><td colspan="5">Opportunistic microorganisms <em>Pseudomonas aeruginosa</em> / <em>Ralstonia</em> spp. / <em>Burkholderia</em> spp.</td></tr>
+                    <tr><td>18</td><td><em>Pseudomonas aeruginosa</em> / <em>Ralstonia</em> spp. / <em>Burkholderia</em> spp.</td><td>not detected</td><td></td><td></td></tr>
+                    <tr class="section-header-row"><td colspan="5">Opportunistic microorganisms <em>Enterobacteriaceae</em> spp. / <em>Enterococcus</em> spp.</td></tr>
+                    <tr><td>19</td><td><em>Enterobacteriaceae</em> spp. / <em>Enterococcus</em> spp.</td><td>not detected</td><td></td><td></td></tr>
+                    <tr class="section-header-row"><td colspan="5">Yeast-like fungi</td></tr>
+                    <tr><td>20</td><td><em>Candida</em> spp. *</td><td>below TH ***</td><td></td><td></td></tr>
+                    <tr class="section-header-row"><td colspan="5">Sexually transmitted infections</td></tr>
+                    <tr><td>21</td><td><em>Mycoplasma genitalium</em> **</td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>22</td><td><em>Trichomonas vaginalis</em> **</td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>23</td><td><em>Neisseria gonorrhoeae</em> **</td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>24</td><td><em>Chlamydia trachomatis</em> **</td><td>not detected</td><td></td><td></td></tr>
+                </tbody>
+            </table>
+            <p class="tiny-text">* Quantitative Analysis Lg(X) &nbsp; ** Qualitative Analysis &nbsp; *** Below threshold</p>
+
+            <div class="conclusion-box conclusion-normal">
+                <p><strong>Conclusion:</strong></p>
+                <p>STIs DNA is not detected.</p>
+                <p><em>Candida</em> spp. is below threshold.</p>
+                <p>The bacterial microbiome composition is normal.</p>
+            </div>
+
+            <div class="page-footer">
+                <span>www.genomer.com.tr</span>
+                <span>19</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 20: Example 2 - Androflor Screen assay with Candida -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-title">Androbiome<sup>&reg;</sup></span>
+            </div>
+
+            <div class="example-header">
+                <h3>Example 2. Androbiome<sup>&reg;</sup> Screen assay</h3>
+            </div>
+
+            <table class="result-table">
+                <thead>
+                    <tr>
+                        <th style="width: 5%;">&numero;</th>
+                        <th style="width: 40%;">Test title</th>
+                        <th colspan="2" style="width: 25%;">Result</th>
+                        <th style="width: 30%;">% of TBM</th>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th>Quantitative</th>
+                        <th>Relative Lg (X/TBM)</th>
+                        <th><small>10 &nbsp;&nbsp;&nbsp; 100</small></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td></td><td>Human DNA</td><td>10<sup>5,0</sup></td><td></td><td></td></tr>
+                    <tr><td>1</td><td>Total Bacterial Mass</td><td>10<sup>4,8</sup></td><td></td><td></td></tr>
+                    <tr class="section-header-row"><td colspan="5">Transit microorganisms</td></tr>
+                    <tr><td>2</td><td><em>Lactobacillus</em> spp.</td><td>not detected</td><td></td><td></td></tr>
+                    <tr class="section-header-row"><td colspan="5">Commensals</td></tr>
+                    <tr><td>3</td><td><em>Staphylococcus</em> spp.</td><td>10<sup>4,7</sup></td><td>-0,1 (68-91%)</td><td><div class="bar-container"><div class="bar bar-normal" style="width: 75%;"></div></div></td></tr>
+                    <tr><td>4</td><td><em>Streptococcus</em> spp.</td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>5</td><td><em>Corynebacterium</em> spp.</td><td>10<sup>3,2</sup></td><td>-1,6 (2,1-2,9%)</td><td><div class="bar-container"><div class="bar bar-moderate" style="width: 3%;"></div></div></td></tr>
+                    <tr class="sum-row"><td></td><td>Commensals, sum</td><td>10<sup>4,7</sup></td><td>-0,1 (70-94%)</td><td><div class="bar-container"><div class="bar bar-normal" style="width: 80%;"></div></div></td></tr>
+                    <tr class="section-header-row"><td colspan="5">BV-associated opportunistic microorganisms</td></tr>
+                    <tr><td>6</td><td><em>Gardnerella vaginalis</em></td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>7</td><td><em>Ureaplasma urealyticum</em> *</td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>8</td><td><em>Ureaplasma parvum</em> *</td><td>below TH ***</td><td></td><td></td></tr>
+                    <tr><td>9</td><td><em>Mycoplasma hominis</em> *</td><td>not detected</td><td></td><td></td></tr>
+                    <tr class="sum-row"><td></td><td>BV-associated opportunistic microorganisms, sum</td><td>not detected</td><td></td><td></td></tr>
+                    <tr class="section-header-row"><td colspan="5">Opportunistic microorganisms <em>Enterobacteriaceae</em> spp. / <em>Enterococcus</em> spp.</td></tr>
+                    <tr><td>10</td><td><em>Enterobacteriaceae</em> spp. / <em>Enterococcus</em> spp.</td><td>not detected</td><td></td><td></td></tr>
+                    <tr class="section-header-row"><td colspan="5">Yeast-like fungi</td></tr>
+                    <tr><td>11</td><td><em>Candida</em> spp. *</td><td class="result-abnormal">10<sup>3,4</sup></td><td></td><td><div class="bar-container"><div class="bar bar-abnormal" style="width: 15%;"></div></div></td></tr>
+                    <tr class="section-header-row"><td colspan="5">Sexually transmitted infections</td></tr>
+                    <tr><td>12</td><td><em>Mycoplasma genitalium</em> **</td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>13</td><td><em>Trichomonas vaginalis</em> **</td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>14</td><td><em>Neisseria gonorrhoeae</em> **</td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>15</td><td><em>Chlamydia trachomatis</em> **</td><td>not detected</td><td></td><td></td></tr>
+                </tbody>
+            </table>
+            <p class="tiny-text">* Quantitative Analysis Lg(X) &nbsp; ** Qualitative Analysis &nbsp; *** Below threshold</p>
+
+            <div class="conclusion-box conclusion-normal">
+                <p><strong>Conclusion:</strong></p>
+                <p>STIs DNA is not detected.</p>
+                <p>DETECTED: <em>Candida</em> spp.</p>
+                <p>The bacterial microbiome composition is normal.</p>
+            </div>
+
+            <div class="page-footer">
+                <span>www.genomer.com.tr</span>
+                <span>20</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 21: If TBM is low + Example 3 -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-title">Androbiome<sup>&reg;</sup></span>
+            </div>
+
+            <div class="section-header-light">
+                <h3>IF TBM IS LOW, SHOULD THE COLLECTION OF BIOMATERIAL BE REPEATED?</h3>
+            </div>
+
+            <p>Low TBM value on passing the biomaterial sampling control (with Human DNA value above the threshold) is interpreted as a variant of norm (Example 3). Repeated biomaterial sampling is not required.</p>
+
+            <div class="example-header" style="margin-top: 12px;">
+                <h3>Example 3. Androbiome<sup>&reg;</sup> assay</h3>
+            </div>
+
+            <table class="result-table" style="font-size: 0.85em;">
+                <thead>
+                    <tr>
+                        <th style="width: 5%;">&numero;</th>
+                        <th style="width: 40%;">Test title</th>
+                        <th colspan="2" style="width: 25%;">Result</th>
+                        <th style="width: 30%;">% of TBM</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td></td><td>Human DNA</td><td>10<sup>5,4</sup></td><td></td><td></td></tr>
+                    <tr><td>1</td><td>Total Bacterial Mass</td><td>10<sup>3,3</sup></td><td></td><td><div class="bar-container"><div class="bar bar-normal" style="width: 15%;"></div></div></td></tr>
+                    <tr class="section-header-row"><td colspan="5">Transit microorganisms</td></tr>
+                    <tr><td>2</td><td><em>Lactobacillus</em> spp.</td><td>not detected</td><td></td><td></td></tr>
+                    <tr class="section-header-row"><td colspan="5">Commensals</td></tr>
+                    <tr><td>3</td><td><em>Staphylococcus</em> spp.</td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>4</td><td><em>Streptococcus</em> spp.</td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>5</td><td><em>Corynebacterium</em> spp.</td><td>not detected</td><td></td><td></td></tr>
+                    <tr class="sum-row"><td></td><td>Commensals, sum</td><td>not detected</td><td></td><td></td></tr>
+                    <tr class="section-header-row"><td colspan="5">BV-associated opportunistic microorganisms</td></tr>
+                    <tr><td>6-12</td><td><em>All BV-associated</em></td><td>not detected</td><td></td><td></td></tr>
+                    <tr class="section-header-row"><td colspan="5">Opportunistic anaerobes</td></tr>
+                    <tr><td>13-16</td><td><em>All opportunistic anaerobes</em></td><td>not detected</td><td></td><td></td></tr>
+                    <tr class="section-header-row"><td colspan="5">Other opportunistic microorganisms</td></tr>
+                    <tr><td>17-19</td><td><em>Haemophilus, Pseudomonas, Enterobacteriaceae</em></td><td>not detected</td><td></td><td></td></tr>
+                    <tr class="section-header-row"><td colspan="5">Yeast-like fungi</td></tr>
+                    <tr><td>20</td><td><em>Candida</em> spp. *</td><td>below TH ***</td><td></td><td></td></tr>
+                    <tr class="section-header-row"><td colspan="5">Sexually transmitted infections</td></tr>
+                    <tr><td>21-24</td><td><em>All STIs</em></td><td>not detected</td><td></td><td></td></tr>
+                </tbody>
+            </table>
+            <p class="tiny-text">* Quantitative Analysis Lg(X) &nbsp; ** Qualitative Analysis &nbsp; *** Below threshold</p>
+
+            <div class="conclusion-box conclusion-normal">
+                <p><strong>Conclusion:</strong></p>
+                <p>STIs DNA is not detected.</p>
+                <p><em>Candida</em> spp. is below threshold.</p>
+                <p>The bacterial microbiome composition is normal.</p>
+            </div>
+
+            <div class="page-footer">
+                <span>www.genomer.com.tr</span>
+                <span>21</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 22: Why TBM might be missing -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-title">Androbiome<sup>&reg;</sup></span>
+            </div>
+
+            <div class="section-header-light">
+                <h3>WHY TBM MIGHT BE MISSING?</h3>
+            </div>
+
+            <p>Absence of TBM with presence of Human DNA is not an indication of an insufficient amount of biomaterial. This may be a variant of norm for some types of biomaterial.</p>
+
+            <p>In examples 4 and 5, the tested biomaterial was ejaculate. The Androbiome<sup>&reg;</sup> results detected Human DNA, but no TBM or any bacteria (<em>Candida</em> spp. are yeast fungi and are not included in TBM). In these cases, biomaterial was taken correctly (as Human DNA indicator is above the threshold), however, ejaculate is characterized by low bacterial load. This represents a variant of norm.</p>
+
+            <div class="page-footer">
+                <span>www.genomer.com.tr</span>
+                <span>22</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 23: Example 4 - Androflor assay (TBM not detected) -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-title">Androbiome<sup>&reg;</sup></span>
+            </div>
+
+            <div class="example-header">
+                <h3>Example 4. Androbiome<sup>&reg;</sup> assay</h3>
+            </div>
+
+            <table class="result-table" style="font-size: 0.85em;">
+                <thead>
+                    <tr>
+                        <th style="width: 5%;">&numero;</th>
+                        <th style="width: 40%;">Test title</th>
+                        <th colspan="2" style="width: 25%;">Result</th>
+                        <th style="width: 30%;">% of TMD</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td></td><td>Human DNA</td><td>10<sup>4,5</sup></td><td></td><td></td></tr>
+                    <tr><td>1</td><td>Total Bacterial Mass</td><td>not detected</td><td></td><td></td></tr>
+                    <tr class="section-header-row"><td colspan="5">Transit microorganisms</td></tr>
+                    <tr><td>2</td><td><em>Lactobacillus</em> spp.</td><td>not detected</td><td></td><td></td></tr>
+                    <tr class="section-header-row"><td colspan="5">Commensals</td></tr>
+                    <tr><td>3-5</td><td><em>All commensals</em></td><td>not detected</td><td></td><td></td></tr>
+                    <tr class="section-header-row"><td colspan="5">BV-associated opportunistic microorganisms</td></tr>
+                    <tr><td>6-12</td><td><em>All BV-associated</em></td><td>not detected</td><td></td><td></td></tr>
+                    <tr class="section-header-row"><td colspan="5">Opportunistic anaerobes</td></tr>
+                    <tr><td>13-16</td><td><em>All opportunistic anaerobes</em></td><td>not detected</td><td></td><td></td></tr>
+                    <tr class="section-header-row"><td colspan="5">Other opportunistic microorganisms</td></tr>
+                    <tr><td>17-19</td><td><em>Haemophilus, Pseudomonas, Enterobacteriaceae</em></td><td>not detected</td><td></td><td></td></tr>
+                    <tr class="section-header-row"><td colspan="5">Yeast-like fungi</td></tr>
+                    <tr><td>20</td><td><em>Candida</em> spp. *</td><td class="result-abnormal">10<sup>3,3</sup></td><td></td><td><div class="bar-container"><div class="bar bar-abnormal" style="width: 15%;"></div></div></td></tr>
+                    <tr class="section-header-row"><td colspan="5">Sexually transmitted infections</td></tr>
+                    <tr><td>21-24</td><td><em>All STIs</em></td><td>not detected</td><td></td><td></td></tr>
+                </tbody>
+            </table>
+            <p class="tiny-text">* Quantitative Analysis Lg(X) &nbsp; ** Qualitative Analysis &nbsp; *** Below threshold</p>
+
+            <div class="conclusion-box conclusion-normal">
+                <p><strong>Conclusion:</strong></p>
+                <p>STIs DNA is not detected.</p>
+                <p>DETECTED: <em>Candida</em> spp.</p>
+                <p>The bacterial microbiome composition is normal.</p>
+            </div>
+
+            <div class="page-footer">
+                <span>www.genomer.com.tr</span>
+                <span>23</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 24: Example 5 - Androflor assay (TBM not detected, no Candida) -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-title">Androbiome<sup>&reg;</sup></span>
+            </div>
+
+            <div class="example-header">
+                <h3>Example 5. Androbiome<sup>&reg;</sup> assay</h3>
+            </div>
+
+            <table class="result-table" style="font-size: 0.85em;">
+                <thead>
+                    <tr>
+                        <th style="width: 5%;">&numero;</th>
+                        <th style="width: 40%;">Test title</th>
+                        <th colspan="2" style="width: 25%;">Result</th>
+                        <th style="width: 30%;">% of TMD</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td></td><td>Human DNA</td><td>10<sup>5,5</sup></td><td></td><td></td></tr>
+                    <tr><td>1</td><td>Total Bacterial Mass</td><td>not detected</td><td></td><td></td></tr>
+                    <tr class="section-header-row"><td colspan="5">Transit microorganisms</td></tr>
+                    <tr><td>2</td><td><em>Lactobacillus</em> spp.</td><td>not detected</td><td></td><td></td></tr>
+                    <tr class="section-header-row"><td colspan="5">Commensals</td></tr>
+                    <tr><td>3-5</td><td><em>All commensals</em></td><td>not detected</td><td></td><td></td></tr>
+                    <tr class="section-header-row"><td colspan="5">BV-associated opportunistic microorganisms</td></tr>
+                    <tr><td>6-12</td><td><em>All BV-associated</em></td><td>not detected</td><td></td><td></td></tr>
+                    <tr class="section-header-row"><td colspan="5">Opportunistic anaerobes</td></tr>
+                    <tr><td>13-16</td><td><em>All opportunistic anaerobes</em></td><td>not detected</td><td></td><td></td></tr>
+                    <tr class="section-header-row"><td colspan="5">Other opportunistic microorganisms</td></tr>
+                    <tr><td>17-19</td><td><em>Haemophilus, Pseudomonas, Enterobacteriaceae</em></td><td>not detected</td><td></td><td></td></tr>
+                    <tr class="section-header-row"><td colspan="5">Yeast-like fungi</td></tr>
+                    <tr><td>20</td><td><em>Candida</em> spp. *</td><td>below TH ***</td><td></td><td></td></tr>
+                    <tr class="section-header-row"><td colspan="5">Sexually transmitted infections</td></tr>
+                    <tr><td>21-24</td><td><em>All STIs</em></td><td>not detected</td><td></td><td></td></tr>
+                </tbody>
+            </table>
+            <p class="tiny-text">* Quantitative Analysis Lg(X) &nbsp; ** Qualitative Analysis &nbsp; *** Below threshold</p>
+
+            <div class="conclusion-box conclusion-normal">
+                <p><strong>Conclusion:</strong></p>
+                <p>STIs DNA is not detected.</p>
+                <p><em>Candida</em> spp. is below threshold.</p>
+                <p>The bacterial microbiome composition is normal.</p>
+            </div>
+
+            <div class="page-footer">
+                <span>www.genomer.com.tr</span>
+                <span>24</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 25: Why no color indication + Example 6 -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-title">Androbiome<sup>&reg;</sup></span>
+            </div>
+
+            <div class="section-header-light">
+                <h3>WHY IS THERE NO COLOR INDICATION ON THE RESULT FORM?</h3>
+            </div>
+
+            <p>In example 6, there is no color indication on a report form, as TBM value is &lt;10<sup>4</sup>. At such low TBM values, relative evaluation is not conducted due to calculation inaccuracies associated with specifics of PCR method. The result of this test is valid, because Human DNA indicator is above the threshold value.</p>
+
+            <p>It should be noted that in this case normal microbiota is represented by only one group of bacteria &mdash; <em>Corynebacterium</em> spp. This sample has a low bacterial load (TBM &lt;10<sup>5</sup>), so this is a variant of norm.</p>
+
+            <div class="example-header" style="margin-top: 12px;">
+                <h3>Example 6. Androbiome<sup>&reg;</sup> Screen assay</h3>
+            </div>
+
+            <table class="result-table" style="font-size: 0.85em;">
+                <thead>
+                    <tr>
+                        <th style="width: 5%;">&numero;</th>
+                        <th style="width: 40%;">Test title</th>
+                        <th colspan="2" style="width: 25%;">Result</th>
+                        <th style="width: 30%;">% of TBM</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td></td><td>Human DNA</td><td>10<sup>4,5</sup></td><td></td><td></td></tr>
+                    <tr><td>1</td><td>Total Bacterial Mass</td><td>10<sup>3,8</sup></td><td></td><td><div class="bar-container"><div class="bar bar-normal" style="width: 20%;"></div></div></td></tr>
+                    <tr class="section-header-row"><td colspan="5">Transit microorganisms</td></tr>
+                    <tr><td>2</td><td><em>Lactobacillus</em> spp.</td><td>not detected</td><td></td><td></td></tr>
+                    <tr class="section-header-row"><td colspan="5">Commensals</td></tr>
+                    <tr><td>3</td><td><em>Staphylococcus</em> spp.</td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>4</td><td><em>Streptococcus</em> spp.</td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>5</td><td><em>Corynebacterium</em> spp.</td><td>10<sup>3,1</sup></td><td></td><td></td></tr>
+                    <tr class="sum-row"><td></td><td>Commensals, sum</td><td>10<sup>3,1</sup></td><td></td><td></td></tr>
+                    <tr class="section-header-row"><td colspan="5">BV-associated opportunistic microorganisms</td></tr>
+                    <tr><td>6-9</td><td><em>All BV-associated</em></td><td>not detected</td><td></td><td></td></tr>
+                    <tr class="section-header-row"><td colspan="5">Opportunistic microorganisms</td></tr>
+                    <tr><td>10</td><td><em>Enterobacteriaceae</em> spp. / <em>Enterococcus</em> spp.</td><td>not detected</td><td></td><td></td></tr>
+                    <tr class="section-header-row"><td colspan="5">Yeast-like fungi</td></tr>
+                    <tr><td>11</td><td><em>Candida</em> spp. *</td><td>not detected</td><td></td><td></td></tr>
+                    <tr class="section-header-row"><td colspan="5">Sexually transmitted infections</td></tr>
+                    <tr><td>12-15</td><td><em>All STIs</em></td><td>not detected</td><td></td><td></td></tr>
+                </tbody>
+            </table>
+            <p class="tiny-text">* Quantitative Analysis Lg(X) &nbsp; ** Qualitative Analysis &nbsp; *** Below threshold</p>
+
+            <div class="conclusion-box conclusion-normal">
+                <p><strong>Conclusion:</strong></p>
+                <p>STIs DNA is not detected.</p>
+                <p><em>Candida</em> spp. DNA is not detected.</p>
+                <p>The bacterial microbiome composition is normal.</p>
+            </div>
+
+            <div class="page-footer">
+                <span>www.genomer.com.tr</span>
+                <span>25</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 26: Section 2 - Abnormal + Example 7 -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-title">Androbiome<sup>&reg;</sup></span>
+            </div>
+
+            <div class="section-header">
+                <h2>2. The bacterial microbiome composition is abnormal</h2>
+            </div>
+
+            <p>Disturbance of the balance between normal microbiota and opportunistic microbiota indicates a change in microbiome composition. Depending on the degree of decrease in the normobiota and increase in the proportion of opportunistic microorganisms, the degree of disturbance and the type of proportion of opportunistic microorganisms detected are reported in a conclusion.</p>
+
+            <div class="section-header-light" style="margin-top: 12px;">
+                <h3>ABSOLUTE PREDOMINANCE OF ONE OF THE GROUPS OF NORMAL MICROBIOTA (MICROFLORA)</h3>
+            </div>
+
+            <p>If normal microbiota is represented by only one group of microorganisms with high enough bacterial load (TBM &gt;10<sup>5</sup>), an imbalance of the microbiota components is concluded (Example 7).</p>
+            <p>Presence of more than one group of normal microbiota in samples with high bacterial load (TBM) is considered as norm (Example 1).</p>
+            <p>Prevalence of one genus is not considered as an imbalance in microbiota in the case of low bacterial load (TBM) (Example 6).</p>
+
+            <div class="example-header" style="margin-top: 12px;">
+                <h3>Example 7. Androbiome<sup>&reg;</sup> Screen assay</h3>
+            </div>
+
+            <table class="result-table" style="font-size: 0.8em;">
+                <thead>
+                    <tr>
+                        <th>&numero;</th>
+                        <th>Test title</th>
+                        <th>Quantitative</th>
+                        <th>Relative Lg (X/TBM)</th>
+                        <th>% of TBM</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td></td><td>Human DNA</td><td>10<sup>5,6</sup></td><td></td><td></td></tr>
+                    <tr><td>1</td><td>Total Bacterial Mass</td><td>10<sup>5,1</sup></td><td></td><td></td></tr>
+                    <tr><td>2</td><td><em>Lactobacillus</em> spp.</td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>5</td><td><em>Corynebacterium</em> spp.</td><td>10<sup>4,9</sup></td><td>-0,2 (54-73%)</td><td><div class="bar-container"><div class="bar bar-abnormal" style="width: 65%;"></div></div></td></tr>
+                    <tr class="sum-row"><td></td><td>Commensals, sum</td><td>10<sup>4,9</sup></td><td>-0,2 (54-73%)</td><td><div class="bar-container"><div class="bar bar-abnormal" style="width: 65%;"></div></div></td></tr>
+                    <tr><td>10</td><td><em>Enterobacteriaceae</em> spp. / <em>Enterococcus</em> spp.</td><td>10<sup>4,0</sup></td><td>-1,1 (7-9%)</td><td><div class="bar-container"><div class="bar bar-moderate" style="width: 8%;"></div></div></td></tr>
+                    <tr><td>11</td><td><em>Candida</em> spp. *</td><td>below TH ***</td><td></td><td></td></tr>
+                    <tr><td>12-15</td><td><em>All STIs</em></td><td>not detected</td><td></td><td></td></tr>
+                </tbody>
+            </table>
+
+            <div class="conclusion-box conclusion-abnormal">
+                <p><strong>Conclusion:</strong></p>
+                <p>STIs DNA is not detected. <em>Candida</em> spp. is below threshold.</p>
+                <p>The bacterial microbiome composition is abnormal: the absolute dominance of <em>Corynebacterium</em> spp indicates an imbalance of components of normoflora.</p>
+            </div>
+
+            <div class="page-footer">
+                <span>www.genomer.com.tr</span>
+                <span>26</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 27: Moderately disturbed balance intro -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-title">Androbiome<sup>&reg;</sup></span>
+            </div>
+
+            <div class="section-header-light">
+                <h3>THE BALANCE OF NORMAL AND OPPORTUNISTIC MICROBIOTA (MICROFLORA) IS MODERATELY DISTURBED</h3>
+            </div>
+
+            <h4 style="margin-top: 12px;">WHY DO THE CONCLUSIONS IN THE EXAMPLES BELOW DIFFER?</h4>
+            <h4>HOW CAN THE &laquo;TOTAL MICROORGANISMS DETECTED&raquo; (TMD) INDICATOR BE GREATER THAN 100%?</h4>
+
+            <p style="margin-top: 12px;">In examples 8 and 9 bacterial load in the biomaterial samples is low (TBM value &lt;10<sup>5</sup>), so the degree of imbalance between normal and opportunistic microbiota is not analyzed.</p>
+
+            <p>Example 8 is a sample with low bacterial load (TBM 10<sup>4,3</sup>). With such low TBM values, it is not possible to correctly &laquo;split&raquo; TBM into its components due to calculation inaccuracies. It is also important to consider that TBM is determined in a separate tube independently of other parameters in PCR analysis, so minor numerical discrepancies (in the range of method error +/- 0.3 lg) are possible, as in this example. The sample reveals &laquo;Commensals, sum&raquo; (normal microbiota) of 10<sup>4,5</sup> and &laquo;Opportunistic anaerobes, sum&raquo; of 10<sup>4,4</sup>. The percentages in this case are the same. This is an acceptable numerical inaccuracy. The conclusion indicates opportunistic microorganisms presence.</p>
+
+            <div class="page-footer">
+                <span>www.genomer.com.tr</span>
+                <span>27</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 28: Example 8 -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-title">Androbiome<sup>&reg;</sup></span>
+            </div>
+
+            <div class="example-header">
+                <h3>Example 8. Androbiome<sup>&reg;</sup> assay</h3>
+            </div>
+
+            <table class="result-table" style="font-size: 0.8em;">
+                <thead>
+                    <tr>
+                        <th>&numero;</th>
+                        <th>Test title</th>
+                        <th>Quantitative</th>
+                        <th>Relative Lg (X/TMD)</th>
+                        <th>% of TMD</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td></td><td>Human DNA</td><td>10<sup>5,9</sup></td><td></td><td></td></tr>
+                    <tr><td>1</td><td>Total Bacterial Mass</td><td>10<sup>4,3</sup></td><td></td><td></td></tr>
+                    <tr><td>2</td><td><em>Lactobacillus</em> spp.</td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>4</td><td><em>Streptococcus</em> spp.</td><td>10<sup>4,1</sup></td><td>-0,2 (54-73%)</td><td><div class="bar-container"><div class="bar bar-normal" style="width: 65%;"></div></div></td></tr>
+                    <tr><td>5</td><td><em>Corynebacterium</em> spp.</td><td>10<sup>4,2</sup></td><td>-0,1 (68-91%)</td><td><div class="bar-container"><div class="bar bar-normal" style="width: 75%;"></div></div></td></tr>
+                    <tr class="sum-row"><td></td><td>Commensals, sum</td><td>10<sup>4,5</sup></td><td>0,2 (85-100%)</td><td><div class="bar-container"><div class="bar bar-normal" style="width: 90%;"></div></div></td></tr>
+                    <tr><td>7</td><td><em>Megasphaera</em> spp. / <em>Veillonella</em> spp. / <em>Dialister</em> spp.</td><td>10<sup>3,1</sup></td><td>-1,2 (5-7%)</td><td><div class="bar-container"><div class="bar bar-moderate" style="width: 6%;"></div></div></td></tr>
+                    <tr class="sum-row"><td></td><td>BV-associated opportunistic microorganisms, sum</td><td>10<sup>3,1</sup></td><td>-1,2 (5-7%)</td><td><div class="bar-container"><div class="bar bar-moderate" style="width: 6%;"></div></div></td></tr>
+                    <tr><td>13</td><td><em>Bacteroides</em> spp. / <em>Porphyromonas</em> spp. / <em>Prevotella</em> spp.</td><td>10<sup>4,0</sup></td><td>-0,3 (43-58%)</td><td><div class="bar-container"><div class="bar bar-abnormal" style="width: 50%;"></div></div></td></tr>
+                    <tr><td>14</td><td><em>Anaerococcus</em> spp.</td><td>10<sup>3,5</sup></td><td>-0,8 (13-18%)</td><td><div class="bar-container"><div class="bar bar-abnormal" style="width: 15%;"></div></div></td></tr>
+                    <tr><td>16</td><td><em>Eubacterium</em> spp.</td><td>10<sup>4,1</sup></td><td>-0,2 (54-73%)</td><td><div class="bar-container"><div class="bar bar-abnormal" style="width: 60%;"></div></div></td></tr>
+                    <tr class="sum-row"><td></td><td>Opportunistic anaerobes, sum</td><td>10<sup>4,4</sup></td><td>0,1 (85-100%)</td><td><div class="bar-container"><div class="bar bar-abnormal" style="width: 90%;"></div></div></td></tr>
+                    <tr><td>20</td><td><em>Candida</em> spp. *</td><td>below TH ***</td><td></td><td></td></tr>
+                    <tr><td>21-24</td><td><em>All STIs</em></td><td>not detected</td><td></td><td></td></tr>
+                </tbody>
+            </table>
+
+            <div class="conclusion-box conclusion-abnormal">
+                <p><strong>Conclusion:</strong></p>
+                <p>STIs DNA is not detected. <em>Candida</em> spp. is below threshold.</p>
+                <p>The bacterial microbiome composition is abnormal: opportunistic bacteria are detected.</p>
+            </div>
+
+            <div class="page-footer">
+                <span>www.genomer.com.tr</span>
+                <span>28</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 29: Example 9 -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-title">Androbiome<sup>&reg;</sup></span>
+            </div>
+
+            <p>In example 9, low TBM is detected, the proportion of normal microbiota is reduced and the dominant group in the microbiome composition is anaerobic opportunistic microorganisms.</p>
+
+            <div class="example-header" style="margin-top: 8px;">
+                <h3>Example 9. Androbiome<sup>&reg;</sup> assay</h3>
+            </div>
+
+            <table class="result-table" style="font-size: 0.8em;">
+                <thead>
+                    <tr>
+                        <th>&numero;</th>
+                        <th>Test title</th>
+                        <th>Quantitative</th>
+                        <th>Relative Lg (X/TMD)</th>
+                        <th>% of TMD</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td></td><td>Human DNA</td><td>10<sup>5,4</sup></td><td></td><td></td></tr>
+                    <tr><td>1</td><td>Total Bacterial Mass</td><td>10<sup>4,2</sup></td><td></td><td></td></tr>
+                    <tr><td>2</td><td><em>Lactobacillus</em> spp.</td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>4</td><td><em>Streptococcus</em> spp.</td><td>10<sup>3,4</sup></td><td>-0,8 (13-18%)</td><td><div class="bar-container"><div class="bar bar-normal" style="width: 15%;"></div></div></td></tr>
+                    <tr><td>5</td><td><em>Corynebacterium</em> spp.</td><td>10<sup>3,5</sup></td><td>-0,7 (17-23%)</td><td><div class="bar-container"><div class="bar bar-normal" style="width: 20%;"></div></div></td></tr>
+                    <tr class="sum-row"><td></td><td>Commensals, sum</td><td>10<sup>3,8</sup></td><td>-0,4 (30-41%)</td><td><div class="bar-container"><div class="bar bar-normal" style="width: 35%;"></div></div></td></tr>
+                    <tr><td>7</td><td><em>Megasphaera</em> spp. / <em>Veillonella</em> spp. / <em>Dialister</em> spp.</td><td>10<sup>3,3</sup></td><td>-0,9 (11-14%)</td><td><div class="bar-container"><div class="bar bar-moderate" style="width: 12%;"></div></div></td></tr>
+                    <tr class="sum-row"><td></td><td>BV-associated opportunistic microorganisms, sum</td><td>10<sup>3,3</sup></td><td>-0,9 (11-14%)</td><td><div class="bar-container"><div class="bar bar-moderate" style="width: 12%;"></div></div></td></tr>
+                    <tr><td>14</td><td><em>Anaerococcus</em> spp.</td><td>10<sup>3,7</sup></td><td>-0,5 (27-36%)</td><td><div class="bar-container"><div class="bar bar-abnormal" style="width: 30%;"></div></div></td></tr>
+                    <tr><td>16</td><td><em>Eubacterium</em> spp.</td><td>10<sup>3,6</sup></td><td>-0,6 (21-29%)</td><td><div class="bar-container"><div class="bar bar-abnormal" style="width: 25%;"></div></div></td></tr>
+                    <tr class="sum-row"><td></td><td>Opportunistic anaerobes, sum</td><td>10<sup>4,0</sup></td><td>-0,2 (48-65%)</td><td><div class="bar-container"><div class="bar bar-abnormal" style="width: 55%;"></div></div></td></tr>
+                    <tr><td>17</td><td><em>Haemophilus</em> spp.</td><td>10<sup>3,8</sup></td><td>-0,4 (34-46%)</td><td><div class="bar-container"><div class="bar bar-moderate" style="width: 40%;"></div></div></td></tr>
+                    <tr><td>19</td><td><em>Enterobacteriaceae</em> spp. / <em>Enterococcus</em> spp.</td><td>10<sup>3,4</sup></td><td>-0,8 (13-18%)</td><td><div class="bar-container"><div class="bar bar-moderate" style="width: 15%;"></div></div></td></tr>
+                    <tr><td>20</td><td><em>Candida</em> spp. *</td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>21-24</td><td><em>All STIs</em></td><td>not detected</td><td></td><td></td></tr>
+                </tbody>
+            </table>
+
+            <div class="conclusion-box conclusion-abnormal">
+                <p><strong>Conclusion:</strong></p>
+                <p>STIs DNA is not detected. <em>Candida</em> spp. DNA is not detected.</p>
+                <p>The bacterial microbiome composition is abnormal: opportunistic bacteria are detected (with opportunistic anaerobes predominance).</p>
+            </div>
+
+            <div class="page-footer">
+                <span>www.genomer.com.tr</span>
+                <span>29</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 30: Example 10 -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-title">Androbiome<sup>&reg;</sup></span>
+            </div>
+
+            <p>In example 10, TBM value exceeds 10<sup>5</sup>, the proportion of normal microflora is reduced, thus the degree of microbiota imbalance is estimated. In this case the balance of normal and opportunistic microbiota is moderately disturbed.</p>
+
+            <div class="example-header" style="margin-top: 8px;">
+                <h3>Example 10. Androbiome<sup>&reg;</sup> assay</h3>
+            </div>
+
+            <table class="result-table" style="font-size: 0.8em;">
+                <thead>
+                    <tr>
+                        <th>&numero;</th>
+                        <th>Test title</th>
+                        <th>Quantitative</th>
+                        <th>Relative Lg (X/TBM)</th>
+                        <th>% of TBM</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td></td><td>Human DNA</td><td>10<sup>5,7</sup></td><td></td><td></td></tr>
+                    <tr><td>1</td><td>Total Bacterial Mass</td><td>10<sup>5,5</sup></td><td></td><td></td></tr>
+                    <tr><td>2</td><td><em>Lactobacillus</em> spp.</td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>3</td><td><em>Staphylococcus</em> spp.</td><td>10<sup>4,7</sup></td><td>-0,5 (27-36%)</td><td><div class="bar-container"><div class="bar bar-normal" style="width: 30%;"></div></div></td></tr>
+                    <tr><td>4</td><td><em>Streptococcus</em> spp.</td><td>10<sup>3,9</sup></td><td>-1,3 (4-6%)</td><td><div class="bar-container"><div class="bar bar-normal" style="width: 5%;"></div></div></td></tr>
+                    <tr><td>5</td><td><em>Corynebacterium</em> spp.</td><td>10<sup>3,6</sup></td><td>-1,6 (2,1-2,9%)</td><td><div class="bar-container"><div class="bar bar-normal" style="width: 3%;"></div></div></td></tr>
+                    <tr class="sum-row"><td></td><td>Commensals, sum</td><td>10<sup>4,8</sup></td><td>-0,4 (33-45%)</td><td><div class="bar-container"><div class="bar bar-normal" style="width: 40%;"></div></div></td></tr>
+                    <tr><td>7</td><td><em>Megasphaera</em> spp. / <em>Veillonella</em> spp. / <em>Dialister</em> spp.</td><td>10<sup>3,3</sup></td><td>-1,9 (1,1-1,4%)</td><td><div class="bar-container"><div class="bar bar-moderate" style="width: 2%;"></div></div></td></tr>
+                    <tr class="sum-row"><td></td><td>BV-associated opportunistic microorganisms, sum</td><td>10<sup>3,3</sup></td><td>-1,9 (1,1-1,4%)</td><td><div class="bar-container"><div class="bar bar-moderate" style="width: 2%;"></div></div></td></tr>
+                    <tr><td>13</td><td><em>Bacteroides</em> spp. / <em>Porphyromonas</em> spp. / <em>Prevotella</em> spp.</td><td>10<sup>5,6</sup></td><td>0,4 (85-100%)</td><td><div class="bar-container"><div class="bar bar-abnormal" style="width: 90%;"></div></div></td></tr>
+                    <tr><td>14</td><td><em>Anaerococcus</em> spp.</td><td>10<sup>3,7</sup></td><td>-1,5 (3-4%)</td><td><div class="bar-container"><div class="bar bar-abnormal" style="width: 4%;"></div></div></td></tr>
+                    <tr><td>16</td><td><em>Eubacterium</em> spp.</td><td>10<sup>3,6</sup></td><td>-1,6 (2,1-2,9%)</td><td><div class="bar-container"><div class="bar bar-abnormal" style="width: 3%;"></div></div></td></tr>
+                    <tr class="sum-row"><td></td><td>Opportunistic anaerobes, sum</td><td>10<sup>5,6</sup></td><td>0,4 (85-100%)</td><td><div class="bar-container"><div class="bar bar-abnormal" style="width: 90%;"></div></div></td></tr>
+                    <tr><td>19</td><td><em>Enterobacteriaceae</em> spp. / <em>Enterococcus</em> spp.</td><td>10<sup>4,3</sup></td><td>-0,9 (11-14%)</td><td><div class="bar-container"><div class="bar bar-moderate" style="width: 12%;"></div></div></td></tr>
+                    <tr><td>20</td><td><em>Candida</em> spp. *</td><td>below TH ***</td><td></td><td></td></tr>
+                    <tr><td>21-24</td><td><em>All STIs</em></td><td>not detected</td><td></td><td></td></tr>
+                </tbody>
+            </table>
+
+            <div class="conclusion-box conclusion-abnormal">
+                <p><strong>Conclusion:</strong></p>
+                <p>STIs DNA is not detected. <em>Candida</em> spp. is below threshold.</p>
+                <p>The bacterial microbiome composition is abnormal: the balance of normal and opportunistic microflora is moderately disturbed.</p>
+            </div>
+
+            <div class="page-footer">
+                <span>www.genomer.com.tr</span>
+                <span>30</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 31: Severely disturbed balance intro + Example 11 -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-title">Androbiome<sup>&reg;</sup></span>
+            </div>
+
+            <div class="section-header-light">
+                <h3>THE BALANCE OF NORMAL AND OPPORTUNISTIC MICROBIOTA (MICROFLORA) IS SEVERELY DISTURBED</h3>
+            </div>
+
+            <p>If normal microbiota is present in a sample in low quantity and the biotope is dominated by opportunistic microorganisms, it is reported that the balance of normal and opportunistic microbiota is significantly disturbed (Examples 11, 12 and 13).</p>
+
+            <p>In example 12, a pathogenic microorganism (<em>Mycoplasma genitalium</em>) was also detected in a sample, which is reported in the conclusion along with the information about microbiota imbalance.</p>
+
+            <div class="example-header" style="margin-top: 8px;">
+                <h3>Example 11. Androbiome<sup>&reg;</sup> Screen assay</h3>
+            </div>
+
+            <table class="result-table" style="font-size: 0.8em;">
+                <thead>
+                    <tr>
+                        <th>&numero;</th>
+                        <th>Test title</th>
+                        <th>Quantitative</th>
+                        <th>Relative Lg (X/TMD)</th>
+                        <th>% of TMD</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td></td><td>Human DNA</td><td>10<sup>4,8</sup></td><td></td><td></td></tr>
+                    <tr><td>1</td><td>Total Bacterial Mass</td><td>10<sup>5,4</sup></td><td></td><td></td></tr>
+                    <tr><td>2</td><td><em>Lactobacillus</em> spp.</td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>5</td><td><em>Corynebacterium</em> spp.</td><td>10<sup>3,4</sup></td><td>-2,0 (0,8-1,1%)</td><td><div class="bar-container"><div class="bar bar-normal" style="width: 1%;"></div></div></td></tr>
+                    <tr class="sum-row"><td></td><td>Commensals, sum</td><td>10<sup>3,4</sup></td><td>-2,0 (0,8-1,1%)</td><td><div class="bar-container"><div class="bar bar-normal" style="width: 1%;"></div></div></td></tr>
+                    <tr><td>6</td><td><em>Gardnerella vaginalis</em></td><td>10<sup>5,2</sup></td><td>-0,2 (54-73%)</td><td><div class="bar-container"><div class="bar bar-abnormal" style="width: 65%;"></div></div></td></tr>
+                    <tr class="sum-row"><td></td><td>BV-associated opportunistic microorganisms, sum</td><td>10<sup>5,2</sup></td><td>-0,2 (54-73%)</td><td><div class="bar-container"><div class="bar bar-abnormal" style="width: 65%;"></div></div></td></tr>
+                    <tr><td>10</td><td><em>Enterobacteriaceae</em> spp. / <em>Enterococcus</em> spp.</td><td>10<sup>4,9</sup></td><td>-0,5 (27-36%)</td><td><div class="bar-container"><div class="bar bar-moderate" style="width: 30%;"></div></div></td></tr>
+                    <tr><td>11</td><td><em>Candida</em> spp. *</td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>12-15</td><td><em>All STIs</em></td><td>not detected</td><td></td><td></td></tr>
+                </tbody>
+            </table>
+
+            <div class="conclusion-box conclusion-abnormal">
+                <p><strong>Conclusion:</strong></p>
+                <p>STIs DNA is not detected. <em>Candida</em> spp. DNA is not detected.</p>
+                <p>The bacterial microbiome composition is abnormal: the balance of normal and opportunistic microflora is severely disturbed (with BV-associated opportunistic microorganisms predominance).</p>
+            </div>
+
+            <div class="page-footer">
+                <span>www.genomer.com.tr</span>
+                <span>31</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 32: Example 12 -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-title">Androbiome<sup>&reg;</sup></span>
+            </div>
+
+            <div class="example-header">
+                <h3>Example 12. Androbiome<sup>&reg;</sup> assay</h3>
+            </div>
+
+            <table class="result-table" style="font-size: 0.75em;">
+                <thead>
+                    <tr>
+                        <th>&numero;</th>
+                        <th>Test title</th>
+                        <th>Quantitative</th>
+                        <th>Relative Lg (X/TMD)</th>
+                        <th>% of TMD</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td></td><td>Human DNA</td><td>10<sup>4,6</sup></td><td></td><td></td></tr>
+                    <tr><td>1</td><td>Total Bacterial Mass</td><td>10<sup>6,4</sup></td><td></td><td></td></tr>
+                    <tr><td>2</td><td><em>Lactobacillus</em> spp.</td><td>10<sup>3,2</sup></td><td>-3,2 (&lt;0,1%)</td><td><div class="bar-container"><div class="bar bar-moderate" style="width: 1%;"></div></div></td></tr>
+                    <tr><td>3</td><td><em>Staphylococcus</em> spp.</td><td>10<sup>3,9</sup></td><td>-2,5 (0,3-0,4%)</td><td><div class="bar-container"><div class="bar bar-normal" style="width: 1%;"></div></div></td></tr>
+                    <tr><td>4</td><td><em>Streptococcus</em> spp.</td><td>10<sup>3,5</sup></td><td>-2,9 (0,1-0,1%)</td><td><div class="bar-container"><div class="bar bar-normal" style="width: 1%;"></div></div></td></tr>
+                    <tr><td>5</td><td><em>Corynebacterium</em> spp.</td><td>10<sup>4,5</sup></td><td>-1,9 (1,1-1,4%)</td><td><div class="bar-container"><div class="bar bar-normal" style="width: 2%;"></div></div></td></tr>
+                    <tr class="sum-row"><td></td><td>Commensals, sum</td><td>10<sup>4,6</sup></td><td>-1,8 (1,4-2,0%)</td><td><div class="bar-container"><div class="bar bar-normal" style="width: 2%;"></div></div></td></tr>
+                    <tr><td>7</td><td><em>Megasphaera</em> spp. / <em>Veillonella</em> spp. / <em>Dialister</em> spp.</td><td>10<sup>5,2</sup></td><td>-1,2 (5-7%)</td><td><div class="bar-container"><div class="bar bar-moderate" style="width: 6%;"></div></div></td></tr>
+                    <tr><td>8</td><td><em>Sneathia</em> spp. / <em>Leptotrichia</em> spp. / <em>Fusobacterium</em> spp.</td><td>10<sup>3,5</sup></td><td>-2,9 (0,1-0,1%)</td><td><div class="bar-container"><div class="bar bar-moderate" style="width: 1%;"></div></div></td></tr>
+                    <tr class="sum-row"><td></td><td>BV-associated opportunistic microorganisms, sum</td><td>10<sup>5,2</sup></td><td>-1,2 (5-7%)</td><td><div class="bar-container"><div class="bar bar-moderate" style="width: 6%;"></div></div></td></tr>
+                    <tr><td>13</td><td><em>Bacteroides</em> spp. / <em>Porphyromonas</em> spp. / <em>Prevotella</em> spp.</td><td>10<sup>6,1</sup></td><td>-0,3 (43-58%)</td><td><div class="bar-container"><div class="bar bar-abnormal" style="width: 50%;"></div></div></td></tr>
+                    <tr><td>14</td><td><em>Anaerococcus</em> spp.</td><td>10<sup>4,7</sup></td><td>-1,7 (1,7-2,3%)</td><td><div class="bar-container"><div class="bar bar-abnormal" style="width: 2%;"></div></div></td></tr>
+                    <tr><td>15</td><td><em>Peptostreptococcus</em> spp. / <em>Parvimonas</em> spp.</td><td>10<sup>4,5</sup></td><td>-1,9 (1,1-1,4%)</td><td><div class="bar-container"><div class="bar bar-abnormal" style="width: 2%;"></div></div></td></tr>
+                    <tr><td>16</td><td><em>Eubacterium</em> spp.</td><td>10<sup>5,1</sup></td><td>-1,3 (4-6%)</td><td><div class="bar-container"><div class="bar bar-abnormal" style="width: 5%;"></div></div></td></tr>
+                    <tr class="sum-row"><td></td><td>Opportunistic anaerobes, sum</td><td>10<sup>6,2</sup></td><td>-0,2 (50-67%)</td><td><div class="bar-container"><div class="bar bar-abnormal" style="width: 60%;"></div></div></td></tr>
+                    <tr><td>19</td><td><em>Enterobacteriaceae</em> spp. / <em>Enterococcus</em> spp.</td><td>10<sup>5,9</sup></td><td>-0,5 (27-36%)</td><td><div class="bar-container"><div class="bar bar-moderate" style="width: 30%;"></div></div></td></tr>
+                    <tr><td>20</td><td><em>Candida</em> spp. *</td><td>below TH ***</td><td></td><td></td></tr>
+                    <tr><td>21</td><td><em>Mycoplasma genitalium</em> **</td><td class="result-abnormal">DETECTED</td><td></td><td><div class="bar-container"><div class="bar bar-abnormal" style="width: 100%;"></div></div></td></tr>
+                    <tr><td>22-24</td><td><em>Other STIs</em></td><td>not detected</td><td></td><td></td></tr>
+                </tbody>
+            </table>
+
+            <div class="conclusion-box conclusion-abnormal">
+                <p><strong>Conclusion:</strong></p>
+                <p>DETECTED: <em>Mycoplasma genitalium</em>. <em>Candida</em> spp. is below threshold.</p>
+                <p>The bacterial microbiome composition is abnormal: STIs DNA is detected, the balance of normal and opportunistic microflora is severely disturbed.</p>
+            </div>
+
+            <div class="page-footer">
+                <span>www.genomer.com.tr</span>
+                <span>32</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 33: Example 13 -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-title">Androbiome<sup>&reg;</sup></span>
+            </div>
+
+            <div class="example-header">
+                <h3>Example 13. Androbiome<sup>&reg;</sup> assay</h3>
+            </div>
+
+            <table class="result-table" style="font-size: 0.8em;">
+                <thead>
+                    <tr>
+                        <th>&numero;</th>
+                        <th>Test title</th>
+                        <th>Quantitative</th>
+                        <th>Relative Lg (X/TMD)</th>
+                        <th>% of TMD</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td></td><td>Human DNA</td><td>10<sup>5,8</sup></td><td></td><td></td></tr>
+                    <tr><td>1</td><td>Total Bacterial Mass</td><td>10<sup>5,7</sup></td><td></td><td></td></tr>
+                    <tr><td>2</td><td><em>Lactobacillus</em> spp.</td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>3</td><td><em>Staphylococcus</em> spp.</td><td>10<sup>4,3</sup></td><td>-1,2 (5-7%)</td><td><div class="bar-container"><div class="bar bar-normal" style="width: 6%;"></div></div></td></tr>
+                    <tr><td>5</td><td><em>Corynebacterium</em> spp.</td><td>10<sup>3,9</sup></td><td>-1,6 (2,1-2,9%)</td><td><div class="bar-container"><div class="bar bar-normal" style="width: 3%;"></div></div></td></tr>
+                    <tr class="sum-row"><td></td><td>Commensals, sum</td><td>10<sup>4,4</sup></td><td>-1,1 (7-10%)</td><td><div class="bar-container"><div class="bar bar-normal" style="width: 8%;"></div></div></td></tr>
+                    <tr><td>6-12</td><td><em>All BV-associated</em></td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>13-16</td><td><em>All opportunistic anaerobes</em></td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>17-18</td><td><em>Haemophilus, Pseudomonas</em></td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>19</td><td><em>Enterobacteriaceae</em> spp. / <em>Enterococcus</em> spp.</td><td>10<sup>5,7</sup></td><td>0,2 (85-100%)</td><td><div class="bar-container"><div class="bar bar-abnormal" style="width: 90%;"></div></div></td></tr>
+                    <tr><td>20</td><td><em>Candida</em> spp. *</td><td>below TH ***</td><td></td><td></td></tr>
+                    <tr><td>21-24</td><td><em>All STIs</em></td><td>not detected</td><td></td><td></td></tr>
+                </tbody>
+            </table>
+
+            <div class="conclusion-box conclusion-abnormal">
+                <p><strong>Conclusion:</strong></p>
+                <p>STIs DNA is not detected. <em>Candida</em> spp. is below threshold.</p>
+                <p>The bacterial microbiome composition is abnormal: the balance of normal and opportunistic microflora is severely disturbed (with <em>Enterobacteriaceae</em> spp. / <em>Enterococcus</em> spp. predominance).</p>
+            </div>
+
+            <div class="page-footer">
+                <span>www.genomer.com.tr</span>
+                <span>33</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 34: Disproportional decrease + Example 14 -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-title">Androbiome<sup>&reg;</sup></span>
+            </div>
+
+            <div class="section-header-light">
+                <h3>SIGNIFICANT DECREASE/ABSENCE OF NORMAL MICROFLORA IS NOT PROPORTIONAL TO THE ABSENCE/SLIGHT INCREASE OF OPPORTUNISTIC MICROFLORA</h3>
+            </div>
+
+            <p>In example 14, the decrease in normal microbiota is not proportional to the increase in opportunistic microorganisms (OMs). The analysis was performed with Androbiome<sup>&reg;</sup> Screen, which is intended for screening and does not include the full range of OMs. At the physician's decision, an additional examination can be performed using the Androbiome<sup>&reg;</sup> assay with an extended list of OMs.</p>
+
+            <div class="example-header" style="margin-top: 8px;">
+                <h3>Example 14. Androbiome<sup>&reg;</sup> Screen assay</h3>
+            </div>
+
+            <table class="result-table" style="font-size: 0.8em;">
+                <thead>
+                    <tr>
+                        <th>&numero;</th>
+                        <th>Test title</th>
+                        <th>Quantitative</th>
+                        <th>Relative Lg (X/TBM)</th>
+                        <th>% of TBM</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td></td><td>Human DNA</td><td>10<sup>5,2</sup></td><td></td><td></td></tr>
+                    <tr><td>1</td><td>Total Bacterial Mass</td><td>10<sup>6,2</sup></td><td></td><td></td></tr>
+                    <tr><td>2</td><td><em>Lactobacillus</em> spp.</td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>3</td><td><em>Staphylococcus</em> spp.</td><td>10<sup>3,5</sup></td><td>-2,7 (0,2-0,2%)</td><td><div class="bar-container"><div class="bar bar-normal" style="width: 1%;"></div></div></td></tr>
+                    <tr><td>5</td><td><em>Corynebacterium</em> spp.</td><td>10<sup>4,2</sup></td><td>-2,0 (0,8-1,1%)</td><td><div class="bar-container"><div class="bar bar-normal" style="width: 1%;"></div></div></td></tr>
+                    <tr class="sum-row"><td></td><td>Commensals, sum</td><td>10<sup>4,3</sup></td><td>-1,9 (1,0-1,4%)</td><td><div class="bar-container"><div class="bar bar-normal" style="width: 2%;"></div></div></td></tr>
+                    <tr><td>6-9</td><td><em>All BV-associated</em></td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>10</td><td><em>Enterobacteriaceae</em> spp. / <em>Enterococcus</em> spp.</td><td>10<sup>5,5</sup></td><td>-0,7 (17-23%)</td><td><div class="bar-container"><div class="bar bar-moderate" style="width: 20%;"></div></div></td></tr>
+                    <tr><td>11</td><td><em>Candida</em> spp. *</td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>12-15</td><td><em>All STIs</em></td><td>not detected</td><td></td><td></td></tr>
+                </tbody>
+            </table>
+
+            <div class="conclusion-box conclusion-abnormal">
+                <p><strong>Conclusion:</strong></p>
+                <p>STIs DNA is not detected. <em>Candida</em> spp. DNA is not detected.</p>
+                <p>The bacterial microbiome composition is abnormal: decrease/absence of normal microflora is not proportional to the absence/slight increase of opportunistic microflora.</p>
+            </div>
+
+            <div class="page-footer">
+                <span>www.genomer.com.tr</span>
+                <span>34</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 35: Example 15 -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-title">Androbiome<sup>&reg;</sup></span>
+            </div>
+
+            <p>In example 15, a male urethral scrape was analyzed using the Androbiome<sup>&reg;</sup> assay. The TBM value of 10<sup>4.7</sup> was obtained, and no microorganisms were detected that are included in the analytes list of the assay. This indicates that some microorganism was present in this sample that is not specifically detected by the Androbiome<sup>&reg;</sup> test system. Upon further investigation by sequencing, <em>Treponema pallidum</em> was identified.</p>
+
+            <div class="example-header" style="margin-top: 8px;">
+                <h3>Example 15. Androbiome<sup>&reg;</sup> assay</h3>
+            </div>
+
+            <table class="result-table" style="font-size: 0.8em;">
+                <thead>
+                    <tr>
+                        <th>&numero;</th>
+                        <th>Test title</th>
+                        <th>Quantitative</th>
+                        <th>Relative Lg (X/TMD)</th>
+                        <th>% of TMD</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td></td><td>Human DNA</td><td>10<sup>4,2</sup></td><td></td><td></td></tr>
+                    <tr><td>1</td><td>Total Bacterial Mass</td><td>10<sup>4,7</sup></td><td></td><td><div class="bar-container"><div class="bar bar-normal" style="width: 50%;"></div></div></td></tr>
+                    <tr><td>2</td><td><em>Lactobacillus</em> spp.</td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>3-5</td><td><em>All commensals</em></td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>6-12</td><td><em>All BV-associated</em></td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>13-16</td><td><em>All opportunistic anaerobes</em></td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>17-19</td><td><em>All other opportunistic</em></td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>20</td><td><em>Candida</em> spp. *</td><td>below TH ***</td><td></td><td></td></tr>
+                    <tr><td>21-24</td><td><em>All STIs</em></td><td>not detected</td><td></td><td></td></tr>
+                </tbody>
+            </table>
+
+            <div class="conclusion-box conclusion-abnormal">
+                <p><strong>Conclusion:</strong></p>
+                <p>STIs DNA is not detected. <em>Candida</em> spp. is below threshold.</p>
+                <p>The bacterial microbiome composition is abnormal: decrease/absence of normal microflora is not proportional to the absence/slight increase of opportunistic microflora.</p>
+            </div>
+
+            <div class="page-footer">
+                <span>www.genomer.com.tr</span>
+                <span>35</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 36: STIs DNA detected + Example 16 -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-title">Androbiome<sup>&reg;</sup></span>
+            </div>
+
+            <div class="section-header-light">
+                <h3>STIS' DNA IS DETECTED (OBLIGATE PATHOGENS ARE PRESENT)</h3>
+            </div>
+
+            <p>In example 16, Human DNA is present while TBM is absent. This result is considered as valid. At the same time, <em>Mycoplasma genitalium</em> and <em>Candida</em> spp. are detected in significant amounts, i.e. the microbiome composition is abnormal.</p>
+
+            <div class="example-header" style="margin-top: 8px;">
+                <h3>Example 16. Androbiome<sup>&reg;</sup> assay</h3>
+            </div>
+
+            <table class="result-table" style="font-size: 0.8em;">
+                <thead>
+                    <tr>
+                        <th>&numero;</th>
+                        <th>Test title</th>
+                        <th>Quantitative</th>
+                        <th>Relative Lg (X/TMD)</th>
+                        <th>% of TMD</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td></td><td>Human DNA</td><td>10<sup>5,9</sup></td><td></td><td></td></tr>
+                    <tr><td>1</td><td>Total Bacterial Mass</td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>2</td><td><em>Lactobacillus</em> spp.</td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>3-5</td><td><em>All commensals</em></td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>6-12</td><td><em>All BV-associated</em></td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>13-16</td><td><em>All opportunistic anaerobes</em></td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>17-19</td><td><em>All other opportunistic</em></td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>20</td><td><em>Candida</em> spp. *</td><td class="result-abnormal">10<sup>5,2</sup></td><td></td><td><div class="bar-container"><div class="bar bar-abnormal" style="width: 80%;"></div></div></td></tr>
+                    <tr><td>21</td><td><em>Mycoplasma genitalium</em> **</td><td class="result-abnormal">DETECTED</td><td></td><td><div class="bar-container"><div class="bar bar-abnormal" style="width: 100%;"></div></div></td></tr>
+                    <tr><td>22-24</td><td><em>Other STIs</em></td><td>not detected</td><td></td><td></td></tr>
+                </tbody>
+            </table>
+
+            <div class="conclusion-box conclusion-abnormal">
+                <p><strong>Conclusion:</strong></p>
+                <p>DETECTED: <em>Mycoplasma genitalium</em>.</p>
+                <p>DETECTED: <em>Candida</em> spp.</p>
+                <p>The bacterial microbiome composition is abnormal: STIs DNA is detected.</p>
+            </div>
+
+            <div class="page-footer">
+                <span>www.genomer.com.tr</span>
+                <span>36</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 37: Section 3 - No conclusion + Example 17 -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-title">Androbiome<sup>&reg;</sup></span>
+            </div>
+
+            <div class="section-header">
+                <h2>3. Cases when no conclusion is issued</h2>
+            </div>
+
+            <div class="section-header-light" style="margin-top: 12px;">
+                <h3>INSUFFICIENT AMOUNT OF BIOMATERIAL: TBM AND HUMAN DNA ARE BOTH NOT DETECTED OR BELOW THRESHOLD</h3>
+            </div>
+
+            <div class="example-header" style="margin-top: 8px;">
+                <h3>Example 17. Androbiome<sup>&reg;</sup> assay</h3>
+            </div>
+
+            <table class="result-table" style="font-size: 0.8em;">
+                <thead>
+                    <tr>
+                        <th>&numero;</th>
+                        <th>Test title</th>
+                        <th>Quantitative</th>
+                        <th>Relative Lg (X/TMD)</th>
+                        <th>% of TMD</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td></td><td>Human DNA</td><td class="result-abnormal">not detected</td><td></td><td><div class="bar-container"><div class="bar bar-abnormal" style="width: 100%;"></div></div></td></tr>
+                    <tr><td>1</td><td>Total Bacterial Mass</td><td>10<sup>3,4</sup></td><td></td><td><div class="bar-container"><div class="bar bar-abnormal" style="width: 15%;"></div></div></td></tr>
+                    <tr><td>2</td><td><em>Lactobacillus</em> spp.</td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>3</td><td><em>Staphylococcus</em> spp.</td><td>10<sup>3,2</sup></td><td>-2,2 (54-73%)</td><td></td></tr>
+                    <tr><td>5</td><td><em>Corynebacterium</em> spp.</td><td>10<sup>3,2</sup></td><td>-0,2 (54-73%)</td><td></td></tr>
+                    <tr class="sum-row"><td></td><td>Commensals, sum</td><td>10<sup>3,5</sup></td><td>0,1 (85-100%)</td><td><div class="bar-container"><div class="bar bar-normal" style="width: 90%;"></div></div></td></tr>
+                    <tr><td>10</td><td><em>Ureaplasma parvum</em> *</td><td>10<sup>3,4</sup></td><td></td><td><div class="bar-container"><div class="bar bar-moderate" style="width: 15%;"></div></div></td></tr>
+                    <tr><td>20</td><td><em>Candida</em> spp. *</td><td>below TH ***</td><td></td><td></td></tr>
+                    <tr><td>21-24</td><td><em>All STIs</em></td><td>not detected</td><td></td><td></td></tr>
+                </tbody>
+            </table>
+
+            <div class="conclusion-box" style="background: #FEE2E2; border-color: #EF4444;">
+                <p><strong>Conclusion:</strong></p>
+                <p>Amount of bacterial and/or human DNA in the sample is not enough for the test result.</p>
+            </div>
+
+            <div class="page-footer">
+                <span>www.genomer.com.tr</span>
+                <span>37</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 38: Exceeding threshold of transient microbiota + Example 18 -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-title">Androbiome<sup>&reg;</sup></span>
+            </div>
+
+            <div class="section-header-light">
+                <h3>EXCEEDING THE THRESHOLD VALUES OF TRANSIENT MICROBIOTA (MICROFLORA)</h3>
+            </div>
+
+            <p>In cases when transient microbiota accounts for more than 10% of the bacterial load of a biotope, a conclusion on microbiome composition is not issued. At a physician's decision, it is possible to repeat biomaterial sampling under the condition of protected sexual contacts or sexual abstinence for 3 days.</p>
+
+            <div class="example-header" style="margin-top: 8px;">
+                <h3>Example 18. Androbiome<sup>&reg;</sup> Screen assay</h3>
+            </div>
+
+            <table class="result-table" style="font-size: 0.8em;">
+                <thead>
+                    <tr>
+                        <th>&numero;</th>
+                        <th>Test title</th>
+                        <th>Quantitative</th>
+                        <th>Relative Lg (X/TBM)</th>
+                        <th>% of TBM</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td></td><td>Human DNA</td><td>10<sup>4,8</sup></td><td></td><td></td></tr>
+                    <tr><td>1</td><td>Total Bacterial Mass</td><td>10<sup>4,3</sup></td><td></td><td><div class="bar-container"><div class="bar bar-normal" style="width: 35%;"></div></div></td></tr>
+                    <tr><td>2</td><td><em>Lactobacillus</em> spp.</td><td>10<sup>3,8</sup></td><td>-0,5 (27-36%)</td><td><div class="bar-container"><div class="bar bar-moderate" style="width: 30%;"></div></div></td></tr>
+                    <tr><td>3</td><td><em>Staphylococcus</em> spp.</td><td>10<sup>3,1</sup></td><td>-1,2 (5-7%)</td><td><div class="bar-container"><div class="bar bar-normal" style="width: 6%;"></div></div></td></tr>
+                    <tr><td>5</td><td><em>Corynebacterium</em> spp.</td><td>10<sup>3,5</sup></td><td>-0,8 (13-18%)</td><td><div class="bar-container"><div class="bar bar-normal" style="width: 15%;"></div></div></td></tr>
+                    <tr class="sum-row"><td></td><td>Commensals, sum</td><td>10<sup>3,6</sup></td><td>-0,7 (19-25%)</td><td><div class="bar-container"><div class="bar bar-normal" style="width: 22%;"></div></div></td></tr>
+                    <tr><td>6-9</td><td><em>All BV-associated</em></td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>10</td><td><em>Enterobacteriaceae</em> spp. / <em>Enterococcus</em> spp.</td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>11</td><td><em>Candida</em> spp. *</td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>12-15</td><td><em>All STIs</em></td><td>not detected</td><td></td><td></td></tr>
+                </tbody>
+            </table>
+
+            <div class="conclusion-box" style="background: #FEF3C7; border-color: #F59E0B;">
+                <p><strong>Conclusion:</strong></p>
+                <p>STIs DNA is not detected. <em>Candida</em> spp. DNA is not detected.</p>
+                <p>Exceeding the threshold values of transient microflora does not allow to make a correct conclusion about the real composition of the bacterial microbiome belong to patient. Microflora e.g. BV-associated bacteria, can be the cause of acute inflammation of the lower parts of the urogenital tract. The result of the study directly depends on compliance with the rules of preparation for the collection of biomaterial.</p>
+            </div>
+
+            <div class="page-footer">
+                <span>www.genomer.com.tr</span>
+                <span>38</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 39: Example 19 -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-title">Androbiome<sup>&reg;</sup></span>
+            </div>
+
+            <p>In example 19, <em>Gardnerella vaginalis</em> was also detected in significant numbers, in addition to <em>Lactobacillus</em> spp., despite meeting all pre-analytical requirements for repeated biomaterial sampling. In this case, <em>Lactobacillus</em> spp. and <em>Gardnerella vaginalis</em> are predominant components of a male patient's microbiota and may be a cause of acute inflammation in the lower urogenital tract [1].</p>
+
+            <div class="example-header" style="margin-top: 8px;">
+                <h3>Example 19. Androbiome<sup>&reg;</sup> assay</h3>
+            </div>
+
+            <table class="result-table" style="font-size: 0.75em;">
+                <thead>
+                    <tr>
+                        <th>&numero;</th>
+                        <th>Test title</th>
+                        <th>Quantitative</th>
+                        <th>Relative Lg (X/TMD)</th>
+                        <th>% of TMD</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td></td><td>Human DNA</td><td>10<sup>5,7</sup></td><td></td><td></td></tr>
+                    <tr><td>1</td><td>Total Bacterial Mass</td><td>10<sup>5,5</sup></td><td></td><td></td></tr>
+                    <tr><td>2</td><td><em>Lactobacillus</em> spp.</td><td>10<sup>5,6</sup></td><td>0,1 (85-100%)</td><td><div class="bar-container"><div class="bar bar-abnormal" style="width: 90%;"></div></div></td></tr>
+                    <tr><td>3</td><td><em>Staphylococcus</em> spp.</td><td>10<sup>3,9</sup></td><td>-1,6 (2,1-2,9%)</td><td><div class="bar-container"><div class="bar bar-normal" style="width: 3%;"></div></div></td></tr>
+                    <tr><td>4</td><td><em>Streptococcus</em> spp.</td><td>10<sup>3,6</sup></td><td>-1,9 (1,1-1,4%)</td><td><div class="bar-container"><div class="bar bar-normal" style="width: 2%;"></div></div></td></tr>
+                    <tr><td>5</td><td><em>Corynebacterium</em> spp.</td><td>10<sup>3,8</sup></td><td>-1,7 (1,7-2,3%)</td><td><div class="bar-container"><div class="bar bar-normal" style="width: 2%;"></div></div></td></tr>
+                    <tr class="sum-row"><td></td><td>Commensals, sum</td><td>10<sup>4,3</sup></td><td>-1,2 (5-7%)</td><td><div class="bar-container"><div class="bar bar-normal" style="width: 6%;"></div></div></td></tr>
+                    <tr><td>6</td><td><em>Gardnerella vaginalis</em></td><td>10<sup>5,4</sup></td><td>-0,1 (68-91%)</td><td><div class="bar-container"><div class="bar bar-abnormal" style="width: 75%;"></div></div></td></tr>
+                    <tr class="sum-row"><td></td><td>BV-associated opportunistic microorganisms, sum</td><td>10<sup>5,4</sup></td><td>-0,1 (68-91%)</td><td><div class="bar-container"><div class="bar bar-abnormal" style="width: 75%;"></div></div></td></tr>
+                    <tr><td>16</td><td><em>Eubacterium</em> spp.</td><td>10<sup>4,8</sup></td><td>-0,7 (17-23%)</td><td><div class="bar-container"><div class="bar bar-moderate" style="width: 20%;"></div></div></td></tr>
+                    <tr class="sum-row"><td></td><td>Opportunistic anaerobes, sum</td><td>10<sup>4,8</sup></td><td>-0,7 (17-23%)</td><td><div class="bar-container"><div class="bar bar-moderate" style="width: 20%;"></div></div></td></tr>
+                    <tr><td>20</td><td><em>Candida</em> spp. *</td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>21-24</td><td><em>All STIs</em></td><td>not detected</td><td></td><td></td></tr>
+                </tbody>
+            </table>
+
+            <div class="conclusion-box" style="background: #FEF3C7; border-color: #F59E0B;">
+                <p><strong>Conclusion:</strong></p>
+                <p>STIs DNA is not detected. <em>Candida</em> spp. DNA is not detected.</p>
+                <p>Exceeding the threshold values of transient microflora does not allow to make a correct conclusion about the real composition of the bacterial microbiome belong to patient. Microflora e.g. BV-associated bacteria, can be the cause of acute inflammation of the lower parts of the urogenital tract. The result of the study directly depends on compliance with the rules of preparation for the collection of biomaterial.</p>
+            </div>
+
+            <p class="tiny-text" style="margin-top: 8px;">[1] Pochernikov DG, Postovoytenko NT, Getman VV, Galkina IS. Diagnostic significance of <em>Lactobacillus</em> spp. identification in ejaculate. Bulletin of RSMU, 2020, 3. DOI: 10.24075/vrgmu.2020.039</p>
+
+            <div class="page-footer">
+                <span>www.genomer.com.tr</span>
+                <span>39</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 40: Will obligate pathogens be detected + Example 20 -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-title">Androbiome<sup>&reg;</sup></span>
+            </div>
+
+            <div class="section-header-light">
+                <h3>WILL OBLIGATE PATHOGENS BE DETECTED, IF HUMAN DNA AND TBM ARE NOT DETECTED?</h3>
+            </div>
+
+            <p>Even if TBM and Human DNA are both below the threshold values, or if transient microflora is present at more than 10% of TBM, information on the detected obligate pathogens will be reported in the automated conclusion. The microbiome composition will not be analyzed (Example 20).</p>
+
+            <div class="example-header" style="margin-top: 8px;">
+                <h3>Example 20. Androbiome<sup>&reg;</sup> assay</h3>
+            </div>
+
+            <table class="result-table" style="font-size: 0.8em;">
+                <thead>
+                    <tr>
+                        <th>&numero;</th>
+                        <th>Test title</th>
+                        <th>Quantitative</th>
+                        <th>Relative Lg (X/TBM)</th>
+                        <th>% of TBM</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td></td><td>Human DNA</td><td class="result-abnormal">not detected</td><td></td><td><div class="bar-container"><div class="bar bar-abnormal" style="width: 100%;"></div></div></td></tr>
+                    <tr><td>1</td><td>Total Bacterial Mass</td><td class="result-abnormal">not detected</td><td></td><td><div class="bar-container"><div class="bar bar-abnormal" style="width: 100%;"></div></div></td></tr>
+                    <tr><td>2</td><td><em>Lactobacillus</em> spp.</td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>5</td><td><em>Corynebacterium</em> spp.</td><td>10<sup>3,3</sup></td><td></td><td></td></tr>
+                    <tr class="sum-row"><td></td><td>Commensals, sum</td><td>10<sup>3,3</sup></td><td></td><td></td></tr>
+                    <tr><td>6-12</td><td><em>All BV-associated</em></td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>13-16</td><td><em>All opportunistic anaerobes</em></td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>17-19</td><td><em>All other opportunistic</em></td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>20</td><td><em>Candida</em> spp. *</td><td>below TH ***</td><td></td><td></td></tr>
+                    <tr><td>21</td><td><em>Mycoplasma genitalium</em> **</td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>22</td><td><em>Trichomonas vaginalis</em> **</td><td class="result-abnormal">DETECTED</td><td></td><td><div class="bar-container"><div class="bar bar-abnormal" style="width: 100%;"></div></div></td></tr>
+                    <tr><td>23</td><td><em>Neisseria gonorrhoeae</em> **</td><td>not detected</td><td></td><td></td></tr>
+                    <tr><td>24</td><td><em>Chlamydia trachomatis</em> **</td><td>not detected</td><td></td><td></td></tr>
+                </tbody>
+            </table>
+
+            <div class="conclusion-box conclusion-abnormal">
+                <p><strong>Conclusion:</strong></p>
+                <p>DETECTED: <em>Trichomonas vaginalis</em>.</p>
+            </div>
+
+            <p class="small-text" style="margin-top: 12px;">For additional information, please refer to information materials available on the website: genomer.com.tr</p>
+
+            <div class="page-footer">
+                <span>www.genomer.com.tr</span>
+                <span>40</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back Cover -->
+    <div class="page back-cover">
+        <div class="page-content">
+            <img src="genomerlogo.png" alt="Genomer" class="back-logo">
+            <p class="back-tagline">Advanced Molecular Diagnostics</p>
+            <div class="contact-info">
+                <p><strong>www.genomer.com.tr</strong></p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

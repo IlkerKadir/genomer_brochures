@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>GMDN Kod Beyanı - Genomer Biyoteknoloji</title>
+<style>
+    @page { size: A4; margin: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+        font-family: "Times New Roman", Times, serif;
+        color: #1a1a1a;
+        background: #fff;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    .page {
+        width: 210mm;
+        height: 297mm;
+        padding: 16mm 22mm 14mm 22mm;
+        position: relative;
+        background: #fff;
+        display: flex;
+        flex-direction: column;
+    }
+    .letterhead {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        border-bottom: 2.5px solid #0a5a8a;
+        padding-bottom: 12px;
+        margin-bottom: 20px;
+    }
+    .letterhead .logo img {
+        height: 68px;
+        width: auto;
+    }
+    .letterhead .company {
+        text-align: right;
+        font-size: 9.5pt;
+        color: #333;
+        line-height: 1.55;
+        max-width: 95mm;
+    }
+    .letterhead .company .name {
+        font-weight: 700;
+        color: #0a5a8a;
+        font-size: 10.5pt;
+        margin-bottom: 3px;
+    }
+    .ref-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 10.5pt;
+        margin-bottom: 18px;
+    }
+    .ref-row .ref { color: #333; }
+    .ref-row .ref strong { display: inline-block; min-width: 75px; }
+    .addressee {
+        margin-bottom: 16px;
+        font-size: 11.5pt;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+    }
+    .subject {
+        margin-bottom: 16px;
+        font-size: 11pt;
+    }
+    .subject strong { display: inline-block; min-width: 55px; }
+    .body-text {
+        font-size: 10.5pt;
+        line-height: 1.5;
+        text-align: justify;
+        margin-bottom: 8px;
+    }
+    .body-text p { margin-bottom: 7px; }
+    table.gmdn {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 8px 0 12px;
+        font-size: 9.5pt;
+    }
+    table.gmdn th {
+        background: #0a5a8a;
+        color: #fff;
+        padding: 6px 10px;
+        text-align: left;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+    }
+    table.gmdn th.col-code,
+    table.gmdn td.col-code {
+        width: 22mm;
+        text-align: center;
+    }
+    table.gmdn th.col-term,
+    table.gmdn td.col-term {
+        width: 78mm;
+    }
+    table.gmdn td {
+        padding: 5px 10px;
+        border-bottom: 1px solid #d0d7de;
+        vertical-align: top;
+    }
+    table.gmdn td.col-code {
+        font-weight: 700;
+        font-family: "Courier New", monospace;
+        font-size: 10.5pt;
+    }
+    table.gmdn tr:nth-child(even) td { background: #f5f8fb; }
+    .placeholder {
+        color: #999;
+        font-style: italic;
+        font-weight: 400;
+        font-family: "Times New Roman", Times, serif;
+        font-size: 9.5pt;
+    }
+    .signature-row {
+        margin-top: 28px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 40px;
+    }
+    .signature-row .sig-col {
+        width: 75mm;
+        font-size: 10.5pt;
+        line-height: 1.45;
+    }
+    .signature-row .sig-col .title { font-weight: 700; }
+    .signature-row .sig-col .subtitle { color: #555; font-size: 9.5pt; }
+    .signature-row .stamp-col {
+        width: 70mm;
+        text-align: center;
+        padding-top: 60px;
+        font-size: 10.5pt;
+        font-weight: 700;
+    }
+    .footer {
+        border-top: 1px solid #c8d0d8;
+        padding-top: 7px;
+        margin-top: auto;
+        font-size: 8.5pt;
+        color: #666;
+        text-align: center;
+        line-height: 1.45;
+    }
+</style>
+</head>
+<body>
+<div class="page">
+
+    <div class="letterhead">
+        <div class="logo">
+            <img src="genomerlogo.png" alt="Genomer Biyoteknoloji">
+        </div>
+        <div class="company">
+            <div class="name">GENOMER BİYOTEKNOLOJİ<br>ARGE SAN. VE TİC. LTD. ŞTİ.</div>
+            Barış SB Mah. 5003 Sk.<br>
+            Kadir Has Binası Kısım A No: 2<br>
+            İç Kapı No: Z14<br>
+            Gebze / Kocaeli / Türkiye<br>
+            www.genomer.com.tr &nbsp;|&nbsp; support@genomer.com.tr
+        </div>
+    </div>
+
+    <div class="ref-row">
+        <div class="ref"><strong>Referans No:</strong> GEN-REG-2026/002</div>
+        <div class="ref"><strong>Tarih:</strong> 22.04.2026</div>
+    </div>
+
+    <div class="addressee">İLGİLİ MAKAMA</div>
+
+    <div class="subject">
+        <strong>Konu:</strong> Global Medical Device Nomenclature (GMDN) Kod Beyanı
+    </div>
+
+    <div class="body-text">
+        <p>
+            Genomer Biyoteknoloji Arge San. ve Tic. Ltd. Şti. olarak; aşağıda listelenen
+            in vitro diyagnostik tıbbi cihazlarımız için GMDN Agency tarafından yayımlanan
+            <em>Global Medical Device Nomenclature</em> sistemine göre atanan kod ve
+            terimlerin aşağıdaki tabloda beyan edildiği şekilde olduğunu bildiririz.
+        </p>
+    </div>
+
+    <table class="gmdn">
+        <thead>
+            <tr>
+                <th>Ürün Adı</th>
+                <th class="col-code">GMDN Kodu</th>
+                <th class="col-term">GMDN Terimi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Genomer Candida albicans qPCR Detection Kit</td>
+                <td class="col-code">52048</td>
+                <td class="col-term">Candida albicans nükleik asit IVD, kit, nükleik asit tekniği (NAT)</td>
+            </tr>
+            <tr>
+                <td>Genomer HSV-2 qPCR Detection Kit</td>
+                <td class="col-code">49593</td>
+                <td class="col-term">Herpes simpleks virüs 2 (HSV-2) nükleik asit IVD, kit, nükleik asit tekniği (NAT)</td>
+            </tr>
+            <tr>
+                <td>Genomer Gardnerella vaginalis qPCR Detection Kit</td>
+                <td class="col-code">48208</td>
+                <td class="col-term">Çoklu vajinit/vajinozis ilişkili patojen nükleik asit IVD, kit, nükleik asit tekniği (NAT)</td>
+            </tr>
+            <tr>
+                <td>Genomer HBV qPCR Test Kit</td>
+                <td class="col-code">48307</td>
+                <td class="col-term">Hepatit B virüs nükleik asit IVD, kit, nükleik asit tekniği (NAT)</td>
+            </tr>
+            <tr>
+                <td>Genomer HCV qPCR Test Kit</td>
+                <td class="col-code">48374</td>
+                <td class="col-term">Hepatit C virüs nükleik asit IVD, kit, nükleik asit tekniği (NAT)</td>
+            </tr>
+            <tr>
+                <td>Genomer HCV Genotip qPCR Test Kit</td>
+                <td class="col-code">59866</td>
+                <td class="col-term">Hepatit C virüs genotipleme IVD, kit, nükleik asit tekniği (NAT)</td>
+            </tr>
+            <tr>
+                <td>Genomer Respiratory-24 v2.0 Pathogen Detection Kit</td>
+                <td class="col-code">47922</td>
+                <td class="col-term">Çoklu cinsli solunum yolu virüsü nükleik asit IVD kiti, nükleik asit tekniği (NAT)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="body-text">
+        <p>
+            Yukarıda belirtilen GMDN kodları; cihazların kullanım amacı ve teknik
+            özellikleri dikkate alınarak GMDN Agency'nin güncel nomenklatür sistemi
+            çerçevesinde belirlenmiş olup, ilgili teknik dosyalar ile tutarlıdır ve
+            firmamızın ISO 13485 kalite yönetim sistemi kapsamında sürdürülmektedir.
+        </p>
+        <p>
+            İşbu belge, ilgili kurum, kuruluş ve makamlara sunulmak üzere
+            Genomer Biyoteknoloji Arge San. ve Tic. Ltd. Şti. tarafından
+            düzenlenmiştir. Bilgilerinize arz/rica olunur.
+        </p>
+    </div>
+
+    <div class="signature-row">
+        <div class="sig-col">
+            <div class="title">Genomer Biyoteknoloji</div>
+            <div class="subtitle">Arge San. ve Tic. Ltd. Şti.</div>
+        </div>
+        <div class="stamp-col">Yetkili İmza / Kaşe</div>
+    </div>
+
+    <div class="footer">
+        Genomer Biyoteknoloji Arge San. ve Tic. Ltd. Şti. &nbsp;•&nbsp;
+        Barış SB Mah. 5003 Sk. Kadir Has Binası Kısım A No:2 İç Kapı No:Z14, Gebze / Kocaeli / Türkiye<br>
+        www.genomer.com.tr &nbsp;•&nbsp; support@genomer.com.tr
+    </div>
+
+</div>
+</body>
+</html>

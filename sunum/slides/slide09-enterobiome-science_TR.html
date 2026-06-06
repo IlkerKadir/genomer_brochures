@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+html { background: #FFFFFF; }
+body {
+  width: 720pt; height: 405pt; margin: 0; padding: 0;
+  font-family: Arial, sans-serif;
+  display: flex; background: #FFFFFF;
+}
+.container { width: 100%; height: 100%; position: relative; }
+.header { position: absolute; top: 0; left: 0; right: 0; height: 48pt; background: #0891B2; }
+.header-text { position: absolute; top: 12pt; left: 40pt; }
+.logo-top { position: absolute; top: 12pt; right: 40pt; }
+.logo-top img { height: 22pt; }
+.content { position: absolute; top: 60pt; left: 30pt; right: 30pt; bottom: 10pt; }
+.section-title { font-size: 10pt; color: #0E7490; font-weight: bold; margin: 0 0 8pt 0; }
+.phases { display: flex; gap: 8pt; margin-bottom: 12pt; }
+.phase-card {
+  flex: 1; border-radius: 4pt; padding: 8pt;
+}
+.phase-card-teal { background: #ECFEFF; border-top: 3pt solid #0891B2; }
+.phase-card-green { background: #D1FAE5; border-top: 3pt solid #059669; }
+.phase-title { font-size: 8pt; color: #0E7490; font-weight: bold; margin: 0 0 4pt 0; }
+.phase-title-green { font-size: 8pt; color: #065F46; font-weight: bold; margin: 0 0 4pt 0; }
+.phase-body { font-size: 7pt; color: #4A4A5A; margin: 0; line-height: 1.4; }
+ul { margin: 0 0 4pt 0; padding-left: 14pt; }
+ul li { font-size: 8pt; color: #4A4A5A; line-height: 1.6; }
+.info-box {
+  background: #F0FDFA; border-left: 3pt solid #0891B2; padding: 8pt;
+  margin-top: 8pt;
+}
+.info-box p { font-size: 8pt; color: #0E7490; font-weight: bold; margin: 0; line-height: 1.4; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header"></div>
+  <div class="header-text">
+    <h2 style="color: #FFFFFF; font-size: 15pt; margin: 0;">ENTEROBIOME KIDS — Mikrobiyom Gelişimi</h2>
+  </div>
+  <div class="logo-top"><img src="genomerlogo.png"></div>
+  <div class="content">
+    <p class="section-title">Çocuklarda Bağırsak Mikrobiyotası Oluşumunun Dört Evresi</p>
+    <div class="phases">
+      <div class="phase-card phase-card-teal">
+        <p class="phase-title">Evre 1: Doğum</p>
+        <p class="phase-body">Streptococcus spp., Enterobacterales</p>
+      </div>
+      <div class="phase-card phase-card-teal">
+        <p class="phase-title">Evre 2: 14. Gün</p>
+        <p class="phase-body">Bifidobacterium, Lactobacillaceae, Clostridium, Bacteroidota</p>
+      </div>
+      <div class="phase-card phase-card-teal">
+        <p class="phase-title">Evre 3: Tamamlayıcı Gıdalar</p>
+        <p class="phase-body">Bacteroidota, Bacillota, Verrucomicrobiota, Actinomycetota</p>
+      </div>
+      <div class="phase-card phase-card-green">
+        <p class="phase-title-green">Evre 4: Sütten Kesme</p>
+        <p class="phase-body">Stabilizasyon — erişkin benzeri kompozisyon</p>
+      </div>
+    </div>
+    <p class="section-title">Mikrobiyota Oluşumunu Etkileyen Faktörler</p>
+    <ul>
+      <li><b>Doğum şekli:</b> Doğal doğum → stabil kompozisyon; Sezaryen → gecikmiş kolonizasyon, daha fazla C. difficile, Enterococcus, Klebsiella, Veillonella</li>
+      <li><b>Beslenme türü:</b> Anne sütüyle beslenen → Bifidobacterium baskın (B. breve, B. bifidum, B. longum); Formüla ile beslenen → Bacteroides ve Clostridium baskın</li>
+      <li><b>Gestasyonel yaş:</b> Prematüre → gecikmiş anaerobik kolonizasyon, daha yüksek Enterobacteriaceae ve fırsatçı mikroorganizma oranı</li>
+      <li><b>Antibiyotik kullanımı:</b> Çeşitliliği azaltır, ilaca dirençli Enterobacteriaceae ve Clostridium artışına, Bifidobacteriaceae azalmasına yol açar</li>
+    </ul>
+    <div class="info-box">
+      <p>Tür çeşitliliği yüksek bir bağırsak ekosistemi olumsuz streslere karşı daha dirençlidir. Azalmış çeşitlilik hastalıklarla ilişkilidir.</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+html { background: #FFFFFF; }
+body {
+  width: 720pt; height: 405pt; margin: 0; padding: 0;
+  font-family: Arial, sans-serif;
+  display: flex; background: #FFFFFF;
+}
+.container { width: 100%; height: 100%; position: relative; }
+.header { position: absolute; top: 0; left: 0; right: 0; height: 48pt; background: #7B4B94; }
+.header-text { position: absolute; top: 12pt; left: 40pt; }
+.logo-top { position: absolute; top: 12pt; right: 40pt; }
+.logo-top img { height: 22pt; }
+.content { position: absolute; top: 58pt; left: 30pt; right: 30pt; }
+.footer { position: absolute; bottom: 10pt; left: 40pt; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header"></div>
+  <div class="header-text">
+    <h2 style="color: #FFFFFF; font-size: 16pt; margin: 0;">FEMOBIOME II LINE - Test Comparison</h2>
+  </div>
+  <div class="logo-top"><img src="genomerlogo.png"></div>
+  <div class="content">
+    <p style="font-size: 8pt; color: #4A4A5A; margin-bottom: 6pt;">Comparison of FEMOBIOME test variants and their clinical applications</p>
+    <div id="comparison-table" class="placeholder" style="width: 660pt; height: 130pt; background: #f5f5f5;"></div>
+    <p style="font-size: 9pt; color: #7B4B94; font-weight: 600; margin-top: 12pt; margin-bottom: 6pt;">Clinical Indications</p>
+    <div id="clinical-table" class="placeholder" style="width: 660pt; height: 140pt; background: #f5f5f5;"></div>
+  </div>
+  <div class="footer">
+    <p style="font-size: 7pt; color: #7B4B94; font-weight: 600;">FEMOBIOME II provides more clinically relevant information for the same price</p>
+  </div>
+</div>
+</body>
+</html>

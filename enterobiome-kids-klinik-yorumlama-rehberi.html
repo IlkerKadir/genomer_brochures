@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Enterobiome Kids — Rapor Okuma ve Yorumlama Rehberi</title>
+<style>
+    @page { size: A4; margin: 16mm 18mm 14mm 18mm; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+        font-family: "Times New Roman", Times, serif;
+        color: #1a1a1a; background: #fff;
+        -webkit-print-color-adjust: exact; print-color-adjust: exact;
+        font-size: 10.5pt; line-height: 1.5;
+    }
+    .cover { page-break-after: always; text-align: center; padding-top: 24mm; position: relative; min-height: 255mm; }
+    .cover::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 8px; background: linear-gradient(90deg, #0a5a8a 0%, #1a7ab0 60%, #0a5a8a 100%); }
+    .cover .eyebrow { font-size: 11pt; letter-spacing: 4px; color: #555; text-transform: uppercase; margin-bottom: 10mm; }
+    .cover .title { font-size: 25pt; font-weight: 700; color: #0a5a8a; letter-spacing: 0.5px; line-height: 1.2; margin-bottom: 6mm; }
+    .cover .subtitle { font-size: 12.5pt; color: #333; font-style: italic; margin-bottom: 14mm; }
+    .cover .audience { font-size: 10.5pt; background: #f5f8fb; border-left: 3px solid #0a5a8a; text-align: left; padding: 10px 14px; margin: 0 22mm 12mm; line-height: 1.55; }
+    .cover .toc-card { margin: 0 22mm; background: #fff; border: 1px solid #c8d0d8; border-radius: 6px; text-align: left; padding: 14px 18px; font-size: 10pt; line-height: 1.5; }
+    .cover .toc-card .toc-head { font-weight: 700; color: #0a5a8a; font-size: 11pt; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 8px; border-bottom: 1px solid #e3e8ee; padding-bottom: 5px; }
+    .cover .toc-card .toc-row { display: flex; gap: 10px; padding: 4px 0; border-bottom: 1px dotted #e3e8ee; }
+    .cover .toc-card .toc-row:last-child { border-bottom: none; }
+    .cover .toc-card .toc-num { flex-shrink: 0; width: 18px; color: #0a5a8a; font-weight: 700; font-family: Georgia, serif; }
+    .cover .toc-card .toc-text { flex: 1; color: #333; }
+    .cover .toc-card .toc-text strong { color: #1a4a6a; }
+    .cover .bottom-band { position: absolute; bottom: 0; left: 0; right: 0; background: #0a5a8a; color: #fff; padding: 10px 14px; font-size: 9.5pt; font-style: italic; letter-spacing: 0.3px; text-align: center; }
+
+    .doc-title-band { background: #0a5a8a; color: #fff; padding: 4px 12px; font-size: 10pt; font-weight: 600; letter-spacing: 0.4px; margin-bottom: 12px; }
+
+    h2 { font-size: 12.5pt; font-weight: 700; color: #0a5a8a; margin: 14px 0 6px; border-bottom: 1px solid #c8d0d8; padding-bottom: 3px; page-break-after: avoid; }
+    h3 { font-size: 11pt; font-weight: 700; color: #1a4a6a; margin: 10px 0 4px; page-break-after: avoid; }
+    h4 { font-size: 10.5pt; font-weight: 700; color: #333; margin: 8px 0 3px; page-break-after: avoid; }
+    p { text-align: justify; margin-bottom: 6px; orphans: 3; widows: 3; }
+    ul, ol { margin-left: 18px; margin-bottom: 6px; }
+    li { margin-bottom: 3px; text-align: justify; }
+
+    .info-box { background: #f5f8fb; border-left: 3px solid #0a5a8a; padding: 8px 12px; margin: 8px 0; font-size: 10pt; line-height: 1.5; page-break-inside: avoid; }
+    .warn-box { background: #fef3c7; border-left: 3px solid #b45309; padding: 8px 12px; margin: 8px 0; font-size: 10pt; line-height: 1.5; page-break-inside: avoid; }
+    .key-box { background: #ecf7f0; border-left: 3px solid #15803d; padding: 8px 12px; margin: 8px 0; font-size: 10pt; line-height: 1.5; page-break-inside: avoid; }
+    .disclaimer-box { background: #fef2f2; border: 1.5px solid #dc2626; border-radius: 4px; padding: 10px 14px; margin: 10px 0; font-size: 10pt; line-height: 1.5; page-break-inside: avoid; }
+
+    table { width: 100%; border-collapse: collapse; margin: 6px 0 10px; font-size: 9.5pt; page-break-inside: avoid; }
+    table th { background: #0a5a8a; color: #fff; padding: 5px 8px; text-align: left; font-weight: 700; font-size: 9pt; }
+    table td { padding: 5px 8px; border: 1px solid #c8d0d8; vertical-align: top; }
+    table tr:nth-child(even) td { background: #f5f8fb; }
+    .light-table th { background: #e7ecf1; color: #1a4a6a; }
+
+    .traffic { display: inline-block; width: 14px; height: 14px; border-radius: 50%; margin-right: 6px; vertical-align: middle; border: 1px solid rgba(0,0,0,0.15); }
+    .traffic.green { background: #22c55e; }
+    .traffic.yellow { background: #f59e0b; }
+    .traffic.red { background: #dc2626; }
+
+    .flow { margin: 8px 0 10px; page-break-inside: avoid; }
+    .flow-step { display: flex; align-items: flex-start; gap: 10px; padding: 6px 0; border-bottom: 1px dotted #d3dbe3; }
+    .flow-step:last-child { border-bottom: none; }
+    .flow-num { flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; background: #0a5a8a; color: #fff; font-weight: 700; font-size: 10pt; display: flex; align-items: center; justify-content: center; font-family: Georgia, serif; }
+    .flow-step .flow-body { flex: 1; }
+    .flow-step .flow-body strong { color: #1a4a6a; }
+
+    .pattern { border: 1px solid #c8d0d8; border-radius: 5px; margin: 9px 0; overflow: hidden; page-break-inside: avoid; }
+    .pattern .pat-head { background: #eef3f7; padding: 5px 12px; font-weight: 700; color: #0a5a8a; font-size: 10.5pt; border-bottom: 1px solid #c8d0d8; display: flex; align-items: center; gap: 8px; }
+    .pattern .pat-head .dot { width: 12px; height: 12px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.15); }
+    .pattern .pat-body { padding: 7px 12px; }
+    .pattern .pat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .pattern .pat-col h4 { margin-top: 2px; color: #0a5a8a; font-size: 9.5pt; text-transform: uppercase; letter-spacing: 0.3px; }
+    .pattern ul { margin-left: 16px; font-size: 9.7pt; }
+    .pattern li { margin-bottom: 2px; }
+
+    .report-mock { border: 1.5px solid #c8d0d8; border-radius: 5px; overflow: hidden; margin: 8px 0; page-break-inside: avoid; }
+    .report-mock .rm-title { background: #0a5a8a; color: #fff; padding: 5px 12px; font-weight: 700; font-size: 10pt; display: flex; justify-content: space-between; align-items: center; }
+    .report-mock .rm-title .rm-tag { font-weight: 600; font-size: 8.5pt; opacity: 0.85; font-style: italic; }
+    .report-mock .rm-title .rm-status { font-size: 9pt; font-weight: 600; }
+    .report-mock table { margin: 0; font-size: 9pt; }
+    .report-mock table th { background: #1a4a6a; font-size: 8.5pt; padding: 3px 6px; }
+    .report-mock table td { padding: 2.5px 6px; border: 1px solid #d8dee4; }
+    .report-mock .grp td { background: #e7ecf1; font-weight: 700; color: #1a4a6a; font-style: italic; }
+    .report-mock .phylum td { background: #d9e2ea; font-weight: 700; color: #0a5a8a; font-size: 8.4pt; text-transform: uppercase; letter-spacing: 0.4px; padding: 2px 6px; }
+    .report-mock .ind { padding-left: 16px; font-style: italic; }
+    .report-mock .sub td { padding-left: 26px; font-style: italic; color: #666; font-size: 8.3pt; }
+    .report-mock .neg { color: #999; }
+    .report-mock-long, .report-mock-long table, .report-mock-long tr, .report-mock-long td { page-break-inside: auto; }
+    .report-mock .hot { color: #c0392b; font-weight: 700; }
+    .report-mock .num-col { text-align: center; width: 20mm; }
+    .report-mock .ref-col { text-align: center; width: 24mm; color: #555; }
+    .report-mock .pct-col { text-align: center; width: 16mm; }
+    .anno { display: inline-block; min-width: 15px; height: 15px; line-height: 15px; text-align: center; border-radius: 50%; background: #d35400; color: #fff; font-size: 8pt; font-weight: 700; font-family: Georgia, serif; padding: 0 3px; vertical-align: middle; margin-left: 4px; }
+    .anno-list { margin: 6px 0 4px; page-break-inside: avoid; }
+    .anno-item { display: flex; align-items: flex-start; gap: 8px; padding: 4px 0; border-bottom: 1px dotted #d3dbe3; font-size: 9.7pt; }
+    .anno-item:last-child { border-bottom: none; }
+    .anno-item .anno-badge { flex-shrink: 0; min-width: 17px; height: 17px; line-height: 17px; text-align: center; border-radius: 50%; background: #d35400; color: #fff; font-size: 8.5pt; font-weight: 700; font-family: Georgia, serif; padding: 0 3px; }
+    .anno-item .anno-text { flex: 1; }
+    .anno-item .anno-text strong { color: #1a4a6a; }
+
+    .ref-list { font-size: 9pt; line-height: 1.45; }
+    .ref-list li { margin-bottom: 5px; }
+    sup.ref { color: #0a5a8a; font-weight: 700; }
+
+    .footer-note { margin-top: 12px; font-size: 8.5pt; color: #777; text-align: center; font-style: italic; border-top: 1px solid #c8d0d8; padding-top: 6px; }
+    .section-break { page-break-before: always; }
+</style>
+</head>
+<body>
+
+<!-- ============== KAPAK ============== -->
+<div class="cover">
+    <div class="eyebrow">Klinisyenler İçin</div>
+    <div class="title">ENTEROBIOME KIDS<br>Rapor Okuma ve Yorumlama Rehberi</div>
+    <div class="subtitle">Pediatrik Bağırsak Mikrobiyota Raporunun Adım Adım Değerlendirilmesi</div>
+
+    <div class="audience">
+        <strong>Amaç:</strong> Bu rehber, Enterobiome Kids raporunun klinik pratikte değerlendirilmesine yöneliktir. Raporun hangi sırayla incelendiği, mutlak ve göreceli değerlerin ne ifade ettiği, yaşa bağlı referans aralıkları ve sık karşılaşılan rapor görünümlerinin nasıl yorumlandığı, gerçek bir rapor örneği üzerinden ele alınmaktadır.<br>
+        <strong>Hedef Kitle:</strong> Enterobiome Kids raporunu değerlendiren çocuk sağlığı ve hastalıkları, çocuk gastroenterolojisi, çocuk enfeksiyon hastalıkları ve aile hekimliği uzmanları.
+    </div>
+
+    <div class="toc-card">
+        <div class="toc-head">Bu Rehberde Neler Var?</div>
+        <div class="toc-row"><span class="toc-num">1.</span><span class="toc-text"><strong>Test ve Rapor Kısaca</strong> — ne ölçer, panelin yapısı, örnek ve yaşa bağlı yorum</span></div>
+        <div class="toc-row"><span class="toc-num">2.</span><span class="toc-text"><strong>Raporu Adım Adım Okuma</strong> — değerlendirme sırası, mutlak/göreceli değerler, çeşitlilik, "bu yaşta değerlendirilmez", işaretler</span></div>
+        <div class="toc-row"><span class="toc-num">3.</span><span class="toc-text"><strong>Rapor Görünümleri ve Yorumları</strong> — dengeli mikrobiyota, bifidobakteri yetersizliği, çeşitlilik düşüklüğü, fırsatçı artış, patojenlik/direnç markerları</span></div>
+        <div class="toc-row"><span class="toc-num">4.</span><span class="toc-text"><strong>Örnek Değerlendirme Üzerinden Yorumlama</strong> — anotasyonlu temsili tablo</span></div>
+        <div class="toc-row"><span class="toc-num">5.</span><span class="toc-text"><strong>Özel Durumlar ve Tekrar Test</strong> — yaş etkisi, antibiyotik, beslenme, zamanlama</span></div>
+        <div class="toc-row"><span class="toc-num">6.</span><span class="toc-text"><strong>Sınırlamalar, Klinik Karar Notu ve Seçilmiş Kaynaklar</strong></span></div>
+    </div>
+
+    <div class="bottom-band">Bilgilendirme materyalidir — tedavi önerisi içermez. Klinik karar hekime aittir.</div>
+</div>
+
+<!-- ============== GÖVDE ============== -->
+<div class="doc-title-band">ENTEROBIOME KIDS — RAPOR OKUMA VE YORUMLAMA REHBERİ</div>
+
+<!-- ===== 1 ===== -->
+<h2>1. Test ve Rapor Kısaca</h2>
+<p><strong>Enterobiome Kids</strong>, çocuklarda bağırsak mikrobiyotasını dışkı örneğinden real-time PCR (qPCR) ile değerlendiren çoklu hedefli bir testtir. Normal (yararlı) mikrobiyota, fırsatçı patojenler ve patojenlik/direnç belirteçleri filum düzeyinde organize edilerek raporlanır. Her hedef için sonuç, <strong>mutlak bir değer (Lg GE/g dışkı)</strong> ve toplam bakteri kütlesine göre <strong>göreceli bir oran (%)</strong> şeklinde, ayrıca her parametre için <strong>kendi referans aralığıyla birlikte</strong> verilir.</p>
+
+<div class="warn-box">
+    <strong>Enterobiome Kids'i diğer mikrobiyota testlerinden ayıran temel noktalar:</strong><br>
+    (1) Referans aralıkları <strong>yaşa bağlıdır</strong>; bazı parametreler için raporda "bu yaşta değerlendirilmez" ibaresi yer alabilir. Aynı değer, farklı yaşta farklı yorumlanır.<br>
+    (2) Bifidobakteriler <strong>"bebek tipi" ve "erişkin tipi" türler</strong> olarak ayrılır; bebeklerde bebek tipinin baskınlığı beklenir.<br>
+    (3) Panelde ayrıca <strong>patojenlik ve direnç belirteçleri</strong> (toksin ve direnç genleri) bulunur.
+</div>
+
+<h3>1.1 Panelin Yapısı</h3>
+<table class="light-table">
+    <thead><tr><th style="width:46mm;">Bölüm</th><th>İçerik (raporda görünen başlıklar)</th></tr></thead>
+    <tbody>
+        <tr><td><strong>Normal mikrobiyota</strong></td><td>Toplam oran ve çeşitlilik (takson sayısı); <em>Actinobacteria</em> (özellikle <em>Bifidobacterium</em>; bebek tipi: <em>B. longum</em> subsp. <em>infantis/longum</em>, <em>B. bifidum</em>, <em>B. breve</em> — erişkin tipi: <em>B. adolescentis</em>, <em>B. catenulatum</em>, <em>B. animalis</em> subsp. <em>lactis</em>, <em>B. dentium</em>)</td></tr>
+        <tr><td><strong>Firmicutes</strong></td><td><em>Clostridium leptum</em> grubu, <em>Faecalibacterium prausnitzii</em>, <em>Lachnospiraceae</em>, <em>Streptococcus</em> spp., <em>Lactobacillaceae</em>, <em>Dialister/Megasphaera/Veillonella</em> ve diğerleri</td></tr>
+        <tr><td><strong>Bacteroidetes</strong></td><td><em>Bacteroides</em> spp., <em>Prevotella</em> spp., <em>Parabacteroides</em>, <em>Alistipes</em> ve diğerleri</td></tr>
+        <tr><td><strong>Diğer bakteriler</strong></td><td><em>Akkermansia muciniphila</em>, <em>Desulfovibrio</em>, <em>Methanobrevibacter</em></td></tr>
+        <tr><td><strong>Fırsatçı patojenler</strong></td><td><em>Clostridium difficile</em> grubu, <em>C. perfringens</em> grubu, <em>Enterobacteriaceae</em>, <em>E. coli</em>, <em>Enterococcus</em>, <em>Staphylococcus</em>, <em>Pseudomonas</em> ve diğerleri</td></tr>
+        <tr><td><strong>Patojenlik ve direnç belirteçleri</strong></td><td><em>C. difficile</em> toksinleri (tcdA, tcdB); <em>S. aureus</em> metisilin direnci (mecA); <em>S. agalactiae</em> invazivlik geni (srr2)</td></tr>
+        <tr><td><strong>Maya mantarları</strong></td><td><em>Candida albicans</em></td></tr>
+    </tbody>
+</table>
+
+<h3>1.2 Örnek ve Birim</h3>
+<ul>
+    <li><strong>Örnek:</strong> taze dışkı (mekonyum dahil)</li>
+    <li><strong>Birim:</strong> mutlak değerler Lg (GE/g dışkı); göreceli değerler yüzde (%)</li>
+</ul>
+<div class="info-box">
+    <strong>Yaş, bu testte yorumun ayrılmaz parçasıdır.</strong> Bağırsak mikrobiyotası doğumdan itibaren yaşa göre öngörülebilir bir olgunlaşma izler; bebekte beklenen profil ile daha büyük çocukta beklenen profil farklıdır.<sup class="ref">1</sup> Bu nedenle raporda her parametre yaşa uygun referans aralığıyla birlikte verilir ve bazı parametreler için "bu yaşta değerlendirilmez" denebilir.
+</div>
+
+<!-- ===== 2 ===== -->
+<h2>2. Raporu Adım Adım Okuma</h2>
+
+<h3>2.1 Önerilen Değerlendirme Sırası</h3>
+<p>Raporun belirli bir sırayla incelenmesi, yorumda oluşabilecek yanılgıları büyük ölçüde önler. Aşağıdaki sıralama pratik bir yaklaşım sunmaktadır:</p>
+<div class="flow">
+    <div class="flow-step"><div class="flow-num">1</div><div class="flow-body"><strong>Toplam bakteri kütlesi ve normal mikrobiyota oranı.</strong> Toplam yük ve normal mikrobiyotanın toplam oranı, mikrobiyotanın genel sağlığının ilk göstergesidir.</div></div>
+    <div class="flow-step"><div class="flow-num">2</div><div class="flow-body"><strong>Çeşitlilik (takson sayısı).</strong> Çeşitlilik, mikrobiyotanın olgunluğunu ve dayanıklılığını yansıtır; yaşa uygun referans aralığıyla birlikte okunur.</div></div>
+    <div class="flow-step"><div class="flow-num">3</div><div class="flow-body"><strong>Bifidobakteriler.</strong> Toplam <em>Bifidobacterium</em> düzeyi ve bebek/erişkin tip dağılımı, özellikle süt çocuğunda kilit bilgidir.</div></div>
+    <div class="flow-step"><div class="flow-num">4</div><div class="flow-body"><strong>Fırsatçı patojenler.</strong> Fırsatçı patojenlerin toplam oranı ve tek tek düzeyleri, kendi referans aralıklarıyla karşılaştırılır.</div></div>
+    <div class="flow-step"><div class="flow-num">5</div><div class="flow-body"><strong>Patojenlik ve direnç belirteçleri.</strong> Toksin ve direnç genlerinin (tcdA/tcdB, mecA, srr2) varlığı, ilgili etkenin klinik öneminin değerlendirilmesinde yol göstericidir.</div></div>
+</div>
+
+<h3>2.2 Sayıları Okuma: Mutlak (Lg) ve Göreceli (%)</h3>
+<ul>
+    <li><strong>Mutlak (Lg GE/g dışkı):</strong> Gram dışkı başına genom eşdeğeri sayısının onluk logaritmasıdır. Örneğin "8,5" değeri yaklaşık 10<sup>8,5</sup> GE/g'ye karşılık gelir ve taksonun mutlak yükünü ifade eder.</li>
+    <li><strong>Göreceli (%):</strong> İlgili taksonun toplam bakteri kütlesi içindeki oranıdır; kompozisyonu yansıtır.</li>
+    <li><strong>Referans aralığı:</strong> Her iki değer için de raporda, çocuğun yaşına uygun referans aralığı ayrıca belirtilir.</li>
+</ul>
+<div class="key-box">
+    <strong>Yorumda gözden kaçırılmaması gereken nokta:</strong> Bu testte tek bir "sağlıklı eşik" yoktur; her parametre <strong>kendi yaşa uygun referans aralığıyla</strong> birlikte değerlendirilir. Bir değerin yüksek ya da düşük olması, ancak ilgili referans aralığına göre anlam kazanır. "Bu yaşta değerlendirilmez" ibaresi, o parametrenin o yaş için tanısal bilgi taşımadığını gösterir.
+</div>
+
+<h3>2.3 İşaretler</h3>
+<table>
+    <thead><tr><th style="width:46mm;">İşaret</th><th>Anlamı</th></tr></thead>
+    <tbody>
+        <tr><td><strong>saptanmadı</strong></td><td>Hedef saptanmadı (negatif).</td></tr>
+        <tr><td><strong>"—" (tire)</strong></td><td>İlgili takson için değer bildirilmedi (saptanmadı veya ölçülebilir düzeyin altında).</td></tr>
+        <tr><td><strong>"bu yaşta değerlendirilmez"</strong></td><td>Parametre, çocuğun yaşı için tanısal bilgi taşımadığından yorumlanmaz (örneğin süt çocuğunda Bacteroides veya Firmicutes/Bacteroidetes oranı).</td></tr>
+        <tr><td><strong>Lg değeri</strong></td><td>Sayılar logaritmik ölçektedir; "8,9" yaklaşık 10<sup>8,9</sup> GE/g anlamına gelir.</td></tr>
+    </tbody>
+</table>
+
+<!-- ===== 3 ===== -->
+<h2 class="section-break">3. Rapor Görünümleri ve Yorumları</h2>
+<p>Aşağıdaki tablolarda, sık karşılaşılan rapor görünümleri ve bunların klinik karşılıkları bir arada sunulmaktadır. Tüm bulgular, çocuğun yaşı, beslenme biçimi, klinik tablosu ve öyküsüyle birlikte değerlendirilmelidir.</p>
+
+<div class="pattern">
+    <div class="pat-head"><span class="dot" style="background:#22c55e;"></span>3.1 Dengeli (Yaşına Uygun) Mikrobiyota</div>
+    <div class="pat-body"><div class="pat-row">
+        <div class="pat-col"><h4>Rapor görünümü</h4><ul>
+            <li>Normal mikrobiyota toplam oranı referans aralığında (yüksek)</li>
+            <li>Çeşitlilik yaşa uygun</li>
+            <li>Süt çocuğunda <em>Bifidobacterium</em> baskın ve bebek tipi öne çıkıyor</li>
+            <li>Fırsatçı patojenler düşük; patojenlik/direnç belirteçleri saptanmadı</li>
+        </ul></div>
+        <div class="pat-col"><h4>Yorum</h4><ul>
+            <li>Yaşına uygun, dengeli bir bağırsak mikrobiyotası ile uyumlu profil.</li>
+            <li>Özellikle bebeklerde bifidobakteri baskınlığı, beklenen ve koruyucu kabul edilen bir bulgudur.</li>
+        </ul></div>
+    </div></div>
+</div>
+
+<div class="pattern">
+    <div class="pat-head"><span class="dot" style="background:#f59e0b;"></span>3.2 Bifidobakteri Yetersizliği</div>
+    <div class="pat-body"><div class="pat-row">
+        <div class="pat-col"><h4>Rapor görünümü</h4><ul>
+            <li>Toplam <em>Bifidobacterium</em> düzeyi yaşa göre düşük</li>
+            <li>Süt çocuğunda bebek tipi bifidobakteri oranı beklenenin altında</li>
+        </ul></div>
+        <div class="pat-col"><h4>Yorum</h4><ul>
+            <li>Erken dönemde bifidobakteri yetersizliği; doğum şekli, beslenme biçimi ve antibiyotik öyküsü bağlamında değerlendirilir.<sup class="ref">3</sup></li>
+            <li>Klinik tablo ve büyüme verileriyle birlikte ele alınır.</li>
+        </ul></div>
+    </div></div>
+</div>
+
+<div class="pattern">
+    <div class="pat-head"><span class="dot" style="background:#f59e0b;"></span>3.3 Düşük Çeşitlilik</div>
+    <div class="pat-body"><div class="pat-row">
+        <div class="pat-col"><h4>Rapor görünümü</h4><ul>
+            <li>Takson sayısı yaşa uygun referansın altında</li>
+        </ul></div>
+        <div class="pat-col"><h4>Yorum</h4><ul>
+            <li>Düşük çeşitlilik mikrobiyotanın dayanıklılığının azaldığına işaret edebilir; sık görülen nedenler arasında yakın antibiyotik kullanımı bulunur.<sup class="ref">2</sup></li>
+            <li>Tek başına bir hastalık tanısı değildir; klinik bağlamla yorumlanır.</li>
+        </ul></div>
+    </div></div>
+</div>
+
+<div class="pattern">
+    <div class="pat-head"><span class="dot" style="background:#dc2626;"></span>3.4 Fırsatçı Patojen Artışı</div>
+    <div class="pat-body"><div class="pat-row">
+        <div class="pat-col"><h4>Rapor görünümü</h4><ul>
+            <li>Fırsatçı patojenlerin toplam oranı veya tek tek düzeyleri referansın üzerinde (örneğin <em>Enterobacteriaceae</em>, <em>C. difficile</em> grubu, <em>Staphylococcus</em>)</li>
+        </ul></div>
+        <div class="pat-col"><h4>Yorum</h4><ul>
+            <li>Fırsatçı yük artışı, normal mikrobiyota baskınlığının azaldığı bir disbiyozla birlikte görülebilir.</li>
+            <li>Klinik anlamı, semptomlar ve patojenlik belirteçleriyle birlikte değerlendirilir.</li>
+        </ul></div>
+    </div></div>
+</div>
+
+<div class="pattern">
+    <div class="pat-head"><span class="dot" style="background:#dc2626;"></span>3.5 Patojenlik / Direnç Belirteçleri</div>
+    <div class="pat-body"><div class="pat-row">
+        <div class="pat-col"><h4>Rapor görünümü</h4><ul>
+            <li><em>C. difficile</em> toksin genleri (tcdA / tcdB) saptandı</li>
+            <li><em>S. aureus</em> mecA (metisilin direnci) saptandı</li>
+            <li><em>S. agalactiae</em> srr2 (invazivlik) saptandı</li>
+        </ul></div>
+        <div class="pat-col"><h4>Yorum</h4><ul>
+            <li>Bu genler, ilgili etkenin patojenik veya dirençli potansiyelini gösterir ve klinik önemini artırır.</li>
+            <li><strong>Yaşa özgü önemli not:</strong> 1 yaşın altındaki bebeklerde <em>C. difficile</em> kolonizasyonu sık ve çoğunlukla asemptomatiktir; toksin reseptörleri henüz olgunlaşmadığından, toksin geni varlığı bu yaş grubunda klinik tabloyla birlikte dikkatle yorumlanır.<sup class="ref">5</sup></li>
+        </ul></div>
+    </div></div>
+</div>
+
+<!-- ===== 4 ===== -->
+<h2 class="section-break">4. Örnek Değerlendirme Üzerinden Yorumlama</h2>
+<p>Enterobiome Kids raporu, mikrobiyotayı filum düzeyinde organize edilmiş çok sayıda takson üzerinden değerlendirir. Aşağıdaki temsili tablo, raporun bu ayrıntılı yapısını yansıtacak biçimde hazırlanmıştır; her takson için <strong>mutlak değer (Lg), göreceli oran (%) ve bunların yaşa uygun referans aralıkları</strong> birlikte verilir. Değerler gerçek bir rapor verisinden alınmış (kimlik bilgisi içermeyen) örnek bir profildir ve yaşına uygun, dengeli bir süt çocuğunu yansıtmaktadır. Tablonun ardından gelen numaralı açıklamalar, yorumda öne çıkan satırları vurgular.</p>
+
+<div class="report-mock report-mock-long">
+    <div class="rm-title"><span>Temsili Değerlendirme Tablosu <span class="rm-tag">(örnek)</span></span><span class="rm-status"><span class="traffic green" style="width:11px;height:11px;"></span>YAŞINA UYGUN <span class="anno">1</span></span></div>
+    <table>
+        <thead><tr>
+            <th>Parametre</th>
+            <th style="width:15mm;text-align:center;">Mutlak (Lg)</th>
+            <th style="width:20mm;text-align:center;">Ref. (Lg)</th>
+            <th style="width:15mm;text-align:center;">Göreceli %</th>
+            <th style="width:21mm;text-align:center;">Ref. %</th>
+        </tr></thead>
+        <tbody>
+            <tr><td>Toplam bakteri kütlesi <span class="anno">2</span></td><td class="num-col">8,9</td><td class="num-col">&gt;6,0</td><td class="num-col">—</td><td class="num-col">—</td></tr>
+            <tr class="grp"><td>NORMAL MİKROBİYOTA, toplam <span class="anno">3</span></td><td class="num-col">8,6</td><td class="num-col">7,0-10,2</td><td class="num-col">99,9</td><td class="num-col">80-100</td></tr>
+            <tr><td class="ind">Çeşitlilik (takson sayısı) <span class="anno">4</span></td><td class="num-col">6</td><td class="num-col">≥4</td><td class="num-col">—</td><td class="num-col">—</td></tr>
+            <tr><td class="ind">Firmicutes / Bacteroidetes oranı</td><td class="neg" colspan="4" style="text-align:left;">bu yaşta değerlendirilmez</td></tr>
+            <tr class="phylum"><td colspan="5">Actinobacteria</td></tr>
+            <tr><td class="ind"><em>Bifidobacterium</em> spp. <span class="anno">5</span></td><td class="num-col">8,5</td><td class="num-col">5,3-10,1</td><td class="num-col">70,9</td><td class="num-col">25,7-98,3</td></tr>
+            <tr><td class="ind">Bebek tipi bifidobakteriler <span class="anno">5</span></td><td class="num-col">7,6</td><td class="num-col">5,0-8,6</td><td class="num-col">100,0</td><td class="num-col">&gt;5</td></tr>
+            <tr class="sub"><td><em>B. longum</em> subsp. <em>longum</em></td><td class="num-col">7,6</td><td class="num-col">—</td><td class="num-col">99,2</td><td class="num-col">—</td></tr>
+            <tr class="sub"><td><em>B. bifidum</em></td><td class="num-col">5,4</td><td class="num-col">—</td><td class="num-col">0,6</td><td class="num-col">—</td></tr>
+            <tr class="sub"><td><em>B. longum</em> subsp. <em>infantis</em></td><td class="num-col">4,7</td><td class="num-col">—</td><td class="num-col">0,1</td><td class="num-col">—</td></tr>
+            <tr><td class="ind">Erişkin tipi bifidobakteriler</td><td class="num-col neg">—</td><td class="num-col">0,0-6,6</td><td class="num-col neg">—</td><td class="num-col">0-40</td></tr>
+            <tr><td class="ind">Coriobacteria</td><td class="num-col">5,4</td><td class="num-col">0,0-8,8</td><td class="num-col">0,1</td><td class="num-col">0,0-5,0</td></tr>
+            <tr class="phylum"><td colspan="5">Firmicutes</td></tr>
+            <tr><td class="ind"><em>Clostridium leptum</em> grubu</td><td class="num-col neg">—</td><td class="num-col">0,0-8,4</td><td class="num-col neg">—</td><td class="num-col">0,0-5,7</td></tr>
+            <tr><td class="ind"><em>Faecalibacterium prausnitzii</em></td><td class="num-col neg">—</td><td class="num-col">0,0-7,5</td><td class="num-col neg">—</td><td class="num-col">—</td></tr>
+            <tr><td class="ind"><em>Lachnospiraceae</em></td><td class="num-col">4,8</td><td class="num-col">0,0-9,6</td><td class="num-col">&lt;0,1</td><td class="num-col">0,0-47,1</td></tr>
+            <tr><td class="ind"><em>Dialister/Megasphaera/Veillonella</em></td><td class="num-col">6,4</td><td class="num-col">0,0-8,7</td><td class="num-col">0,6</td><td class="num-col">0,0-10,0</td></tr>
+            <tr><td class="ind"><em>Streptococcus</em> spp.</td><td class="num-col">5,8</td><td class="num-col">5,1-8,6</td><td class="num-col">0,1</td><td class="num-col">0,0-2,0</td></tr>
+            <tr><td class="ind"><em>Lactobacillaceae</em></td><td class="num-col neg">—</td><td class="num-col">0,0-7,8</td><td class="num-col neg">—</td><td class="num-col">0,0-5,0</td></tr>
+            <tr class="phylum"><td colspan="5">Bacteroidetes</td></tr>
+            <tr><td class="ind"><em>Bacteroides</em> spp. <span class="anno">6</span></td><td class="num-col">8,1</td><td class="num-col">0,0-9,4</td><td class="num-col">28,2</td><td class="num-col">0,0-26,2</td></tr>
+            <tr><td class="ind"><em>Prevotella</em> spp.</td><td class="num-col neg">—</td><td class="num-col">0,0-6,5</td><td class="num-col neg">—</td><td class="num-col">0,0-3,0</td></tr>
+            <tr><td class="ind"><em>Parabacteroides</em> spp.</td><td class="num-col neg">—</td><td class="num-col">0,0-8,4</td><td class="num-col neg">—</td><td class="num-col">—</td></tr>
+            <tr class="phylum"><td colspan="5">Diğer bakteriler</td></tr>
+            <tr><td class="ind"><em>Akkermansia muciniphila</em></td><td class="num-col neg">—</td><td class="num-col">0,0-8,5</td><td class="num-col neg">—</td><td class="num-col">—</td></tr>
+            <tr><td class="ind"><em>Methanobrevibacter</em> spp.</td><td class="num-col neg">—</td><td class="num-col">0,0-6,7</td><td class="num-col neg">—</td><td class="num-col">—</td></tr>
+            <tr class="grp"><td>FIRSATÇI PATOJENLER, toplam <span class="anno">7</span></td><td class="num-col">5,8</td><td class="num-col">6,0-9,3</td><td class="num-col">0,1</td><td class="num-col">0-20</td></tr>
+            <tr><td class="ind"><em>Enterobacteriaceae</em></td><td class="num-col">5,8</td><td class="num-col">6,9-9,2</td><td class="num-col">0,1</td><td class="num-col">0,0-20,0</td></tr>
+            <tr><td class="ind"><em>E. coli</em></td><td class="num-col">5,8</td><td class="num-col">4,1-8,1</td><td class="num-col">0,1</td><td class="num-col">0,0-10,0</td></tr>
+            <tr><td class="ind"><em>Enterococcus</em> spp.</td><td class="num-col neg">—</td><td class="num-col">5,6-8,5</td><td class="num-col neg">—</td><td class="num-col">—</td></tr>
+            <tr><td class="ind"><em>Clostridium difficile</em> grubu</td><td class="num-col neg">—</td><td class="num-col">0,0-7,8</td><td class="num-col neg">—</td><td class="num-col">—</td></tr>
+            <tr><td class="ind"><em>Staphylococcus</em> spp.</td><td class="num-col">4,1</td><td class="num-col">0,0-6,3</td><td class="num-col">&lt;0,1</td><td class="num-col">0,0-1,0</td></tr>
+            <tr class="grp"><td>PATOJENLİK / DİRENÇ BELİRTEÇLERİ <span class="anno">8</span></td><td class="num-col" colspan="4"></td></tr>
+            <tr><td class="ind"><em>C. difficile</em> toksinleri (tcdA / tcdB)</td><td class="neg" colspan="4" style="text-align:left;">saptanmadı</td></tr>
+            <tr><td class="ind"><em>Staphylococcus aureus</em></td><td class="num-col">3,8</td><td class="num-col">0,0-5,8</td><td class="num-col">&lt;0,1</td><td class="num-col">0,0-0,1</td></tr>
+            <tr class="sub"><td>mecA (metisilin direnci)</td><td class="neg" colspan="4" style="text-align:left;">saptanmadı</td></tr>
+            <tr><td class="ind"><em>Streptococcus agalactiae</em></td><td class="num-col neg">—</td><td class="num-col">0,0-5,0</td><td class="num-col neg">—</td><td class="num-col">—</td></tr>
+            <tr class="sub"><td>srr2 (invazivlik)</td><td class="neg" colspan="4" style="text-align:left;">saptanmadı</td></tr>
+            <tr class="grp"><td>MAYA MANTARLARI</td><td class="num-col" colspan="4"></td></tr>
+            <tr><td class="ind"><em>Candida albicans</em></td><td class="num-col neg">saptanmadı</td><td class="num-col">0,0-4,8</td><td class="num-col neg">—</td><td class="num-col">—</td></tr>
+        </tbody>
+    </table>
+</div>
+<div class="anno-list">
+    <div class="anno-item"><span class="anno-badge">1</span><span class="anno-text">Genel değerlendirme, çocuğun yaşına uygun ve dengeli bir mikrobiyotayı göstermektedir.</span></div>
+    <div class="anno-item"><span class="anno-badge">2</span><span class="anno-text">Toplam bakteri kütlesi 8,9 lg olup referans değer olan 6,0'ın üzerindedir; yeterli bakteri yükü vardır.</span></div>
+    <div class="anno-item"><span class="anno-badge">3</span><span class="anno-text">Normal mikrobiyota oranı %99,9 ile referans aralığının (%80-100) üst sınırındadır; yararlı flora belirgin biçimde baskındır.</span></div>
+    <div class="anno-item"><span class="anno-badge">4</span><span class="anno-text">Çeşitlilik 6 taksondur ve yaşa uygun referansı (≥4) karşılamaktadır.</span></div>
+    <div class="anno-item"><span class="anno-badge">5</span><span class="anno-text"><strong>Bu testteki kilit pediatrik bulgu:</strong> Toplam <em>Bifidobacterium</em> 8,5 lg ile referansın üzerindedir ve metabolik olarak aktif bifidobakterilerin %100'ü <strong>bebek tipidir</strong> (büyük ölçüde <em>B. longum</em> subsp. <em>longum</em>). Süt çocuğunda beklenen ve koruyucu kabul edilen profildir; erişkin tipi bifidobakteriler bu örnekte saptanmamıştır.</span></div>
+    <div class="anno-item"><span class="anno-badge">6</span><span class="anno-text"><strong>Yaşa bağlı yorumun önemi:</strong> <em>Bacteroides</em> göreceli oranı %28,2 ile referans üst sınırının (%26,2) hafifçe üzerinde görünmektedir. Ancak bu yaşta <em>Bacteroides</em> ve Firmicutes/Bacteroidetes oranı klinik olarak değerlendirilmediğinden (raporda "bu yaşta değerlendirilmez"), bu sınırdaki yükseklik tek başına anlamlı kabul edilmez.</span></div>
+    <div class="anno-item"><span class="anno-badge">7</span><span class="anno-text">Fırsatçı patojenlerin toplam göreceli oranı yalnızca %0,1'dir (referans &lt;%20); <em>Enterobacteriaceae</em> ve <em>E. coli</em> düzeyleri düşüktür, fırsatçı yük çok azdır.</span></div>
+    <div class="anno-item"><span class="anno-badge">8</span><span class="anno-text">Patojenlik/direnç belirteçleri açısından <em>C. difficile</em> toksin genleri (tcdA/tcdB), <em>S. aureus</em> mecA ve <em>S. agalactiae</em> srr2 saptanmamıştır. <em>S. aureus</em> ile ilişkili sinyal (3,8 lg) referansın (&lt;5,8) altındadır ve <em>Candida albicans</em> saptanmamıştır.</span></div>
+</div>
+
+<!-- ===== 5 ===== -->
+<h2 class="section-break">5. Özel Durumlar ve Tekrar Test</h2>
+
+<h3>5.1 Sık Karşılaşılan Özel Durumlar</h3>
+<table>
+    <thead><tr><th style="width:52mm;">Durum</th><th>Nasıl yorumlanır</th></tr></thead>
+    <tbody>
+        <tr><td><strong>"Bu yaşta değerlendirilmez"</strong> ibaresi</td><td>İlgili parametre o yaş için tanısal bilgi taşımaz; eksiklik veya hata olarak okunmamalıdır. Örneğin süt çocuğunda Bacteroides ve Firmicutes/Bacteroidetes oranı bu kapsamdadır.</td></tr>
+        <tr><td><strong>Yakın antibiyotik kullanımı</strong></td><td>Çeşitlilikte düşme ve fırsatçı yükte geçici artış görülebilir. Sonuç, kullanım zamanı ve süresi bağlamında değerlendirilir.<sup class="ref">2</sup></td></tr>
+        <tr><td><strong>Beslenme biçimi</strong> (anne sütü / formül / ek gıda)</td><td>Bifidobakteri düzeyi ve tür dağılımı beslenmeden belirgin etkilenir; yorum beslenme öyküsüyle birlikte yapılır.<sup class="ref">3</sup></td></tr>
+        <tr><td><strong>Bebekte C. difficile / toksin geni</strong></td><td>1 yaş altında asemptomatik kolonizasyon sıktır; toksin geni varlığı klinik tabloyla birlikte dikkatle yorumlanır.<sup class="ref">5</sup></td></tr>
+    </tbody>
+</table>
+
+<h3>5.2 Tekrar Test Zamanlaması</h3>
+<table>
+    <thead><tr><th style="width:62mm;">Durum</th><th>Önerilen yaklaşım</th></tr></thead>
+    <tbody>
+        <tr><td>Antibiyotik kürü sonrası mikrobiyota takibi</td><td>Tedavi bitiminden birkaç hafta sonra (klinik gidişe göre)</td></tr>
+        <tr><td>Beslenme değişikliği / probiyotik sonrası izlem</td><td>Değişiklikten sonra mikrobiyotanın yeni dengeye ulaşması beklenerek</td></tr>
+        <tr><td>Disbiyoz saptanan olguda kontrol</td><td>Klinik tablo ve hekim önerisine göre</td></tr>
+    </tbody>
+</table>
+<div class="info-box">
+    Örnekleme öncesi antibiyotik veya probiyotik kullanımı sonucu etkileyebilir. Sonuçlar, çocuğun yaşı, beslenmesi ve öyküsü göz önünde bulundurularak hekim tarafından değerlendirilir.
+</div>
+
+<!-- ===== 6 ===== -->
+<h2>6. Sınırlamalar, Klinik Karar Notu ve Kaynaklar</h2>
+<ul>
+    <li>Enterobiome Kids nükleik asit tabanlı bir testtir; <strong>canlı/ölü ayrımı yapmaz.</strong> Yakın geçmişte tedavi almış çocukta artık DNA saptanabilir.</li>
+    <li>Sonuçlar mutlaka <strong>çocuğun yaşına uygun referans aralıklarıyla</strong> birlikte yorumlanır.</li>
+    <li>Göreceli yorum düşük bakteri yükünde güvenilir değildir.</li>
+    <li>Sonuç, klinik bulgular ve hasta öyküsü olmadan tek başına tedavi kararı dayanağı olamaz.</li>
+</ul>
+
+<div class="disclaimer-box">
+    <strong>KLİNİK KARAR HEKİME AİTTİR.</strong> Bu rehber Enterobiome Kids raporunun okunup yorumlanmasına yardımcı olmak amacıyla hazırlanmış bilgilendirme materyalidir; <strong>tedavi önerisi içermez</strong> ve hekimin klinik muhakemesinin yerine geçmez. Tedavi kararları için güncel ulusal/uluslararası kılavuzlara ve çocuğun bireysel tablosuna göre karar verilmelidir.
+</div>
+
+<h3>Seçilmiş Kaynaklar</h3>
+<ol class="ref-list">
+    <li><strong>Yatsunenko T, Rey FE, Manary MJ, et al.</strong> Human gut microbiome viewed across age and geography. <em>Nature</em>. 2012;486(7402):222-227. <em>— Bağırsak mikrobiyomunun yaşa bağlı olgunlaşma paterni.</em></li>
+    <li><strong>Korpela K, de Vos WM.</strong> Antibiotic use in childhood alters the gut microbiota. <em>Microb Cell</em>. 2016;3(7):296-298. <em>— Çocuklukta antibiyotik kullanımının mikrobiyom üzerine etkisi.</em></li>
+    <li><strong>Milani C, Duranti S, Bottacini F, et al.</strong> The First Microbial Colonizers of the Human Gut. <em>Microbiol Mol Biol Rev</em>. 2017;81(4):e00036-17. <em>— Bebek bağırsak mikrobiyotası ve bifidobakteriler.</em></li>
+    <li><strong>Stewart CJ, Ajami NJ, O'Brien JL, et al.</strong> Temporal development of the gut microbiome in early childhood (TEDDY). <em>Nature</em>. 2018;562(7728):583-588. <em>— Erken çocuklukta mikrobiyom gelişimi.</em></li>
+    <li><strong>Davidovics ZH, Michail S, Nicholson MR, et al.</strong> Fecal Microbiota Transplantation for Recurrent <em>C. difficile</em> Infection and Other Conditions in Children (NASPGHAN/ESPGHAN). <em>J Pediatr Gastroenterol Nutr</em>. 2019;68(1):130-143. <em>— Çocuklarda C. difficile enfeksiyonu.</em></li>
+    <li><strong>Enterobiome Kids Üretici Ürün Broşürü</strong>, 2026. <em>— Panel, hedef taksonlar, yaşa bağlı referans değerleri ve örnek alma yönlendirmeleri için üreticiye ait teknik referans.</em></li>
+</ol>
+
+<div class="footer-note">
+    Bu rehber, Enterobiome Kids raporlarının değerlendirilmesinde hekimlere yardımcı bilgilendirme materyali olarak hazırlanmıştır. Tedavi önerisi içermez.
+</div>
+
+</body>
+</html>

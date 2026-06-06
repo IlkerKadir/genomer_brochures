@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Cihaz Teslim Tutanağı - Genomer Biyoteknoloji</title>
+<style>
+    @page { size: A4; margin: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+        font-family: "Times New Roman", Times, serif;
+        color: #1a1a1a;
+        background: #fff;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    .page {
+        width: 210mm;
+        height: 297mm;
+        padding: 12mm 20mm 10mm 20mm;
+        position: relative;
+        background: #fff;
+        display: flex;
+        flex-direction: column;
+    }
+    .letterhead {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        border-bottom: 2.5px solid #0a5a8a;
+        padding-bottom: 8px;
+        margin-bottom: 12px;
+    }
+    .letterhead .logo img { height: 56px; width: auto; }
+    .letterhead .company {
+        text-align: right;
+        font-size: 9.5pt;
+        color: #333;
+        line-height: 1.55;
+        max-width: 95mm;
+    }
+    .letterhead .company .name {
+        font-weight: 700;
+        color: #0a5a8a;
+        font-size: 10.5pt;
+        margin-bottom: 3px;
+    }
+    .ref-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 10pt;
+        margin-bottom: 10px;
+    }
+    .ref-row .ref strong { display: inline-block; min-width: 80px; }
+    .doc-title {
+        text-align: center;
+        font-size: 15pt;
+        font-weight: 700;
+        color: #0a5a8a;
+        letter-spacing: 1px;
+        margin-bottom: 2px;
+    }
+    .doc-subtitle {
+        text-align: center;
+        font-size: 9.5pt;
+        color: #555;
+        font-style: italic;
+        margin-bottom: 10px;
+    }
+    .body-text {
+        font-size: 10pt;
+        line-height: 1.45;
+        text-align: justify;
+        margin-bottom: 8px;
+    }
+    .section-title {
+        background: #0a5a8a;
+        color: #fff;
+        padding: 4px 10px;
+        font-size: 10pt;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        margin: 8px 0 0 0;
+    }
+    table.info {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 9.5pt;
+        margin-bottom: 0;
+    }
+    table.info td {
+        padding: 5px 9px;
+        border: 1px solid #c8d0d8;
+        vertical-align: top;
+    }
+    table.info td.label {
+        background: #f5f8fb;
+        font-weight: 700;
+        color: #333;
+        width: 38%;
+    }
+    table.info td.value {
+        min-height: 22px;
+    }
+    table.parties {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 9.5pt;
+    }
+    table.parties td {
+        padding: 5px 9px;
+        border: 1px solid #c8d0d8;
+        vertical-align: top;
+        width: 50%;
+    }
+    table.parties td.label {
+        background: #f5f8fb;
+        font-weight: 700;
+        color: #333;
+    }
+    table.parties .field {
+        display: block;
+        margin-bottom: 4px;
+    }
+    table.parties .field-label {
+        font-size: 8.5pt;
+        color: #666;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        display: block;
+        margin-bottom: 1px;
+    }
+    .accessories {
+        border: 1px solid #c8d0d8;
+        padding: 6px 10px;
+        font-size: 9.5pt;
+    }
+    .accessories ol {
+        margin-left: 20px;
+        line-height: 1.7;
+    }
+    .declaration {
+        margin-top: 10px;
+        font-size: 9.5pt;
+        line-height: 1.45;
+        text-align: justify;
+        padding: 8px 11px;
+        background: #f5f8fb;
+        border-left: 3px solid #0a5a8a;
+    }
+    .signature-row {
+        margin-top: 12px;
+        display: flex;
+        justify-content: space-between;
+        gap: 28px;
+    }
+    .signature-row .sig-col {
+        flex: 1;
+        font-size: 10pt;
+        line-height: 1.5;
+    }
+    .signature-row .sig-col .role {
+        font-weight: 700;
+        color: #0a5a8a;
+        margin-bottom: 4px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-size: 9.5pt;
+    }
+    .signature-row .sig-col .field {
+        margin-bottom: 6px;
+    }
+    .signature-row .sig-col .field-label {
+        font-size: 8.5pt;
+        color: #666;
+        display: block;
+    }
+    .signature-row .sig-col .line {
+        border-bottom: 1px solid #555;
+        height: 14px;
+    }
+    .signature-row .sig-col .stamp-area {
+        margin-top: 8px;
+        height: 36px;
+        border: 1px dashed #c8d0d8;
+        text-align: center;
+        font-size: 8.5pt;
+        color: #999;
+        padding-top: 12px;
+        font-style: italic;
+    }
+    .footer {
+        border-top: 1px solid #c8d0d8;
+        padding-top: 7px;
+        margin-top: auto;
+        font-size: 8.5pt;
+        color: #666;
+        text-align: center;
+        line-height: 1.45;
+    }
+</style>
+</head>
+<body>
+<div class="page">
+
+    <div class="letterhead">
+        <div class="logo">
+            <img src="genomerlogo.png" alt="Genomer Biyoteknoloji">
+        </div>
+        <div class="company">
+            <div class="name">GENOMER BİYOTEKNOLOJİ<br>ARGE SAN. VE TİC. LTD. ŞTİ.</div>
+            Barış SB Mah. 5003 Sk.<br>
+            Kadir Has Binası Kısım A No: 2<br>
+            İç Kapı No: Z14<br>
+            Gebze / Kocaeli / Türkiye<br>
+            www.genomer.com.tr &nbsp;|&nbsp; support@genomer.com.tr
+        </div>
+    </div>
+
+    <div class="ref-row">
+        <div class="ref"><strong>Tutanak No:</strong> ........................</div>
+        <div class="ref"><strong>Tarih:</strong> ......./......./...........</div>
+    </div>
+
+    <div class="doc-title">CİHAZ TESLİM TUTANAĞI</div>
+    <div class="doc-subtitle">Equipment Delivery Acceptance Form</div>
+
+    <div class="body-text">
+        Aşağıda bilgileri yer alan cihaz, Genomer Biyoteknoloji Arge San. ve Tic. Ltd. Şti.
+        tarafından belirtilen taraflar arasında, ekleri ve aksesuarları ile birlikte
+        eksiksiz şekilde teslim edilmiş/teslim alınmıştır. İşbu tutanak iki nüsha olarak
+        düzenlenmiş olup taraflarca imza altına alınmıştır.
+    </div>
+
+    <div class="section-title">1. CİHAZ BİLGİLERİ</div>
+    <table class="info">
+        <tr>
+            <td class="label">Cihaz Adı</td>
+            <td class="value">&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="label">Marka / Model</td>
+            <td class="value">&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="label">Seri Numarası</td>
+            <td class="value">&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="label">Garanti Süresi</td>
+            <td class="value">&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="label">Kalibrasyon Notu</td>
+            <td class="value">&nbsp;</td>
+        </tr>
+    </table>
+
+    <div class="section-title">2. AKSESUAR / EK PARÇA LİSTESİ</div>
+    <div class="accessories">
+        <ol>
+            <li>&nbsp;</li>
+            <li>&nbsp;</li>
+            <li>&nbsp;</li>
+            <li>&nbsp;</li>
+        </ol>
+    </div>
+
+    <div class="section-title">3. TARAFLAR</div>
+    <table class="parties">
+        <tr>
+            <td class="label">TESLİM EDEN</td>
+            <td class="label">TESLİM ALAN</td>
+        </tr>
+        <tr>
+            <td>
+                <span class="field"><span class="field-label">Kurum / Firma:</span>&nbsp;</span>
+                <span class="field"><span class="field-label">Ad - Soyad:</span>&nbsp;</span>
+                <span class="field"><span class="field-label">Görev / Unvan:</span>&nbsp;</span>
+                <span class="field"><span class="field-label">İletişim:</span>&nbsp;</span>
+            </td>
+            <td>
+                <span class="field"><span class="field-label">Kurum / Firma:</span>&nbsp;</span>
+                <span class="field"><span class="field-label">Ad - Soyad:</span>&nbsp;</span>
+                <span class="field"><span class="field-label">Görev / Unvan:</span>&nbsp;</span>
+                <span class="field"><span class="field-label">İletişim:</span>&nbsp;</span>
+            </td>
+        </tr>
+    </table>
+
+    <div class="declaration">
+        Yukarıda özellikleri belirtilen cihaz, eksiksiz, hasarsız ve çalışır durumda;
+        kalibrasyon ve aksesuar bilgileri ile uyumlu şekilde teslim alınmıştır.
+        Taraflar tutanak içeriğini okumuş, mutabık kalmış ve imza altına almıştır.
+    </div>
+
+    <div class="signature-row">
+        <div class="sig-col">
+            <div class="role">Teslim Eden</div>
+            <div class="field"><span class="field-label">Ad - Soyad:</span><div class="line"></div></div>
+            <div class="field"><span class="field-label">İmza:</span><div class="line"></div></div>
+            <div class="stamp-area">Kaşe</div>
+        </div>
+        <div class="sig-col">
+            <div class="role">Teslim Alan</div>
+            <div class="field"><span class="field-label">Ad - Soyad:</span><div class="line"></div></div>
+            <div class="field"><span class="field-label">İmza:</span><div class="line"></div></div>
+            <div class="stamp-area">Kaşe</div>
+        </div>
+    </div>
+
+    <div class="footer">
+        Genomer Biyoteknoloji Arge San. ve Tic. Ltd. Şti. &nbsp;•&nbsp;
+        Barış SB Mah. 5003 Sk. Kadir Has Binası Kısım A No:2 İç Kapı No:Z14, Gebze / Kocaeli / Türkiye<br>
+        www.genomer.com.tr &nbsp;•&nbsp; support@genomer.com.tr
+    </div>
+
+</div>
+</body>
+</html>

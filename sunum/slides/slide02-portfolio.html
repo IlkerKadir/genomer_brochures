@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 720pt;
+    height: 405pt;
+    display: flex;
+    flex-direction: column;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #FFFFFF;
+    position: relative;
+    overflow: hidden;
+  }
+  .header-bar {
+    width: 100%;
+    height: 52pt;
+    background: #1B262C;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28pt;
+    flex-shrink: 0;
+  }
+  .header-bar h2 {
+    font-size: 18pt;
+    color: #FFFFFF;
+    font-weight: bold;
+  }
+  .header-bar img {
+    height: 22pt;
+  }
+  .cards-container {
+    display: flex;
+    gap: 14pt;
+    padding: 14pt 28pt 0 28pt;
+    flex: 1;
+  }
+  .card {
+    flex: 1;
+    border-radius: 6pt;
+    padding: 14pt;
+  }
+  .card-purple {
+    background: #F5EBF8;
+    border-left: 4pt solid #7B4B94;
+  }
+  .card-teal {
+    background: #ECFEFF;
+    border-left: 4pt solid #0891B2;
+  }
+  .card-blue {
+    background: #E0F2FE;
+    border-left: 4pt solid #0EA5E9;
+  }
+  .card h3 {
+    font-size: 13pt;
+    font-weight: bold;
+    margin-bottom: 4pt;
+  }
+  .card-purple h3 { color: #7B4B94; }
+  .card-teal h3 { color: #0891B2; }
+  .card-blue h3 { color: #0EA5E9; }
+  .card h4 {
+    font-size: 8pt;
+    font-weight: bold;
+    margin-bottom: 10pt;
+  }
+  .card-purple h4 { color: #5C3470; }
+  .card-teal h4 { color: #0E7490; }
+  .card-blue h4 { color: #0284C7; }
+  .card ul {
+    font-size: 8pt;
+    color: #4A4A5A;
+    line-height: 1.7;
+    margin-left: 12pt;
+  }
+  .card ul li {
+    margin-bottom: 3pt;
+  }
+  .footer {
+    width: 100%;
+    padding: 8pt 28pt;
+    border-top: 1pt solid #E2E8F0;
+    flex-shrink: 0;
+  }
+  .footer p {
+    font-size: 7pt;
+    color: #94A3B8;
+  }
+</style>
+</head>
+<body>
+  <div class="header-bar">
+    <h2>Product Portfolio</h2>
+    <img src="genomerlogo.png" alt="Genomer">
+  </div>
+  <div class="cards-container">
+    <div class="card card-purple">
+      <h3>FEMOBIOME II LINE</h3>
+      <h4>Women's Urogenital Microbiota</h4>
+      <ul>
+        <li>3 test variants: FEMOBIOME II (16 tubes), PrimaScreen (8 tubes), SecundaScreen (8 tubes)</li>
+        <li>Normobiota, anaerobes, aerobes, mycoplasmas, STIs, HPV, herpesviruses</li>
+        <li>Vaginal and cervical sampling incl. self-collection</li>
+        <li>Visual traffic light reporting system</li>
+      </ul>
+    </div>
+    <div class="card card-teal">
+      <h3>ENTEROBIOME KIDS</h3>
+      <h4>Children's Gut Microbiota</h4>
+      <ul>
+        <li>Covers 99.9% of prokaryotic mass in children's feces</li>
+        <li>6 bacterial phyla + Euryarchaeota + Candida</li>
+        <li>Pathogenicity markers: mecA, srr2, tcdA, tcdB</li>
+        <li>Normocenosis/dysbiosis status with diversity estimation</li>
+      </ul>
+    </div>
+    <div class="card card-blue">
+      <h3>ANDROBIOME</h3>
+      <h4>Male Urogenital Microbiota</h4>
+      <ul>
+        <li>2 variants: Androbiome (full) and Androbiome Screen</li>
+        <li>No analogues worldwide</li>
+        <li>Normal, opportunistic microbiota and STI detection</li>
+        <li>6 biomaterial types supported</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer">
+    <p>All tests use real-time PCR technology with quantitative results | From sample collection to report interpretation</p>
+  </div>
+</body>
+</html>

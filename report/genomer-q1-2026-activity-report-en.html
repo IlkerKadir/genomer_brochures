@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genomer Biotechnology — 2026 Q1 Activity Report</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600;700&display=block" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0F2B4C;
+            --primary-light: #1B4D8C;
+            --accent: #2E86C1;
+            --text: #1a1a2e;
+            --text-light: #4a4a5a;
+            --border: #C5D5E8;
+            --bg-light: #F4F7FB;
+            --bg-highlight: #EAF0F8;
+            --status-green: #1E8449;
+            --status-yellow: #B7950B;
+            --status-blue: #2471A3;
+            --status-gray: #717D7E;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html {
+            font-size: 10pt;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        body {
+            font-family: 'Noto Sans', sans-serif;
+            color: var(--text);
+            line-height: 1.6;
+            background: #e0e0e0;
+        }
+
+        @page { size: 210mm 297mm; margin: 0; }
+
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            background: #fff;
+            page-break-after: always;
+            page-break-inside: avoid;
+            position: relative;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        .page:last-child { page-break-after: auto; }
+
+        @media print {
+            html, body { width: 210mm; background: #fff; }
+            .page { width: 210mm; min-height: 297mm; margin: 0; page-break-after: always; overflow: hidden; }
+        }
+
+        @media screen {
+            body { padding: 30px 0; }
+            .page { margin: 0 auto 30px; box-shadow: 0 4px 24px rgba(0,0,0,0.12); }
+        }
+
+        .cover-page {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+            text-align: center;
+            height: 297mm;
+        }
+
+        .cover-logo {
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            color: var(--primary);
+            text-transform: uppercase;
+            margin-bottom: 60px;
+        }
+
+        .cover-line {
+            width: 80px;
+            height: 3px;
+            background: var(--accent);
+            margin: 0 auto 40px;
+        }
+
+        .cover-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1.3;
+            margin-bottom: 12px;
+        }
+
+        .cover-subtitle {
+            font-size: 1.3rem;
+            font-weight: 400;
+            color: var(--text-light);
+            margin-bottom: 50px;
+        }
+
+        .cover-meta {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            line-height: 1.8;
+        }
+
+        .cover-meta strong { color: var(--text); }
+
+        .cover-footer {
+            position: absolute;
+            bottom: 40px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--status-gray);
+        }
+
+        .content-page { padding: 40px 50px 50px; }
+
+        .page-header {
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 8px;
+            margin-bottom: 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .page-header h1 { font-size: 1.4rem; font-weight: 700; color: var(--primary); }
+        .page-header .page-num { font-size: 0.75rem; color: var(--status-gray); }
+
+        h2 {
+            font-size: 1.1rem; font-weight: 700; color: var(--primary);
+            margin: 22px 0 10px; padding-bottom: 4px; border-bottom: 1px solid var(--border);
+        }
+        h2:first-of-type { margin-top: 0; }
+        h3 { font-size: 0.95rem; font-weight: 600; color: var(--primary-light); margin: 16px 0 8px; }
+        p { font-size: 0.85rem; line-height: 1.65; margin-bottom: 10px; color: var(--text); }
+
+        .status {
+            display: inline-block; font-size: 0.65rem; font-weight: 600;
+            padding: 2px 8px; border-radius: 3px; text-transform: uppercase;
+            letter-spacing: 0.3px; vertical-align: middle; margin-left: 8px;
+        }
+        .status-done { background: #D5F5E3; color: var(--status-green); }
+        .status-progress { background: #FEF9E7; color: var(--status-yellow); }
+        .status-planned { background: #D6EAF8; color: var(--status-blue); }
+        .status-initial { background: #EAECEE; color: var(--status-gray); }
+
+        .account-card {
+            background: var(--bg-light); border-left: 3px solid var(--accent);
+            padding: 12px 16px; margin-bottom: 14px; border-radius: 0 4px 4px 0;
+            break-inside: avoid; page-break-inside: avoid;
+        }
+        .account-card h3 { margin: 0 0 6px; font-size: 0.9rem; }
+        .account-card p { margin-bottom: 6px; font-size: 0.82rem; }
+        .account-card p:last-child { margin-bottom: 0; }
+        .account-card .detail { font-size: 0.78rem; color: var(--text-light); }
+
+        .key-point {
+            background: var(--bg-highlight); border: 1px solid var(--border);
+            padding: 12px 16px; margin: 14px 0; border-radius: 4px; font-size: 0.82rem;
+            break-inside: avoid; page-break-inside: avoid;
+        }
+        .key-point strong { color: var(--primary); }
+
+        .data-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; margin: 12px 0 16px; }
+        .data-table thead th { background: var(--primary); color: #fff; padding: 7px 10px; text-align: left; font-weight: 600; font-size: 0.75rem; }
+        .data-table tbody td { padding: 6px 10px; border-bottom: 1px solid #e0e7f0; vertical-align: top; }
+        .data-table tbody tr:nth-child(even) { background: var(--bg-light); }
+
+        ul { margin: 8px 0 12px 20px; font-size: 0.83rem; }
+        ul li { margin-bottom: 5px; line-height: 1.55; }
+
+        .exec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+        .exec-box { background: var(--bg-light); border-top: 3px solid var(--accent); padding: 14px 16px; border-radius: 0 0 4px 4px; }
+        .exec-box .exec-label { font-size: 0.68rem; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 4px; }
+        .exec-box .exec-value { font-size: 1.3rem; font-weight: 700; color: var(--primary); }
+        .exec-box .exec-desc { font-size: 0.75rem; color: var(--text-light); margin-top: 2px; }
+
+        .request-box { background: #FDF2E9; border-left: 4px solid #E67E22; padding: 14px 18px; margin: 14px 0; border-radius: 0 4px 4px 0; }
+        .request-box p { font-size: 0.82rem; margin-bottom: 6px; }
+        .request-box p:last-child { margin-bottom: 0; }
+
+        .section-divider { border: none; border-top: 1px solid var(--border); margin: 18px 0; }
+
+        .report-footer {
+            position: absolute; bottom: 20px; left: 50px; right: 50px;
+            display: flex; justify-content: space-between;
+            font-size: 0.65rem; color: var(--status-gray); border-top: 1px solid #eee; padding-top: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PAGE 1: COVER -->
+    <div class="page cover-page">
+        <div class="cover-logo">Genomer Biotechnology</div>
+        <div class="cover-line"></div>
+        <div class="cover-title">2026 Q1<br>Activity Report</div>
+        <div class="cover-subtitle">January — March 2026</div>
+        <div class="cover-meta">
+            <strong>Prepared by:</strong> Ilker Kadiroztürk<br>
+            <strong>Date:</strong> March 2026
+        </div>
+        <div class="cover-footer">Genomer Biyoteknoloji Arge San. ve Tic. LTD. ŞTİ.</div>
+    </div>
+
+    <!-- PAGE 2: EXECUTIVE SUMMARY -->
+    <div class="page content-page">
+        <div class="page-header">
+            <h1>1. Executive Summary</h1>
+            <span class="page-num">2</span>
+        </div>
+
+        <p>This report summarizes Genomer Biotechnology's sales, business development and strategic activities across Turkey, Azerbaijan and other target markets during the first quarter of 2026.</p>
+
+        <div class="exec-grid">
+            <div class="exec-box">
+                <div class="exec-label">Private Laboratory Groups</div>
+                <div class="exec-value">5</div>
+                <div class="exec-desc">Ahenk (agreement secured), Biruni/Centro, Synevo, Düzen, Ataşehir Genetik/Datagen</div>
+            </div>
+            <div class="exec-box">
+                <div class="exec-label">Private Hospital Groups</div>
+                <div class="exec-value">4</div>
+                <div class="exec-desc">MLP Care, Florence Nightingale, Medicana, Acıbadem</div>
+            </div>
+            <div class="exec-box">
+                <div class="exec-label">Clinical Research Candidates</div>
+                <div class="exec-value">3</div>
+                <div class="exec-desc">Medipol, Gazi University, Acıbadem University</div>
+            </div>
+            <div class="exec-box">
+                <div class="exec-label">Azerbaijan Institutions</div>
+                <div class="exec-value">14+</div>
+                <div class="exec-desc">Instrument installations and kit sales ongoing</div>
+            </div>
+        </div>
+
+        <h2>Key Highlights</h2>
+        <ul>
+            <li><strong>Agreement secured with Ahenk Laboratories.</strong> Instrument installation pending. Operations will commence with Femobiome, Androbiome and Enterobiome tests. Ahenk's strong industry reputation will serve as a valuable reference for future prospects.</li>
+            <li><strong>MLP Care (Medical Park / Liv / İstinye University)</strong> — meetings initiated with the group's procurement management. There is potential for instrument placement at multiple hospitals within the group.</li>
+            <li><strong>TJOD 2026 Congress</strong> (May 13–17) — speaker sponsorship and exhibition booth being planned. This is a strategically critical event for the SUT reimbursement inclusion process.</li>
+            <li><strong>Azerbaijan:</strong> Instrument installed at Referans Lab; installations at Sunlab, Gömrük Hospital and Azerbaijan Medical University are in the pipeline.</li>
+            <li><strong>United States:</strong> Sanem has completed her training and begun commercial outreach. Several laboratories have expressed interest.</li>
+        </ul>
+
+        <div class="request-box">
+            <p><strong>Action Items Requested from Management:</strong></p>
+            <p>1. An official authorization letter confirming Genomer as the responsible party for DNA Technology projects in Turkey</p>
+            <p>2. Published scientific articles, clinical research data and supporting documentation from Russia</p>
+            <p>3. Technical support for answering laboratory inquiries in the US market</p>
+        </div>
+
+        <div class="report-footer">
+            <span>Genomer Biotechnology — 2026 Q1 Activity Report</span>
+            <span></span>
+        </div>
+    </div>
+
+    <!-- PAGE 3: TURKEY — PRIVATE LABORATORY GROUPS -->
+    <div class="page content-page">
+        <div class="page-header">
+            <h1>2. Turkey — Private Laboratory Groups</h1>
+            <span class="page-num">3</span>
+        </div>
+
+        <p>Active negotiations are underway with five leading private laboratory groups in Turkey. Target product portfolio: Femobiome, Androbiome, Enterobiome and HPV kits.</p>
+
+        <div class="account-card">
+            <h3>Ahenk Laboratories <span class="status status-done">Agreement Secured</span></h3>
+            <p>Agreement has been reached and instrument installation is pending. Operations will initially begin with <strong>Femobiome, Androbiome and Enterobiome</strong> tests, with the goal of also capturing their HPV business going forward. Ahenk currently works with Anatolia for HPV testing and their HPV volumes are quite high.</p>
+            <p class="detail"><strong>Potential:</strong> With 5 branches in Istanbul, Ahenk is Turkey's leading private laboratory in terms of the number of external institutions it serves. Their sample volumes are very high. They have a strong field marketing team and have already begun promoting our tests in the field. Their well-established reputation in the industry will make them both an excellent starting point and a powerful reference account.</p>
+        </div>
+
+        <div class="account-card">
+            <h3>Biruni + Centro Laboratories <span class="status status-progress">Pricing Stage</span></h3>
+            <p>Biruni is one of Turkey's largest private laboratory groups and also owns Centro Laboratories. We have met with their laboratory management and they have shown strong interest. We also met directly with OB-GYN physicians who work with Centro Laboratories and relayed their requests for Femobiome testing.</p>
+            <p class="detail">We informed them of our upcoming launch at Ahenk. Kit pricing was submitted last week; we are awaiting their response.</p>
+        </div>
+
+        <div class="account-card">
+            <h3>Synevo Laboratories <span class="status status-progress">Pricing Stage</span></h3>
+            <p>Synevo is an international laboratory group with active operations in Turkey. During our meeting with their laboratory division, they showed strong interest in the microbiome kits and indicated they would request a demo. Discussions with their procurement department have begun.</p>
+            <p class="detail">We expect Synevo to move forward once Ahenk is operational and serves as a reference.</p>
+        </div>
+
+        <div class="account-card">
+            <h3>Düzen Laboratories <span class="status status-initial">Initial Contact</span></h3>
+            <p>A phone call was conducted with their laboratory team and correspondence has been exchanged. Their headquarters are in Ankara, and an in-person visit is being planned for the coming weeks.</p>
+        </div>
+
+        <div class="account-card">
+            <h3>Ataşehir Genetik / Datagen Laboratories <span class="status status-progress">In Discussion</span></h3>
+            <p>A genetics laboratory group headquartered in Kayseri with additional facilities in Istanbul Ataşehir. They have contracts with numerous private and public hospitals; city hospitals in Kayseri, Manisa, Konya and similar provinces outsource their genetics testing to this laboratory.</p>
+            <p class="detail">The laboratory director has been met with and has given approval. A meeting with the laboratory owner is scheduled for next week. Significant potential is identified for Femobiome, Androbiome, Enterobiome and HPV.</p>
+        </div>
+
+        <div class="report-footer">
+            <span>Genomer Biotechnology — 2026 Q1 Activity Report</span>
+            <span></span>
+        </div>
+    </div>
+
+    <!-- PAGE 4: TURKEY — PRIVATE HOSPITAL GROUPS -->
+    <div class="page content-page">
+        <div class="page-header">
+            <h1>3. Turkey — Private Hospital Groups</h1>
+            <span class="page-num">4</span>
+        </div>
+
+        <div class="account-card">
+            <h3>MLP Care (Medical Park + Liv Hospitals + İstinye University) <span class="status status-progress">In Discussion</span></h3>
+            <p>MLP Care is one of Turkey's largest private hospital groups, operating hospitals across multiple provinces. Historically, the group has outsourced most of its PCR testing to external laboratories, but is now in the process of building its in-house PCR capacity. This presents a significant opportunity for us.</p>
+            <p>We met with <strong>Şirin Hanım</strong>, who heads procurement for the entire group. They expressed strong interest in Femobiome, Androbiome and Enterobiome tests. She also noted that their physicians have been pleased with DNA Technology's HPV products. An instrument was previously installed at their Antalya hospitals by Paşa Bey, and they have occasionally outsourced these tests to Gelişim as a reference laboratory.</p>
+            <p class="detail"><strong>Potential:</strong> Given their daily patient volumes, the potential here is substantial. Instrument placement at multiple hospitals is feasible. Göztepe hospitals are currently the most active site for PCR testing within the group. We discussed joint clinician engagement activities with Şirin Hanım, as well as demand generation through OB-GYN and pediatric gastroenterology departments across the group's hospitals.</p>
+        </div>
+
+        <div class="request-box">
+            <p><strong>Management Action Required for MLP Care:</strong></p>
+            <p>1. Official authorization letter confirming Genomer's responsibility for DNA Technology projects in Turkey</p>
+            <p>2. Published scientific articles and clinical research documentation from Russia</p>
+            <p style="font-size:0.78rem; color:var(--text-light); margin-top:8px;">Note: Gelişim Laboratory may continue operating within its own facility; however, Genomer needs to be formally authorized for all other institutional projects, as previously discussed. Since Gelişim finds it more profitable to run tests in-house, they have not been actively marketing to external institutions. We intend to step in and significantly grow test volumes at these accounts.</p>
+        </div>
+
+        <div class="account-card">
+            <h3>Florence Nightingale Hospitals <span class="status status-progress">Demand Generation</span></h3>
+            <p>Hospital visits are ongoing. We are meeting with both laboratory physicians and OB-GYN specialists. Both sides have shown interest. Based on the demand being generated, we will jointly visit the procurement department in the coming weeks.</p>
+        </div>
+
+        <div class="account-card">
+            <h3>Medicana Hospitals <span class="status status-planned">Planned Entry</span></h3>
+            <p>We met with <strong>Prof. Dr. Ender Pehlivanoğlu</strong>, Head of Pediatric Gastroenterology at Medicana Zincirlikuyu Hospital. He will serve as our Key Opinion Leader (KOL) for Enterobiome Kids. Prof. Pehlivanoğlu will arrange a meeting with the hospital's general manager to facilitate our entry into the institution.</p>
+        </div>
+
+        <div class="account-card">
+            <h3>Acıbadem Hospital Group <span class="status status-progress">In Discussion</span></h3>
+            <p>One of Turkey's largest private hospital groups. The laboratory division has been visited and an appointment with their procurement department has been scheduled for next week.</p>
+        </div>
+
+        <div class="report-footer">
+            <span>Genomer Biotechnology — 2026 Q1 Activity Report</span>
+            <span></span>
+        </div>
+    </div>
+
+    <!-- PAGE 5: CLINICAL RESEARCH + KOL -->
+    <div class="page content-page">
+        <div class="page-header">
+            <h1>4. Clinical Research, KOL and Congress Plan</h1>
+            <span class="page-num">5</span>
+        </div>
+
+        <h2>4.1 Clinical Research Initiatives</h2>
+
+        <p>Clinical studies are essential for gaining scientific acceptance in the Turkish market and for inclusion in the SUT reimbursement list. Discussions are underway with three university hospitals.</p>
+
+        <div class="account-card">
+            <h3>Medipol University Hospital <span class="status status-progress">In Discussion</span></h3>
+            <p>They are receptive to clinical research collaboration. A phone call has been conducted and an in-person meeting is planned for next week.</p>
+        </div>
+
+        <div class="account-card">
+            <h3>Gazi University Faculty of Medicine <span class="status status-progress">In Discussion</span></h3>
+            <p>We met with <strong>Prof. Dr. Ayşe Meltem Yalınay</strong>, a medical microbiologist whose primary field of expertise is the microbiome. She is favorably inclined toward clinical research collaboration.</p>
+        </div>
+
+        <div class="account-card">
+            <h3>Acıbadem University <span class="status status-planned">Meeting Scheduled</span></h3>
+            <p>They indicated that they have conducted similar clinical studies before. An appointment has been secured for next week.</p>
+        </div>
+
+        <div class="key-point">
+            <strong>Strategy:</strong> Conducting all studies at a single center is impractical given time and resource constraints. We therefore plan to assign each product line to a different research center — Femobiome at one, Androbiome at another, Enterobiome at a third — and advance them in parallel.
+        </div>
+
+        <hr class="section-divider">
+
+        <h2>4.2 Key Opinion Leaders (KOL)</h2>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Physician</th>
+                    <th>Specialty</th>
+                    <th>Relevant Products</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Op. Dr. Murat Emanetoğlu</strong></td>
+                    <td>Obstetrics & Gynecology</td>
+                    <td>Femobiome, Androbiome, HPV</td>
+                </tr>
+                <tr>
+                    <td><strong>Prof. Dr. Ender Pehlivanoğlu</strong></td>
+                    <td>Pediatric Gastroenterology</td>
+                    <td>Enterobiome Kids</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="report-footer">
+            <span>Genomer Biotechnology — 2026 Q1 Activity Report</span>
+            <span></span>
+        </div>
+    </div>
+
+    <!-- PAGE 6: CONGRESS + SUT STRATEGY -->
+    <div class="page content-page">
+        <div class="page-header">
+            <h1>5. Congress Plan and Reimbursement Strategy</h1>
+            <span class="page-num">6</span>
+        </div>
+
+        <h2>5.1 Congress Plan — TJOD 2026</h2>
+
+        <p><strong>Turkish Society of Gynecology and Obstetrics (TJOD) Congress</strong><br>
+        Date: May 13–17, 2026</p>
+
+        <p>We are planning both a <strong>speaker sponsorship</strong> and an <strong>exhibition booth</strong> at this congress. Our goal is for Op. Dr. Murat Emanetoğlu to deliver a presentation on our tests. He is a highly respected physician with an extensive professional network and holds leadership positions in several medical associations. He has personally ordered Femoflor and Androflor tests for his patients in the past and is well-versed in the product line.</p>
+
+        <hr class="section-divider">
+
+        <h2>5.2 SUT (Reimbursement) Strategy</h2>
+
+        <p><strong>SUT (Sağlık Uygulama Tebliği — Health Implementation Communiqué)</strong> is the official regulation issued by Turkey's Social Security Institution (SGK) that governs patient access to healthcare services, treatment reimbursement and payment terms.</p>
+
+        <p>Getting our tests included in the SUT list is a <strong>strategic priority.</strong> Once listed, our tests would be reimbursed by both the SGK (state insurance) and private insurance providers. This would:</p>
+        <ul>
+            <li>Significantly increase test volumes at private hospitals,</li>
+            <li>Open the door to public (state) hospitals.</li>
+        </ul>
+
+        <p>For SUT inclusion, the <strong>Turkish Society of Gynecology</strong> needs to formally recommend our tests to the Ministry of Health. This is why participation in the TJOD Congress and building relationships with the society's leadership are critically important. Dr. Emanetoğlu's influence in the field will be leveraged throughout this process.</p>
+
+        <div class="report-footer">
+            <span>Genomer Biotechnology — 2026 Q1 Activity Report</span>
+            <span></span>
+        </div>
+    </div>
+
+    <!-- PAGE 7: REGIONAL DISTRIBUTION + INTERNATIONAL -->
+    <div class="page content-page">
+        <div class="page-header">
+            <h1>6. Regional Distribution Strategy</h1>
+            <span class="page-num">7</span>
+        </div>
+
+        <h2>6.1 Domestic Distribution in Turkey</h2>
+
+        <p><strong>Istanbul and Ankara</strong> will be managed directly by Genomer. For other provinces, we plan to work with regional distributors. Through my father's longstanding industry contacts, we have begun discussions with distributors who actively hold regional distribution rights for major companies such as Roche, Sysmex and bioMérieux.</p>
+
+        <div class="account-card">
+            <h3>Gaziantep Region <span class="status status-progress">In Discussion</span></h3>
+            <p>We have met with the Roche distributor in Gaziantep. They operate both as a distributor and as a private hospital laboratory operator. They expressed eagerness to get started as soon as possible. An in-person visit to Gaziantep is planned for the coming weeks.</p>
+        </div>
+
+        <div class="account-card">
+            <h3>Bursa and Surrounding Region <span class="status status-initial">Initial Contact</span></h3>
+            <p>We have engaged with a distributor in the Bursa region who holds distribution rights for Roche, Sysmex and bioMérieux. They have shown interest in our tests, and an in-person visit is planned for the coming weeks.</p>
+        </div>
+
+        <div class="account-card">
+            <h3>Turkish Republic of Northern Cyprus (TRNC) <span class="status status-initial">Initial Contact</span></h3>
+            <p>Our Gaziantep-based distributor also operates in Northern Cyprus and has requested to cover this territory as well. Separately, my father met with Oya Talat, wife of former TRNC President Mehmet Ali Talat. We had previously explored project opportunities with them; they have renewed their interest. We will visit them on our next trip to the region.</p>
+        </div>
+
+        <hr class="section-divider">
+
+        <h2>6.2 International Markets</h2>
+
+        <h3>United States <span class="status status-progress">Work Underway</span></h3>
+        <p>Sanem has completed her training with DNA Technology and has begun commercial activities. In the US, laboratories can perform their own validations and start testing without FDA clearance. Several laboratories have expressed interest; however, there are numerous technical questions that need to be addressed. We require your support in answering these questions and in determining our go-forward strategy for this market.</p>
+
+        <h3>European Union <span class="status status-planned">Planning Stage</span></h3>
+        <p>Upon signing the IVDR contract, the notified body issues an extension letter. This letter enables sales in Europe on a self-declaration basis, provided that receiving laboratories accept it. When the timing is right, we will conduct market research and define our entry strategy.</p>
+
+        <div class="report-footer">
+            <span>Genomer Biotechnology — 2026 Q1 Activity Report</span>
+            <span></span>
+        </div>
+    </div>
+
+    <!-- PAGES 8–9: AZERBAIJAN -->
+    <div class="page content-page" style="overflow: visible; page-break-inside: auto; min-height: auto;">
+        <div class="page-header">
+            <h1>7. Azerbaijan Market</h1>
+            <span class="page-num">8</span>
+        </div>
+
+        <p>Active engagement is underway with over 14 institutions in Azerbaijan. Instrument installations and kit sales are progressing.</p>
+
+        <div class="account-card">
+            <h3>Referans Lab <span class="status status-done">Instrument Installed</span></h3>
+            <p>The largest private laboratory in Azerbaijan. They have begun using Femoflor, Androflor and Enteroflor tests. We expect very significant potential at this account, both due to the high volume of samples they receive from public hospitals and the breadth of their physician marketing network and institutional contracts.</p>
+        </div>
+
+        <div class="account-card">
+            <h3>Sunlab Laboratory <span class="status status-planned">Installation Planned</span></h3>
+            <p>Will be running Femoflor, Androflor, Enteroflor and HPV 21 Quant tests. One of the incoming instruments will be installed at this laboratory.</p>
+        </div>
+
+        <div class="account-card">
+            <h3>RDM (Republic Diagnostic Center) <span class="status status-planned">Installation Planned</span></h3>
+            <p>Will start with Femoflor, Androflor and HPV 21 Quant tests. Instrument installation is being planned.</p>
+        </div>
+
+        <div class="account-card">
+            <h3>Sağlam Aile <span class="status status-progress">Order Pending</span></h3>
+            <p>An existing customer of yours; they will continue working with us. Orders are expected in April. The DT Prime + DT Stream instrument project is underway and we expect it to materialize shortly.</p>
+        </div>
+
+        <div class="account-card">
+            <h3>Sefa Genetik Lab <span class="status status-progress">Active</span></h3>
+            <p>Interested in HLA, thrombophilia panels, Femoflor, Androflor and Enteroflor. They already have DNA Technology instruments in their facility.</p>
+        </div>
+
+        <div class="account-card">
+            <h3>Gömrük Hospital <span class="status status-planned">Installation Planned</span></h3>
+            <p>Will be running a broad portfolio including single urogenital tests, Femoflor, Androflor, Enteroflor, hepatitis panels and HPV. One of the incoming instruments will be installed at this hospital.</p>
+        </div>
+
+        <div class="account-card">
+            <h3>Azerbaijan Medical University Surgical Hospital <span class="status status-planned">Installation Planned</span></h3>
+            <p>Will be operating the full product portfolio. Instrument installation is being planned.</p>
+        </div>
+
+        <div class="account-card">
+            <h3>Bonadea Liv Hospital <span class="status status-progress">Proposal Submitted</span></h3>
+            <p>This is the Medical Park group's hospital in Azerbaijan. They requested a quote for HPV Quant 21. Discussions are also underway for Femoflor, Androflor and Enteroflor, and they have expressed interest.</p>
+        </div>
+
+        <div class="account-card">
+            <h3>Baku Sağlamlık Center <span class="status status-done">Agreement Secured</span></h3>
+            <p>Operated by Azerimed. An agreement has been reached and they will now procure directly from us.</p>
+        </div>
+
+        <div class="account-card">
+            <h3>Fetal Center <span class="status status-progress">In Discussion</span></h3>
+            <p>Operates in the IVF and genetics space. They are interested in Femoflor and Androflor tests.</p>
+        </div>
+
+        <div class="account-card" style="margin-top: 30px;">
+            <h3>Diamed <span class="status status-progress">In Discussion</span></h3>
+            <p>Discussions are ongoing for hepatitis, HPV, Femoflor and Androflor tests.</p>
+        </div>
+
+        <div class="account-card">
+            <h3>Kraton Clinic <span class="status status-done">Active Customer</span></h3>
+            <p>Hepatitis kits from our incoming shipments have been sold to this institution. They will continue purchasing.</p>
+        </div>
+
+        <div class="account-card">
+            <h3>Gebele <span class="status status-progress">In Discussion</span></h3>
+            <p>Discussions are ongoing for hepatitis and urogenital tests.</p>
+        </div>
+
+        <div class="account-card">
+            <h3>Medikus Hospital <span class="status status-progress">In Discussion</span></h3>
+            <p>An institution with potential in both Baku and Ganja. Discussions are underway for Femoflor, Androflor, Enteroflor, HPV and hepatitis tests.</p>
+        </div>
+
+        <div class="key-point">
+            <strong>Public Hospitals:</strong> Structural changes are taking place in Azerbaijan's public hospital system, including personnel reshuffles. There is ongoing discussion about transferring İcbari Sigorta (the compulsory state insurance body) under the Ministry of Health. These changes may open up new opportunities for us in the public sector. We are closely monitoring the situation and will keep you informed of any developments.
+        </div>
+
+        <div class="report-footer">
+            <span>Genomer Biotechnology — 2026 Q1 Activity Report</span>
+            <span></span>
+        </div>
+    </div>
+
+</body>
+</html>

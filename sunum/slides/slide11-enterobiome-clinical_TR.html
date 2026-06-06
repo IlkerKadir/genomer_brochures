@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+html { background: #FFFFFF; }
+body {
+  width: 720pt; height: 405pt; margin: 0; padding: 0;
+  font-family: Arial, sans-serif;
+  display: flex; background: #FFFFFF;
+}
+.container { width: 100%; height: 100%; position: relative; }
+.header { position: absolute; top: 0; left: 0; right: 0; height: 48pt; background: #0891B2; }
+.header-text { position: absolute; top: 12pt; left: 40pt; }
+.logo-top { position: absolute; top: 12pt; right: 40pt; }
+.logo-top img { height: 22pt; }
+.content { position: absolute; top: 60pt; left: 30pt; right: 30pt; }
+.columns { display: flex; gap: 24pt; }
+.col { flex: 1; }
+.section-title { font-size: 10pt; color: #0891B2; font-weight: bold; margin: 0 0 8pt 0; }
+.sub-header { font-size: 8.5pt; color: #333; font-weight: bold; margin: 10pt 0 4pt 0; }
+ul { margin: 0 0 4pt 0; padding-left: 14pt; }
+ul li { font-size: 8pt; color: #4A4A5A; line-height: 1.6; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header"></div>
+  <div class="header-text">
+    <h2 style="color: #FFFFFF; font-size: 15pt; margin: 0;">ENTEROBIOME KIDS — Klinik Önemi</h2>
+  </div>
+  <div class="logo-top"><img src="genomerlogo.png"></div>
+  <div class="content">
+    <div class="columns">
+      <div class="col">
+        <p class="section-title">Temel Klinik Belirteçler</p>
+        <ul>
+          <li><b>Bacillota/Bacteroidota oranı:</b> Bacteroidota yönünde kayma inflamatuvar sürecin göstergesi olabilir</li>
+          <li><b>F. prausnitzii:</b> Anti-inflamatuvar biyobelirteç. IL-10/IL-12 salgılanmasını artırır, IL-8'i inhibe eder. İnflamatuvar bağırsak hastalığında azalır</li>
+          <li><b>Akkermansia muciniphila:</b> Başlıca müsin metabolize edicisi. Bariyer fonksiyonunu güçlendirir. Bütirat üretimi için propiyonat ve asetat üretir</li>
+          <li><b>Bifidobacterium türleri:</b> Çocuk türleri (B. bifidum, B. longum, B. infantis, B. breve) anne sütü oligosakkaritlerini fermente eder, T-düzenleyici hücreleri aktive eder. Erişkin türleri bitkisel polisakkaritleri fermente eder</li>
+        </ul>
+      </div>
+      <div class="col">
+        <p class="section-title">Hastalık İlişkileri ve Belirteçler</p>
+        <p class="sub-header">Patojenite Belirteçleri</p>
+        <ul>
+          <li><b>mecA</b> — Staphylococcus'ta metisilin direnci; metisiline dirençli suşlar</li>
+          <li><b>srr2</b> — S. agalactiae invazivliği; kan dolaşımı ve merkezi sinir sistemi invazyonunu kolaylaştırarak menenjite neden olur</li>
+          <li><b>tcdA / tcdB</b> — C. difficile enterotoksinleri A ve B; akut inflamasyona, bağırsak bariyerinde hasara ve sıvı akışına yol açar</li>
+        </ul>
+        <p class="sub-header">Hastalık İlişkileri</p>
+        <ul>
+          <li>İBH (ÜK, Crohn): ↑ Bacteroides/Prevotella, ↓ F. prausnitzii</li>
+          <li>Çölyak hastalığı: ↓ Lactobacillus/Bifidobacteria, ↑ pro-inflamatuvar Veillonellaceae</li>
+          <li>Nekrotizan enterokolit (prematüre): C. perfringens ve Enterobacterales ile ilişkili</li>
+          <li>C. difficile taşıyıcılığı: 1 yaş altı çocuklarda %61'e kadar; normalde ~2 yaşında elimine edilir</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

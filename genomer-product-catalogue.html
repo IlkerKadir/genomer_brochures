@@ -1,0 +1,1921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genomer Product Catalogue 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&family=Noto+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================
+           1. CSS VARIABLES
+           ============================================ */
+        :root {
+            --brand: #0EA5E9;
+            --brand-dark: #0284C7;
+            --brand-light: #38BDF8;
+
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --text-muted: #64748B;
+            --text-white: #FFFFFF;
+
+            --bg-white: #FFFFFF;
+            --bg-light: #F8FAFC;
+            --bg-muted: #F1F5F9;
+
+            --border-light: #E2E8F0;
+            --border-medium: #CBD5E1;
+
+            --accent-green: #10B981;
+            --accent-yellow: #F59E0B;
+            --accent-red: #EF4444;
+
+            --font-heading: 'Figtree', sans-serif;
+            --font-body: 'Noto Sans', sans-serif;
+
+            /* Default theme */
+            --theme-primary: #0EA5E9;
+            --theme-primary-dark: #0284C7;
+            --theme-primary-light: #38BDF8;
+            --theme-primary-bg: #E0F2FE;
+        }
+
+        /* Theme overrides */
+        .theme-brand {
+            --theme-primary: #0EA5E9;
+            --theme-primary-dark: #0284C7;
+            --theme-primary-light: #38BDF8;
+            --theme-primary-bg: #E0F2FE;
+        }
+        .theme-femobiome {
+            --theme-primary: #7B4B94;
+            --theme-primary-dark: #5C3470;
+            --theme-primary-light: #9B6BB0;
+            --theme-primary-bg: #F5EBF8;
+        }
+        .theme-androbiome {
+            --theme-primary: #0EA5E9;
+            --theme-primary-dark: #0284C7;
+            --theme-primary-light: #38BDF8;
+            --theme-primary-bg: #E0F2FE;
+        }
+        .theme-enterobiome {
+            --theme-primary: #0891B2;
+            --theme-primary-dark: #0E7490;
+            --theme-primary-light: #22D3EE;
+            --theme-primary-bg: #ECFEFF;
+        }
+        .theme-hpv {
+            --theme-primary: #0284C7;
+            --theme-primary-dark: #075985;
+            --theme-primary-light: #0EA5E9;
+            --theme-primary-bg: #E0F2FE;
+        }
+
+        /* ============================================
+           2. RESET + BASE TYPOGRAPHY
+           ============================================ */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 10pt;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--text-primary);
+            line-height: 1.6;
+            background: var(--bg-muted);
+        }
+
+        h1, h2, h3, h4, h5 {
+            font-family: var(--font-heading);
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        h1 { font-size: 2.2em; }
+        h2 { font-size: 1.45em; margin-bottom: 10px; }
+        h3 { font-size: 1.15em; margin-bottom: 8px; }
+        h4 { font-size: 1em; }
+        p { margin-bottom: 8px; font-size: 0.92em; }
+
+        /* ============================================
+           3. PRINT SETUP
+           ============================================ */
+        @page {
+            size: 210mm 297mm;
+            margin: 0;
+        }
+
+        .page {
+            width: 210mm;
+            height: 297mm;
+            max-height: 297mm;
+            padding: 18mm 20mm;
+            background: var(--bg-white);
+            page-break-after: always;
+            page-break-inside: avoid;
+            position: relative;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        .page:last-child {
+            page-break-after: auto;
+        }
+
+        @media print {
+            html, body {
+                width: 210mm;
+                height: 297mm;
+                background: white;
+            }
+            .page {
+                width: 210mm;
+                height: 297mm;
+                margin: 0;
+                box-shadow: none;
+                page-break-after: always;
+                overflow: hidden;
+            }
+            body { background: white; }
+        }
+
+        @media screen {
+            .page {
+                margin: 20px auto;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+            }
+        }
+
+        .page-content {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ============================================
+           4. PAGE HEADER/FOOTER
+           ============================================ */
+        .page-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--theme-primary);
+            margin-bottom: 20px;
+        }
+
+        .page-header-bar .header-logo {
+            height: 28px;
+            width: auto;
+        }
+
+        .page-header-bar .header-section-name {
+            font-family: var(--font-heading);
+            font-size: 0.8em;
+            font-weight: 600;
+            color: var(--theme-primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .page-footer-bar {
+            margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-light);
+            font-size: 0.75em;
+            color: var(--text-muted);
+        }
+
+        .page-footer-bar .page-num {
+            font-weight: 600;
+            color: var(--theme-primary);
+        }
+
+        /* ============================================
+           5. COVER PAGE
+           ============================================ */
+        .cover-page {
+            padding: 0;
+            background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
+        }
+
+        .cover-page .page-content {
+            padding: 18mm 20mm;
+            justify-content: space-between;
+            color: var(--text-white);
+        }
+
+        .cover-header {
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        .cover-logo {
+            height: 50px;
+            filter: brightness(0) invert(1);
+        }
+
+        .cover-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 30px 0;
+        }
+
+        .cover-title {
+            font-size: 3.2em;
+            font-weight: 700;
+            color: white;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .cover-subtitle {
+            font-size: 1.5em;
+            font-weight: 300;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 30px;
+        }
+
+        .cover-badge {
+            display: inline-block;
+            padding: 8px 24px;
+            border: 2px solid rgba(255,255,255,0.5);
+            border-radius: 30px;
+            font-family: var(--font-heading);
+            font-size: 0.95em;
+            font-weight: 600;
+            color: rgba(255,255,255,0.9);
+            letter-spacing: 1.5px;
+        }
+
+        .cover-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9em;
+        }
+
+        /* DNA Helix */
+        .dna-helix-container {
+            position: absolute;
+            right: 30mm;
+            top: 0;
+            bottom: 0;
+            width: 140px;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .dna-helix {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Molecular dots */
+        .molecular-dots {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        /* ============================================
+           6. PRODUCT CARDS
+           ============================================ */
+        .product-card {
+            border: 1px solid var(--border-light);
+            border-left: 5px solid var(--theme-primary);
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin-bottom: 14px;
+            background: var(--bg-white);
+        }
+
+        .product-card h3 {
+            color: var(--theme-primary);
+            margin-bottom: 6px;
+        }
+
+        .product-card p {
+            color: var(--text-secondary);
+            margin-bottom: 0;
+            font-size: 0.88em;
+            line-height: 1.5;
+        }
+
+        .product-card .card-meta {
+            display: flex;
+            gap: 16px;
+            margin-top: 8px;
+            font-size: 0.8em;
+            color: var(--text-muted);
+        }
+
+        .product-card .card-meta span {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Overview cards side-by-side */
+        .cards-row {
+            display: flex;
+            gap: 14px;
+        }
+
+        .cards-row .product-card {
+            flex: 1;
+        }
+
+        /* ============================================
+           7. COMPARISON TABLES
+           ============================================ */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85em;
+            page-break-inside: avoid;
+        }
+
+        .comparison-table thead th {
+            background: var(--theme-primary);
+            color: white;
+            padding: 8px 10px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.92em;
+        }
+
+        .comparison-table thead th:first-child {
+            text-align: left;
+        }
+
+        .comparison-table tbody td {
+            padding: 5px 10px;
+            border-bottom: 1px solid var(--border-light);
+            vertical-align: middle;
+        }
+
+        .comparison-table tbody td:not(:first-child) {
+            text-align: center;
+        }
+
+        .comparison-table tbody tr:nth-child(even) {
+            background: var(--bg-light);
+        }
+
+        .comparison-table .category-row td {
+            background: var(--theme-primary-bg);
+            font-weight: 600;
+            color: var(--theme-primary-dark);
+            font-size: 0.9em;
+            padding: 6px 10px;
+        }
+
+        .dot {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+        }
+
+        .dot-filled {
+            background: var(--theme-primary);
+        }
+
+        .dot-empty {
+            border: 2px solid var(--border-medium);
+        }
+
+        .indent {
+            padding-left: 24px !important;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+
+        .comparison-table.compact tbody td {
+            padding: 2px 8px;
+        }
+        .comparison-table.compact .category-row td {
+            padding: 3px 8px;
+        }
+        .comparison-table.compact .dot {
+            width: 10px;
+            height: 10px;
+        }
+        .comparison-table.compact thead th {
+            padding: 6px 8px;
+        }
+
+        /* ============================================
+           8. SPECS TABLES
+           ============================================ */
+        .specs-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88em;
+        }
+
+        .specs-table th {
+            background: var(--theme-primary-bg);
+            color: var(--theme-primary-dark);
+            padding: 8px 14px;
+            text-align: left;
+            width: 30%;
+            font-weight: 600;
+            vertical-align: top;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .specs-table td {
+            padding: 8px 14px;
+            border-bottom: 1px solid var(--border-light);
+            vertical-align: top;
+        }
+
+        /* ============================================
+           9. PRICE TABLE
+           ============================================ */
+        .price-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85em;
+        }
+
+        .price-table thead th {
+            font-size: 0.85em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            padding: 8px 10px;
+            border-bottom: 2px solid var(--text-primary);
+            text-align: left;
+        }
+
+        .price-table thead th:nth-child(3),
+        .price-table thead th:nth-child(4) {
+            text-align: right;
+        }
+
+        .price-table tbody td {
+            padding: 8px 10px;
+            border-bottom: 1px solid var(--border-light);
+            vertical-align: middle;
+        }
+
+        .price-table tbody td:nth-child(3),
+        .price-table tbody td:nth-child(4) {
+            text-align: right;
+        }
+
+        .price-table .product-name {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .price-table .catalog-number {
+            font-family: 'Courier New', monospace;
+            font-size: 0.92em;
+            color: var(--text-muted);
+        }
+
+        .price-table .product-note {
+            display: block;
+            font-size: 0.85em;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .price-section-header {
+            font-family: var(--font-heading);
+            font-size: 0.82em;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 14px 0 8px;
+            border-bottom: 1px solid var(--text-primary);
+            margin-top: 16px;
+        }
+
+        .price-section-note {
+            font-size: 0.78em;
+            color: var(--text-muted);
+            margin-top: 4px;
+            margin-bottom: 8px;
+        }
+
+        /* ============================================
+           10. SECTION HEADERS & DECORATIVE
+           ============================================ */
+        .section-title-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .section-title-bar .section-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--theme-primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .section-title-bar .section-icon svg {
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke: white;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .section-title-bar h2 {
+            color: var(--theme-primary-dark);
+            margin-bottom: 0;
+        }
+
+        .section-divider {
+            width: 60px;
+            height: 3px;
+            background: var(--theme-primary);
+            border-radius: 2px;
+            margin-bottom: 16px;
+        }
+
+        /* Value props grid */
+        .value-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 14px;
+            margin: 20px 0;
+        }
+
+        .value-card {
+            text-align: center;
+            padding: 18px 14px;
+            border-radius: 10px;
+            background: var(--bg-light);
+            border: 1px solid var(--border-light);
+        }
+
+        .value-card .value-icon {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto 10px;
+            background: var(--theme-primary-bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .value-card .value-icon svg {
+            width: 22px;
+            height: 22px;
+            stroke: var(--theme-primary);
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .value-card h4 {
+            color: var(--theme-primary-dark);
+            font-size: 0.92em;
+            margin-bottom: 4px;
+        }
+
+        .value-card p {
+            font-size: 0.8em;
+            color: var(--text-muted);
+            margin-bottom: 0;
+        }
+
+        /* TOC */
+        .toc-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .toc-item {
+            display: flex;
+            align-items: baseline;
+            padding: 8px 0;
+            border-bottom: 1px dotted var(--border-light);
+        }
+
+        .toc-title {
+            font-weight: 500;
+            color: var(--text-primary);
+            font-size: 0.95em;
+        }
+
+        .toc-dots {
+            flex: 1;
+            border-bottom: 2px dotted var(--border-medium);
+            margin: 0 8px;
+            min-width: 20px;
+            position: relative;
+            top: -3px;
+        }
+
+        .toc-page {
+            font-weight: 600;
+            color: var(--theme-primary);
+            font-size: 0.95em;
+            min-width: 20px;
+            text-align: right;
+        }
+
+        /* HPV Genotype Matrix */
+        .genotype-matrix {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.78em;
+            margin-top: 16px;
+        }
+
+        .genotype-matrix th {
+            padding: 5px 4px;
+            text-align: center;
+            font-weight: 600;
+            background: var(--theme-primary);
+            color: white;
+            font-size: 0.88em;
+        }
+
+        .genotype-matrix th:first-child {
+            text-align: left;
+            padding-left: 8px;
+        }
+
+        .genotype-matrix td {
+            padding: 4px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .genotype-matrix td:first-child {
+            text-align: left;
+            padding-left: 8px;
+            font-weight: 500;
+            min-width: 80px;
+        }
+
+        .genotype-matrix tr:nth-child(even) {
+            background: var(--bg-light);
+        }
+
+        .genotype-matrix .hr-type td:first-child {
+            color: var(--accent-red);
+        }
+
+        .genotype-matrix .lr-type td:first-child {
+            color: var(--accent-green);
+        }
+
+        .gm-dot {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--theme-primary);
+        }
+
+        .gm-dot-empty {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 1.5px solid var(--border-medium);
+            background: transparent;
+        }
+
+        /* ============================================
+           11. BACK COVER
+           ============================================ */
+        .back-cover {
+            padding: 0;
+            background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
+        }
+
+        .back-cover .page-content {
+            padding: 18mm 20mm;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: var(--text-white);
+        }
+
+        .back-logo {
+            height: 70px;
+            filter: brightness(0) invert(1);
+            margin-bottom: 30px;
+        }
+
+        .back-tagline {
+            font-family: var(--font-heading);
+            font-size: 1.3em;
+            font-weight: 300;
+            color: rgba(255,255,255,0.85);
+            margin-bottom: 40px;
+        }
+
+        .back-contact p {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.95em;
+            margin-bottom: 6px;
+        }
+
+        .back-contact a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* ============================================
+           12. UTILITY
+           ============================================ */
+        .mt-auto { margin-top: auto; }
+        .mb-0 { margin-bottom: 0; }
+        .text-center { text-align: center; }
+        .flex-grow { flex: 1; }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================
+         PAGE 1: COVER
+         ============================================ -->
+    <div class="page cover-page">
+        <!-- Molecular dots background -->
+        <svg class="molecular-dots" viewBox="0 0 800 1130" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="80" cy="180" r="3" fill="rgba(255,255,255,0.12)"/>
+            <circle cx="60" cy="280" r="2.5" fill="rgba(255,255,255,0.1)"/>
+            <circle cx="100" cy="850" r="3" fill="rgba(255,255,255,0.12)"/>
+            <circle cx="140" cy="900" r="2" fill="rgba(255,255,255,0.1)"/>
+            <circle cx="650" cy="150" r="2" fill="rgba(255,255,255,0.08)"/>
+            <circle cx="700" cy="950" r="2.5" fill="rgba(255,255,255,0.1)"/>
+            <line x1="80" y1="180" x2="120" y2="220" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+            <line x1="100" y1="850" x2="140" y2="900" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+        </svg>
+
+        <!-- DNA Helix -->
+        <div class="dna-helix-container">
+            <svg class="dna-helix" viewBox="0 0 200 800" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+                <defs>
+                    <linearGradient id="helixGradient1" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="rgba(255,255,255,0.1)"/>
+                        <stop offset="50%" stop-color="rgba(255,255,255,0.4)"/>
+                        <stop offset="100%" stop-color="rgba(255,255,255,0.1)"/>
+                    </linearGradient>
+                    <linearGradient id="helixGradient2" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="rgba(56,189,248,0.15)"/>
+                        <stop offset="50%" stop-color="rgba(56,189,248,0.5)"/>
+                        <stop offset="100%" stop-color="rgba(56,189,248,0.15)"/>
+                    </linearGradient>
+                </defs>
+                <path d="M 40 0 Q 120 50, 40 100 Q -40 150, 40 200 Q 120 250, 40 300 Q -40 350, 40 400 Q 120 450, 40 500 Q -40 550, 40 600 Q 120 650, 40 700 Q -40 750, 40 800" stroke="url(#helixGradient1)" stroke-width="4" fill="none" stroke-linecap="round"/>
+                <path d="M 160 0 Q 80 50, 160 100 Q 240 150, 160 200 Q 80 250, 160 300 Q 240 350, 160 400 Q 80 450, 160 500 Q 240 550, 160 600 Q 80 650, 160 700 Q 240 750, 160 800" stroke="url(#helixGradient2)" stroke-width="4" fill="none" stroke-linecap="round"/>
+                <line x1="65" y1="25" x2="135" y2="25" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>
+                <circle cx="65" cy="25" r="4" fill="rgba(16,185,129,0.7)"/>
+                <circle cx="135" cy="25" r="4" fill="rgba(56,189,248,0.7)"/>
+                <line x1="40" y1="75" x2="160" y2="75" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+                <circle cx="40" cy="75" r="5" fill="rgba(255,255,255,0.8)"/>
+                <circle cx="160" cy="75" r="5" fill="rgba(255,255,255,0.8)"/>
+                <line x1="65" y1="125" x2="135" y2="125" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>
+                <circle cx="65" cy="125" r="4" fill="rgba(56,189,248,0.7)"/>
+                <circle cx="135" cy="125" r="4" fill="rgba(16,185,129,0.7)"/>
+                <line x1="40" y1="175" x2="160" y2="175" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+                <circle cx="40" cy="175" r="5" fill="rgba(255,255,255,0.8)"/>
+                <circle cx="160" cy="175" r="5" fill="rgba(255,255,255,0.8)"/>
+                <line x1="65" y1="225" x2="135" y2="225" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>
+                <circle cx="65" cy="225" r="4" fill="rgba(16,185,129,0.7)"/>
+                <circle cx="135" cy="225" r="4" fill="rgba(56,189,248,0.7)"/>
+                <line x1="40" y1="275" x2="160" y2="275" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
+                <circle cx="40" cy="275" r="5" fill="rgba(255,255,255,0.9)"/>
+                <circle cx="160" cy="275" r="5" fill="rgba(255,255,255,0.9)"/>
+                <line x1="65" y1="325" x2="135" y2="325" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>
+                <circle cx="65" cy="325" r="4" fill="rgba(56,189,248,0.7)"/>
+                <circle cx="135" cy="325" r="4" fill="rgba(16,185,129,0.7)"/>
+                <line x1="40" y1="375" x2="160" y2="375" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
+                <circle cx="40" cy="375" r="5" fill="rgba(255,255,255,0.9)"/>
+                <circle cx="160" cy="375" r="5" fill="rgba(255,255,255,0.9)"/>
+                <line x1="65" y1="425" x2="135" y2="425" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+                <circle cx="65" cy="425" r="4" fill="rgba(16,185,129,0.7)"/>
+                <circle cx="135" cy="425" r="4" fill="rgba(56,189,248,0.7)"/>
+                <line x1="40" y1="475" x2="160" y2="475" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
+                <circle cx="40" cy="475" r="5" fill="rgba(255,255,255,0.9)"/>
+                <circle cx="160" cy="475" r="5" fill="rgba(255,255,255,0.9)"/>
+                <line x1="65" y1="525" x2="135" y2="525" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>
+                <circle cx="65" cy="525" r="4" fill="rgba(56,189,248,0.7)"/>
+                <circle cx="135" cy="525" r="4" fill="rgba(16,185,129,0.7)"/>
+                <line x1="40" y1="575" x2="160" y2="575" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+                <circle cx="40" cy="575" r="5" fill="rgba(255,255,255,0.8)"/>
+                <circle cx="160" cy="575" r="5" fill="rgba(255,255,255,0.8)"/>
+                <line x1="65" y1="625" x2="135" y2="625" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>
+                <circle cx="65" cy="625" r="4" fill="rgba(16,185,129,0.7)"/>
+                <circle cx="135" cy="625" r="4" fill="rgba(56,189,248,0.7)"/>
+                <line x1="40" y1="675" x2="160" y2="675" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+                <circle cx="40" cy="675" r="5" fill="rgba(255,255,255,0.8)"/>
+                <circle cx="160" cy="675" r="5" fill="rgba(255,255,255,0.8)"/>
+                <line x1="65" y1="725" x2="135" y2="725" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+                <circle cx="65" cy="725" r="4" fill="rgba(56,189,248,0.6)"/>
+                <circle cx="135" cy="725" r="4" fill="rgba(16,185,129,0.6)"/>
+                <line x1="40" y1="775" x2="160" y2="775" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+                <circle cx="40" cy="775" r="4" fill="rgba(255,255,255,0.6)"/>
+                <circle cx="160" cy="775" r="4" fill="rgba(255,255,255,0.6)"/>
+            </svg>
+        </div>
+
+        <div class="page-content">
+            <div class="cover-header">
+                <img src="genomerlogo.png" alt="Genomer" class="cover-logo">
+            </div>
+            <div class="cover-main">
+                <h1 class="cover-title">PRODUCT<br>CATALOGUE</h1>
+                <p class="cover-subtitle">Molecular Diagnostics Solutions</p>
+                <div class="cover-badge">2026 EDITION</div>
+            </div>
+            <div class="cover-footer">
+                <p>www.genomer.com.tr</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         PAGE 2: COMPANY OVERVIEW + TOC
+         ============================================ -->
+    <div class="page theme-brand">
+        <div class="page-content">
+            <div class="page-header-bar">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-section-name">Company Overview</span>
+            </div>
+
+            <h2 style="color: var(--theme-primary-dark);">Genomer Molecular Diagnostics</h2>
+            <div class="section-divider"></div>
+
+            <p style="font-size: 0.95em; color: var(--text-secondary); margin-bottom: 20px;">Genomer Biyoteknoloji Arge San. ve Tic. Ltd. &#350;ti. &mdash; delivering advanced real-time PCR-based molecular diagnostic solutions for microbiome assessment, pathogen detection, and HPV screening.</p>
+
+            <div class="value-grid">
+                <div class="value-card">
+                    <div class="value-icon">
+                        <svg viewBox="0 0 24 24"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/></svg>
+                    </div>
+                    <h4>Real-time PCR</h4>
+                    <p>Gold-standard multiplex qPCR technology</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">
+                        <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+                    </div>
+                    <h4>Quantitative Results</h4>
+                    <p>Precise quantification with clinical interpretation</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">
+                        <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+                    </div>
+                    <h4>Validated Workflows</h4>
+                    <p>End-to-end solutions from sample to report</p>
+                </div>
+            </div>
+
+            <h3 style="color: var(--theme-primary-dark); margin-top: 24px; margin-bottom: 12px;">Table of Contents</h3>
+
+            <ul class="toc-list">
+                <li class="toc-item">
+                    <span class="toc-title">Microbiome Portfolio Overview</span>
+                    <span class="toc-dots"></span>
+                    <span class="toc-page">3</span>
+                </li>
+                <li class="toc-item">
+                    <span class="toc-title">FEMOBIOME<sup>&reg;</sup>II Line</span>
+                    <span class="toc-dots"></span>
+                    <span class="toc-page">4&ndash;6</span>
+                </li>
+                <li class="toc-item">
+                    <span class="toc-title">ANDROBIOME<sup>&reg;</sup> Line</span>
+                    <span class="toc-dots"></span>
+                    <span class="toc-page">7</span>
+                </li>
+                <li class="toc-item">
+                    <span class="toc-title">ENTEROBIOME<sup>&reg;</sup> Kids</span>
+                    <span class="toc-dots"></span>
+                    <span class="toc-page">8</span>
+                </li>
+                <li class="toc-item">
+                    <span class="toc-title">HPV Testing Overview</span>
+                    <span class="toc-dots"></span>
+                    <span class="toc-page">9</span>
+                </li>
+                <li class="toc-item" style="padding-left: 16px;">
+                    <span class="toc-title" style="color: var(--text-secondary);">Genomer HPV Screen</span>
+                    <span class="toc-dots"></span>
+                    <span class="toc-page">10</span>
+                </li>
+                <li class="toc-item" style="padding-left: 16px;">
+                    <span class="toc-title" style="color: var(--text-secondary);">Genomer HPV Quant 15</span>
+                    <span class="toc-dots"></span>
+                    <span class="toc-page">11</span>
+                </li>
+                <li class="toc-item" style="padding-left: 16px;">
+                    <span class="toc-title" style="color: var(--text-secondary);">Genomer HPV Quant 21</span>
+                    <span class="toc-dots"></span>
+                    <span class="toc-page">12</span>
+                </li>
+                <!-- Ordering info TOC entry hidden for now
+                <li class="toc-item">
+                    <span class="toc-title">Ordering Information</span>
+                    <span class="toc-dots"></span>
+                    <span class="toc-page">13</span>
+                </li>
+                -->
+            </ul>
+
+            <div class="page-footer-bar">
+                <span>www.genomer.com.tr</span>
+                <span class="page-num">2</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         PAGE 3: MICROBIOME PORTFOLIO OVERVIEW
+         ============================================ -->
+    <div class="page theme-brand">
+        <div class="page-content">
+            <div class="page-header-bar">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-section-name">Microbiome Diagnostics</span>
+            </div>
+
+            <h2 style="color: var(--theme-primary-dark);">Microbiome Portfolio Overview</h2>
+            <div class="section-divider"></div>
+            <p style="color: var(--text-secondary); margin-bottom: 20px;">Comprehensive real-time PCR-based microbiome assessment kits for clinical diagnostics.</p>
+
+            <div class="theme-femobiome">
+                <div class="product-card">
+                    <h3>FEMOBIOME<sup>&reg;</sup> II Line</h3>
+                    <p>Line of tests for women microbiota assessment</p>
+                    <div class="card-meta">
+                        <span>3 test kits</span>
+                        <span>8&ndash;16 tubes per kit</span>
+                        <span>Vaginal &amp; cervical swabs</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="theme-androbiome">
+                <div class="product-card">
+                    <h3>ANDROBIOME<sup>&reg;</sup> Line</h3>
+                    <p>Comprehensive real-time PCR-based assay for the assessment of the state of the male urogenital tract microbiota and detection of obligate pathogens &mdash; causative agents of sexually transmitted infections (STIs).</p>
+                    <div class="card-meta">
+                        <span>2 test kits</span>
+                        <span>Urethral scrapes, ejaculate, urine, prostate fluid</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="theme-enterobiome">
+                <div class="product-card">
+                    <h3>ENTEROBIOME<sup>&reg;</sup> Kids</h3>
+                    <p>Reagent kit for the analysis of gut microbiota composition in stool samples from children by real-time PCR.</p>
+                    <div class="card-meta">
+                        <span>1 test kit</span>
+                        <span>12 tests per kit</span>
+                        <span>Stool samples</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page-footer-bar">
+                <span>www.genomer.com.tr</span>
+                <span class="page-num">3</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         PAGE 4: FEMOBIOME II LINE (1/2)
+         ============================================ -->
+    <div class="page theme-femobiome">
+        <div class="page-content">
+            <div class="page-header-bar">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-section-name">FEMOBIOME<sup>&reg;</sup> II Line</span>
+            </div>
+
+            <div class="section-title-bar">
+                <div class="section-icon">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                </div>
+                <h2>FEMOBIOME<sup>&reg;</sup>II Line</h2>
+            </div>
+
+            <p style="color: var(--text-secondary); margin-bottom: 6px; font-size: 0.9em;"><strong style="color: var(--theme-primary);">FEMOBIOME<sup>&reg;</sup>II</strong> &ndash; universal test for assessment women microbiota state with the most comprehensive capabilities.</p>
+            <p style="color: var(--text-secondary); margin-bottom: 6px; font-size: 0.9em;"><strong style="color: var(--theme-primary);">FEMOBIOME<sup>&reg;</sup>PrimaScreen</strong> &ndash; a shortened version of FEMOBIOME<sup>&reg;</sup>II for diagnostics of bacterial vaginosis.</p>
+            <p style="color: var(--text-secondary); margin-bottom: 10px; font-size: 0.9em;"><strong style="color: var(--theme-primary);">FEMOBIOME<sup>&reg;</sup>SecundaScreen</strong> &ndash; a complex test for diagnostics of infectious and inflammatory urogenital diseases.</p>
+
+            <table class="comparison-table compact" style="font-size: 0.78em;">
+                <thead>
+                    <tr>
+                        <th style="width: 42%;"></th>
+                        <th>FB<sup>&reg;</sup>II</th>
+                        <th>Prima<br>Screen</th>
+                        <th>Secunda<br>Screen</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Number of tubes</strong></td>
+                        <td>16</td>
+                        <td>8</td>
+                        <td>8</td>
+                    </tr>
+                    <tr class="category-row"><td colspan="4">Indicators</td></tr>
+                    <tr><td>Human genomic DNA</td><td><span class="dot dot-filled"></span></td><td><span class="dot dot-filled"></span></td><td><span class="dot dot-filled"></span></td></tr>
+                    <tr><td>Total bacterial load</td><td><span class="dot dot-filled"></span></td><td><span class="dot dot-filled"></span></td><td><span class="dot dot-filled"></span></td></tr>
+                    <tr class="category-row"><td colspan="4">Normobiota</td></tr>
+                    <tr><td>Lactobacillus spp.</td><td><span class="dot dot-filled"></span></td><td><span class="dot dot-filled"></span></td><td><span class="dot dot-filled"></span></td></tr>
+                    <tr><td class="indent">L. crispatus</td><td><span class="dot dot-filled"></span></td><td></td><td></td></tr>
+                    <tr><td class="indent">L. jensenii / L. mulieris</td><td><span class="dot dot-filled"></span></td><td></td><td></td></tr>
+                    <tr><td class="indent">L. gasseri / L. paragasseri</td><td><span class="dot dot-filled"></span></td><td></td><td></td></tr>
+                    <tr><td class="indent">L. iners</td><td><span class="dot dot-filled"></span></td><td><span class="dot dot-filled"></span></td><td><span class="dot dot-filled"></span></td></tr>
+                    <tr><td class="indent">L. non-iners</td><td></td><td><span class="dot dot-filled"></span></td><td><span class="dot dot-filled"></span></td></tr>
+                    <tr><td>Bifidobacterium spp.</td><td><span class="dot dot-filled"></span></td><td></td><td></td></tr>
+                    <tr class="category-row"><td colspan="4">Aerobes</td></tr>
+                    <tr><td>Staphylococcus spp.</td><td><span class="dot dot-filled"></span></td><td></td><td><span class="dot dot-filled"></span></td></tr>
+                    <tr><td>Streptococcus spp.</td><td><span class="dot dot-filled"></span></td><td></td><td><span class="dot dot-filled"></span></td></tr>
+                    <tr><td class="indent">Streptococcus agalactiae</td><td><span class="dot dot-filled"></span></td><td></td><td></td></tr>
+                    <tr><td>Enterobacteriaceae</td><td><span class="dot dot-filled"></span></td><td></td><td><span class="dot dot-filled"></span></td></tr>
+                    <tr><td>Enterococcus spp.</td><td><span class="dot dot-filled"></span></td><td></td><td><span class="dot dot-filled"></span></td></tr>
+                    <tr><td>Haemophilus spp.</td><td><span class="dot dot-filled"></span></td><td></td><td><span class="dot dot-filled"></span></td></tr>
+                    <tr class="category-row"><td colspan="4">Anaerobes (BV-associated)</td></tr>
+                    <tr><td>Gardnerella vaginalis</td><td><span class="dot dot-filled"></span></td><td><span class="dot dot-filled"></span></td><td><span class="dot dot-filled"></span></td></tr>
+                    <tr><td>Fannyhessea vaginae (Atopobium vaginae)</td><td><span class="dot dot-filled"></span></td><td><span class="dot dot-filled"></span></td><td><span class="dot dot-filled"></span></td></tr>
+                    <tr><td>Mobiluncus spp.</td><td><span class="dot dot-filled"></span></td><td><span class="dot dot-filled"></span></td><td><span class="dot dot-filled"></span></td></tr>
+                    <tr><td>Anaerococcus spp.</td><td><span class="dot dot-filled"></span></td><td></td><td><span class="dot dot-filled"></span></td></tr>
+                    <tr><td>Peptostreptococcus spp.</td><td><span class="dot dot-filled"></span></td><td></td><td><span class="dot dot-filled"></span></td></tr>
+                    <tr><td>Bacteroides spp. / Porphyromonas spp. / Prevotella spp.</td><td><span class="dot dot-filled"></span></td><td></td><td><span class="dot dot-filled"></span></td></tr>
+                    <tr><td>Sneathia spp. / Leptotrichia spp. / Fusobacterium spp.</td><td><span class="dot dot-filled"></span></td><td></td><td><span class="dot dot-filled"></span></td></tr>
+                    <tr><td>Megasphaera spp. / Veillonella spp. / Dialister spp.</td><td><span class="dot dot-filled"></span></td><td></td><td><span class="dot dot-filled"></span></td></tr>
+                    <tr><td>BVAB1 / BVAB2 / BVAB3</td><td><span class="dot dot-filled"></span></td><td></td><td><span class="dot dot-filled"></span></td></tr>
+                </tbody>
+            </table>
+
+            <div class="page-footer-bar">
+                <span>www.genomer.com.tr</span>
+                <span class="page-num">4</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         PAGE 5: FEMOBIOME II LINE (2/2)
+         ============================================ -->
+    <div class="page theme-femobiome">
+        <div class="page-content">
+            <div class="page-header-bar">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-section-name">FEMOBIOME<sup>&reg;</sup> II Line</span>
+            </div>
+
+            <table class="comparison-table" style="font-size: 0.82em;">
+                <thead>
+                    <tr>
+                        <th style="width: 42%;"></th>
+                        <th>FB<sup>&reg;</sup>II</th>
+                        <th>Prima<br>Screen</th>
+                        <th>Secunda<br>Screen</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="category-row"><td colspan="4">Mycoplasmas</td></tr>
+                    <tr><td>Ureaplasma urealyticum</td><td><span class="dot dot-filled"></span></td><td><span class="dot dot-filled"></span></td><td><span class="dot dot-filled"></span></td></tr>
+                    <tr><td>Ureaplasma parvum</td><td><span class="dot dot-filled"></span></td><td><span class="dot dot-filled"></span></td><td><span class="dot dot-filled"></span></td></tr>
+                    <tr><td>Mycoplasma hominis</td><td><span class="dot dot-filled"></span></td><td><span class="dot dot-filled"></span></td><td><span class="dot dot-filled"></span></td></tr>
+                    <tr class="category-row"><td colspan="4">Yeast-like fungi</td></tr>
+                    <tr><td>Candida spp.</td><td><span class="dot dot-filled"></span></td><td><span class="dot dot-filled"></span></td><td><span class="dot dot-filled"></span></td></tr>
+                    <tr><td class="indent">Candida albicans</td><td><span class="dot dot-filled"></span></td><td><span class="dot dot-filled"></span></td><td><span class="dot dot-filled"></span></td></tr>
+                    <tr class="category-row"><td colspan="4">Sexually transmitted infections (STI)</td></tr>
+                    <tr><td>Chlamydia trachomatis</td><td><span class="dot dot-filled"></span></td><td></td><td><span class="dot dot-filled"></span></td></tr>
+                    <tr><td>Mycoplasma genitalium</td><td><span class="dot dot-filled"></span></td><td></td><td><span class="dot dot-filled"></span></td></tr>
+                    <tr><td>Neisseria gonorrhoeae</td><td><span class="dot dot-filled"></span></td><td></td><td><span class="dot dot-filled"></span></td></tr>
+                    <tr><td>Trichomonas vaginalis</td><td><span class="dot dot-filled"></span></td><td></td><td><span class="dot dot-filled"></span></td></tr>
+                    <tr class="category-row"><td colspan="4">Herpesviruses</td></tr>
+                    <tr><td>HSV-1</td><td><span class="dot dot-filled"></span></td><td></td><td><span class="dot dot-filled"></span></td></tr>
+                    <tr><td>HSV-2</td><td><span class="dot dot-filled"></span></td><td></td><td><span class="dot dot-filled"></span></td></tr>
+                    <tr><td>CMV</td><td><span class="dot dot-filled"></span></td><td></td><td><span class="dot dot-filled"></span></td></tr>
+                    <tr class="category-row"><td colspan="4">Human papillomaviruses</td></tr>
+                    <tr><td>HPV 16</td><td><span class="dot dot-filled"></span></td><td></td><td></td></tr>
+                    <tr><td>HPV 18</td><td><span class="dot dot-filled"></span></td><td></td><td></td></tr>
+                    <tr><td>HPV 45</td><td><span class="dot dot-filled"></span></td><td></td><td></td></tr>
+                    <tr><td>HPV 31/33/35/39/51/52/56/58/59/66/68</td><td><span class="dot dot-filled"></span></td><td></td><td></td></tr>
+                </tbody>
+            </table>
+
+            <div class="page-footer-bar">
+                <span>www.genomer.com.tr</span>
+                <span class="page-num">5</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         PAGE 6: FEMOBIOME II LINE (3/3)
+         ============================================ -->
+    <div class="page theme-femobiome">
+        <div class="page-content">
+            <div class="page-header-bar">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-section-name">FEMOBIOME<sup>&reg;</sup> II Line</span>
+            </div>
+
+            <h3 style="color: var(--theme-primary-dark); margin-top: 16px; margin-bottom: 8px;">How to Choose a Test?</h3>
+            <table class="comparison-table" style="font-size: 0.82em;">
+                <thead>
+                    <tr>
+                        <th style="width: 42%; text-align: left;">Clinical situation</th>
+                        <th>FB<sup>&reg;</sup>II</th>
+                        <th>Prima<br>Screen</th>
+                        <th>Secunda<br>Screen</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="category-row"><td colspan="4">Infectious diseases of reproductive system</td></tr>
+                    <tr><td>Inflammatory symptoms</td><td><span class="dot dot-filled"></span></td><td><span class="dot dot-filled"></span></td><td></td></tr>
+                    <tr><td>Symptoms of BV</td><td><span class="dot dot-filled"></span></td><td></td><td><span class="dot dot-filled"></span></td></tr>
+                    <tr class="category-row"><td colspan="4">Asymptomatic cases</td></tr>
+                    <tr><td>Preparation for pelvic surgery</td><td><span class="dot dot-filled"></span></td><td><span class="dot dot-filled"></span></td><td></td></tr>
+                    <tr><td>Preventive screening</td><td><span class="dot dot-filled"></span></td><td><span class="dot dot-filled"></span></td><td></td></tr>
+                    <tr class="category-row"><td colspan="4">Treatment monitoring</td></tr>
+                    <tr><td>Treatment of infectious diseases</td><td><span class="dot dot-filled"></span></td><td><span class="dot dot-filled"></span></td><td></td></tr>
+                    <tr><td>BV treatment</td><td><span class="dot dot-filled"></span></td><td></td><td><span class="dot dot-filled"></span></td></tr>
+                    <tr class="category-row"><td colspan="4">Obstetrics</td></tr>
+                    <tr><td>Pregnancy planning, ART</td><td><span class="dot dot-filled"></span></td><td><span class="dot dot-filled"></span></td><td></td></tr>
+                    <tr><td>Prophylactic examinations during pregnancy</td><td><span class="dot dot-filled"></span></td><td><span class="dot dot-filled"></span></td><td></td></tr>
+                    <tr><td>Infertility, miscarriage</td><td><span class="dot dot-filled"></span></td><td><span class="dot dot-filled"></span></td><td></td></tr>
+                </tbody>
+            </table>
+
+            <table class="specs-table" style="margin-top: 24px;">
+                <tr>
+                    <th>Biomaterial</th>
+                    <td>Epithelial swab from cervical canal and vagina; cervical swabs in liquid-based cytology transport medium; self-collected vaginal samples</td>
+                </tr>
+                <tr>
+                    <th>Transport medium</th>
+                    <td>STOR-F, STOR-M; liquid-based cytology media (PreservCyt<sup>&reg;</sup>, BD SurePath&trade;, EASYPREP, CellPrep)</td>
+                </tr>
+                <tr>
+                    <th>Tests per kit</th>
+                    <td>12 (24) tests &mdash; package S &bull; 24 (48) tests &mdash; packages A and A-TL (including control samples)</td>
+                </tr>
+                <tr>
+                    <th>Storage</th>
+                    <td>+2 &deg;C &hellip; 8 &deg;C (packages S, A, A-TL) &bull; &minus;18 &deg;C &hellip; &minus;22 &deg;C (TechnoTaq MAX polymerase, package A) &bull; 12 months shelf life</td>
+                </tr>
+                <tr>
+                    <th>Time of analysis</th>
+                    <td>From 2.5 hours (with sample pretreatment)</td>
+                </tr>
+            </table>
+
+            <div class="page-footer-bar">
+                <span>www.genomer.com.tr</span>
+                <span class="page-num">6</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         PAGE 7: ANDROBIOME LINE
+         ============================================ -->
+    <div class="page theme-androbiome">
+        <div class="page-content">
+            <div class="page-header-bar">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-section-name">ANDROBIOME<sup>&reg;</sup> Line</span>
+            </div>
+
+            <div class="section-title-bar">
+                <div class="section-icon">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                </div>
+                <h2>ANDROBIOME<sup>&reg;</sup> Line</h2>
+            </div>
+
+            <p style="color: var(--text-secondary); margin-bottom: 10px;">Androbiome<sup>&reg;</sup> is a comprehensive real-time PCR-based assay for the assessment of the state of the male urogenital tract microbiota and detection of obligate pathogens &mdash; causative agents of sexually transmitted infections (STIs).</p>
+
+            <p style="color: var(--text-secondary); margin-bottom: 10px;"><strong style="color: var(--theme-primary);">Androbiome<sup>&reg;</sup> Screen</strong> &ndash; shortened version of the assay, which is intended for screening and differential diagnosis of acute forms of urogenital tract diseases.</p>
+
+            <p style="color: var(--text-secondary); margin-bottom: 18px;"><strong style="color: var(--theme-primary);">Androbiome<sup>&reg;</sup></strong> &ndash; detailed assay for accessing of microbiome structure, which detects a wide range of opportunistic microorganisms. This assay is recommended to prescribe for patients with chronic forms of diseases or complaints of ineffective treatment.</p>
+
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th style="width: 50%;">Androbiome<sup>&reg;</sup> Screen</th>
+                        <th style="width: 50%;">Androbiome<sup>&reg;</sup></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="background: #f0fdf4;">
+                        <td colspan="2" class="category-row" style="text-align:center; font-weight:600; color: var(--accent-green);">Normal microbiota</td>
+                    </tr>
+                    <tr>
+                        <td><em>Staphylococcus</em> spp.<br><em>Streptococcus</em> spp.<br><em>Corynebacterium</em> spp.</td>
+                        <td><em>Staphylococcus</em> spp.<br><em>Streptococcus</em> spp.<br><em>Corynebacterium</em> spp.</td>
+                    </tr>
+                    <tr>
+                        <td><em>Lactobacillus</em> spp.</td>
+                        <td><em>Lactobacillus</em> spp.</td>
+                    </tr>
+                    <tr style="background: #fef3c7;">
+                        <td colspan="2" class="category-row" style="text-align:center; font-weight:600; color: var(--accent-yellow);">Opportunistic microorganisms</td>
+                    </tr>
+                    <tr>
+                        <td><em>Gardnerella vaginalis</em><br><em>Ureaplasma urealyticum</em><br><em>Ureaplasma parvum</em><br><em>Mycoplasma hominis</em><br><em>Enterobacteriaceae</em> / <em>Enterococcus</em> spp.<br><em>Candida</em> spp.</td>
+                        <td><em>Gardnerella vaginalis</em><br><em>Megasphaera</em> spp. / <em>Veillonella</em> spp. / <em>Dialister</em> spp.<br><em>Sneathia</em> spp. / <em>Leptotrichia</em> spp. / <em>Fusobacterium</em> spp.<br><em>Ureaplasma urealyticum</em><br><em>Ureaplasma parvum</em><br><em>Mycoplasma hominis</em><br><em>Atopobium</em> cluster<br><em>Bacteroides</em> spp. / <em>Porphyromonas</em> spp. / <em>Prevotella</em> spp.<br><em>Anaerococcus</em> spp.<br><em>Peptostreptococcus</em> spp. / <em>Parvimonas</em> spp.<br><em>Eubacterium</em> spp.<br><em>Haemophilus</em> spp.<br><em>Pseudomonas aeruginosa</em> / <em>Ralstonia</em> spp. / <em>Burkholderia</em> spp.<br><em>Enterobacteriaceae</em> spp. / <em>Enterococcus</em> spp.<br><em>Candida</em> spp.</td>
+                    </tr>
+                    <tr style="background: #fee2e2;">
+                        <td colspan="2" class="category-row" style="text-align:center; font-weight:600; color: var(--accent-red);">Obligate pathogens (STIs)</td>
+                    </tr>
+                    <tr>
+                        <td><em>Mycoplasma genitalium</em><br><em>Trichomonas vaginalis</em><br><em>Neisseria gonorrhoeae</em><br><em>Chlamydia trachomatis</em></td>
+                        <td><em>Mycoplasma genitalium</em><br><em>Trichomonas vaginalis</em><br><em>Neisseria gonorrhoeae</em><br><em>Chlamydia trachomatis</em></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="page-footer-bar">
+                <span>www.genomer.com.tr</span>
+                <span class="page-num">7</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         PAGE 8: ENTEROBIOME KIDS
+         ============================================ -->
+    <div class="page theme-enterobiome">
+        <div class="page-content">
+            <div class="page-header-bar">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-section-name">ENTEROBIOME<sup>&reg;</sup> Kids</span>
+            </div>
+
+            <div class="section-title-bar">
+                <div class="section-icon">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                </div>
+                <h2>ENTEROBIOME<sup>&reg;</sup> Kids</h2>
+            </div>
+
+            <p style="font-size: 1em; color: var(--theme-primary-dark); font-weight: 600; margin-bottom: 14px;">Reagent kit for the analysis of gut microbiota composition in stool samples from children by real-time PCR</p>
+
+            <p style="color: var(--text-secondary);">The human gut microbiota is a complex, dynamic ecosystem inhabited by a huge number of different microorganisms, including bacteria, fungi, archaea, and viruses. They interact with each other and with the human organism, participating in a variety of metabolic processes.</p>
+
+            <p style="color: var(--text-secondary);">The gut microbiota is involved in carbohydrate and protein metabolism, lipid exchange, and also produces important metabolic intermediates such as short-chain fatty acids (SCFAs), secondary bile acids (BAs), vitamins and lipopolysaccharides. These metabolites act as signaling molecules and are involved in the functioning of all systems of the human organism.</p>
+
+            <h3 style="color: var(--theme-primary-dark); margin-top: 16px; margin-bottom: 10px;">Childhood is a period of gut microbiome formation</h3>
+
+            <p style="color: var(--text-secondary);">The establishment of the infant's own gut microbiota is a long and dynamic process in which four successive phases are distinguished. The composition and diversity of the gut microbiota change significantly during childhood, influenced by delivery mode, feeding type, diet, antibiotic use, and gestational age.</p>
+
+            <table class="specs-table" style="margin-top: 20px;">
+                <tr>
+                    <th>Kit format</th>
+                    <td>12 tests per kit (including control samples)</td>
+                </tr>
+                <tr>
+                    <th>Catalogue No.</th>
+                    <td>M-EBK-0701v01-12</td>
+                </tr>
+                <tr>
+                    <th>Biomaterial</th>
+                    <td>Stool samples from children</td>
+                </tr>
+                <tr>
+                    <th>Method</th>
+                    <td>Real-time PCR (multiplex qPCR)</td>
+                </tr>
+                <tr>
+                    <th>Storage</th>
+                    <td>+2 &deg;C &hellip; 8 &deg;C</td>
+                </tr>
+            </table>
+
+            <div class="page-footer-bar">
+                <span>www.genomer.com.tr</span>
+                <span class="page-num">8</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         PAGE 9: HPV TESTING OVERVIEW
+         ============================================ -->
+    <div class="page theme-hpv">
+        <div class="page-content">
+            <div class="page-header-bar">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-section-name">HPV Testing Solutions</span>
+            </div>
+
+            <div class="section-title-bar">
+                <div class="section-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 110 20 10 10 0 010-20z"/><path d="M12 6v6l4 2"/></svg>
+                </div>
+                <h2>HPV Testing Solutions</h2>
+            </div>
+
+            <p style="color: var(--text-secondary); margin-bottom: 20px;">Real-time PCR diagnostics for human papillomavirus (HPV) detection and genotyping. Three kits offering qualitative screening through comprehensive quantitative analysis with individual genotyping.</p>
+
+            <div class="cards-row">
+                <div class="product-card" style="text-align: center;">
+                    <div style="background: var(--theme-primary-bg); display: inline-block; padding: 4px 14px; border-radius: 20px; font-size: 0.75em; font-weight: 600; color: var(--theme-primary); margin-bottom: 8px;">QUALITATIVE</div>
+                    <h3 style="font-size: 1.05em;">Genomer<br>HPV Screen</h3>
+                    <p style="font-size: 0.85em; color: var(--text-muted);">14 HR Types</p>
+                    <p style="font-size: 0.85em; color: var(--text-muted); margin-bottom: 0;">96 reactions/kit</p>
+                </div>
+                <div class="product-card" style="text-align: center;">
+                    <div style="background: var(--theme-primary-bg); display: inline-block; padding: 4px 14px; border-radius: 20px; font-size: 0.75em; font-weight: 600; color: var(--theme-primary); margin-bottom: 8px;">QUANTITATIVE</div>
+                    <h3 style="font-size: 1.05em;">Genomer<br>HPV Quant 15</h3>
+                    <p style="font-size: 0.85em; color: var(--text-muted);">15 Types (13 HR + 2 LR)</p>
+                    <p style="font-size: 0.85em; color: var(--text-muted); margin-bottom: 0;">48 reactions/kit</p>
+                </div>
+                <div class="product-card" style="text-align: center;">
+                    <div style="background: var(--theme-primary-bg); display: inline-block; padding: 4px 14px; border-radius: 20px; font-size: 0.75em; font-weight: 600; color: var(--theme-primary); margin-bottom: 8px;">QUANTITATIVE</div>
+                    <h3 style="font-size: 1.05em;">Genomer<br>HPV Quant 21</h3>
+                    <p style="font-size: 0.85em; color: var(--text-muted);">21 Types (18 HR + 3 LR)</p>
+                    <p style="font-size: 0.85em; color: var(--text-muted); margin-bottom: 0;">24 reactions/kit</p>
+                </div>
+            </div>
+
+            <h3 style="color: var(--theme-primary-dark); margin-top: 22px; margin-bottom: 12px;">Key Specifications</h3>
+
+            <table class="comparison-table" style="font-size: 0.84em;">
+                <thead>
+                    <tr>
+                        <th style="width: 32%; text-align: left;">Feature</th>
+                        <th style="width: 23%;">HPV Screen</th>
+                        <th style="width: 23%;">HPV Quant 15</th>
+                        <th style="width: 22%;">HPV Quant 21</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Method</strong></td>
+                        <td>Qualitative RT-PCR</td>
+                        <td>Quantitative RT-PCR</td>
+                        <td>Quantitative RT-PCR</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Reactions/kit</strong></td>
+                        <td>96</td>
+                        <td>48</td>
+                        <td>24</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Total genotypes</strong></td>
+                        <td>14</td>
+                        <td>15</td>
+                        <td>21</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sensitivity</strong></td>
+                        <td>5 copies/tube</td>
+                        <td>5 copies/tube</td>
+                        <td>5 copies/tube</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sample types</strong></td>
+                        <td>Cervical/vaginal epithelial swabs</td>
+                        <td>Epithelial swabs, prostate fluid, ejaculate, urine, biopsy</td>
+                        <td>Epithelial swabs, prostate fluid, ejaculate, urine, biopsy</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Intended use</strong></td>
+                        <td>Cervical cancer screening</td>
+                        <td>Cervical cancer screening, CIN monitoring</td>
+                        <td>Cervical cancer screening, CIN II/III monitoring</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Storage</strong></td>
+                        <td>+2&ndash;8 &deg;C</td>
+                        <td>+2&ndash;8 &deg;C</td>
+                        <td>+2&ndash;8 &deg;C</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Shelf life</strong></td>
+                        <td>12 months</td>
+                        <td>12 months</td>
+                        <td>12 months</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="page-footer-bar">
+                <span>www.genomer.com.tr</span>
+                <span class="page-num">9</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         PAGE 10: GENOMER HPV SCREEN
+         ============================================ -->
+    <div class="page theme-hpv">
+        <div class="page-content">
+            <div class="page-header-bar">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-section-name">Genomer HPV Screen</span>
+            </div>
+
+            <div class="section-title-bar">
+                <div class="section-icon">
+                    <svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+                </div>
+                <h2>Genomer HPV Screen</h2>
+            </div>
+            <p style="font-size: 0.82em; color: var(--theme-primary); font-weight: 600; margin-bottom: 14px;">Qualitative Real-Time PCR &bull; 14 High-Risk Types &bull; 96 Reactions/Kit</p>
+
+            <p style="color: var(--text-secondary); margin-bottom: 12px;">Qualitative DNA detection of 14 types of human papillomavirus (HPV) with high carcinogenic risk associated with cervical cancer. Provides differential (individual) detection of HPV types 16, 18, and 45; the remaining 11 types are detected as a pooled result.</p>
+
+            <h3 style="color: var(--theme-primary-dark); margin-top: 14px; margin-bottom: 8px;">HPV Types Detected</h3>
+            <table class="specs-table" style="font-size: 0.88em;">
+                <tr>
+                    <th style="width: 35%;">Individually genotyped</th>
+                    <td>HPV 16, HPV 18, HPV 45</td>
+                </tr>
+                <tr>
+                    <th>Pooled group detection</th>
+                    <td>HPV 31, 33, 35, 39, 51, 52, 56, 58, 59, 66, 68</td>
+                </tr>
+            </table>
+
+            <h3 style="color: var(--theme-primary-dark); margin-top: 16px; margin-bottom: 8px;">Clinical Indications</h3>
+            <ul style="list-style: none; padding: 0; font-size: 0.88em; color: var(--text-secondary);">
+                <li style="padding: 3px 0; padding-left: 16px; position: relative;"><span style="position: absolute; left: 0; color: var(--theme-primary);">&bull;</span>Cervical cancer screening and preventive screening programs</li>
+                <li style="padding: 3px 0; padding-left: 16px; position: relative;"><span style="position: absolute; left: 0; color: var(--theme-primary);">&bull;</span>Dynamic monitoring of HPV-associated diseases</li>
+                <li style="padding: 3px 0; padding-left: 16px; position: relative;"><span style="position: absolute; left: 0; color: var(--theme-primary);">&bull;</span>Colposcopic or cytologic abnormalities</li>
+                <li style="padding: 3px 0; padding-left: 16px; position: relative;"><span style="position: absolute; left: 0; color: var(--theme-primary);">&bull;</span>History of other sexually transmitted infections</li>
+            </ul>
+
+            <h3 style="color: var(--theme-primary-dark); margin-top: 16px; margin-bottom: 8px;">Technical Specifications</h3>
+            <table class="specs-table" style="font-size: 0.88em;">
+                <tr>
+                    <th style="width: 35%;">Method</th>
+                    <td>Qualitative real-time PCR (TaqMan hydrolysis probes)</td>
+                </tr>
+                <tr>
+                    <th>Reactions per kit</th>
+                    <td>96</td>
+                </tr>
+                <tr>
+                    <th>Tube format</th>
+                    <td>0.2 mL tubes / 8-tube strips</td>
+                </tr>
+                <tr>
+                    <th>Analytical sensitivity</th>
+                    <td>5 DNA copies per amplification tube</td>
+                </tr>
+                <tr>
+                    <th>Analysis time</th>
+                    <td>Approx. 1.5 hours (excluding DNA extraction)</td>
+                </tr>
+                <tr>
+                    <th>Sample types</th>
+                    <td>Epithelial swabs from cervical canal and vaginal mucosa</td>
+                </tr>
+                <tr>
+                    <th>Detection channels</th>
+                    <td>FAM, HEX, ROX, Cy5, Cy5.5 (5-channel)</td>
+                </tr>
+                <tr>
+                    <th>Storage</th>
+                    <td>+2 &deg;C to +8 &deg;C &bull; 12 months shelf life</td>
+                </tr>
+            </table>
+
+            <h3 style="color: var(--theme-primary-dark); margin-top: 16px; margin-bottom: 8px;">Kit Contents</h3>
+            <p style="font-size: 0.85em; color: var(--text-secondary); margin-bottom: 0;">Ready-to-use PCR mix (preloaded strips) &bull; Internal Control (IC) &bull; Sample Intake Control (SIC) for human DNA assessment &bull; Positive Control (cloned HPV genome) &bull; Negative Control</p>
+
+            <div class="page-footer-bar">
+                <span>www.genomer.com.tr</span>
+                <span class="page-num">10</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         PAGE 11: GENOMER HPV QUANT 15
+         ============================================ -->
+    <div class="page theme-hpv">
+        <div class="page-content">
+            <div class="page-header-bar">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-section-name">Genomer HPV Quant 15</span>
+            </div>
+
+            <div class="section-title-bar">
+                <div class="section-icon">
+                    <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+                </div>
+                <h2>Genomer HPV Quant 15</h2>
+            </div>
+            <p style="font-size: 0.82em; color: var(--theme-primary); font-weight: 600; margin-bottom: 14px;">Quantitative Real-Time PCR &bull; 15 Types (13 HR + 2 LR) &bull; 48 Reactions/Kit</p>
+
+            <p style="color: var(--text-secondary); margin-bottom: 12px;">In vitro DNA test for specific identification and quantification of 15 HPV genotypes. Provides both absolute quantification (log copies/sample) and relative quantification normalized to 10<sup>5</sup> human cells for viral load monitoring.</p>
+
+            <h3 style="color: var(--theme-primary-dark); margin-top: 12px; margin-bottom: 8px;">HPV Types Detected</h3>
+            <table class="specs-table" style="font-size: 0.88em;">
+                <tr>
+                    <th style="width: 35%;">High-risk group 1</th>
+                    <td>HPV 16, 31, 33, 35, 52, 58 (detected as group)</td>
+                </tr>
+                <tr>
+                    <th>High-risk group 2</th>
+                    <td>HPV 18, 39, 45, 59 (detected as group)</td>
+                </tr>
+                <tr>
+                    <th>Individually identified HR</th>
+                    <td>HPV 51, HPV 56, HPV 68</td>
+                </tr>
+                <tr>
+                    <th>Low-risk (grouped)</th>
+                    <td>HPV 6, HPV 11</td>
+                </tr>
+            </table>
+
+            <h3 style="color: var(--theme-primary-dark); margin-top: 14px; margin-bottom: 8px;">Quantification Method</h3>
+            <table class="specs-table" style="font-size: 0.88em;">
+                <tr>
+                    <th style="width: 35%;">Absolute quantification</th>
+                    <td>Viral load as log (copies/sample) &mdash; common logarithm of HPV DNA copy number per sample</td>
+                </tr>
+                <tr>
+                    <th>Relative quantification</th>
+                    <td>HPV DNA normalized to human cell count (per 10<sup>5</sup> cells) &mdash; biomarker for viral replication activity</td>
+                </tr>
+                <tr>
+                    <th>Sample Intake Control</th>
+                    <td>SIC estimates human DNA amount; SIC &lt; 4.0 indicates insufficient sampling (repeat required)</td>
+                </tr>
+            </table>
+
+            <h3 style="color: var(--theme-primary-dark); margin-top: 14px; margin-bottom: 8px;">Technical Specifications</h3>
+            <table class="specs-table" style="font-size: 0.88em;">
+                <tr>
+                    <th style="width: 35%;">Method</th>
+                    <td>Quantitative real-time PCR (fluorescent TaqMan probes)</td>
+                </tr>
+                <tr>
+                    <th>Reactions per kit</th>
+                    <td>48</td>
+                </tr>
+                <tr>
+                    <th>Tube format</th>
+                    <td>0.2 mL &times; 8-tube PCR strips</td>
+                </tr>
+                <tr>
+                    <th>Analytical sensitivity</th>
+                    <td>5 copies per amplification tube</td>
+                </tr>
+                <tr>
+                    <th>Sample types</th>
+                    <td>Epithelial cell swabs, prostate fluid, ejaculate, urine, biopsy</td>
+                </tr>
+                <tr>
+                    <th>Detection channels</th>
+                    <td>FAM, HEX (IC), ROX, Cy5</td>
+                </tr>
+                <tr>
+                    <th>Storage</th>
+                    <td>+2 &deg;C to +8 &deg;C &bull; 12 months shelf life</td>
+                </tr>
+            </table>
+
+            <h3 style="color: var(--theme-primary-dark); margin-top: 14px; margin-bottom: 8px;">Kit Contents</h3>
+            <p style="font-size: 0.85em; color: var(--text-secondary); margin-bottom: 0;">Preloaded PCR mix (24 &times; 8-PCR strips) &bull; MAX-Taq polymerase (4 &times; 500 &mu;L) &bull; Mineral oil (4 &times; 1.0 mL) &bull; Positive Control (160 &mu;L, cloned HPV genome)</p>
+
+            <div class="page-footer-bar">
+                <span>www.genomer.com.tr</span>
+                <span class="page-num">11</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         PAGE 12: GENOMER HPV QUANT 21
+         ============================================ -->
+    <div class="page theme-hpv">
+        <div class="page-content">
+            <div class="page-header-bar">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-section-name">Genomer HPV Quant 21</span>
+            </div>
+
+            <div class="section-title-bar">
+                <div class="section-icon">
+                    <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+                </div>
+                <h2>Genomer HPV Quant 21</h2>
+            </div>
+            <p style="font-size: 0.82em; color: var(--theme-primary); font-weight: 600; margin-bottom: 14px;">Quantitative Real-Time PCR &bull; 21 Types (18 HR + 3 LR) &bull; 24 Reactions/Kit</p>
+
+            <p style="color: var(--text-secondary); margin-bottom: 12px;">The most comprehensive HPV genotyping kit in the Genomer HPV line. In vitro DNA test for specific identification and quantification of 21 HPV types. Provides absolute and relative quantification with clinically significant viral load thresholds for CIN monitoring.</p>
+
+            <h3 style="color: var(--theme-primary-dark); margin-top: 12px; margin-bottom: 8px;">HPV Types Detected</h3>
+            <table class="specs-table" style="font-size: 0.88em;">
+                <tr>
+                    <th style="width: 35%;">High-risk types (18)</th>
+                    <td>HPV 16, 18, 26, 31, 33, 35, 39, 45, 51, 52, 53, 56, 58, 59, 66, 68, 73, 82</td>
+                </tr>
+                <tr>
+                    <th>Low-risk types (3)</th>
+                    <td>HPV 6, 11, 44</td>
+                </tr>
+            </table>
+
+            <h3 style="color: var(--theme-primary-dark); margin-top: 14px; margin-bottom: 8px;">Clinical Indications</h3>
+            <ul style="list-style: none; padding: 0; font-size: 0.88em; color: var(--text-secondary);">
+                <li style="padding: 3px 0; padding-left: 16px; position: relative;"><span style="position: absolute; left: 0; color: var(--theme-primary);">&bull;</span>Cervical cancer screening (especially women over 30)</li>
+                <li style="padding: 3px 0; padding-left: 16px; position: relative;"><span style="position: absolute; left: 0; color: var(--theme-primary);">&bull;</span>Monitoring therapy for CIN II and CIN III</li>
+                <li style="padding: 3px 0; padding-left: 16px; position: relative;"><span style="position: absolute; left: 0; color: var(--theme-primary);">&bull;</span>ASC-US (atypical squamous cells) confirmatory testing</li>
+                <li style="padding: 3px 0; padding-left: 16px; position: relative;"><span style="position: absolute; left: 0; color: var(--theme-primary);">&bull;</span>HPV diagnostics in oncopathology of cervix, penis, prostate, anus, and larynx</li>
+                <li style="padding: 3px 0; padding-left: 16px; position: relative;"><span style="position: absolute; left: 0; color: var(--theme-primary);">&bull;</span>Inflammatory diseases of the genitourinary system in women and men</li>
+            </ul>
+
+            <h3 style="color: var(--theme-primary-dark); margin-top: 14px; margin-bottom: 8px;">Technical Specifications</h3>
+            <table class="specs-table" style="font-size: 0.88em;">
+                <tr>
+                    <th style="width: 35%;">Method</th>
+                    <td>Quantitative real-time PCR (fluorescent TaqMan probes, hot-start)</td>
+                </tr>
+                <tr>
+                    <th>Reactions per kit</th>
+                    <td>24</td>
+                </tr>
+                <tr>
+                    <th>Analytical sensitivity</th>
+                    <td>5 copies per amplification tube (10<sup>3</sup> copies/mL DNA sample)</td>
+                </tr>
+                <tr>
+                    <th>Diagnostic specificity</th>
+                    <td>99.9% (95% CI: 99.8&ndash;99.9%)</td>
+                </tr>
+                <tr>
+                    <th>Clinically significant load</th>
+                    <td>&gt;10<sup>3</sup> copies HPV DNA per 10<sup>5</sup> human cells</td>
+                </tr>
+                <tr>
+                    <th>Sample types</th>
+                    <td>Epithelial cell swabs, prostate fluid, ejaculate, urine, biopsy</td>
+                </tr>
+                <tr>
+                    <th>Detection channels</th>
+                    <td>FAM, HEX (IC), ROX, Cy5 (4-channel)</td>
+                </tr>
+                <tr>
+                    <th>Storage</th>
+                    <td>+2 &deg;C to +8 &deg;C &bull; 12 months shelf life</td>
+                </tr>
+            </table>
+
+            <h3 style="color: var(--theme-primary-dark); margin-top: 14px; margin-bottom: 8px;">Kit Contents</h3>
+            <p style="font-size: 0.85em; color: var(--text-secondary); margin-bottom: 0;">Preloaded PCR mix (24 &times; 8-PCR strips) &bull; MAX-Taq polymerase (4 &times; 500 &mu;L) &bull; Mineral oil (4 &times; 1.0 mL) &bull; Positive Control (160 &mu;L, cloned HPV genome, characterized by DNA sequencing)</p>
+
+            <div class="page-footer-bar">
+                <span>www.genomer.com.tr</span>
+                <span class="page-num">12</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         PAGE 13: ORDERING INFORMATION (hidden for now)
+         ============================================ -->
+    <div class="page theme-brand" style="display: none;">
+        <div class="page-content">
+            <div class="page-header-bar">
+                <img src="genomerlogo.png" alt="Genomer" class="header-logo">
+                <span class="header-section-name">Ordering Information</span>
+            </div>
+
+            <h2 style="color: var(--theme-primary-dark);">Ordering Information</h2>
+            <div class="section-divider"></div>
+
+            <!-- Microbiome Diagnostic Kits -->
+            <div class="price-section-header">Microbiome Diagnostic Kits</div>
+            <table class="price-table">
+                <thead>
+                    <tr>
+                        <th style="width: 40%;">Product</th>
+                        <th style="width: 22%;">Cat. No.</th>
+                        <th style="width: 10%;">Tests</th>
+                        <th style="width: 14%;">Price (USD)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="product-name">Femobiome II Multiplex qPCR Kit</span></td>
+                        <td><span class="catalog-number">M-FBII-0701v01-12</span></td>
+                        <td>12</td>
+                        <td>309.60</td>
+                    </tr>
+                    <tr>
+                        <td><span class="product-name">Femobiome PrimaScreen Multiplex qPCR Kit</span></td>
+                        <td><span class="catalog-number">M-FBPS-0601v01-24</span></td>
+                        <td>24</td>
+                        <td>340.80</td>
+                    </tr>
+                    <tr>
+                        <td><span class="product-name">Femobiome SecundaScreen Multiplex qPCR Kit</span></td>
+                        <td><span class="catalog-number">M-FBSS-0701v01-24</span></td>
+                        <td>24</td>
+                        <td>340.80</td>
+                    </tr>
+                    <tr>
+                        <td><span class="product-name">Androbiome Multiplex qPCR Kit</span></td>
+                        <td><span class="catalog-number">M-AB-0701v01-12</span></td>
+                        <td>12</td>
+                        <td>309.60</td>
+                    </tr>
+                    <tr>
+                        <td><span class="product-name">Androbiome Screen Multiplex qPCR Kit</span></td>
+                        <td><span class="catalog-number">M-ABS-0701v01-24</span></td>
+                        <td>24</td>
+                        <td>374.40</td>
+                    </tr>
+                    <tr>
+                        <td><span class="product-name">Enterobiome Kids Multiplex qPCR Kit</span></td>
+                        <td><span class="catalog-number">M-EBK-0701v01-12</span></td>
+                        <td>12</td>
+                        <td>384.00</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- HPV Testing Kits -->
+            <div class="price-section-header">HPV Testing Kits</div>
+            <table class="price-table">
+                <thead>
+                    <tr>
+                        <th style="width: 40%;">Product</th>
+                        <th style="width: 22%;">Cat. No.</th>
+                        <th style="width: 10%;">Tests</th>
+                        <th style="width: 14%;">Price (USD)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="product-name">Genomer HPV Screen</span></td>
+                        <td><span class="catalog-number">&mdash;</span></td>
+                        <td>96</td>
+                        <td>Contact Sales</td>
+                    </tr>
+                    <tr>
+                        <td><span class="product-name">Genomer HPV Quant 15</span></td>
+                        <td><span class="catalog-number">&mdash;</span></td>
+                        <td>48</td>
+                        <td>Contact Sales</td>
+                    </tr>
+                    <tr>
+                        <td><span class="product-name">Genomer HPV Quant 21</span></td>
+                        <td><span class="catalog-number">&mdash;</span></td>
+                        <td>24</td>
+                        <td>Contact Sales</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Extraction Kits -->
+            <div class="price-section-header">Extraction Kits</div>
+            <p class="price-section-note">Validated for KingFisher Flex 96, Auto-Pure 96 (Thermo Fisher Scientific) and AllSheng Instruments</p>
+            <table class="price-table">
+                <thead>
+                    <tr>
+                        <th style="width: 40%;">Product</th>
+                        <th style="width: 22%;">Cat. No.</th>
+                        <th style="width: 10%;">Tests</th>
+                        <th style="width: 14%;">Price (USD)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="product-name">PREP-MB RAPID II DNA/RNA Extraction Kit</span></td>
+                        <td><span class="catalog-number">I-MBR-v01-96</span></td>
+                        <td>96</td>
+                        <td>240.00</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="product-name">PREP-NA PLUS DNA/RNA Extraction Kit</span>
+                            <span class="product-note">All sample types except semen</span>
+                        </td>
+                        <td><span class="catalog-number">I-NAP-v01-50</span></td>
+                        <td>50</td>
+                        <td>80.00</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="product-name">PREP-MB MAX DNA Extraction Kit</span>
+                            <span class="product-note">Optimized for semen samples</span>
+                        </td>
+                        <td><span class="catalog-number">I-MBM-v01-48</span></td>
+                        <td>48</td>
+                        <td>134.40</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Transport Medium -->
+            <div class="price-section-header">Transport Medium</div>
+            <table class="price-table">
+                <thead>
+                    <tr>
+                        <th style="width: 40%;">Product</th>
+                        <th style="width: 22%;">Cat. No.</th>
+                        <th style="width: 10%;">Tests</th>
+                        <th style="width: 14%;">Price (USD)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="product-name">STOR F Transport Medium</span></td>
+                        <td><span class="catalog-number">S-STRF-v01-100</span></td>
+                        <td>100</td>
+                        <td>60.00</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p style="margin-top: 12px; font-size: 0.78em; color: var(--text-muted);">Prices in USD. Subject to change without notice. For research and professional diagnostic use.</p>
+
+            <div class="page-footer-bar">
+                <span>www.genomer.com.tr</span>
+                <span class="page-num">13</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         PAGE 13: BACK COVER
+         ============================================ -->
+    <div class="page back-cover">
+        <!-- Molecular dots background -->
+        <svg class="molecular-dots" viewBox="0 0 800 1130" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="120" cy="200" r="2.5" fill="rgba(255,255,255,0.1)"/>
+            <circle cx="680" cy="300" r="3" fill="rgba(255,255,255,0.08)"/>
+            <circle cx="200" cy="800" r="2" fill="rgba(255,255,255,0.1)"/>
+            <circle cx="600" cy="900" r="2.5" fill="rgba(255,255,255,0.12)"/>
+            <line x1="120" y1="200" x2="160" y2="240" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+            <line x1="600" y1="900" x2="640" y2="940" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+        </svg>
+
+        <div class="page-content">
+            <img src="genomerlogo.png" alt="Genomer" class="back-logo">
+            <p class="back-tagline">Advanced Molecular Diagnostics</p>
+            <div class="back-contact">
+                <p style="font-size: 1.05em; margin-bottom: 14px;">Biyoteknoloji Arge San. ve Tic. Ltd. &#350;ti.</p>
+                <p><strong style="color: white;">www.genomer.com.tr</strong></p>
+                <p>sales@genomer.com.tr</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

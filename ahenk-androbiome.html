@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Androbiome - Ahenk Laboratuvarı</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=block" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0EA5E9;
+            --primary-dark: #0284C7;
+            --primary-light: #38BDF8;
+            --bg-white: #FFFFFF;
+            --bg-light: #F8FAFC;
+            --bg-muted: #F1F5F9;
+            --bg-primary-subtle: #E0F2FE;
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --text-muted: #64748B;
+            --text-white: #FFFFFF;
+            --border-light: #E2E8F0;
+            --border-medium: #CBD5E1;
+            --result-normal: #10B981;
+            --result-normal-bg: #D1FAE5;
+            --result-moderate: #F59E0B;
+            --result-moderate-bg: #FEF3C7;
+            --result-abnormal: #EF4444;
+            --result-abnormal-bg: #FEE2E2;
+            --font-heading: 'Figtree', sans-serif;
+            --font-body: 'Noto Sans', sans-serif;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { font-size: 10pt; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+        body { font-family: var(--font-body); color: var(--text-primary); line-height: 1.6; background: var(--bg-muted); }
+        @page { size: 210mm 297mm; margin: 0; }
+        .page {
+            width: 210mm; height: 297mm; margin: 0 auto 20px; padding: 12mm;
+            background: var(--bg-white); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            position: relative; overflow: hidden; page-break-after: always;
+        }
+        .page:last-child { page-break-after: auto; }
+        .page-content { height: 100%; display: flex; flex-direction: column; }
+        @media print { body { background: white; } .page { margin: 0; box-shadow: none; } }
+        h1,h2,h3,h4 { font-family: var(--font-heading); font-weight: 600; color: var(--primary-dark); line-height: 1.3; }
+        h2 { font-size: 1.5em; margin-bottom: 10px; }
+        h3 { font-size: 1.15em; margin-bottom: 8px; }
+        p { margin-bottom: 8px; color: var(--text-secondary); }
+
+        /* Cover */
+        .cover-page { padding: 0; background: linear-gradient(135deg, #E8EFF8 0%, #FFFFFF 50%, #E8EFF8 100%); }
+        .cover-page .page-content { padding: 12mm; justify-content: space-between; }
+        .cover-header { display: flex; justify-content: space-between; align-items: center; }
+        .cover-logo { height: 50px; }
+        .cover-main { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; text-align: left; padding-right: 180px; }
+        .cover-title { font-size: 3.2em; font-weight: 700; margin-bottom: 16px; color: #1B3A6B; font-family: var(--font-heading); }
+        .cover-subtitle { font-size: 1.3em; font-weight: 400; color: var(--text-secondary); max-width: 380px; line-height: 1.5; }
+        .cover-badge { display: inline-block; background: rgba(27,58,107,0.08); border: 1px solid rgba(27,58,107,0.2); padding: 6px 16px; border-radius: 20px; font-size: 0.85em; margin-top: 20px; color: #1B3A6B; }
+        .cover-footer { text-align: left; font-size: 0.9em; color: var(--text-muted); background: #1B3A6B; color: white; margin: 0 -12mm -12mm; padding: 30px 12mm; }
+
+        .dna-helix-container { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); height: 85%; width: 240px; opacity: 0.9; pointer-events: none; z-index: 1; }
+        .dna-helix-container svg { width: 100%; height: 100%; display: block; }
+        .cover-shapes { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; pointer-events: none; }
+        .blob { position: absolute; border-radius: 50%; filter: blur(60px); }
+        .blob-2 { width: 280px; height: 280px; background: rgba(123, 163, 212, 0.12); bottom: -60px; left: -60px; }
+
+        /* Page header */
+        .page-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 2px solid var(--primary); margin-bottom: 14px; }
+        .page-header img { height: 28px; }
+        .page-number { font-size: 0.85em; color: var(--text-muted); font-weight: 500; }
+
+        /* Section headers */
+        .section-header-gradient { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; padding: 7px 14px; border-radius: 8px; margin-bottom: 10px; }
+        .section-header-gradient h2 { color: white; margin: 0; font-size: 1.15em; }
+        .section-header-light { background: var(--bg-primary-subtle); border-left: 4px solid var(--primary); padding: 5px 12px; border-radius: 0 6px 6px 0; margin-bottom: 8px; }
+        .section-header-light h3 { color: var(--primary-dark); margin: 0; font-size: 0.95em; }
+
+        /* Feature list */
+        .feature-list { list-style: none; margin-bottom: 12px; }
+        .feature-item { display: flex; align-items: flex-start; gap: 10px; padding: 6px 0; }
+        .feature-bullet { width: 7px; height: 7px; background: var(--primary); border-radius: 50%; margin-top: 7px; flex-shrink: 0; }
+        .feature-text { color: var(--text-secondary); line-height: 1.5; font-size: 0.92em; }
+
+        /* Panel table */
+        .panel-table { width: 100%; border-collapse: collapse; font-size: 0.72em; line-height: 1.2; }
+        .panel-table thead { background: var(--primary-dark); color: white; }
+        .panel-table th { padding: 3px 8px; text-align: left; font-weight: 600; font-size: 0.72em; }
+        .panel-table tbody tr { border-bottom: 1px solid var(--border-light); }
+        .panel-table tbody tr:nth-child(even) { background: var(--bg-light); }
+        .panel-table td { padding: 2px 8px; color: var(--text-secondary); }
+        .panel-table .group-row { background: var(--bg-primary-subtle) !important; }
+        .panel-table .group-row td { font-weight: 600; color: var(--primary-dark); padding: 3px 8px; }
+
+        /* Result table — 5-column format matching actual report */
+        .result-table { width: 100%; border-collapse: collapse; font-size: 0.65em; line-height: 1.2; }
+        .result-table thead tr:first-child th { background: var(--primary-dark); color: white; font-size: 0.78em; padding: 3px 5px; text-align: center; border: 1px solid var(--primary-dark); }
+        .result-table thead tr:last-child th { background: #E0F2FE; color: var(--primary-dark); font-size: 0.7em; padding: 2px 5px; text-align: center; border: 1px solid var(--border-light); font-weight: 500; }
+        .result-table td { padding: 2px 5px; vertical-align: middle; border-bottom: 1px solid var(--border-light); font-size: 0.95em; }
+        .result-table td:first-child { text-align: center; width: 22px; color: var(--text-muted); }
+        .result-table td:nth-child(3), .result-table td:nth-child(4) { text-align: center; font-family: 'Noto Sans', sans-serif; font-size: 0.9em; }
+        .result-table .group-header { background: var(--bg-primary-subtle); }
+        .result-table .group-header td { padding: 2px 5px; font-weight: 600; color: var(--primary-dark); font-size: 0.88em; }
+        .result-table .sum-row { background: var(--bg-light); }
+        .result-table .sum-row td { font-weight: 600; font-style: italic; color: var(--text-primary); }
+        .status-normal { background: var(--result-normal-bg); color: var(--result-normal); font-weight: 600; text-align: center; }
+        .status-abnormal { background: var(--result-abnormal-bg); color: var(--result-abnormal); font-weight: 600; text-align: center; }
+        .status-not-detected { color: var(--text-muted); text-align: center; }
+
+        /* Bar chart in TMD % column */
+        .bar-container { width: 100%; height: 10px; background: var(--bg-muted); border-radius: 2px; overflow: hidden; }
+        .bar { height: 100%; border-radius: 2px; min-width: 2px; }
+        .bar-normal { background: var(--result-normal); }
+        .bar-moderate { background: var(--result-moderate); }
+        .bar-abnormal { background: var(--result-abnormal); }
+
+        /* Conclusion box */
+        .conclusion-box { border-radius: 6px; padding: 6px 10px; margin-top: 4px; font-size: 0.72em; }
+        .conclusion-normal { background: var(--result-normal-bg); border: 1px solid var(--result-normal); }
+        .conclusion-abnormal { background: var(--result-abnormal-bg); border: 1px solid var(--result-abnormal); }
+        .conclusion-title { font-weight: 600; margin-bottom: 3px; font-size: 0.88em; }
+        .conclusion-text { font-size: 0.85em; margin: 0; }
+
+        /* Example label */
+        .example-label { display: inline-block; background: var(--bg-primary-subtle); color: var(--primary-dark); font-weight: 600; padding: 3px 10px; border-radius: 4px; font-size: 0.78em; margin-bottom: 4px; }
+
+        /* Info/warning boxes */
+        .info-box { background: var(--bg-primary-subtle); border-left: 4px solid var(--primary); padding: 12px 14px; border-radius: 0 6px 6px 0; margin: 12px 0; }
+        .info-box p { margin: 0; font-size: 0.88em; }
+        .warning-box { background: #FEF3C7; border: 1px solid #F59E0B; border-radius: 6px; padding: 12px 14px; margin: 12px 0; }
+        .warning-box p { color: #92400E; margin: 0; font-size: 0.85em; }
+
+        /* Prep table */
+        .prep-table { width: 100%; border-collapse: collapse; font-size: 0.85em; }
+        .prep-table thead th { background: var(--primary-dark); color: white; padding: 8px 10px; text-align: left; font-weight: 600; }
+        .prep-table tbody tr { border-bottom: 1px solid var(--border-light); }
+        .prep-table td { padding: 7px 10px; color: var(--text-secondary); }
+        .prep-table .time-badge { background: var(--primary); color: white; padding: 3px 10px; border-radius: 12px; font-size: 0.82em; font-weight: 600; white-space: nowrap; }
+
+        /* Color legend */
+        .color-legend { display: flex; gap: 20px; margin: 12px 0; font-size: 0.85em; }
+        .legend-item { display: flex; align-items: center; gap: 6px; }
+        .legend-dot { width: 14px; height: 14px; border-radius: 3px; }
+        .legend-green { background: var(--result-normal); }
+        .legend-yellow { background: var(--result-moderate); }
+        .legend-red { background: var(--result-abnormal); }
+
+        /* Interpretation schema */
+        .step-box { background: var(--bg-light); border: 1px solid var(--border-light); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+        .step-number { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; background: var(--primary); color: white; border-radius: 50%; font-weight: 700; font-size: 0.85em; margin-right: 8px; }
+        .step-title { font-weight: 600; color: var(--primary-dark); font-size: 0.95em; }
+
+        /* Highlight card */
+        .highlight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0; }
+        .highlight-card { background: var(--bg-primary-subtle); border-radius: 6px; padding: 8px 10px; border-left: 3px solid var(--primary); }
+        .highlight-card h4 { color: var(--primary-dark); font-size: 0.82em; margin-bottom: 2px; }
+        .highlight-card p { margin: 0; font-size: 0.75em; color: var(--text-secondary); line-height: 1.3; }
+
+        /* Report example pages */
+        .report-page-subtitle { font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 14px; line-height: 1.4; }
+        .report-images { display: flex; gap: 12px; justify-content: center; align-items: flex-start; }
+        .report-images figure { margin: 0; flex: 1; }
+        .report-images img { width: 100%; max-height: 780px; object-fit: contain; border: 1px solid var(--border-light); border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .report-images figcaption { text-align: center; font-size: 0.72rem; color: var(--text-muted); margin-top: 4px; font-weight: 500; }
+        .report-badge { display: inline-block; padding: 3px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; margin-bottom: 10px; }
+        .badge-green { background: var(--result-normal-bg); color: var(--result-normal); }
+        .badge-yellow { background: var(--result-moderate-bg); color: var(--result-moderate); }
+        .badge-red { background: var(--result-abnormal-bg); color: var(--result-abnormal); }
+        .report-callout { background: var(--bg-light); border-radius: 6px; padding: 8px 12px; border-left: 3px solid var(--primary); margin-top: 10px; }
+        .report-callout h4 { font-size: 0.82rem; color: var(--primary-dark); margin-bottom: 2px; }
+        .report-callout p { margin: 0; font-size: 0.75rem; line-height: 1.35; }
+
+        /* Back cover */
+        .back-cover {
+            background: #FFFFFF; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center; padding: 50px;
+            position: relative;
+        }
+        .back-cover::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px; background: linear-gradient(90deg, var(--primary) 0%, #1B3A6B 100%); }
+        .back-cover::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 80px; background: #1B3A6B; }
+        .back-cover .back-logo { height: 65px; margin-bottom: 30px; }
+        .back-cover h2 { color: #1B3A6B; font-size: 1.4rem; margin-bottom: 8px; }
+        .back-cover p { color: #4A4A5A; font-size: 1rem; margin-bottom: 0; }
+        .back-cover .contact-info { margin-top: 40px; color: #4A4A5A; font-size: 0.95rem; line-height: 1.8; position: relative; z-index: 1; }
+        .back-cover .contact-info a { color: #1B3A6B; text-decoration: none; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <!-- SAYFA 1: KAPAK -->
+    <div class="page cover-page">
+        <div class="cover-shapes">
+            <div class="blob blob-2"></div>
+        </div>
+        <div class="dna-helix-container">
+            <svg class="dna-helix" viewBox="0 0 200 800" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="helixGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="rgba(27,58,107,0.2)"/>
+                        <stop offset="50%" stop-color="rgba(27,58,107,0.12)"/>
+                        <stop offset="100%" stop-color="rgba(27,58,107,0.2)"/>
+                    </linearGradient>
+                </defs>
+                <path d="M40,0 Q100,50 160,100 Q100,150 40,200 Q100,250 160,300 Q100,350 40,400 Q100,450 160,500 Q100,550 40,600 Q100,650 160,700 Q100,750 40,800" stroke="url(#helixGrad)" stroke-width="3" fill="none"/>
+                <path d="M160,0 Q100,50 40,100 Q100,150 160,200 Q100,250 40,300 Q100,350 160,400 Q100,450 40,500 Q100,550 160,600 Q100,650 40,700 Q100,750 160,800" stroke="url(#helixGrad)" stroke-width="3" fill="none"/>
+                <line x1="65" y1="50" x2="135" y2="50" stroke="rgba(27,58,107,0.08)" stroke-width="2"/>
+                <line x1="45" y1="100" x2="155" y2="100" stroke="rgba(27,58,107,0.08)" stroke-width="2"/>
+                <line x1="65" y1="150" x2="135" y2="150" stroke="rgba(27,58,107,0.08)" stroke-width="2"/>
+                <line x1="45" y1="200" x2="155" y2="200" stroke="rgba(27,58,107,0.08)" stroke-width="2"/>
+                <line x1="65" y1="250" x2="135" y2="250" stroke="rgba(27,58,107,0.08)" stroke-width="2"/>
+                <line x1="45" y1="300" x2="155" y2="300" stroke="rgba(27,58,107,0.08)" stroke-width="2"/>
+                <line x1="65" y1="350" x2="135" y2="350" stroke="rgba(27,58,107,0.08)" stroke-width="2"/>
+                <line x1="45" y1="400" x2="155" y2="400" stroke="rgba(27,58,107,0.08)" stroke-width="2"/>
+                <line x1="65" y1="450" x2="135" y2="450" stroke="rgba(27,58,107,0.08)" stroke-width="2"/>
+                <line x1="45" y1="500" x2="155" y2="500" stroke="rgba(27,58,107,0.08)" stroke-width="2"/>
+                <line x1="65" y1="550" x2="135" y2="550" stroke="rgba(27,58,107,0.08)" stroke-width="2"/>
+                <line x1="45" y1="600" x2="155" y2="600" stroke="rgba(27,58,107,0.08)" stroke-width="2"/>
+                <line x1="65" y1="650" x2="135" y2="650" stroke="rgba(27,58,107,0.08)" stroke-width="2"/>
+                <line x1="45" y1="700" x2="155" y2="700" stroke="rgba(27,58,107,0.08)" stroke-width="2"/>
+                <line x1="65" y1="750" x2="135" y2="750" stroke="rgba(27,58,107,0.08)" stroke-width="2"/>
+            </svg>
+        </div>
+        <div class="page-content">
+            <div class="cover-header">
+                <img src="ahenklogo.png" alt="Ahenk Laboratuvarı" class="cover-logo">
+            </div>
+            <div class="cover-main">
+                <h1 class="cover-title">ANDROBIOME</h1>
+                <div class="cover-subtitle">Erkek ürogenital sistem mikrobiyotasının kapsamlı değerlendirilmesi ve CYBE etkeni zorunlu patojenlerin tespiti</div>
+                <div class="cover-badge">Erkek Ürogenital Mikrobiyom Analizi</div>
+            </div>
+            <div class="cover-footer">Moleküler Tanıda Öncü Teknoloji</div>
+        </div>
+    </div>
+
+    <!-- SAYFA 2: GİRİŞ + ANALİT PANELİ -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="ahenklogo.png" alt="Ahenk Laboratuvarı">
+                <span class="page-number">2</span>
+            </div>
+
+            <div class="section-header-gradient">
+                <h2>Androbiome Nedir?</h2>
+            </div>
+
+            <p style="font-size: 0.82em; margin-bottom: 6px;">Androbiome, erkek ürogenital sistem mikrobiyotasının durumunun değerlendirilmesi ve cinsel yolla bulaşan enfeksiyonların (CYBE) etkeni olan zorunlu patojenlerin tespiti için kapsamlı bir Real-Time PCR tabanlı testtir. Kültürde üretilmesi zor olan anaerobik mikroorganizmalar dahil olmak üzere normal ve fırsatçı mikrobiyota bileşenlerinin hızlı kantitatif tayinini sağlar.</p>
+
+            <div class="highlight-grid">
+                <div class="highlight-card">
+                    <h4>Kantitatif Mikrobiyota Analizi</h4>
+                    <p>Normal ve fırsatçı mikrobiyota bileşenlerinin oransal dağılımını belirler</p>
+                </div>
+                <div class="highlight-card">
+                    <h4>CYBE Taraması</h4>
+                    <p>C. trachomatis, M. genitalium, N. gonorrhoeae, T. vaginalis tespiti</p>
+                </div>
+                <div class="highlight-card">
+                    <h4>Geniş Fırsatçı Mikroorganizma Profili</h4>
+                    <p>Kronik hastalık formları ve tedaviye yetersiz yanıt durumlarında detaylı değerlendirme</p>
+                </div>
+                <div class="highlight-card">
+                    <h4>Moleküler Tanı</h4>
+                    <p>Klasik kültür yöntemiyle saptanamayan anaerobları ve zor üreyen mikroorganizmaları da kapsar</p>
+                </div>
+            </div>
+
+            <div class="section-header-light" style="margin-top: 6px;">
+                <h3>Androbiome Tam Analiz Paneli</h3>
+            </div>
+
+            <table class="panel-table">
+                <thead>
+                    <tr><th style="width: 60%;">Mikroorganizma</th><th>Kategori</th></tr>
+                </thead>
+                <tbody>
+                    <tr class="group-row"><td colspan="2">Göstergeler</td></tr>
+                    <tr><td>İnsan genomik DNA'sı</td><td>Numune kalite kontrolü</td></tr>
+                    <tr><td>Toplam Bakteri Kütlesi (TBK)</td><td>Genel bakteri kantitasyonu</td></tr>
+                    <tr class="group-row"><td colspan="2">Normal Mikrobiyota (Kommensaller)</td></tr>
+                    <tr><td>Staphylococcus spp.</td><td>Normal kommensal</td></tr>
+                    <tr><td>Streptococcus spp.</td><td>Normal kommensal</td></tr>
+                    <tr><td>Corynebacterium spp.</td><td>Normal kommensal</td></tr>
+                    <tr class="group-row"><td colspan="2">Geçici Mikroorganizmalar</td></tr>
+                    <tr><td>Lactobacillus spp.</td><td>Partner kontaminasyonu göstergesi</td></tr>
+                    <tr class="group-row"><td colspan="2">BV ile İlişkili Fırsatçı Mikroorganizmalar</td></tr>
+                    <tr><td>Gardnerella vaginalis</td><td>Fırsatçı</td></tr>
+                    <tr><td>Megasphaera spp. / Veillonella spp. / Dialister spp.</td><td>Fırsatçı</td></tr>
+                    <tr><td>Sneathia spp. / Leptotrichia spp. / Fusobacterium spp.</td><td>Fırsatçı</td></tr>
+                    <tr><td>Ureaplasma urealyticum</td><td>Fırsatçı mikoplazma</td></tr>
+                    <tr><td>Ureaplasma parvum</td><td>Fırsatçı mikoplazma</td></tr>
+                    <tr><td>Mycoplasma hominis</td><td>Fırsatçı mikoplazma</td></tr>
+                    <tr><td>Atopobium kümesi</td><td>Fırsatçı</td></tr>
+                    <tr class="group-row"><td colspan="2">Fırsatçı Anaeroblar</td></tr>
+                    <tr><td>Bacteroides spp. / Porphyromonas spp. / Prevotella spp.</td><td>Fırsatçı anaerob</td></tr>
+                    <tr><td>Anaerococcus spp.</td><td>Fırsatçı anaerob</td></tr>
+                    <tr><td>Peptostreptococcus spp. / Parvimonas spp.</td><td>Fırsatçı anaerob</td></tr>
+                    <tr><td>Eubacterium spp.</td><td>Fırsatçı anaerob</td></tr>
+                    <tr class="group-row"><td colspan="2">Diğer Fırsatçı Mikroorganizmalar</td></tr>
+                    <tr><td>Haemophilus spp.</td><td>Fırsatçı</td></tr>
+                    <tr><td>Pseudomonas aeruginosa / Ralstonia spp. / Burkholderia spp.</td><td>Fırsatçı</td></tr>
+                    <tr><td>Enterobacteriaceae spp. / Enterococcus spp.</td><td>Fırsatçı</td></tr>
+                    <tr class="group-row"><td colspan="2">Maya Mantarları</td></tr>
+                    <tr><td>Candida spp.</td><td>Maya mantarı</td></tr>
+                    <tr class="group-row"><td colspan="2">Zorunlu Patojenler (CYBE)</td></tr>
+                    <tr><td>Mycoplasma genitalium</td><td>Zorunlu patojen</td></tr>
+                    <tr><td>Trichomonas vaginalis</td><td>Zorunlu patojen</td></tr>
+                    <tr><td>Neisseria gonorrhoeae</td><td>Zorunlu patojen</td></tr>
+                    <tr><td>Chlamydia trachomatis</td><td>Zorunlu patojen</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- SAYFA 3: BİYOMATERYAL + HASTA HAZIRLIĞI -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="ahenklogo.png" alt="Ahenk Laboratuvarı">
+                <span class="page-number">3</span>
+            </div>
+
+            <div class="section-header-gradient">
+                <h2>Biyomateryal ve Hasta Hazırlığı</h2>
+            </div>
+
+            <div class="section-header-light">
+                <h3>Kabul Edilen Biyomateryal Türleri</h3>
+            </div>
+
+            <table class="prep-table">
+                <thead>
+                    <tr><th>Biyomateryal</th><th>Tanı Hedefi</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Glans penis / prepisyum epitel sürüntüsü</td><td>Üretrit, balanopostit</td></tr>
+                    <tr><td>Üretra sürüntüsü</td><td>Üretrit</td></tr>
+                    <tr><td>Ejakülat</td><td>Prostatit, vezikülit, epididimit</td></tr>
+                    <tr><td>Prostat salgısı</td><td>Prostatit</td></tr>
+                    <tr><td>İdrar (ilk porsiyon)</td><td>Üretrit (sürüntü yerine alternatif)</td></tr>
+                </tbody>
+            </table>
+
+            <div class="section-header-light" style="margin-top: 16px;">
+                <h3>Hasta Hazırlık Kuralları</h3>
+            </div>
+
+            <table class="prep-table">
+                <thead>
+                    <tr><th>Kural</th><th>Süre</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Cinsel perhiz veya bariyer kontrasepsiyon kullanımı</td><td><span class="time-badge">3 gün önce</span></td></tr>
+                    <tr><td>Antiseptik kullanımından kaçınılması (antibakteriyel sabunlar dahil)</td><td><span class="time-badge">Test öncesi</span></td></tr>
+                    <tr><td>Sürüntü alınacaksa idrar yapmama</td><td><span class="time-badge">1,5&ndash;2 saat önce</span></td></tr>
+                    <tr><td>Akut prostatit şüphesinde prostat masajı</td><td style="color: var(--result-abnormal); font-weight: 600;">Kesinlikle yasak!</td></tr>
+                </tbody>
+            </table>
+
+            <div class="info-box" style="margin-top: 14px;">
+                <p>Antibiyotik kullanımı sırasında Androbiome incelemesi reçete edilebilir (örn. tedavi takibi için), ancak antibiyotik tedavisinin sonuçları etkileyebileceği göz önünde bulundurulmalıdır.</p>
+            </div>
+
+            <div class="section-header-gradient" style="margin-top: 16px;">
+                <h2>Sonuçların Analizi</h2>
+            </div>
+
+            <p style="font-size: 0.9em;">Androbiome testi ölçü birimi olarak <strong>genom eşdeğeri (GE)/numune</strong> kullanır. GE, bir mikroorganizmanın bir genomuna karşılık gelen genetik materyal miktarıdır ve mikrobiyolojik kültürdeki KOB'a benzerdir.</p>
+
+            <ul class="feature-list">
+                <li class="feature-item">
+                    <span class="feature-bullet"></span>
+                    <span class="feature-text"><strong>Mutlak değerler</strong> &ndash; GE/numune cinsinden; her mikroorganizmanın kantitatif bakteri yükünü gösterir</span>
+                </li>
+                <li class="feature-item">
+                    <span class="feature-bullet"></span>
+                    <span class="feature-text"><strong>Rölatif değerler</strong> &ndash; % cinsinden; her taksonun toplam bakteri kütlesindeki (TBK) oranını temsil eder</span>
+                </li>
+            </ul>
+
+            <div class="color-legend">
+                <div class="legend-item"><div class="legend-dot legend-green"></div><span>Normalden sapma yok</span></div>
+                <div class="legend-item"><div class="legend-dot legend-yellow"></div><span>Dikkat gerektirir</span></div>
+                <div class="legend-item"><div class="legend-dot legend-red"></div><span>Patoloji, normalden sapma</span></div>
+            </div>
+
+            <div class="warning-box">
+                <p><strong>Not:</strong> Patoloji alanına giren göstergelerin klinik önemi, tedavi eden hekim tarafından tanı hedeflerine ve hastanın genel muayene sonuçlarına göre değerlendirilmelidir.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SAYFA 4: YORUMLAMA ŞEMASI -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="ahenklogo.png" alt="Ahenk Laboratuvarı">
+                <span class="page-number">4</span>
+            </div>
+
+            <div class="section-header-gradient">
+                <h2>Sonuç Yorumlama Şeması</h2>
+            </div>
+
+            <div class="step-box">
+                <span class="step-number">1</span>
+                <span class="step-title">Zorunlu patojenler ve Candida spp. varlığının değerlendirilmesi</span>
+                <p style="font-size: 0.85em; margin-top: 6px; margin-bottom: 0;">Bu mikroorganizmalar, yetersiz biyomateryal durumunda bile sonuçta raporlanır.<br>
+                <strong>Zorunlu patojenler:</strong> Saptanmadı / <span style="color: var(--result-abnormal); font-weight: 600;">SAPTANDI</span><br>
+                <strong>Candida spp.:</strong> ED altında / 10<sup>3</sup>&ndash;10<sup>4</sup> / &gt;10<sup>4</sup></p>
+            </div>
+
+            <div class="step-box">
+                <span class="step-number">2</span>
+                <span class="step-title">Biyomateryalin analiz gereksinimlerine uygunluğunun kontrolü</span>
+                <p style="font-size: 0.85em; margin-top: 6px; margin-bottom: 0;">
+                1. İnsan DNA'sı &gt;10<sup>3</sup> &nbsp;&bull;&nbsp; 2. TBK &gt;10<sup>4</sup><br>
+                Hem TBK hem de İnsan DNA'sı eşik değerinin altındaysa &rarr; yetersiz biyomateryal raporlanır<br>
+                3. Lactobacillus spp. &gt;%10 &rarr; eşik aşıldı (partner kontaminasyonu)</p>
+            </div>
+
+            <div class="step-box">
+                <span class="step-number">3</span>
+                <span class="step-title">Normal ve fırsatçı mikrobiyota arasındaki dengenin değerlendirilmesi</span>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px;">
+                    <div style="background: var(--result-normal-bg); border-radius: 6px; padding: 8px 10px;">
+                        <p style="font-size: 0.82em; margin: 0; color: var(--result-normal);"><strong>Normal mikrobiyom yapısı:</strong></p>
+                        <ul style="font-size: 0.78em; margin: 4px 0 0 16px; color: var(--text-secondary);">
+                            <li>Normal mikrobiyota baskınlığı</li>
+                            <li>TBK &gt;10<sup>5</sup>: 2+ cins temsili</li>
+                            <li>TBK &lt;10<sup>5</sup>: tek cins kabul edilir</li>
+                            <li>Düşük bakteri yükü</li>
+                        </ul>
+                    </div>
+                    <div style="background: var(--result-abnormal-bg); border-radius: 6px; padding: 8px 10px;">
+                        <p style="font-size: 0.82em; margin: 0; color: var(--result-abnormal);"><strong>Anormal mikrobiyom yapısı:</strong></p>
+                        <ul style="font-size: 0.78em; margin: 4px 0 0 16px; color: var(--text-secondary);">
+                            <li>Normal mikrobiyota oranı azalmış</li>
+                            <li>Fırsatçı mikroorganizmaların baskınlığı</li>
+                            <li>TBK &gt;10<sup>5</sup>: tek cins temsili</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-box">
+                <span class="step-number">4</span>
+                <span class="step-title">Otomatik sonuç oluşturulması</span>
+                <p style="font-size: 0.85em; margin-top: 6px; margin-bottom: 0;">
+                &bull; Zorunlu patojenlerin varlığı &bull; Candida spp. varlığı &bull; Baskın mikroorganizma grubunun belirlenmesi ile bakteriyel mikrobiyom yapısının değerlendirilmesi</p>
+            </div>
+
+            <div class="info-box" style="margin-top: 10px;">
+                <p><strong>Lactobacillus spp. erkek numunelerinde:</strong> Erkek ürogenital sisteminde Lactobacillus normalde bulunmaz. Eşik değerini aşan Lactobacillus varlığı, kadın partnerin mikrobiyotası ile kontaminasyonu gösterir. Bu durumda numune yeniden alınmalıdır.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SAYFA 5: ÖRNEK RAPOR — Normal Mikrobiyom -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="ahenklogo.png" alt="Ahenk Laboratuvarı">
+                <span class="page-number">5</span>
+            </div>
+
+            <div class="section-header-gradient">
+                <h2>Örnek Raporlar</h2>
+            </div>
+
+            <span class="report-badge badge-green">Normal Mikrobiyom Kompozisyonu</span>
+            <p class="report-page-subtitle">Kommensal floranın baskın olduğu, CYBE ve fırsatçı patojen saptanmayan sağlıklı bir erkek ürogenital mikrobiyota profili. Logaritmik ölçekli çubuk grafik, kommensallerin toplam bakteri kütlesinin tamamına yakınını oluşturduğunu göstermektedir.</p>
+
+            <div class="report-images">
+                <figure>
+                    <img src="report-andro-normal.png" alt="Androbiome normal rapor">
+                </figure>
+            </div>
+
+            <div class="report-callout">
+                <h4>Sonuç:</h4>
+                <p>CYBE DNA'sı saptanmadı. Candida spp. eşik değerinin altında. Bakteriyel mikrobiyom kompozisyonu normaldir.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SAYFA 6: ÖRNEK RAPOR — Fırsatçı Bakteriler -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="ahenklogo.png" alt="Ahenk Laboratuvarı">
+                <span class="page-number">6</span>
+            </div>
+
+            <span class="report-badge badge-yellow">Fırsatçı Bakteriler Saptandı</span>
+            <p class="report-page-subtitle">Kommensal floranın azaldığı ve fırsatçı mikroorganizmaların arttığı bir mikrobiyom profili. Enterobacteriaceae spp. / Enterococcus spp. baskın hale gelmiştir; ancak CYBE etkenleri negatiftir. Kronik veya tekrarlayan ürogenital enfeksiyonlarda sık karşılaşılan bir tablo.</p>
+
+            <div class="report-images">
+                <figure>
+                    <img src="report-andro-opportunistic.png" alt="Androbiome fırsatçı bakteri raporu">
+                </figure>
+            </div>
+
+            <div class="report-callout">
+                <h4>Sonuç:</h4>
+                <p>CYBE DNA'sı saptanmadı. Candida spp. eşik değerinin altında. Bakteriyel mikrobiyom kompozisyonu anormaldir: fırsatçı bakteriler saptandı.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SAYFA 7: ÖRNEK RAPOR — Ciddi Disbiyoz + CYBE -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <img src="ahenklogo.png" alt="Ahenk Laboratuvarı">
+                <span class="page-number">7</span>
+            </div>
+
+            <span class="report-badge badge-red">Ciddi Disbiyoz + CYBE Saptandı</span>
+            <p class="report-page-subtitle">Normal ve fırsatçı mikroflora dengesinin ciddi şekilde bozulduğu, Chlamydia trachomatis pozitif bir vaka. Fırsatçı anaeroblar toplam bakteri kütlesinin büyük bölümünü oluşturmuş, kommensaller belirgin şekilde azalmıştır. Acil antimikrobiyal tedavi planlaması gerektirir.</p>
+
+            <div class="report-images">
+                <figure>
+                    <img src="report-andro-sti.png" alt="Androbiome ciddi disbiyoz raporu">
+                </figure>
+            </div>
+
+            <div class="report-callout">
+                <h4>Sonuç:</h4>
+                <p>SAPTANDI: Chlamydia trachomatis. Candida spp. eşik değerinin altında. Bakteriyel mikrobiyom kompozisyonu anormaldir: CYBE saptandı, normal ve fırsatçı mikroflora dengesi ciddi şekilde bozulmuştur.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SAYFA 8: ARKA KAPAK -->
+    <div class="page back-cover">
+        <img src="ahenklogo.png" alt="Ahenk Laboratuvarı" class="back-logo">
+        <h2>Sağlığınız İçin Doğru Sonuçlar</h2>
+
+        <div class="contact-info">
+            <a href="https://www.ahenklab.com.tr">www.ahenklab.com.tr</a><br>
+            444 89 88<br>
+            Merkez Mah. Darülaceze Cad. No: 20 Pk. 34381 Şişli / İSTANBUL
+        </div>
+    </div>
+</body>
+</html>

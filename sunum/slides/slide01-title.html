@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 720pt;
+    height: 405pt;
+    display: flex;
+    flex-direction: column;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #0F1A2E url('bg-gradient-dark.png') no-repeat center center;
+    background-size: cover;
+    position: relative;
+    overflow: hidden;
+  }
+  .logo {
+    position: absolute;
+    top: 24pt;
+    left: 48pt;
+    height: 36pt;
+  }
+  .dna-icon {
+    position: absolute;
+    right: 40pt;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 130pt;
+    height: 130pt;
+    opacity: 0.2;
+    z-index: 0;
+  }
+  .top-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40pt 48pt;
+    position: relative;
+    z-index: 1;
+  }
+  .main-title {
+    font-size: 28pt;
+    font-weight: bold;
+    color: #FFFFFF;
+    margin-bottom: 8pt;
+    margin-top: 24pt;
+  }
+  .subtitle {
+    font-size: 16pt;
+    color: #38BDF8;
+    margin-bottom: 14pt;
+    font-weight: normal;
+  }
+  .description {
+    font-size: 10pt;
+    color: #94A3B8;
+    max-width: 400pt;
+    line-height: 1.6;
+  }
+  .bottom-bar {
+    width: 100%;
+    height: 44pt;
+    background: #0F4C75;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 48pt;
+    flex-shrink: 0;
+  }
+  .bottom-bar p {
+    font-size: 8pt;
+    color: #94A3B8;
+  }
+</style>
+</head>
+<body>
+  <img src="genomerlogo.png" alt="Genomer" class="logo">
+  <img src="icon-dna.png" alt="" class="dna-icon">
+  <div class="top-content">
+    <h1 class="main-title">Microbiome Testing Line</h1>
+    <h2 class="subtitle">Clinical Product Portfolio</h2>
+    <p class="description">Comprehensive real-time PCR-based molecular diagnostics for quantitative microbiota assessment across gynecological, pediatric, and urological applications</p>
+  </div>
+  <div class="bottom-bar">
+    <p>For Healthcare Professionals</p>
+    <p>www.genomer.com.tr</p>
+  </div>
+</body>
+</html>

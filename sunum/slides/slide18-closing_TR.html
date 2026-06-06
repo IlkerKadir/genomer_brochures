@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slayt 18 – Kapanış</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html {
+    background: #0F1A2E;
+  }
+  html, body {
+    width: 720pt;
+    height: 405pt;
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #0F1A2E;
+    overflow: hidden;
+    position: relative;
+  }
+  .top-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 40pt;
+  }
+  .top-section img {
+    height: 40pt;
+    margin-bottom: 14pt;
+  }
+  .top-section h1 {
+    font-size: 22pt;
+    color: #FFFFFF;
+    font-weight: bold;
+    margin-bottom: 8pt;
+    text-align: center;
+  }
+  .top-section p {
+    font-size: 10pt;
+    color: #38BDF8;
+    text-align: center;
+    line-height: 1.6;
+  }
+  .cards-row {
+    position: absolute;
+    top: 175pt;
+    display: flex;
+    gap: 16pt;
+    justify-content: center;
+    width: 100%;
+    padding: 0 80pt;
+  }
+  .mini-card {
+    background: rgba(255,255,255,0.08);
+    border-radius: 6pt;
+    padding: 12pt;
+    text-align: center;
+    border: 1pt solid rgba(255,255,255,0.15);
+    flex: 1;
+    max-width: 170pt;
+  }
+  .mini-card .card-name-purple {
+    font-size: 10pt;
+    color: #C084FC;
+    font-weight: bold;
+    margin-bottom: 4pt;
+  }
+  .mini-card .card-name-teal {
+    font-size: 10pt;
+    color: #2DD4BF;
+    font-weight: bold;
+    margin-bottom: 4pt;
+  }
+  .mini-card .card-name-blue {
+    font-size: 10pt;
+    color: #38BDF8;
+    font-weight: bold;
+    margin-bottom: 4pt;
+  }
+  .mini-card .card-desc {
+    font-size: 8pt;
+    color: #94A3B8;
+    line-height: 1.5;
+  }
+  .contact {
+    position: absolute;
+    bottom: 30pt;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3pt;
+  }
+  .contact .label {
+    font-size: 8pt;
+    color: #64748B;
+    line-height: 1.6;
+  }
+  .contact .website {
+    font-size: 9pt;
+    color: #94A3B8;
+    line-height: 1.6;
+  }
+  .contact .email {
+    font-size: 8pt;
+    color: #64748B;
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+  <div class="top-section">
+    <img src="genomerlogo.png" alt="Genomer Logo">
+    <h1>Mikrobiyom Test Çözümleri</h1>
+    <p>Klinik mikrobiyota değerlendirmesi için kapsamlı moleküler tanı</p>
+  </div>
+
+  <div class="cards-row">
+    <div class="mini-card">
+      <p class="card-name-purple">FEMOBIOME II</p>
+      <p class="card-desc">Kadın ürogenital mikrobiyotası</p>
+    </div>
+    <div class="mini-card">
+      <p class="card-name-teal">ENTEROBIOME KIDS</p>
+      <p class="card-desc">Çocuk bağırsak mikrobiyotası</p>
+    </div>
+    <div class="mini-card">
+      <p class="card-name-blue">ANDROBIOME</p>
+      <p class="card-desc">Erkek ürogenital mikrobiyotası</p>
+    </div>
+  </div>
+
+  <div class="contact">
+    <p class="label">Bilgi ve sipariş için:</p>
+    <p class="website">www.genomer.com.tr</p>
+    <p class="email">info@genomer.com.tr</p>
+  </div>
+</body>
+</html>

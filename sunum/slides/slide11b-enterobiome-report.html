@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+html { background: #FFFFFF; }
+body {
+  width: 720pt; height: 405pt; margin: 0; padding: 0;
+  font-family: Arial, sans-serif;
+  display: flex; background: #FFFFFF;
+}
+.container { width: 100%; height: 100%; position: relative; }
+.header { position: absolute; top: 0; left: 0; right: 0; height: 48pt; background: #0891B2; }
+.header-text { position: absolute; top: 12pt; left: 40pt; }
+.logo-top { position: absolute; top: 12pt; right: 40pt; }
+.logo-top img { height: 22pt; }
+.content { position: absolute; top: 56pt; left: 28pt; right: 28pt; bottom: 6pt; display: flex; gap: 12pt; }
+.col-left { flex: 1; display: flex; flex-direction: column; gap: 5pt; }
+.col-right { flex: 1; display: flex; flex-direction: column; gap: 5pt; }
+.section-title { font-size: 9pt; color: #0E7490; font-weight: bold; margin: 0 0 2pt 0; }
+.feature-card {
+  background: #ECFEFF; border-left: 2pt solid #0891B2; padding: 7pt 8pt; border-radius: 0 3pt 3pt 0;
+}
+.feature-title { font-size: 7.5pt; font-weight: bold; color: #0E7490; margin: 0 0 3pt 0; }
+.feature-desc { font-size: 6.5pt; color: #4A4A5A; margin: 0; line-height: 1.5; }
+.pill-row { display: flex; gap: 6pt; margin-top: 4pt; }
+.pill-green { background: #D1FAE5; border-radius: 8pt; padding: 2pt 8pt; }
+.pill-yellow { background: #FEF3C7; border-radius: 8pt; padding: 2pt 8pt; }
+.pill-red { background: #FEE2E2; border-radius: 8pt; padding: 2pt 8pt; }
+.pill-text-g { margin: 0; font-size: 6pt; font-weight: bold; color: #065F46; }
+.pill-text-y { margin: 0; font-size: 6pt; font-weight: bold; color: #92400E; }
+.pill-text-r { margin: 0; font-size: 6pt; font-weight: bold; color: #991B1B; }
+.marker-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5pt; }
+.marker-card {
+  background: #FFF7ED; border: 0.5pt solid #FED7AA; border-radius: 3pt; padding: 7pt 6pt; text-align: center;
+}
+.marker-name { font-size: 8pt; font-weight: bold; color: #9A3412; font-family: 'Courier New', monospace; margin: 0; }
+.marker-desc { font-size: 5.5pt; color: #78716C; margin: 2pt 0 0 0; line-height: 1.4; }
+.auto-card {
+  background: #D1FAE5; border: 0.5pt solid #A7F3D0; border-radius: 3pt; padding: 7pt 8pt;
+}
+.auto-title { font-size: 7.5pt; font-weight: bold; color: #065F46; margin: 0 0 3pt 0; }
+.auto-text { font-size: 6.5pt; color: #065F46; line-height: 1.5; margin: 0; }
+.output-card {
+  background: #F8FAFC; border: 0.5pt solid #E2E8F0; border-radius: 3pt; padding: 7pt 8pt;
+}
+.output-title { font-size: 7.5pt; font-weight: bold; color: #0E7490; margin: 0 0 4pt 0; }
+.clinical-card {
+  background: #FEF2F2; border-left: 2pt solid #EF4444; border-radius: 0 3pt 3pt 0; padding: 7pt 8pt;
+}
+.clinical-title { font-size: 7pt; font-weight: bold; color: #991B1B; margin: 0 0 3pt 0; }
+.clinical-text { font-size: 6pt; color: #7F1D1D; margin: 0; line-height: 1.5; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header"></div>
+  <div class="header-text">
+    <h2 style="color: #FFFFFF; font-size: 15pt; margin: 0;">ENTEROBIOME KIDS &#8212; Report Output</h2>
+  </div>
+  <div class="logo-top"><img src="genomerlogo.png"></div>
+
+  <div class="content">
+    <div class="col-left">
+      <p class="section-title">Result Form Components</p>
+
+      <div class="feature-card">
+        <p class="feature-title">1. Normocenosis / Dysbiosis Status</p>
+        <p class="feature-desc">Determined by relative abundance of normobiota vs. opportunistic microbiota in TBM. Classification guides clinical decision-making.</p>
+        <div class="pill-row">
+          <div class="pill-green"><p class="pill-text-g">Normocenosis</p></div>
+          <div class="pill-yellow"><p class="pill-text-y">Moderate Dysbiosis</p></div>
+          <div class="pill-red"><p class="pill-text-r">Severe Dysbiosis</p></div>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <p class="feature-title">2. Diversity Estimation</p>
+        <p class="feature-desc">Normal microbiota diversity across 6 phyla: Actinomycetota, Bacillota, Bacteroidota, Pseudomonadota, Fusobacteriota, Verrucomicrobiota. Lower diversity correlates with disease risk.</p>
+      </div>
+
+      <div class="feature-card">
+        <p class="feature-title">3. Bacillota / Bacteroidota Ratio</p>
+        <p class="feature-desc">Key gut balance indicator. Shift toward Bacteroidota may indicate inflammatory process. Associated with metabolic disorders, obesity, and IBD.</p>
+      </div>
+
+      <div class="feature-card">
+        <p class="feature-title">4. Quantitative Assessment</p>
+        <p class="feature-desc">Bifidobacteria/lactobacilli counts with species-level identification. Opportunistic microbiota and <i>Candida</i> quantification. Includes <i>F. prausnitzii</i> and <i>Akkermansia muciniphila</i> as anti-inflammatory biomarkers.</p>
+      </div>
+
+      <div class="clinical-card">
+        <p class="clinical-title">Clinical Associations</p>
+        <p class="clinical-text">IBD: &#x2191; Bacteroides/Prevotella, &#x2193; F. prausnitzii. Celiac: &#x2193; Lactobacillus/Bifidobacteria. NEC: C. perfringens, Enterobacterales. C. difficile carriage patterns tracked.</p>
+      </div>
+    </div>
+
+    <div class="col-right">
+      <p class="section-title">Pathogenicity Markers</p>
+
+      <div class="marker-grid">
+        <div class="marker-card">
+          <p class="marker-name">mecA</p>
+          <p class="marker-desc">Methicillin-resistant <i>Staphylococcus</i> detection</p>
+        </div>
+        <div class="marker-card">
+          <p class="marker-name">srr2</p>
+          <p class="marker-desc"><i>Str. agalactiae</i> invasiveness; promotes meningitis</p>
+        </div>
+        <div class="marker-card">
+          <p class="marker-name">tcdA</p>
+          <p class="marker-desc"><i>C. difficile</i> enterotoxin A</p>
+        </div>
+        <div class="marker-card">
+          <p class="marker-name">tcdB</p>
+          <p class="marker-desc"><i>C. difficile</i> enterotoxin B (cytotoxin)</p>
+        </div>
+      </div>
+
+      <div class="auto-card">
+        <p class="auto-title">Automated Report Generation</p>
+        <p class="auto-text">Results form auto-generated with recommended Real-Time PCR instruments and RealTime_PCR software. Preset templates configure settings and calculate results automatically. No manual data entry required.</p>
+      </div>
+
+      <div class="output-card">
+        <p class="output-title">Report Includes</p>
+        <ul style="margin:0; padding-left:12pt; font-size:6.5pt; color:#334155; line-height:1.7;">
+          <li>Quantitative normobiota estimation by phylum</li>
+          <li>Bifidobacteria species identification</li>
+          <li>Opportunistic microbiota and <i>Candida</i> levels</li>
+          <li>Antibiotic resistance markers (mecA)</li>
+          <li>Virulence markers (srr2, tcdA, tcdB)</li>
+          <li>Bacillota/Bacteroidota ratio calculation</li>
+          <li>Overall dysbiosis classification</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

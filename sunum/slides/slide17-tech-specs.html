@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slide 17 – Technical Specifications & Compatibility</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 720pt;
+    height: 405pt;
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-direction: column;
+    background: #FFFFFF;
+    overflow: hidden;
+  }
+  .header {
+    width: 100%;
+    height: 48pt;
+    background: #1B262C;
+    display: flex;
+    align-items: center;
+    padding-left: 36pt;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .header h1 {
+    font-size: 14.5pt;
+    font-weight: bold;
+    color: #FFFFFF;
+    letter-spacing: 0.3pt;
+  }
+  .logo-top {
+    position: absolute;
+    top: 12pt;
+    right: 40pt;
+  }
+  .logo-top img {
+    height: 22pt;
+  }
+  .content {
+    flex: 1;
+    padding: 14pt 36pt 10pt 36pt;
+    display: flex;
+    gap: 24pt;
+  }
+  .col {
+    flex: 1;
+  }
+  .col-title {
+    font-size: 10pt;
+    color: #1B262C;
+    font-weight: bold;
+    margin-bottom: 8pt;
+  }
+  .sub-header {
+    font-size: 8.5pt;
+    font-weight: bold;
+    color: #1B262C;
+    margin-top: 8pt;
+    margin-bottom: 4pt;
+  }
+  .col ul {
+    list-style: disc;
+    padding-left: 12pt;
+    margin-bottom: 2pt;
+  }
+  .col ul li {
+    font-size: 8pt;
+    color: #4A4A5A;
+    line-height: 1.7;
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <h1>Technical Specifications &amp; Platform Compatibility</h1>
+    <div class="logo-top"><img src="genomerlogo.png" alt="Genomer Logo"></div>
+  </div>
+
+  <div class="content">
+    <div class="col">
+      <p class="col-title">Extraction &amp; PCR Platforms</p>
+
+      <p class="sub-header">DNA Extraction</p>
+      <ul>
+        <li>Allsheng Auto-Pure 96</li>
+        <li>KingFisher Flex (PREP-MB-RAPID II)</li>
+        <li>PREP-MB MAX (for ejaculate)</li>
+        <li>PREP-NA PLUS, PREP-GS PLUS (alternatives)</li>
+      </ul>
+
+      <p class="sub-header">PCR Setup</p>
+      <ul>
+        <li>Automated 384-well format</li>
+        <li>Manual 96-well format</li>
+        <li>Preset templates for major real-time PCR instruments</li>
+        <li>Automatic results generation via RealTime_PCR software</li>
+      </ul>
+    </div>
+
+    <div class="col">
+      <p class="col-title">Storage &amp; Logistics</p>
+
+      <p class="sub-header">Kit Storage</p>
+      <ul>
+        <li>+2 to +8°C: packages S, A, A-TL</li>
+        <li>-18 to -22°C: TechnoTaq MAX polymerase (package A)</li>
+        <li>Shelf life: 12 months for all kits</li>
+      </ul>
+
+      <p class="sub-header">Sample Storage</p>
+      <ul>
+        <li>2-8°C: up to 24 hours</li>
+        <li>-18 to -22°C: up to 1 month (frozen)</li>
+        <li>Transport media: STOR-F, STOR-M</li>
+      </ul>
+
+      <p class="sub-header">Compatible Liquid Cytology Media</p>
+      <ul>
+        <li>PreservCyt (Hologic Inc., USA)</li>
+        <li>BD SurePath (Becton, Dickinson, USA)</li>
+        <li>EASYPREP (YD Diagnostics, South Korea)</li>
+        <li>CellPrep (CP Biodyne, South Korea)</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

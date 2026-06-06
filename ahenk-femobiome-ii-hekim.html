@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FEMOBIOME II - Kadın Mikrobiyotası Değerlendirmesi | Ahenk Laboratuvarı</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600;700&display=block" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1B3A6B;
+            --primary-light: #2C5A9A;
+            --text-dark: #1a1a2e;
+            --text-body: #2d2d3d;
+            --border: #C5D5E8;
+            --bg-light: #F0F4FA;
+            --bg-table-header: #1B3A6B;
+            --bg-table-alt: #EDF2F8;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html {
+            font-size: 10pt;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        body {
+            font-family: 'Noto Sans', sans-serif;
+            color: var(--text-body);
+            line-height: 1.5;
+            background: #e8e8e8;
+        }
+
+        @page { size: 210mm 297mm; margin: 0; }
+
+        .page {
+            width: 210mm;
+            height: 297mm;
+            max-height: 297mm;
+            background: #fff;
+            page-break-after: always;
+            page-break-inside: avoid;
+            position: relative;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        .page:last-child { page-break-after: auto; }
+
+        @media print {
+            html, body { width: 210mm; height: 297mm; background: #fff; }
+            .page { width: 210mm; height: 297mm; margin: 0; page-break-after: always; overflow: hidden; }
+        }
+
+        @media screen {
+            body { padding: 30px 0; }
+            .page { margin: 0 auto 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.12); }
+        }
+
+        /* ── PAGE 1: COVER ── */
+        .cover-page {
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+        }
+
+        .cover-header {
+            background: var(--primary);
+            padding: 32px 45px 28px;
+            text-align: center;
+        }
+
+        .cover-header h2 {
+            color: rgba(255,255,255,0.85);
+            font-size: 1.15rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .cover-header h1 {
+            color: #fff;
+            font-size: 2.6rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .cover-image {
+            flex: 1;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f5f5f5;
+        }
+
+        .cover-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .cover-footer {
+            padding: 20px 45px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            background: #fff;
+        }
+
+        .cover-footer img {
+            height: 48px;
+        }
+
+        /* ── PAGE 2: CONTENT ── */
+        .content-page {
+            padding: 40px 45px;
+        }
+
+        .content-page h2 {
+            color: var(--primary);
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-bottom: 14px;
+            line-height: 1.35;
+        }
+
+        .content-page p {
+            font-size: 0.88rem;
+            line-height: 1.6;
+            margin-bottom: 12px;
+            color: var(--text-body);
+        }
+
+        .content-page strong {
+            color: var(--text-dark);
+        }
+
+        .specs-row {
+            display: flex;
+            gap: 0;
+            margin-top: 20px;
+            border-top: 2px solid var(--primary);
+        }
+
+        .spec-item {
+            flex: 1;
+            padding: 10px 14px;
+            border-right: 1px solid var(--border);
+        }
+
+        .spec-item:last-child { border-right: none; }
+
+        .spec-item .spec-label {
+            font-size: 0.68rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 3px;
+        }
+
+        .spec-item .spec-value {
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        /* ── PAGE 3: TABLE ── */
+        .table-page {
+            padding: 35px 35px;
+        }
+
+        .table-page h3 {
+            color: var(--primary);
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .org-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.72rem;
+            margin-bottom: 16px;
+        }
+
+        .org-table thead th {
+            background: var(--bg-table-header);
+            color: #fff;
+            padding: 6px 10px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.7rem;
+        }
+
+        .org-table tbody td {
+            padding: 4px 10px;
+            border-bottom: 1px solid #e0e7f0;
+            vertical-align: top;
+        }
+
+        .org-table tbody tr:nth-child(even) {
+            background: var(--bg-table-alt);
+        }
+
+        .org-table .group-header td {
+            background: var(--primary);
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.7rem;
+            padding: 5px 10px;
+        }
+
+        .org-table em {
+            font-style: italic;
+        }
+
+        .note-box {
+            background: var(--bg-light);
+            border-left: 3px solid var(--primary);
+            padding: 8px 12px;
+            font-size: 0.72rem;
+            line-height: 1.45;
+            margin-top: 10px;
+        }
+
+        /* ── PAGE 4: BACK COVER ── */
+        .back-cover {
+            padding: 40px 45px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .back-cover .cert-image {
+            max-width: 70%;
+            margin: 10px auto 20px;
+        }
+
+        .back-cover .cert-image img {
+            width: 100%;
+            border-radius: 4px;
+        }
+
+        .back-cover .cert-text {
+            text-align: center;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .back-cover .ahenk-logo {
+            height: 55px;
+            margin-bottom: 30px;
+        }
+
+        .back-footer {
+            width: 100%;
+            background: var(--primary);
+            padding: 18px 30px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #fff;
+            font-size: 0.75rem;
+        }
+
+        .back-footer .branch {
+            text-align: center;
+            flex: 1;
+        }
+
+        .back-footer .branch-name {
+            font-weight: 700;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 2px;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .back-footer .branch-addr {
+            font-size: 0.62rem;
+            line-height: 1.35;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .back-contact {
+            text-align: center;
+            margin-top: auto;
+            margin-bottom: 80px;
+        }
+
+        .back-contact a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .back-contact .phone {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PAGE 1: COVER -->
+    <div class="page cover-page">
+        <div class="cover-header">
+            <h2>KADIN MİKROBİYOTASI DEĞERLENDİRMESİNDE</h2>
+            <h1>FEMOBIOME II</h1>
+        </div>
+        <div class="cover-image">
+            <img src="cover-femobiome.jpg" alt="Kadın Sağlığı">
+        </div>
+        <div class="cover-footer">
+            <img src="ahenklogo.png" alt="Ahenk Laboratuvarı">
+        </div>
+    </div>
+
+    <!-- PAGE 2: CONTENT -->
+    <div class="page content-page">
+
+        <h2>Kadın Mikrobiyotası Değerlendirmesinde En Kapsamlı Yöntem: FEMOBIOME II</h2>
+
+        <p><strong>FEMOBIOME II,</strong> kadın ürogenital mikrobiyotasının kapsamlı değerlendirmesi için tasarlanmış real-time PCR bazlı moleküler tanı testidir. Tek bir testte normobiyota, fırsatçı mikroorganizmalar, zorunlu patojenler, virüsler ve mantarları analiz eder.</p>
+
+        <p><strong>FEMOBIOME II</strong> testi, <em>Lactobacillus</em> türlerini tür düzeyinde ayırt eder: <em>L. crispatus, L. iners, L. jensenii/L. mulieris, L. gasseri/L. paragasseri.</em> Bu detaylı tür ayrımı, mikrobiyota durumunun doğru değerlendirilmesi için kritik öneme sahiptir.</p>
+
+        <p><strong>Cinsel yolla bulaşan enfeksiyon (CYBE) etkenleri</strong> olan <em>Chlamydia trachomatis, Neisseria gonorrhoeae, Mycoplasma genitalium</em> ve <em>Trichomonas vaginalis</em> tek testte taranarak asemptomatik ve subklinik enfeksiyonların dışlanması sağlanır.</p>
+
+        <p><strong>Herpesvirüsler</strong> (HSV-1, HSV-2, CMV) ve <strong>yüksek riskli HPV tipleri</strong> (HPV 16, HPV 18, HPV 45, HPV 31/33/35/39/51/52/56/58/59/66/68) aynı test kapsamında değerlendirilir.</p>
+
+        <p><strong>Grup B streptokok</strong> (<em>Streptococcus agalactiae</em>) kantitatif analizi özellikle gebelik planlaması ve gebelik döneminde kritik öneme sahiptir.</p>
+
+        <p>Test sonuçları, <strong>trafik ışığı sistemi</strong> ile klinik yorumlama kolaylığı sağlar: öbiyoz (yeşil), orta disbiyoz (sarı) ve şiddetli disbiyoz (kırmızı) şeklinde görsel değerlendirme sunar. Kişiselleştirilmiş rapor, doğrusal ve sütun histogramları ile detaylı mikrobiyota profilini içerir.</p>
+
+        <div class="specs-row">
+            <div class="spec-item">
+                <div class="spec-label">Yöntem</div>
+                <div class="spec-value">Real-Time PCR</div>
+            </div>
+            <div class="spec-item">
+                <div class="spec-label">Tüp Sayısı</div>
+                <div class="spec-value">16 reaksiyon tüpü</div>
+            </div>
+            <div class="spec-item">
+                <div class="spec-label">Analiz Süresi</div>
+                <div class="spec-value">2,5 saatten itibaren</div>
+            </div>
+            <div class="spec-item">
+                <div class="spec-label">Saklama</div>
+                <div class="spec-value">+2°C / +8°C</div>
+            </div>
+            <div class="spec-item">
+                <div class="spec-label">Raf Ömrü</div>
+                <div class="spec-value">12 ay</div>
+            </div>
+        </div>
+
+        <div class="specs-row" style="border-top: 1px solid var(--border); margin-top: 0;">
+            <div class="spec-item">
+                <div class="spec-label">Örnek Türü</div>
+                <div class="spec-value">Servikal/vajinal sürüntü (transport besiyerinde), sıvı bazlı sitoloji ortamında sürüntü, kendi kendine alınan vajinal sürüntü</div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- PAGE 3: ORGANISM TABLE -->
+    <div class="page table-page">
+
+        <h3>FEMOBIOME II Paneli</h3>
+
+        <table class="org-table">
+            <thead>
+                <tr>
+                    <th style="width: 55%;">Mikroorganizma</th>
+                    <th style="width: 45%;">Klinik Önemi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="group-header"><td colspan="2">NORMOBİYOTA</td></tr>
+                <tr><td><em>Lactobacillus</em> spp. (toplam)</td><td>Normal vajinal flora</td></tr>
+                <tr><td>&emsp;<em>L. crispatus</em></td><td rowspan="4">Tür düzeyinde ayrım</td></tr>
+                <tr><td>&emsp;<em>L. jensenii / L. mulieris</em></td></tr>
+                <tr><td>&emsp;<em>L. gasseri / L. paragasseri</em></td></tr>
+                <tr><td>&emsp;<em>L. iners</em></td></tr>
+                <tr><td><em>Bifidobacterium</em> spp.</td><td>Normal flora</td></tr>
+
+                <tr class="group-header"><td colspan="2">AEROBLAR (Fırsatçı)</td></tr>
+                <tr><td><em>Staphylococcus</em> spp.</td><td rowspan="5">Fırsatçı aerobik mikroorganizmalar</td></tr>
+                <tr><td><em>Streptococcus</em> spp.</td></tr>
+                <tr><td>&emsp;<em>Streptococcus agalactiae</em> (GBS)</td></tr>
+                <tr><td><em>Enterobacteriaceae</em></td></tr>
+                <tr><td><em>Enterococcus</em> spp. / <em>Haemophilus</em> spp.</td></tr>
+
+                <tr class="group-header"><td colspan="2">ANAEROBLAR (BV İlişkili)</td></tr>
+                <tr><td><em>Gardnerella vaginalis</em></td><td rowspan="7">BV ilişkili anaerobik fırsatçı mikroorganizmalar</td></tr>
+                <tr><td><em>Fannyhessea vaginae</em></td></tr>
+                <tr><td><em>Mobiluncus</em> spp. / <em>Anaerococcus</em> spp. / <em>Peptostreptococcus</em> spp.</td></tr>
+                <tr><td><em>Bacteroides</em> spp. / <em>Porphyromonas</em> spp. / <em>Prevotella</em> spp.</td></tr>
+                <tr><td><em>Sneathia</em> spp. / <em>Leptotrichia</em> spp. / <em>Fusobacterium</em> spp.</td></tr>
+                <tr><td><em>Megasphaera</em> spp. / <em>Veillonella</em> spp. / <em>Dialister</em> spp.</td></tr>
+                <tr><td>BVAB1 / BVAB2 / BVAB3</td></tr>
+
+                <tr class="group-header"><td colspan="2">MİKOPLAZMALAR</td></tr>
+                <tr><td><em>Ureaplasma urealyticum</em> / <em>Ureaplasma parvum</em></td><td rowspan="2">Fırsatçı genital mikoplazmalar</td></tr>
+                <tr><td><em>Mycoplasma hominis</em></td></tr>
+
+                <tr class="group-header"><td colspan="2">MAYA MANTARLARI</td></tr>
+                <tr><td><em>Candida</em> spp. / <em>Candida albicans</em></td><td>Kantitatif analiz</td></tr>
+
+                <tr class="group-header"><td colspan="2">CİNSEL YOLLA BULAŞAN ENFEKSİYONLAR (CYBE)</td></tr>
+                <tr><td><em>Chlamydia trachomatis</em></td><td rowspan="4">Zorunlu patojenler</td></tr>
+                <tr><td><em>Neisseria gonorrhoeae</em></td></tr>
+                <tr><td><em>Mycoplasma genitalium</em></td></tr>
+                <tr><td><em>Trichomonas vaginalis</em></td></tr>
+
+                <tr class="group-header"><td colspan="2">HERPESVİRÜSLER</td></tr>
+                <tr><td>HSV-1, HSV-2, CMV</td><td>Üreme sağlığı açısından önemli</td></tr>
+
+                <tr class="group-header"><td colspan="2">İNSAN PAPİLLOMAVİRÜSLERİ (HPV)</td></tr>
+                <tr><td>HPV 16, HPV 18, HPV 45</td><td>Yüksek riskli HPV tipleri (ayrı ayrı)</td></tr>
+                <tr><td>HPV 31/33/35/39/51/52/56/58/59/66/68</td><td>Yüksek riskli HPV tipleri (gruplu)</td></tr>
+            </tbody>
+        </table>
+
+        <div class="note-box">
+            <strong>Endikasyonlar:</strong> Enflamatuvar semptomlar, bakteriyel vajinoz tanısı, pelvik cerrahi öncesi hazırlık, koruyucu tarama, enfeksiyon tedavisi takibi, gebelik planlaması ve yardımcı üreme teknolojileri (YÜT), gebelik dönemi profilaktik muayeneler, infertilite ve düşük öyküsü.
+        </div>
+
+        <div class="note-box" style="margin-top: 8px;">
+            <strong>Örnek Türü:</strong> Transport besiyerinde servikal/vajinal sürüntü (STOR-F, STOR-M), sıvı bazlı sitoloji ortamında sürüntü (PreservCyt, BD SurePath, EASYPREP, CellPrep), kendi kendine alınan vajinal sürüntü.
+        </div>
+
+    </div>
+
+    <!-- PAGE 4: BACK COVER -->
+    <div class="page back-cover">
+
+        <div class="cert-image">
+            <img src="akreditasyon.png" alt="TÜRKAK Akreditasyon Sertifikası">
+        </div>
+
+        <p class="cert-text">Laboratuvarımız TÜRKAK tarafından<br>TS EN ISO 15189 standartlarına göre akredite edilmiştir.</p>
+
+        <img src="ahenklogo.png" alt="Ahenk Laboratuvarı" class="ahenk-logo">
+
+        <div class="back-contact">
+            <a href="https://www.ahenklab.com.tr">www.ahenklab.com.tr</a>
+            <div class="phone">444 89 88</div>
+        </div>
+
+        <div class="back-footer">
+            <div class="branch">
+                <div class="branch-name">Şişli Merkez</div>
+                <div class="branch-addr">Merkez Mah. Darülaceze Cad.<br>No: 20 Pk. 34381 Şişli / İSTANBUL</div>
+            </div>
+            <div class="branch">
+                <div class="branch-name">Şişli Şube</div>
+                <div class="branch-addr">Halaskargazi Cad. No: 209<br>Şişli / İSTANBUL</div>
+            </div>
+            <div class="branch">
+                <div class="branch-name">Avcılar Şube</div>
+                <div class="branch-addr">Bağımsız Cad. No:51<br>Avcılar / İSTANBUL</div>
+            </div>
+            <div class="branch">
+                <div class="branch-name">Küçükçekmece</div>
+                <div class="branch-addr">Fevziçakmak Mah.<br>Küçükçekmece / İSTANBUL</div>
+            </div>
+            <div class="branch">
+                <div class="branch-name">Tuzla Şube</div>
+                <div class="branch-addr">Postane Mah.<br>Tuzla / İSTANBUL</div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

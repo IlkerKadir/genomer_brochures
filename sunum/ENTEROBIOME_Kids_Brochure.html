@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ENTEROBIOME Kids - Gut Microbiota Analysis for Children</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Varela+Round&family=Nunito+Sans:wght@300;400;500;600;700&family=Figtree:wght@300;400;500;600;700&family=Noto+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Brand Colors - Teal Healthcare Theme */
+            --primary: #0891B2;
+            --primary-light: #22D3EE;
+            --primary-dark: #0E7490;
+            --primary-bg: #ECFEFF;
+            --secondary: #22D3EE;
+            --accent: #059669;
+            --accent-light: #10B981;
+            --background: #FFFFFF;
+            --background-alt: #F0FDFA;
+            --text-primary: #164E63;
+            --text-secondary: #0F766E;
+            --text-muted: #5EEAD4;
+            --border: #A5F3FC;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+
+            --font-heading: 'Figtree', sans-serif;
+            --font-body: 'Noto Sans', sans-serif;
+            --page-padding: 50px;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 10pt;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--text-primary);
+            line-height: 1.5;
+            background: var(--background);
+        }
+
+        @page {
+            size: 210mm 297mm;
+            margin: 0;
+        }
+
+        .page {
+            width: 210mm;
+            height: 297mm;
+            max-height: 297mm;
+            padding: 40px 45px;
+            background: var(--background);
+            page-break-after: always;
+            page-break-inside: avoid;
+            position: relative;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        .page:last-child {
+            page-break-after: auto;
+        }
+
+        @media print {
+            html, body { width: 210mm; height: 297mm; }
+            .page { width: 210mm; height: 297mm; margin: 0; padding: 40px 45px; page-break-after: always; overflow: hidden; }
+        }
+
+        h1, h2, h3, h4 {
+            font-family: var(--font-heading);
+            font-weight: 600;
+            line-height: 1.3;
+            color: var(--primary);
+        }
+
+        h2 { font-size: 1.4rem; margin-bottom: 12px; }
+        h3 { font-size: 1.1rem; margin-bottom: 8px; color: var(--primary-dark); }
+
+        p { margin-bottom: 10px; font-size: 0.9rem; line-height: 1.5; }
+
+        /* Cover Page - Clean design without problematic CSS */
+        .cover-page {
+            background: #B2EBF2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 40px 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* SVG gradient background - safe for PDF */
+        .cover-gradient-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        /* Hide CSS-based background patterns - they cause artifacts */
+        .cover-bg-pattern {
+            display: none;
+        }
+
+        .cover-header {
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+            position: relative;
+            z-index: 2;
+        }
+
+        .cover-header .logo {
+            height: 42px;
+        }
+
+        .logo { height: 40px; width: auto; }
+
+        /* Central Card - No background */
+        .cover-card {
+            background: transparent;
+            padding: 50px 60px;
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 480px;
+        }
+
+        /* Gut illustration - border-radius OK without box-shadow */
+        .gut-illustration {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 25px;
+            background: #0891B2;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            border: 4px solid rgba(255,255,255,0.3);
+        }
+
+        .gut-illustration-gradient {
+            display: none;
+        }
+
+        .gut-illustration svg {
+            width: 100px;
+            height: 100px;
+        }
+
+        .cover-title {
+            font-family: 'Varela Round', sans-serif;
+            font-size: 3.2rem;
+            color: #164E63;
+            margin-bottom: 8px;
+            letter-spacing: -1px;
+            font-weight: 400;
+            line-height: 1.1;
+        }
+
+        .cover-title sup {
+            font-size: 0.9rem;
+            vertical-align: super;
+            letter-spacing: 0;
+        }
+
+        .cover-kids-badge {
+            display: inline-block;
+            background: #059669;
+            color: white;
+            font-family: 'Varela Round', sans-serif;
+            font-size: 1.8rem;
+            padding: 8px 28px;
+            border-radius: 50px;
+            margin-bottom: 25px;
+        }
+
+        .cover-divider {
+            width: 60px;
+            height: 4px;
+            background: #0E7490;
+            margin: 0 auto 20px;
+            border-radius: 2px;
+        }
+
+        .cover-subtitle {
+            font-family: 'Nunito Sans', sans-serif;
+            font-size: 0.85rem;
+            color: #164E63;
+            font-weight: 500;
+            max-width: 380px;
+            line-height: 1.7;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 0 auto;
+        }
+
+        /* Footer badge */
+        .cover-footer {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .cover-footer-badge {
+            background: rgba(255,255,255,0.9);
+            padding: 12px 28px;
+            border-radius: 12px;
+        }
+
+        .cover-footer-badge p {
+            font-family: 'Nunito Sans', sans-serif;
+            font-size: 0.75rem;
+            color: #0E7490;
+            margin: 0;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .cover-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 100px;
+            padding: 10px 24px;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .cover-badge svg {
+            width: 18px;
+            height: 18px;
+            stroke: white;
+            fill: none;
+            stroke-width: 2;
+        }
+
+        /* Page Header */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .page-header .logo {
+            height: 30px;
+        }
+
+        .page-number {
+            font-size: 2rem;
+            color: var(--primary-bg);
+            font-weight: 700;
+            position: absolute;
+            bottom: 30px;
+            right: 45px;
+        }
+
+        /* Content bullets with teal circles */
+        .content-block {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .content-bullet {
+            width: 12px;
+            height: 12px;
+            background: var(--primary);
+            border-radius: 50%;
+            flex-shrink: 0;
+            margin-top: 4px;
+        }
+
+        .content-text {
+            flex: 1;
+            font-size: 0.88rem;
+            line-height: 1.55;
+        }
+
+        /* Section title with underline */
+        .section-title {
+            font-size: 1.4rem;
+            color: var(--primary);
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+        }
+
+        .subsection-title {
+            font-size: 1.1rem;
+            color: var(--primary-dark);
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        /* Data Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+            font-size: 0.8rem;
+        }
+
+        .data-table thead {
+            background: var(--primary);
+            color: white;
+        }
+
+        .data-table th {
+            padding: 8px 10px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.78rem;
+        }
+
+        .data-table td {
+            padding: 8px 10px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+            font-size: 0.8rem;
+        }
+
+        .data-table tbody tr:nth-child(even) { background: var(--primary-bg); }
+
+        .organism { font-weight: 600; color: var(--primary-dark); font-style: italic; }
+        .ref { color: #999; font-size: 0.7rem; text-align: right; }
+
+        /* Diagram styles for page 3 - Modern Card-Based Timeline */
+        .diagram-container {
+            margin: 12px 0;
+            font-size: 0.75rem;
+        }
+
+        .diagram-header-bar {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            text-align: center;
+            padding: 10px 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .diagram-subheader-bar {
+            background: var(--primary-bg);
+            color: var(--primary);
+            text-align: center;
+            padding: 8px;
+            font-weight: 500;
+            font-size: 0.78rem;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .diagram-main {
+            display: flex;
+            background: white;
+            border: 1px solid var(--border);
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            overflow: hidden;
+        }
+
+        .diagram-sidebar {
+            width: 90px;
+            background: linear-gradient(180deg, var(--primary-bg) 0%, #f0fdfa 100%);
+            border-right: 2px dashed var(--border);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 15px 10px;
+            text-align: center;
+        }
+
+        .diagram-sidebar-title {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            line-height: 1.3;
+        }
+
+        .diagram-sidebar-subtitle {
+            font-size: 0.62rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+            font-style: italic;
+        }
+
+        .diagram-timeline-wrapper {
+            flex: 1;
+            padding: 18px 15px;
+            position: relative;
+        }
+
+        /* Timeline connector line */
+        .timeline-connector {
+            position: absolute;
+            top: 50px;
+            left: 55px;
+            right: 55px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-light) 0%, var(--primary) 50%, var(--accent) 100%);
+            border-radius: 2px;
+        }
+
+        .timeline-connector::after {
+            content: '';
+            position: absolute;
+            right: -6px;
+            top: -4px;
+            width: 0;
+            height: 0;
+            border-left: 10px solid var(--accent);
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+        }
+
+        .timeline-stages {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            z-index: 1;
+        }
+
+        .timeline-card {
+            width: 105px;
+            text-align: center;
+        }
+
+        .timeline-icon-wrapper {
+            width: 56px;
+            height: 56px;
+            margin: 0 auto 10px;
+            background: white;
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 8px rgba(8, 145, 178, 0.2);
+            position: relative;
+        }
+
+        .timeline-icon-wrapper svg {
+            width: 28px;
+            height: 28px;
+            stroke: var(--primary);
+            fill: none;
+            stroke-width: 1.8;
+        }
+
+        .timeline-card:last-child .timeline-icon-wrapper {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .timeline-card:last-child .timeline-icon-wrapper svg {
+            stroke: white;
+        }
+
+        .timeline-card-label {
+            font-weight: 600;
+            color: var(--primary-dark);
+            font-size: 0.72rem;
+            margin-bottom: 6px;
+            line-height: 1.25;
+            min-height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .timeline-card-bacteria {
+            background: var(--primary-bg);
+            border-radius: 6px;
+            padding: 8px 6px;
+            font-size: 0.62rem;
+            color: var(--text-secondary);
+            font-style: italic;
+            line-height: 1.4;
+            min-height: 70px;
+        }
+
+        .timeline-card:last-child .timeline-card-bacteria {
+            background: rgba(5, 150, 105, 0.1);
+            font-style: normal;
+            font-weight: 500;
+            color: var(--accent);
+        }
+
+        /* Info box */
+        .info-box {
+            background: var(--primary-bg);
+            border-left: 4px solid var(--primary);
+            padding: 12px 15px;
+            margin: 12px 0;
+            font-size: 0.85rem;
+        }
+
+        .info-box p { margin: 0; }
+
+        /* Bullet list */
+        .bullet-list {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0;
+        }
+
+        .bullet-list li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+        }
+
+        .bullet-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 6px;
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+        }
+
+        /* Feature grid for page 11 */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .feature-item {
+            font-size: 0.85rem;
+        }
+
+        .feature-item strong {
+            color: var(--primary);
+        }
+
+        /* Back cover */
+        .back-cover {
+            background: var(--primary);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 60px;
+        }
+
+        .back-cover .logo {
+            height: 60px;
+            filter: invert(1) brightness(2);
+            -webkit-filter: invert(1) brightness(2);
+            margin-bottom: 40px;
+        }
+
+        .back-cover-tagline {
+            color: rgba(255,255,255,0.85);
+            font-size: 1.1rem;
+            font-style: italic;
+            margin-top: 40px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: white;
+            margin: 12px 0;
+            font-size: 1rem;
+        }
+
+        .contact-item svg {
+            width: 22px;
+            height: 22px;
+            stroke: white;
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .footnote {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-top: 15px;
+            line-height: 1.4;
+        }
+
+        /* Screen Styles - Document Preview Mode */
+        @media screen {
+            body {
+                background: #E5E7EB;
+                padding: 40px 0;
+            }
+
+            .page {
+                margin: 0 auto 40px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Page 1: Cover - Friendly Design for Kids -->
+    <div class="page cover-page">
+        <!-- SVG Gradient Background - avoids Chrome PDF bug with CSS gradient + border-radius -->
+        <svg class="cover-gradient-bg" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 100 100">
+            <defs>
+                <linearGradient id="coverGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#E0F7FA"/>
+                    <stop offset="50%" stop-color="#B2EBF2"/>
+                    <stop offset="100%" stop-color="#80DEEA"/>
+                </linearGradient>
+            </defs>
+            <rect width="100" height="100" fill="url(#coverGradient)"/>
+        </svg>
+
+        <!-- Background Pattern - Soft bubbles and friendly bacteria -->
+        <div class="cover-bg-pattern">
+            <!-- Soft bubbles -->
+            <div class="bubble b1"></div>
+            <div class="bubble b2"></div>
+            <div class="bubble b3"></div>
+            <div class="bubble b4"></div>
+            <div class="bubble b5"></div>
+            <div class="bubble b6"></div>
+            <div class="bubble b7"></div>
+            <div class="bubble b8"></div>
+            <!-- Friendly microbes -->
+            <div class="friendly-microbe fm1"></div>
+            <div class="friendly-microbe fm2"></div>
+            <div class="friendly-microbe fm3"></div>
+            <div class="friendly-microbe fm4"></div>
+            <!-- Accent dots -->
+            <div class="accent-dot ad1"></div>
+            <div class="accent-dot ad2"></div>
+            <div class="accent-dot ad3"></div>
+            <div class="accent-dot ad4"></div>
+        </div>
+
+        <!-- Header with logo -->
+        <div class="cover-header">
+            <img src="genomerlogo.png" alt="Genomer" class="logo">
+        </div>
+
+        <!-- Central Neumorphic Card -->
+        <div class="cover-card">
+            <!-- Simple Microbiome Icon -->
+            <div class="gut-illustration">
+                <!-- SVG gradient background for the circle -->
+                <svg class="gut-illustration-gradient" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+                    <defs>
+                        <linearGradient id="gutGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#22D3EE"/>
+                            <stop offset="100%" stop-color="#0891B2"/>
+                        </linearGradient>
+                    </defs>
+                    <rect width="100" height="100" fill="url(#gutGrad)"/>
+                </svg>
+                <!-- Microbiome icon -->
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="position: relative; z-index: 1;">
+                    <!-- Simple bacteria/microbiome circles - white for contrast -->
+                    <circle cx="50" cy="50" r="18" fill="white" fill-opacity="0.9"/>
+                    <circle cx="30" cy="35" r="10" fill="white" fill-opacity="0.7"/>
+                    <circle cx="70" cy="35" r="9" fill="white" fill-opacity="0.8"/>
+                    <circle cx="35" cy="65" r="7" fill="white" fill-opacity="0.6"/>
+                    <circle cx="65" cy="68" r="10" fill="white" fill-opacity="0.7"/>
+                    <circle cx="50" cy="25" r="5" fill="white" fill-opacity="0.8"/>
+                    <circle cx="75" cy="55" r="6" fill="white" fill-opacity="0.6"/>
+                    <circle cx="25" cy="50" r="4" fill="white" fill-opacity="0.7"/>
+                </svg>
+            </div>
+
+            <h1 class="cover-title">ENTEROBIOME<sup>&reg;</sup></h1>
+            <div class="cover-kids-badge">KIDS</div>
+            <div class="cover-divider"></div>
+            <p class="cover-subtitle">REAGENT KIT FOR THE ANALYSIS OF GUT MICROBIOTA COMPOSITION IN STOOL SAMPLES FROM CHILDREN BY REAL-TIME PCR</p>
+        </div>
+
+        <!-- Footer badge -->
+        <div class="cover-footer">
+            <div class="cover-footer-badge">
+                <p>Advanced Molecular Diagnostics for Children's Health</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page 2: Gut Microbiota -->
+    <div class="page">
+        <header class="page-header">
+            <img src="genomerlogo.png" alt="Genomer" class="logo">
+        </header>
+
+        <h2 class="section-title">GUT MICROBIOTA</h2>
+
+        <div class="content-block">
+            <div class="content-bullet"></div>
+            <div class="content-text">The human gut microbiota is a complex, dynamic ecosystem inhabited by a huge number of different microorganisms, including bacteria, fungi, archaea, and viruses. They interact with each other and with the human organism, participating in a variety of metabolic processes. The total number of microbial cells in the human gut can exceed the number of the body's own cells by an order of magnitude [1]. Moreover, the total number of protein-coding genes in the microbiota is hundreds of times greater than the number of human genes [2]. This allows the gut microbiome to perform a range of functions that are inaccessible to cells in the human body.</div>
+        </div>
+
+        <div class="content-block">
+            <div class="content-bullet"></div>
+            <div class="content-text">The gut microbiota is involved in carbohydrate and protein metabolism, lipid exchange, and also produces important metabolic intermediates such as short-chain fatty acids (SCFAs), secondary bile acids (BAs), vitamins and lipopolysaccharides. These metabolites act as signaling molecules and are involved in the functioning of all systems of the human organism. In particular, they are involved in the regulation of appetite, intestinal motility, energy consumption and accumulation. The gut microbiota stimulates the maturation of the immune system and is linked to the barrier function of the gut, protecting it from colonization by pathogens.</div>
+        </div>
+
+        <div class="content-block">
+            <div class="content-bullet"></div>
+            <div class="content-text">At the species level, it is difficult to determine the phylogenetic "core microbiota" which are the dominant microorganisms found in most people (>50% of the population). This can be explained by the functional redundancy of the microbiota — some functions can be performed by members of different taxa. In addition, the metabolic functions of microorganisms can be homogeneous even within a family, so different species can functionally replace each other and prevail in the microbiota of different healthy people without disturbing the biocenosis.</div>
+        </div>
+
+        <h3 class="subsection-title">CHILDHOOD IS A PERIOD OF GUT MICROBIOME FORMATION</h3>
+
+        <p>The presence and origin of meconium "microbiota" is controversial [3–5]. Normally, microbiota is absent from the fetal gut, since there are no substrates for its nutrition. The sources of microorganisms in a newborn's meconium can be both vaginal, skin and fecal microbiota of a mother, as well as the microbiota of the uterine cavity and the outer surface of the chorionic villi. In any case, before the beginning of feeding the child, the meconium microbiota is transient.</p>
+
+        <p>The establishment of the infant's own gut microbiota is a long and dynamic process in which four successive phases are distinguished [6].</p>
+
+        <span class="page-number">02</span>
+    </div>
+
+    <!-- Page 3: Diagram and factors -->
+    <div class="page">
+        <header class="page-header">
+            <img src="genomerlogo.png" alt="Genomer" class="logo">
+        </header>
+
+        <!-- Modern Card-Based Timeline Diagram -->
+        <div class="diagram-container">
+            <div class="diagram-header-bar">ANTIBIOTIC USE</div>
+            <div class="diagram-subheader-bar">TYPE OF FEEDING, DIET</div>
+            <div class="diagram-main">
+                <div class="diagram-sidebar">
+                    <div class="diagram-sidebar-title">TYPE OF BIRTH</div>
+                    <div class="diagram-sidebar-subtitle">Gestational age</div>
+                </div>
+                <div class="diagram-timeline-wrapper">
+                    <div class="timeline-connector"></div>
+                    <div class="timeline-stages">
+                        <div class="timeline-card">
+                            <div class="timeline-icon-wrapper">
+                                <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/></svg>
+                            </div>
+                            <div class="timeline-card-label">Birth</div>
+                            <div class="timeline-card-bacteria">Streptococcus spp.<br>Enterobacterales</div>
+                        </div>
+                        <div class="timeline-card">
+                            <div class="timeline-icon-wrapper">
+                                <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="18" cy="8" r="2" stroke-dasharray="2 1"/></svg>
+                            </div>
+                            <div class="timeline-card-label">14 days</div>
+                            <div class="timeline-card-bacteria">Lactobacillaceae<br>Bifidobacterium spp.<br>Clostridium<br>Bacteroidota*</div>
+                        </div>
+                        <div class="timeline-card">
+                            <div class="timeline-icon-wrapper">
+                                <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="6" cy="5" r="1.5"/><circle cx="18" cy="5" r="1.5"/></svg>
+                            </div>
+                            <div class="timeline-card-label">Introduction of complementary foods</div>
+                            <div class="timeline-card-bacteria">Bacteroidota,<br>Bacillota,<br>Verrucomicrobiota<br>Actinomycetota,<br>Pseudomonadota*</div>
+                        </div>
+                        <div class="timeline-card">
+                            <div class="timeline-icon-wrapper">
+                                <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                            </div>
+                            <div class="timeline-card-label">Termination of breast feeding or artificial feeding</div>
+                            <div class="timeline-card-bacteria">Stabilization of microbiota composition</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <p class="footnote">* — according to nomenclature approved by International Committee on Systematics of Prokaryotes, the following names are adopted (February, 2021): Bacillota (previously Firmicutes), Pseudomonadota (previously Proteobacteria), Bacteroidota (previously Bacteroidetes), Actinomycetota (previously Actinobacteria), Fusobacteriota (previously Fusobacteria), Verrucomicrobiota (previously Verrucomicrobia)</p>
+
+        <p style="margin-top: 15px;">The dynamics of gut microbiota formation in children depends on gestational age, type of birth, type of feeding and antibiotic use, so its composition may differ in children of the same age.</p>
+
+        <ul class="bullet-list">
+            <li>The gut microbiota of naturally born infants is characterized by low diversity but stable composition, since a child comes into contact with representatives of mother's vaginal, skin, and fecal microbiota during birth process [7-8]. In children born by caesarean section, the formation of gut microbiota takes more time. Also opportunistic microorganisms are detected more often there, such as <em>Clostridium difficile</em>, <em>Enterococcus spp.</em>, <em>Klebsiella spp.</em>, <em>Streptococcus spp.</em> and <em>Veillonella spp.</em></li>
+            <li>During breastfeeding, gut microbiota is represented mainly by <em>Bifidobacterium spp.</em> (in particular <em>Bifidobacterium breve</em>, <em>Bifidobacterium bifidum</em> and <em>Bifidobacterium longum</em>), as well as <em>Lactobacillus spp.</em>, <em>Streptococcus spp.</em>, <em>Enterococcus spp.</em> and <em>Lactococcus spp.</em> [9]. In artificially fed children, the gut microbiota is dominated by anaerobes from the genera <em>Bacteroides</em> and <em>Clostridium</em>, while the number of bifidobacteria is reduced [10-11].</li>
+        </ul>
+
+        <span class="page-number">03</span>
+    </div>
+
+    <!-- Page 4: Diversity and Normal Microbiota -->
+    <div class="page">
+        <header class="page-header">
+            <img src="genomerlogo.png" alt="Genomer" class="logo">
+        </header>
+
+        <ul class="bullet-list">
+            <li>Gestational age is another key factor that influences the formation of gut microbiota. In premature infants, the development of the digestive and immune systems is not completed. Hospitalization, artificial feeding and antibiotic use, usually required for such children, can lead to irreversible changes in the natural process of gut colonization and development of the intestinal microbiota [12]. In particular, preterm infants have delayed anaerobic colonization and their faeces contain higher amounts of <em>Enterobacteriaceae</em>, <em>Enterococcus</em>, and opportunistic microorganisms, compared to full-term infants [13].</li>
+            <li>The use of antibiotics reduces the overall diversity of the microbiota and leads to an increase in the content of drug-resistant and potentially pathogenic bacteria from <em>Enterobacteriaceae</em> and <em>Clostridium</em> taxa, at the same time decreasing the number of <em>Bifidobacteriaceae</em>, <em>Bacilli</em> and <em>Lactobacillales</em> [14].</li>
+        </ul>
+
+        <h2 class="section-title">DIVERSITY OF THE GUT MICROBIOTA</h2>
+
+        <p>Evolutionarily, many metabolic functions of the macroorganism were assigned to the gut microbiota. Most diverse composition of microbiota is the most "useful" for human organism because provides as many metabolic ways as possible. When assessing the diversity of the gut microbiota, it is important to take into account the ability of different microorganisms to jointly metabolize substances, the utilization of which requires the participation of enzymes present in different microorganisms taxa.</p>
+
+        <p>A decrease in the content of one key type of microorganisms (for example, as a result of antibiotic treatment) can lead to a decrease in the number of other microorganisms and a partial or complete loss of some functions of gut microbiota.</p>
+
+        <p>The association between reduced microbiota diversity and presence of diseases indicates that a species-rich gut ecosystem is more resilient to adverse environmental stresses [15].</p>
+
+        <div class="info-box">
+            <p><strong>Understanding how the gut microbiota affects human health requires a shift in focus from individual pathogens to an ecological approach that considers the gut microbiota as a whole and in interaction with the host.</strong></p>
+        </div>
+
+        <h2 class="section-title">NORMAL MICROBIOTA</h2>
+
+        <p>Normal gut microbiota is represented by a wide range of microorganisms, which are mainly representatives of three phyla: <em>Bacillota (Firmicutes)</em>, <em>Bacteroidota (Bacteroidetes)</em>, <em>Actinomycetota (Actinobacteria)</em>.</p>
+
+        <span class="page-number">04</span>
+    </div>
+
+    <!-- Page 5: Actinomycetota -->
+    <div class="page">
+        <header class="page-header">
+            <img src="genomerlogo.png" alt="Genomer" class="logo">
+        </header>
+
+        <h2 class="section-title">ACTINOMYCETOTA (ACTINOBACTERIA)</h2>
+
+        <p>In the gut microbiota of children the phylum <em>Actinomycetota (Actinobacteria)</em> is represented by the genus <em>Bifidobacterium</em> and the class <em>Coriobacteriia</em>. Bifidobacteria are among the first microorganisms colonizing the gut of a child after birth. They are the dominant group of the gut microbiota in the first months of life. With age, the microbiota becomes more diverse in composition, but bifidobacteria still retain their important role in maintaining human health. Bifidobacteria help to prevent the invasion of pathogens which cause intestinal infections, thus preventing the colonization of the gut by pathogens [16].</p>
+
+        <table class="data-table">
+            <thead>
+                <tr><th colspan="3">ACTINOMYCETOTA (ACTINOBACTERIA)</th></tr>
+            </thead>
+            <tbody>
+                <tr><td colspan="3" style="background: var(--primary-bg);"><strong><em>Bifidobacterium spp.</em></strong></td></tr>
+                <tr>
+                    <td style="width:18%"><strong>metabolically active "child" species</strong></td>
+                    <td>The dominant group in gut microbiota before the introduction of complementary foods. These bacteria ferment breast milk oligosaccharides, promote the reproduction and fixation of lactobacilli in the biocenosis, and the activation of cellular immunity and T-regulatory cells. Contribute to the development of immature intestinal epithelial cells</td>
+                    <td class="ref">[17-20]</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><em>B. bifidum</em> — Ferments breast milk oligosaccharides, metabolizes plant polysaccharides when complementary foods are introduced. Breaks down carbohydrate parts of mucins</td>
+                    <td class="ref">[16, 21]</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><em>B. longum subsp. longum</em> — The most abundant type of bifidobacteria. Predominant in the intestines of both breastfed and formula-fed children</td>
+                    <td class="ref">[22]</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><em>B. longum subsp. infantis</em> — Predominant in the intestinal microbiota of breast-fed children</td>
+                    <td class="ref"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><em>B. breve</em> — Ferments breast milk oligosaccharides, metabolizes plant polysaccharides when complementary foods are introduced</td>
+                    <td class="ref"></td>
+                </tr>
+                <tr>
+                    <td><strong>metabolically active "adult" species</strong></td>
+                    <td>Predominate among bifidobacteria of the gut microbiota after the introduction of complementary foods and the cessation of breast feeding<br><br><em>Bifidobacterium adolescentis<br>Bifidobacterium catenulatum subspp<br>Bifidobacterium animalis subsp. lactis<br>Bifidobacterium dentium</em><br><br>Ferment plant-derived polysaccharides and oligosaccharides, contributing to the activation of the humoral immunity and pro-inflammatory T17</td>
+                    <td class="ref">[23]</td>
+                </tr>
+                <tr><td colspan="3" style="background: var(--primary-bg);"><strong><em>Coriobacteriia</em></strong></td></tr>
+                <tr>
+                    <td><em>Coriobacteriia</em></td>
+                    <td>Takes part in the biotransformation of polyphenols: lignins, flavonoids, tannins, which are natural antioxidants</td>
+                    <td class="ref"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <span class="page-number">05</span>
+    </div>
+
+    <!-- Page 6: Bacillota -->
+    <div class="page">
+        <header class="page-header">
+            <img src="genomerlogo.png" alt="Genomer" class="logo">
+        </header>
+
+        <h2 class="section-title">BACILLOTA (FIRMICUTES)</h2>
+
+        <p>Most of the gut microorganisms of the phylum <em>Bacillota (Firmicutes)</em> belong to the class <em>Clostridia</em>. This is the most represented taxon in the human intestine, the members of which can be included both in the normal microbiota and in opportunistic or even pathogenic microbiota.</p>
+
+        <p><em>Clostridia</em> of normal flora break down proteins and fats, supplying food substrates to other microorganisms. <em>Clostridia</em> produce butyrate (SCFA) which is the main source of energy for epithelial cells of the colon. Within the <em>Clostridium</em> genus, the most abundant in gut normobiota are <em>Clostridium leptum</em> gr. and <em>Lachnospiraceae</em> (<em>Clostridium coccoides</em> gr.), accounting for up to 40% and 35%, respectively, of the total number of bacteria [24].</p>
+
+        <table class="data-table">
+            <thead>
+                <tr><th colspan="3">BACILLOTA (FIRMICUTES)</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="width:25%"><em>Clostridium leptum</em> gr (claster IV)</td>
+                    <td>Includes four species: <em>C. leptum</em>, <em>C. sporosphaeroides</em>, <em>C. cellulosi</em> and <em>Faecalibacterium prausnitzii</em></td>
+                    <td class="ref">[24-25]</td>
+                </tr>
+                <tr>
+                    <td><em>Faecalibacterium prausnitzii</em></td>
+                    <td>The most common representative of <em>Clostridium leptum</em> gr. Promotes the secretion of anti-inflammatory interleukins IL-10 and IL-12 and inhibition of the production of pro-inflammatory IL-8. It is considered to be a biomarker of intestinal diseases: its presence in the microbiota decreases in inflammatory pathologies</td>
+                    <td class="ref">[25-27]</td>
+                </tr>
+                <tr>
+                    <td><em>Dialister spp./Allisonella spp./Megaspherae spp./Veillonella spp.</em></td>
+                    <td>Is included in the <em>Veillonellaceae</em> family, which are propionate-producing bacteria</td>
+                    <td class="ref">[28]</td>
+                </tr>
+                <tr>
+                    <td><em>Lachnospiraceae</em> (<em>Clostridium coccoides</em> gr, claster XIVa)</td>
+                    <td>Includes <em>Clostridium</em>, <em>Butyrivibrio</em>, <em>Dorea</em>, <em>Coprococcus</em>, <em>Eubacterium</em>, <em>Ruminococcus</em> and <em>Roseburia</em>. Are capable of metabolizing all five mucin monosaccharides. <em>Lachnospiraceae</em> is present in early age children</td>
+                    <td class="ref">[25-29]</td>
+                </tr>
+                <tr>
+                    <td><em>Lactobacillaceae</em></td>
+                    <td>A group which is important from a probiotic point of view. They colonize the microbiome and produce lactate, preventing the propagation of pathogens. Increase the barrier function of the gastrointestinal tract and participate in the restoration of homeostasis in intestinal disorders</td>
+                    <td class="ref">[30]</td>
+                </tr>
+                <tr>
+                    <td><em>Lactococcus lactis</em></td>
+                    <td>Marker of animal milk presence in the diet, e.g., the use of artificial milk formulas. One of the main producers of lactate among lactobacilli</td>
+                    <td class="ref"></td>
+                </tr>
+                <tr>
+                    <td><em>Streptococcus spp.</em></td>
+                    <td>Belong to lactic acid bacteria, ferment carbohydrates</td>
+                    <td class="ref">[31]</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <span class="page-number">06</span>
+    </div>
+
+    <!-- Page 7: Bacteroidota and Other Bacteria -->
+    <div class="page">
+        <header class="page-header">
+            <img src="genomerlogo.png" alt="Genomer" class="logo">
+        </header>
+
+        <h2 class="section-title">BACTEROIDOTA (BACTEROIDETES)</h2>
+
+        <p>The <em>Bacteroidota (Bacteroidetes)</em> taxa is the second largest phylum in the gut microbiota. Representatives of the phylum <em>Bacteroidota (Bacteroidetes)</em> play an important role in the metabolism of polysaccharides. Also they are the main producers of anti-inflammatory short-chain fatty acids (SCFAs) in the gut and secrete metabolites involved in the regulation of the immune and nervous systems functioning.</p>
+
+        <table class="data-table">
+            <thead>
+                <tr><th colspan="3">BACTEROIDOTA (BACTEROIDETES)</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="width:20%"><em>Bacteroides spp.</em></td>
+                    <td>Are associated with high intake of animal proteins and fats. In case of lack of vegetable carbohydrates, they are able to use polysaccharides produced by intestinal cells, which is important during nutritional deficiencies. The main producers of vitamin K</td>
+                    <td class="ref">[32-33]</td>
+                </tr>
+                <tr>
+                    <td><em>Prevotella spp.</em></td>
+                    <td>Are able to degrade polysaccharides in a high-fiber mixed diet and dominate the gut microbiota in rural populations. Synthesize propionate</td>
+                    <td class="ref">[34]</td>
+                </tr>
+                <tr>
+                    <td><em>Parabacteroides spp.</em></td>
+                    <td>Synthesize antimicrobial substances, thus preventing gut colonization by pathogenic bacteria. They are most often found in full-term infants who were born naturally. Play a leading role in the conversion of bile acids, which modulates lipid and glucose metabolism, preventing insulin resistance and obesity</td>
+                    <td class="ref">[35]</td>
+                </tr>
+                <tr>
+                    <td><em>Alistipes spp.</em></td>
+                    <td>Produce acetate and propionate</td>
+                    <td class="ref">[36]</td>
+                </tr>
+                <tr>
+                    <td><em>Butyricimonas spp.</em></td>
+                    <td>Produce acetate, propionate and succinate</td>
+                    <td class="ref"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>Thus, the most part of gut microbiota in children after two years old is represented by bacteria of the phylum <em>Bacillota (Firmicutes)</em>. Their decrease and the shift of the <em>Bacillota (Firmicutes)/Bacteroidota (Bacteroidetes)</em> ratio towards <em>Bacteroidota (Bacteroidetes)</em> may be associated with the development of the inflammatory process.</p>
+
+        <p>Ulcerative colitis and Crohn's disease are often associated with a significant increase in <em>Bacteroides</em> and <em>Prevotella</em> representatives, a change in the number of bifidobacteria, and a decrease in Firmicutes – <em>C. leptum</em> gr, especially <em>F. prausnitzii</em> [37-38]. In celiac disease, there is a decrease in <em>Lactobacillus</em> and <em>Bifidobacteria</em> and an increase in pro-inflammatory bacteria, including the <em>Veillonellaceae</em> family.</p>
+
+        <h2 class="section-title">OTHER BACTERIA</h2>
+
+        <p>The end product of most biochemical reactions in the gut is molecular hydrogen. To maintain the metabolic activity of the microbiota, its oxidation is important. This function in the gut biocenosis is performed by three groups of microorganisms: acetogens (<em>Blautia spp.</em>, <em>Lachnospiraceae</em> family), sulfate-reducing bacteria (<em>Desulfovibrio spp.</em>), and methanogens (archaea from the <em>Methanobacteriaceae</em> group, namely, <em>Methanobrevibacter</em> and/or <em>Methanosphaera</em>) [39]. Normally, faecal samples may contain the representatives of several groups or only one of them [40].</p>
+
+        <span class="page-number">07</span>
+    </div>
+
+    <!-- Page 8: Akkermansia and Opportunistic Microbiota -->
+    <div class="page">
+        <header class="page-header">
+            <img src="genomerlogo.png" alt="Genomer" class="logo">
+        </header>
+
+        <p>The main mucin metabolizer in children over two years old and adults is <em>Akkermansia muciniphila</em> (<em>Verrucomicrobiota</em> phylum (<em>Verrucomicrobia</em>). <em>A. muciniphila</em> colonizes the mucosal layer of the human large intestine and enhances its barrier function.</p>
+
+        <p><em>A. muciniphila</em> split intestinal mucin mainly into propionic and acetic acids, which become a substrate for <em>F. prausnitzii</em>, one of the main producers of butyrate, which contributes to the suppression of inflammatory processes in the intestine [41-42].</p>
+
+        <h2 class="section-title">OPPORTUNISTIC MICROBIOTA (PATHOBIONTS) AND PATHOGENICITY AND RESISTANCE MARKERS</h2>
+
+        <table class="data-table">
+            <tbody>
+                <tr>
+                    <td style="width:22%"><em>Clostridium difficile</em> gr.<br><em>Clostridioides difficile</em><br>tcdA, tcdB<br>(markers of pathogenicity)</td>
+                    <td><em>Clostridioides difficile</em> can produce enterotoxins A (tcdA) and B (tcdB), which cause acute inflammation, damaging of the intestinal barrier, and fluid influx. It has multiple antibiotics resistance, causes nosocomial infectious diarrhea. Symptoms can range from mild diarrhea to severe colitis and intestinal perforations</td>
+                    <td class="ref">[25]</td>
+                </tr>
+                <tr>
+                    <td><em>C. perfringens</em> gr.</td>
+                    <td>Constitute a part of the gut microbiota in preterm infants, and in 30% of them <em>C. perfringens</em> gr. are detected already in the intensive care unit. Capable of producing a large number of toxins. <em>C. perfringens</em> gr. is associated with the development of necrotizing enterocolitis in preterm infants, which is often lethal</td>
+                    <td class="ref">[25, 43, 44]</td>
+                </tr>
+                <tr>
+                    <td><em>Enterobacterales</em></td>
+                    <td>Representatives of this group are considered as markers of inflammation. During inflammation there is an increase in the number of facultative anaerobes from the order <em>Enterobacterales</em> and a decrease in the number of representatives of the normobiota. <em>Enterobacterales</em> may be associated with irritable bowel syndrome, inflammatory bowel disease, and necrotizing enterocolitis</td>
+                    <td class="ref">[45-46]</td>
+                </tr>
+                <tr>
+                    <td><em>Enterococcus spp.</em></td>
+                    <td>Includes both commensal species and species that can cause diarrhea in newborns. Commensal species can stimulate the immune system and affect the maintenance of intestinal homeostasis. <em>E. faecalis</em> and <em>E. faecium</em> are the most common species found in humans</td>
+                    <td class="ref">[47]</td>
+                </tr>
+                <tr>
+                    <td><em>Erysipelotrichaceae</em></td>
+                    <td>Have high immunogenicity, pro-inflammatory effect and, possibly, multiple resistance to antimicrobial drugs. The number of representatives of <em>Erysipelotrichaceae</em> increases significantly in inflammatory intestine diseases</td>
+                    <td class="ref">[48-49]</td>
+                </tr>
+                <tr>
+                    <td><em>Staphylococcus spp.</em></td>
+                    <td>Are among the first microorganisms colonizing the gut of a newborn, especially in premature infants. <em>Staphylococcus spp.</em> (usually <em>S. epidermidis</em>) constitutes a significant part of the microbiota at an early age in children born by caesarean section</td>
+                    <td class="ref"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <span class="page-number">08</span>
+    </div>
+
+    <!-- Page 9: More Pathobionts and C. difficile info -->
+    <div class="page">
+        <header class="page-header">
+            <img src="genomerlogo.png" alt="Genomer" class="logo">
+        </header>
+
+        <table class="data-table">
+            <tbody>
+                <tr>
+                    <td style="width:22%"><em>Staphylococcus aureus</em><br>mecA (methicillin resistance marker)</td>
+                    <td>Representative of the normal skin microbiota. If present in the gut, slows down the formation of normal microbiota. Can cause diseases of varying severity, up to sepsis. Strains carrying the mecA gene are resistant to methicillin</td>
+                    <td class="ref">[50]</td>
+                </tr>
+                <tr>
+                    <td><em>Streptococcus agalactiae</em><br>srr2</td>
+                    <td>Part of normal human microbiota; however, <em>S. agalactiae</em> strains carrying the srr2 gene have increased virulence. The product of the srr2 gene promotes the invasion of <em>S. agalactiae</em> into the bloodstream and further into the vascular membranes of the brain, causing the development of meningitis</td>
+                    <td class="ref">[51]</td>
+                </tr>
+                <tr>
+                    <td><em>Candida spp.</em></td>
+                    <td>Part of normal human intestinal microbiota. Their number positively correlates with predominance of carbohydrates in the diet</td>
+                    <td class="ref"></td>
+                </tr>
+                <tr>
+                    <td><em>Candida albicans</em></td>
+                    <td>Presents in 30-60% of healthy people, may simultaneously use different substrates, including lactate and citrate. Antibiotic treatment promotes <em>C. albicans</em> colonization. Under certain conditions, such as suppression of the immune system and impaired permeability of the intestinal wall, can cause invasive infections, including nosocomial infections</td>
+                    <td class="ref">[52-53]</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p style="margin-top: 20px;">The infection caused by <em>C. difficile</em> is one of the main causes of hospital-acquired diarrhea and is often associated with antibiotic therapy, which leads to a decrease in the diversity of gut microbiota and in the number of representatives of the phyla <em>Bacillota (Firmicutes)</em>, <em>Bacteroidota (Bacteroidetes)</em> and <em>Actinomycetota (Actinobacteria)</em>. The frequency of carriage of <em>C. difficile</em> in children from three years old and adults is about 0-3%. At the same time, in children younger than one year old, the carriage frequency can reach 61% [55].</p>
+
+        <p>Children of this age group are more likely to have non-toxigenic strains and do not develop any symptoms of infection. According to one hypothesis, this is due to the absence of receptors for enterotoxin A in newborns [56]. As the child's immune system matures, <em>C. difficile</em> is normally eliminated from the gut microbiota by about two years.</p>
+
+        <span class="page-number">09</span>
+    </div>
+
+    <!-- Page 10: Methods -->
+    <div class="page">
+        <header class="page-header">
+            <img src="genomerlogo.png" alt="Genomer" class="logo">
+        </header>
+
+        <h2 class="section-title">METHODS TO STUDY THE COMPOSITION OF THE HUMAN GUT MICROBIOTA</h2>
+
+        <div class="content-block">
+            <div class="content-bullet"></div>
+            <div class="content-text">The standard method for studying the composition of the human microbiota is bacterial culture. However, 50-80% of the microorganisms that make up the gut microbiota are difficult to cultivate and are not detected by the microbiological method. In addition, the results of bacterial culture are directly dependent on the preservation of the microorganisms viability.</div>
+        </div>
+
+        <div class="content-block">
+            <div class="content-bullet"></div>
+            <div class="content-text">Next generation sequencing (NGS) method allows one to identify microorganisms with an accuracy to the species, as well as to calculate the ratios between species. However, the information obtained using NGS is often redundant and requires highly qualified staff to interpret it, which makes it difficult to use sequencing as a routine research method. At the same time, NGS has been used to identify taxa that are most relevant for the analysis with other methods.</div>
+        </div>
+
+        <div class="content-block">
+            <div class="content-bullet"></div>
+            <div class="content-text">Currently, the most optimal approach for studying the microbiota is to use real-time PCR. This is an accurate and fast quantitative determination of microorganisms in a sample using species-specific or group-specific primers and the subsequent normalization of the results obtained by the number of copies of the target genes. The multi-tube and multiplex assay format makes it possible to combine the identification of large taxa with the detection of several key microbiota species and/or subpopulations.</div>
+        </div>
+
+        <div class="info-box">
+            <p><strong>The ENTEROBIOME Kids reagent kit detects microbial taxa that make up at least 99.9% of the total prokaryotic mass of a child's feces.</strong> According to published data, functional taxonomic groups were identified, united according to the main metabolic characteristics and effects on the host organism. Thus, the taxa identified in the ENTEROBIOME Kids reagent kit are detailed to the level of clinical significance, taking into account the age of the child.</p>
+        </div>
+
+        <p><strong>The ENTEROBIOME Kids reagent kit</strong> is designed for detection of colon associated bacteria DNA (<em>Bacillota (Firmicutes)</em>, <em>Pseudomonadota (Proteobacteria)</em>, <em>Bacteroidota (Bacteroidetes)</em>, <em>Actinomycetota (Actinobacteria)</em>, <em>Fusobacteriota (Fusobacteria)</em>, <em>Verrucomicrobiota (Verrucomicrobia)</em>), <em>Euryarchaeota</em> phylums), including <em>Candida</em> fungi, as well as gene of methicillin-resistance <em>Staphylococcus spp.</em> (mecA), <em>Cl. difficile</em> with enterotoxins A and B (tcdA, tcdB), <em>Str. agalactiae</em> with the invasiveness marker gene (srr2) by real-time PCR in DNA preparations obtained from children's faeces samples in order to assess the composition of the large intestinal microbiota.</p>
+
+        <span class="page-number">10</span>
+    </div>
+
+    <!-- Page 11: Study Recommendations and Kit Features -->
+    <div class="page">
+        <header class="page-header">
+            <img src="genomerlogo.png" alt="Genomer" class="logo">
+        </header>
+
+        <div class="info-box" style="background: var(--primary); color: white; border-left-color: var(--primary-dark);">
+            <p style="margin: 0;"><strong>THE STUDY IS RECOMMENDED</strong></p>
+        </div>
+
+        <p>when it is necessary to determine the qualitative composition and quantitative assessment of the microbiota of the large intestine in the context of medical and diagnostic procedures</p>
+
+        <div class="info-box" style="background: var(--primary); color: white; border-left-color: var(--primary-dark); margin-top: 20px;">
+            <p style="margin: 0;"><strong>BIOMATERIAL FOR TESTING</strong></p>
+        </div>
+
+        <p>feces (including meconium)</p>
+
+        <h2 class="section-title">FEATURES OF THE REAGENT KIT</h2>
+
+        <p><strong>Determination of the gut microbiota status (normocenosis/dysbiosis) by the relative abundance of normobiota and opportunistic microbiota in the total bacterial mass (TBM):</strong></p>
+
+        <ul class="bullet-list">
+            <li>quantitative estimation of normobiota (phyla <em>Actinomycetota (Actinobacteria)</em>, <em>Bacillota (Firmicutes)</em>, <em>Bacteroidota (Bacteroidetes)</em>, <em>Pseudomonadota (Proteobacteria)</em>), opportunistic microbiota and yeast fungi from genus <em>Candida</em>;</li>
+            <li>estimation of the normal microbiota diversity;</li>
+            <li>determination of the number of bifidobacteria and lactobacilli;</li>
+            <li>determination of bifidobacteria species;</li>
+            <li>calculation of the <em>Bacillota (Firmicutes)</em>, <em>Bacteroidota (Bacteroidetes)</em> ratio;</li>
+            <li>estimation of the presence of the representatives of <em>Bacteroidetes</em> taxa;</li>
+            <li>detection of markers of pathogenicity and resistance: mecA, srr2, tcdA, tcdB</li>
+        </ul>
+
+        <div class="feature-grid">
+            <div class="feature-item"><strong>Multiplex format</strong> — several DNA targets are detected simultaneously in one test tube;</div>
+            <div class="feature-item"><strong>Automatic generation of the results</strong> form when using the recommended Real-time PCR instruments of the RealTime_PCR software;</div>
+            <div class="feature-item"><strong>Internal control</strong> — assessment of the quality of DNA extraction and PCR;</div>
+            <div class="feature-item"><strong>Availability of preset templates</strong> with test parameters, which automatically set the necessary settings and calculate the results.</div>
+        </div>
+
+        <span class="page-number">11</span>
+    </div>
+
+    <!-- Page 12: Back Cover -->
+    <div class="page back-cover">
+        <img src="genomerlogo.png" alt="Genomer" class="logo">
+
+        <div class="contact-item">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            <span>www.genomer.com.tr</span>
+        </div>
+
+        <div class="contact-item">
+            <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <span>info@genomer.com.tr</span>
+        </div>
+
+        <p class="back-cover-tagline">Advanced Molecular Diagnostics<br>for Children's Gut Health</p>
+    </div>
+
+</body>
+</html>

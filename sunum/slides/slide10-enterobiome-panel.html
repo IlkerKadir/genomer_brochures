@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+html { background: #FFFFFF; }
+body {
+  width: 720pt; height: 405pt; margin: 0; padding: 0;
+  font-family: Arial, sans-serif;
+  display: flex; background: #FFFFFF;
+}
+.container { width: 100%; height: 100%; position: relative; }
+.header { position: absolute; top: 0; left: 0; right: 0; height: 48pt; background: #0891B2; }
+.header-text { position: absolute; top: 12pt; left: 40pt; }
+.logo-top { position: absolute; top: 12pt; right: 40pt; }
+.logo-top img { height: 22pt; }
+.content { position: absolute; top: 60pt; left: 30pt; right: 30pt; }
+.columns { display: flex; gap: 16pt; }
+.col { flex: 1; }
+.col-title { font-size: 9pt; font-weight: bold; margin: 0 0 6pt 0; }
+.col-title-teal { color: #0891B2; }
+.col-title-amber { color: #B45309; }
+.sub-header { font-size: 8pt; color: #333; font-weight: bold; margin: 8pt 0 3pt 0; }
+.sub-header:first-child { margin-top: 0; }
+ul { margin: 0 0 2pt 0; padding-left: 12pt; }
+ul li { font-size: 7.5pt; color: #4A4A5A; line-height: 1.55; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header"></div>
+  <div class="header-text">
+    <h2 style="color: #FFFFFF; font-size: 15pt; margin: 0;">ENTEROBIOME KIDS — Detailed Detection Panel</h2>
+  </div>
+  <div class="logo-top"><img src="genomerlogo.png"></div>
+  <div class="content">
+    <div class="columns">
+      <div class="col">
+        <p class="col-title col-title-teal">Normal Microbiota</p>
+        <p class="sub-header">Actinomycetota</p>
+        <ul>
+          <li>Bifidobacterium spp. (child species: B. bifidum, B. longum, B. infantis, B. breve)</li>
+          <li>Bifidobacterium spp. (adult species: B. adolescentis, B. catenulatum, B. animalis)</li>
+          <li>Coriobacteriia</li>
+        </ul>
+        <p class="sub-header">Bacillota</p>
+        <ul>
+          <li>Cl. leptum gr. (cluster IV)</li>
+          <li>F. prausnitzii</li>
+          <li>Lachnospiraceae (cluster XIVa)</li>
+          <li>Lactobacillaceae</li>
+          <li>Lactococcus lactis</li>
+          <li>Streptococcus spp.</li>
+          <li>Veillonellaceae</li>
+          <li>Erysipelotrichaceae</li>
+        </ul>
+      </div>
+      <div class="col">
+        <p class="sub-header" style="margin-top: 20pt;">Bacteroidota</p>
+        <ul>
+          <li>Bacteroides spp.</li>
+          <li>Prevotella spp.</li>
+          <li>Parabacteroides spp.</li>
+          <li>Alistipes spp.</li>
+          <li>Butyricimonas spp.</li>
+        </ul>
+        <p class="sub-header">Other</p>
+        <ul>
+          <li>Akkermansia muciniphila (Verrucomicrobiota)</li>
+          <li>Blautia spp. (acetogens)</li>
+          <li>Desulfovibrio spp. (sulfate-reducing)</li>
+          <li>Methanobacteriaceae (methanogens)</li>
+        </ul>
+      </div>
+      <div class="col">
+        <p class="col-title col-title-amber">Opportunistic &amp; Markers</p>
+        <p class="sub-header">Pathobionts</p>
+        <ul>
+          <li>C. difficile (tcdA, tcdB markers)</li>
+          <li>C. perfringens gr.</li>
+          <li>Enterobacterales</li>
+          <li>Enterococcus spp.</li>
+          <li>S. aureus (mecA marker)</li>
+          <li>S. agalactiae (srr2 marker)</li>
+        </ul>
+        <p class="sub-header">Fungi</p>
+        <ul>
+          <li>Candida spp.</li>
+          <li>Candida albicans</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

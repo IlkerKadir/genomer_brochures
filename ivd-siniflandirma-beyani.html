@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>IVD Sınıflandırma Beyanı - Genomer Biyoteknoloji</title>
+<style>
+    @page {
+        size: A4;
+        margin: 0;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+        font-family: "Times New Roman", Times, serif;
+        color: #1a1a1a;
+        background: #fff;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    .page {
+        width: 210mm;
+        height: 297mm;
+        padding: 16mm 22mm 14mm 22mm;
+        position: relative;
+        background: #fff;
+        display: flex;
+        flex-direction: column;
+    }
+    .page-body { flex: 1 1 auto; }
+    .letterhead {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        border-bottom: 2.5px solid #0a5a8a;
+        padding-bottom: 12px;
+        margin-bottom: 20px;
+    }
+    .letterhead .logo img {
+        height: 68px;
+        width: auto;
+    }
+    .letterhead .company {
+        text-align: right;
+        font-size: 9.5pt;
+        color: #333;
+        line-height: 1.55;
+        max-width: 95mm;
+    }
+    .letterhead .company .name {
+        font-weight: 700;
+        color: #0a5a8a;
+        font-size: 10.5pt;
+        margin-bottom: 3px;
+    }
+    .ref-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 10.5pt;
+        margin-bottom: 18px;
+    }
+    .ref-row .ref { color: #333; }
+    .ref-row .ref strong { display: inline-block; min-width: 75px; }
+    .addressee {
+        margin-bottom: 16px;
+        font-size: 11.5pt;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+    }
+    .subject {
+        margin-bottom: 16px;
+        font-size: 11pt;
+    }
+    .subject strong { display: inline-block; min-width: 55px; }
+    .body-text {
+        font-size: 10.5pt;
+        line-height: 1.5;
+        text-align: justify;
+        margin-bottom: 8px;
+    }
+    .body-text p { margin-bottom: 7px; }
+    table.classification {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 8px 0 12px;
+        font-size: 10pt;
+    }
+    table.classification th {
+        background: #0a5a8a;
+        color: #fff;
+        padding: 7px 14px;
+        text-align: left;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+    }
+    table.classification th:last-child {
+        text-align: center;
+        width: 80px;
+    }
+    table.classification td {
+        padding: 6px 14px;
+        border-bottom: 1px solid #d0d7de;
+    }
+    table.classification td:last-child {
+        text-align: center;
+        font-weight: 700;
+        font-size: 11pt;
+    }
+    table.classification tr:nth-child(even) td {
+        background: #f5f8fb;
+    }
+    .class-badge {
+        display: inline-block;
+        min-width: 32px;
+        padding: 3px 10px;
+        border-radius: 4px;
+        color: #1a1a1a;
+        font-weight: 700;
+        background: #e5e9ee;
+        border: 1px solid #c8cfd6;
+    }
+    .regulatory-note {
+        background: #f5f8fb;
+        border-left: 4px solid #0a5a8a;
+        padding: 10px 14px;
+        font-size: 10pt;
+        line-height: 1.55;
+        margin: 12px 0 14px;
+        color: #333;
+    }
+    .signature-row {
+        margin-top: 28px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 40px;
+    }
+    .signature-row .sig-col {
+        width: 75mm;
+        font-size: 10.5pt;
+        line-height: 1.45;
+    }
+    .signature-row .sig-col .title { font-weight: 700; }
+    .signature-row .sig-col .subtitle { color: #555; font-size: 9.5pt; }
+    .signature-row .stamp-col {
+        width: 70mm;
+        text-align: center;
+        padding-top: 60px;
+        font-size: 10.5pt;
+        font-weight: 700;
+    }
+    .footer {
+        border-top: 1px solid #c8d0d8;
+        padding-top: 7px;
+        margin-top: auto;
+        font-size: 8.5pt;
+        color: #666;
+        text-align: center;
+        line-height: 1.45;
+    }
+</style>
+</head>
+<body>
+<div class="page">
+
+    <div class="letterhead">
+        <div class="logo">
+            <img src="genomerlogo.png" alt="Genomer Biyoteknoloji">
+        </div>
+        <div class="company">
+            <div class="name">GENOMER BİYOTEKNOLOJİ<br>ARGE SAN. VE TİC. LTD. ŞTİ.</div>
+            Barış SB Mah. 5003 Sk.<br>
+            Kadir Has Binası Kısım A No: 2<br>
+            İç Kapı No: Z14<br>
+            Gebze / Kocaeli / Türkiye<br>
+            www.genomer.com.tr &nbsp;|&nbsp; support@genomer.com.tr
+        </div>
+    </div>
+
+    <div class="ref-row">
+        <div class="ref"><strong>Referans No:</strong> GEN-REG-2026/001</div>
+        <div class="ref"><strong>Tarih:</strong> 21.04.2026</div>
+    </div>
+
+    <div class="addressee">İLGİLİ MAKAMA</div>
+
+    <div class="subject">
+        <strong>Konu:</strong> İn Vitro Diyagnostik (IVD) Tıbbi Cihaz Sınıflandırma Beyanı
+    </div>
+
+    <div class="body-text">
+        <p>
+            Genomer Biyoteknoloji Arge San. ve Tic. Ltd. Şti. olarak; aşağıda listelenen
+            in vitro diyagnostik tıbbi cihazlarımızın, 2017/746 sayılı Avrupa Birliği
+            İn Vitro Diyagnostik Tıbbi Cihaz Yönetmeliği (IVDR) Ek VIII'de belirtilen
+            sınıflandırma kurallarına ve Türkiye İlaç ve Tıbbi Cihaz Kurumu (TİTCK) tarafından
+            yürürlüğe konulan <em>İn Vitro Tanı Amaçlı Tıbbi Cihaz Yönetmeliği</em>'ne uygun
+            şekilde değerlendirildiğini ve ilgili risk sınıflarının aşağıdaki tabloda
+            beyan edildiği şekilde olduğunu bildiririz.
+        </p>
+    </div>
+
+    <table class="classification">
+        <thead>
+            <tr>
+                <th>Ürün Adı</th>
+                <th>IVD Sınıfı</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Candida albicans qPCR Kiti</td>
+                <td><span class="class-badge class-B">B</span></td>
+            </tr>
+            <tr>
+                <td>Gardnerella vaginalis qPCR Kiti</td>
+                <td><span class="class-badge class-B">B</span></td>
+            </tr>
+            <tr>
+                <td>HSV-2 qPCR Kiti</td>
+                <td><span class="class-badge class-C">C</span></td>
+            </tr>
+            <tr>
+                <td>HCV Genotip qPCR Kiti</td>
+                <td><span class="class-badge class-C">C</span></td>
+            </tr>
+            <tr>
+                <td>Genomer Solunum-24 v2.0 Patojen Tespit Kiti</td>
+                <td><span class="class-badge class-C">C</span></td>
+            </tr>
+            <tr>
+                <td>HBV qPCR Kiti</td>
+                <td><span class="class-badge class-D">D</span></td>
+            </tr>
+            <tr>
+                <td>HCV qPCR Kiti</td>
+                <td><span class="class-badge class-D">D</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="body-text">
+        <p>
+            Yukarıda belirtilen sınıflandırmalar; cihazların kullanım amacı, hedef analit
+            ve hasta/toplum sağlığı açısından taşıdığı risk dikkate alınarak IVDR 2017/746
+            Ek VIII kuralları çerçevesinde yapılmış olup, ilgili teknik dosyalar ile tutarlıdır
+            ve firmamızın ISO 13485 kalite yönetim sistemi kapsamında sürdürülmektedir.
+        </p>
+        <p>
+            İşbu belge, ilgili kurum, kuruluş ve makamlara sunulmak üzere
+            Genomer Biyoteknoloji Arge San. ve Tic. Ltd. Şti. tarafından
+            düzenlenmiştir. Bilgilerinize arz/rica olunur.
+        </p>
+    </div>
+
+    <div class="signature-row">
+        <div class="sig-col">
+            <div class="title">Genomer Biyoteknoloji</div>
+            <div class="subtitle">Arge San. ve Tic. Ltd. Şti.</div>
+        </div>
+        <div class="stamp-col">Yetkili İmza / Kaşe</div>
+    </div>
+
+    <div class="footer">
+        Genomer Biyoteknoloji Arge San. ve Tic. Ltd. Şti. &nbsp;•&nbsp;
+        Barış SB Mah. 5003 Sk. Kadir Has Binası Kısım A No:2 İç Kapı No:Z14, Gebze / Kocaeli / Türkiye<br>
+        www.genomer.com.tr &nbsp;•&nbsp; support@genomer.com.tr
+    </div>
+
+</div>
+</body>
+</html>
