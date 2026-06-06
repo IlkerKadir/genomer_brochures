@@ -6,8 +6,9 @@ import uuid
 import zipfile
 import fitz
 from fastapi import FastAPI, UploadFile, File, HTTPException
-from fastapi.responses import Response, FileResponse, JSONResponse
+from fastapi.responses import Response
 from fastapi.staticfiles import StaticFiles
+from typing import Literal
 from pydantic import BaseModel
 
 import engine
@@ -36,8 +37,11 @@ def _table_for(kit):
 def _annotate(fs):
     table, passthrough = _table_for(fs["kit"])
     doc = fitz.open(stream=fs["pdf_bytes"], filetype="pdf")
-    segs = engine.extract_segments(doc)
-    return engine.translate_segments(segs, table, passthrough, fs["overrides"]), doc
+    try:
+        segs = engine.extract_segments(doc)
+        return engine.translate_segments(segs, table, passthrough, fs["overrides"])
+    finally:
+        doc.close()
 
 
 def _counts(ann):
@@ -60,7 +64,6 @@ def _get(session, file):
 
 @app.post("/api/upload")
 async def upload(files: list[UploadFile] = File(...)):
-    set_out_dir(_OUT_DIR)
     session_id = uuid.uuid4().hex[:12]
     SESSIONS[session_id] = {"files": {}}
     out = []
@@ -74,7 +77,7 @@ async def upload(files: list[UploadFile] = File(...)):
         fs = {"name": uf.filename, "pdf_bytes": data, "kit": kit,
               "overrides": {}, "saved_path": None}
         SESSIONS[session_id]["files"][file_id] = fs
-        ann, _ = _annotate(fs)
+        ann = _annotate(fs)
         out.append({"file_id": file_id, "name": uf.filename, "kit": kit,
                     "counts": _counts(ann)})
     return {"session_id": session_id, "files": out}
@@ -83,7 +86,7 @@ async def upload(files: list[UploadFile] = File(...)):
 @app.get("/api/{session}/{file}/manifest")
 def manifest(session: str, file: str):
     fs = _get(session, file)
-    ann, _ = _annotate(fs)
+    ann = _annotate(fs)
     return [{"id": a.id, "page": a.page, "bbox": a.seg.bbox, "en": a.en, "tr": a.tr,
              "source": a.source, "needs_review": a.needs_review} for a in ann]
 
@@ -93,15 +96,18 @@ def page_png(session: str, file: str, n: int):
     fs = _get(session, file)
     out_bytes = _render_bytes(fs)
     doc = fitz.open(stream=out_bytes, filetype="pdf")
-    if n < 0 or n >= len(doc):
-        raise HTTPException(404, "sayfa yok")
-    png = doc[n].get_pixmap(dpi=150).tobytes("png")
+    try:
+        if n < 0 or n >= len(doc):
+            raise HTTPException(404, "sayfa yok")
+        png = doc[n].get_pixmap(dpi=150).tobytes("png")
+    finally:
+        doc.close()
     return Response(content=png, media_type="image/png")
 
 
 class SegmentEdit(BaseModel):
     tr: str
-    scope: str  # "dict" | "report"
+    scope: Literal["dict", "report"]
 
 
 @app.post("/api/{session}/{file}/segment/{seg}")
@@ -110,7 +116,7 @@ def edit_segment(session: str, file: str, seg: str, body: SegmentEdit):
     fs["overrides"][seg] = body.tr
     result = {"ok": True}
     if body.scope == "dict":
-        ann, _ = _annotate(fs)
+        ann = _annotate(fs)
         en = next((a.en for a in ann if a.id == seg), None)
         if en:
             res = dictionary.add_entry(fs["kit"], en, body.tr, overwrite=False)
@@ -120,7 +126,7 @@ def edit_segment(session: str, file: str, seg: str, body: SegmentEdit):
 
 
 class KitBody(BaseModel):
-    kit: str
+    kit: Literal["femobiome_ii", "androbiome", "enterobiome_kids"]
 
 
 @app.post("/api/{session}/{file}/kit")
@@ -128,7 +134,7 @@ def set_kit(session: str, file: str, body: KitBody):
     fs = _get(session, file)
     fs["kit"] = body.kit
     fs["overrides"] = {}
-    ann, _ = _annotate(fs)
+    ann = _annotate(fs)
     return {"ok": True, "counts": _counts(ann)}
 
 
