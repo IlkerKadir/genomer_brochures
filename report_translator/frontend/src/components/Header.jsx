@@ -1,7 +1,7 @@
 import { useEffect, useState } from "preact/hooks";
 import * as api from "../api/client.js";
 
-export function Header() {
+export function Header({ view, onNav }) {
   const [outDir, setOut] = useState("");
   useEffect(() => { api.getOutDir().then((r) => setOut(r.out_dir)); }, []);
   return (
@@ -12,6 +12,20 @@ export function Header() {
         Rapor Çevirici
         <span>EN → TR</span>
       </h1>
+      <nav class="nav-tabs" aria-label="Ana gezinti">
+        <button
+          class={`nav-tab${view === "reports" ? " active" : ""}`}
+          onClick={() => onNav("reports")}
+        >
+          Raporlar
+        </button>
+        <button
+          class={`nav-tab${view === "dictionary" ? " active" : ""}`}
+          onClick={() => onNav("dictionary")}
+        >
+          Sözlük
+        </button>
+      </nav>
       <div class="out-dir">
         <span>Çıktı:</span>
         <code title={outDir}>{outDir || "—"}</code>

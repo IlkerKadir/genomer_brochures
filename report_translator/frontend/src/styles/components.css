@@ -1131,3 +1131,247 @@ code {
   border-radius: var(--radius-xs);
   color: var(--text-secondary);
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   HEADER NAV TABS
+═══════════════════════════════════════════════════════════════════════════ */
+.nav-tabs {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: var(--surface-sunken);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 3px;
+  margin-left: var(--space-4);
+}
+
+.nav-tab {
+  background: transparent;
+  color: var(--text-tertiary);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  padding: 5px var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  box-shadow: none;
+  transition:
+    background var(--transition-base),
+    color var(--transition-base),
+    border-color var(--transition-base),
+    box-shadow var(--transition-base);
+}
+
+.nav-tab:hover:not(:disabled) {
+  background: var(--surface-base);
+  color: var(--text-primary);
+  border-color: var(--border-subtle);
+  transform: none;
+  box-shadow: var(--shadow-xs);
+}
+
+.nav-tab.active {
+  background: var(--surface-base);
+  color: var(--brand-purple);
+  border-color: rgba(108,58,142,0.22);
+  box-shadow: var(--shadow-xs);
+  font-weight: var(--weight-semibold);
+}
+
+.nav-tab.active:hover:not(:disabled) {
+  background: var(--brand-purple-soft);
+  transform: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DICTIONARY VIEW
+═══════════════════════════════════════════════════════════════════════════ */
+.dict {
+  flex: 1;
+  max-width: 1140px;
+  margin: var(--space-8) auto;
+  padding: 0 var(--space-6);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  animation: fadeSlideUp var(--transition-slow) both;
+}
+
+/* ─── Add Form ─────────────────────────────────────────────────────────── */
+.dict-add {
+  padding: var(--space-5);
+}
+
+.dict-add-title {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--text-secondary);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-4);
+}
+
+.dict-add-fields {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.dict-select {
+  font-family: var(--font-family);
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+  background: var(--surface-sunken);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-3);
+  cursor: pointer;
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+  min-width: 140px;
+}
+
+.dict-select:focus {
+  outline: none;
+  border-color: var(--brand-blue);
+  box-shadow: var(--shadow-focus-blue);
+}
+
+.dict-input {
+  flex: 1;
+  min-width: 160px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-family);
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+  background: var(--surface-sunken);
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+.dict-input:focus {
+  outline: none;
+  border-color: var(--brand-blue);
+  background: var(--surface-base);
+  box-shadow: var(--shadow-focus-blue);
+}
+
+.dict-input::placeholder {
+  color: var(--text-disabled);
+}
+
+/* ─── Toolbar ──────────────────────────────────────────────────────────── */
+.dict-toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  padding: var(--space-3) var(--space-4);
+  background: var(--surface-base);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.dict-search {
+  width: 240px;
+  flex-shrink: 0;
+}
+
+.dict-count {
+  margin-left: auto;
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ─── List ─────────────────────────────────────────────────────────────── */
+.dict-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* ─── Row ──────────────────────────────────────────────────────────────── */
+.dict-row {
+  display: grid;
+  grid-template-columns: 130px minmax(0,1fr) minmax(0,1.5fr) auto;
+  align-items: center;
+  gap: var(--space-3);
+  background: var(--surface-base);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  box-shadow: var(--shadow-xs);
+  transition:
+    border-color var(--transition-base),
+    box-shadow var(--transition-base);
+}
+
+.dict-row:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-sm);
+}
+
+.dict-scope {
+  /* reuse .kit styles — just override width */
+  align-self: start;
+  margin-top: 2px;
+}
+
+.dict-en {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+  background: var(--surface-sunken);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xs);
+  padding: 3px var(--space-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+}
+
+.dict-tr-input {
+  width: 100%;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-2);
+  font-family: var(--font-family);
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+  background: var(--surface-sunken);
+  resize: vertical;
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+.dict-tr-input:focus {
+  outline: none;
+  border-color: var(--brand-blue);
+  background: var(--surface-base);
+  box-shadow: var(--shadow-focus-blue);
+}
+
+.dict-row-acts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  align-items: stretch;
+  min-width: 72px;
+}
+
+.dict-del {
+  color: var(--color-error) !important;
+  border-color: var(--color-error-border) !important;
+}
+
+.dict-del:hover:not(:disabled) {
+  background: var(--color-error-soft) !important;
+  color: var(--color-error) !important;
+  border-color: var(--color-error-border) !important;
+  transform: none !important;
+}

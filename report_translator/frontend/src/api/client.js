@@ -49,3 +49,10 @@ export const pageUrl = (s, f, n) => `/api/${s}/${f}/page/${n}.png?t=${Date.now()
 export const originalUrl = (s, f, n) => `/api/${s}/${f}/original/${n}.png`;
 export const reviewUrl = (s, f) => `/api/${s}/${f}/review.txt`;
 export const downloadAllUrl = (s) => `/api/${s}/download_all`;
+
+// ─── Dictionary ────────────────────────────────────────────────────────────
+export const getDictionary = () => jget('/api/dictionary');
+export const saveDictEntry = (scope, en, tr, overwrite = false) =>
+  jpost('/api/dictionary/entry', { scope, en, tr, overwrite });
+export const deleteDictEntry = (scope, en) =>
+  jpost('/api/dictionary/delete', { scope, en });
