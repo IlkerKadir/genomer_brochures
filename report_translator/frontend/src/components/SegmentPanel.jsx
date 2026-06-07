@@ -5,13 +5,15 @@ export function SegmentPanel({ session, file, store, activeId, setActiveId, onCh
   const visible = store.visibleSegments.value;
 
   async function save(seg, tr, scope, force = false) {
-    store.applyOverride(seg.id, tr);
     const r = await api.editSegment(session, file.file_id, seg.id, tr, scope, force);
     if (r.conflict) {
       if (confirm(`Bu metin sözlükte zaten "${r.existing}" olarak var. Üzerine yazılsın mı?`)) {
         await api.editSegment(session, file.file_id, seg.id, tr, "dict", true);
+      } else {
+        return; // iptal — yerel state değişmesin
       }
     }
+    store.applyOverride(seg.id, tr);
     onChanged();
   }
 

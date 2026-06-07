@@ -34,7 +34,7 @@ export function createStore() {
     const cur = segmentById(id);
     if (!cur) return;
     if (record) undoStack.push({ id, prev: cur.tr });
-    manifest.value = manifest.value.map((s) => (s.id === id ? { ...s, tr } : s));
+    manifest.value = manifest.value.map((s) => (s.id === id ? { ...s, tr, source: "override" } : s));
     saveStatus.value = "unsaved";
   }
 

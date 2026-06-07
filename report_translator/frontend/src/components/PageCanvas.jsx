@@ -1,4 +1,4 @@
-import { useRef, useState } from "preact/hooks";
+import { useRef, useState, useEffect } from "preact/hooks";
 import * as api from "../api/client.js";
 
 const DPI = 150;
@@ -17,13 +17,26 @@ export function PageCanvas({ session, file, pageCount, manifest, zoom, compare,
 }
 
 function PageImage({ session, file, n, manifest, compare, activeId, onPickSegment }) {
-  const wrap = useRef(null);
-  const [dims, setDims] = useState(null);
+  const imgRef = useRef(null);
+  const [w, setW] = useState(0);
+  const [nat, setNat] = useState(0);
+
+  // ResizeObserver: zoom (CSS --zoom) değişince clientWidth değişir → scale yeniden hesaplanır
+  useEffect(() => {
+    const el = imgRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => setW(el.clientWidth));
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
   function onLoad(e) {
-    const img = e.target;
-    setDims({ w: img.clientWidth, nat: img.naturalWidth });
+    setNat(e.target.naturalWidth);
+    setW(e.target.clientWidth);
   }
-  const scale = dims ? dims.w / (dims.nat / (DPI / 72)) : 0;
+
+  const scale = (w && nat) ? w / (nat / (DPI / 72)) : 0;
+
   return (
     <div class="pageRow">
       {compare && (
@@ -32,10 +45,10 @@ function PageImage({ session, file, n, manifest, compare, activeId, onPickSegmen
           <div class="pageTag">EN</div>
         </div>
       )}
-      <div class="pageWrap" ref={wrap}>
-        <img src={api.pageUrl(session, file.file_id, n)} onLoad={onLoad} alt={"TR sayfa " + (n + 1)} />
+      <div class="pageWrap">
+        <img ref={imgRef} src={api.pageUrl(session, file.file_id, n)} onLoad={onLoad} alt={"TR sayfa " + (n + 1)} />
         {compare && <div class="pageTag">TR</div>}
-        {dims && manifest.map((s) => {
+        {scale > 0 && manifest.map((s) => {
           const [x0, y0, x1, y1] = s.bbox;
           return <div key={s.id}
             class={"box" + (s.needs_review ? " review" : "") + (s.id === activeId ? " active" : "")}

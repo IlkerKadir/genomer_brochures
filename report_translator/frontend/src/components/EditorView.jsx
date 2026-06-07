@@ -52,7 +52,7 @@ export function EditorView({ session, file, onBack }) {
       {loading ? <div class="skeleton">Yükleniyor…</div> : (
         <div class="editorBody">
           <ThumbnailRail session={session} file={file} pageCount={pageCount}
-            manifest={store.manifest.value} onJump={jump} />
+            manifest={store.manifest.value} onJump={jump} refreshKey={refreshKey} />
           <PageCanvas session={session} file={file} pageCount={pageCount}
             manifest={store.manifest.value} zoom={zoom} compare={compare}
             activeId={activeId} onPickSegment={setActiveId} refreshKey={refreshKey} />

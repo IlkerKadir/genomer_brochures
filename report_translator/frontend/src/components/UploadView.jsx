@@ -5,16 +5,21 @@ import * as api from "../api/client.js";
 
 export function UploadView({ session, files, setSession, setFiles, onOpen }) {
   async function handleFiles(fileList) {
-    const res = await api.upload(fileList);
-    setSession(res.session_id);
-    setFiles(res.files.map((f) => ({ ...f, status: f.error ? "error" : "pending" })));
+    try {
+      const res = await api.upload(fileList);
+      setSession(res.session_id);
+      setFiles(res.files.map((f) => ({ ...f, status: f.error ? "error" : "pending" })));
+    } catch (e) {
+      alert("Yükleme başarısız: " + e.message);
+    }
   }
 
   // ilerleme poll'ü: pending dosya kaldıkça durum çek
+  // hasPending boolean'ı bağımlılık olarak kullanılır — her poll'da files referansı
+  // değişince effect teardown/setup döngüsünden kaçınmak için
+  const hasPending = files.some((f) => f.status === "pending");
   useEffect(() => {
-    if (!session) return;
-    const pending = files.some((f) => f.status === "pending");
-    if (!pending) return;
+    if (!session || !hasPending) return;
     const t = setInterval(async () => {
       const st = await api.getStatus(session);
       setFiles((prev) => prev.map((f) => {
@@ -23,7 +28,7 @@ export function UploadView({ session, files, setSession, setFiles, onOpen }) {
       }));
     }, 800);
     return () => clearInterval(t);
-  }, [session, files]);
+  }, [session, hasPending]);
 
   return (
     <section class="upload">
