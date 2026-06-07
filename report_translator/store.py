@@ -62,16 +62,37 @@ class SessionStore:
         self._write_state(sid, {"files": {}})
         return sid
 
-    def add_file(self, sid, name, pdf_bytes, kit):
+    def add_file(self, sid, name, pdf_bytes, kit, counts=None):
         fid = uuid.uuid4().hex[:8]
         with open(os.path.join(self._sdir(sid), fid + ".pdf"), "wb") as f:
             f.write(pdf_bytes)
         with self._lock:
             state = self._read_state(sid)
-            state["files"][fid] = {"name": name, "kit": kit, "overrides": {},
-                                   "saved_path": None, "status": "pending"}
+            state["files"][fid] = {
+                "name": name, "kit": kit, "overrides": {},
+                "saved_path": None, "status": "pending",
+                "counts": counts if counts is not None else {"translated": 0, "review": 0, "total": 0},
+            }
             self._write_state(sid, state)
         return fid
+
+    def set_counts(self, sid, fid, counts):
+        with self._lock:
+            state = self._read_state(sid)
+            state["files"][fid]["counts"] = counts
+            self._write_state(sid, state)
+
+    def delete_file(self, sid, fid):
+        with self._lock:
+            state = self._read_state(sid)
+            pdf_path = os.path.join(self._sdir(sid), fid + ".pdf")
+            if os.path.exists(pdf_path):
+                os.remove(pdf_path)
+            state["files"].pop(fid, None)
+            self._write_state(sid, state)
+            remaining = list(state["files"].keys())
+        if not remaining:
+            self.delete_session(sid)
 
     def set_status(self, sid, fid, status, error=None):
         with self._lock:

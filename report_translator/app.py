@@ -103,8 +103,10 @@ async def upload(files: list[UploadFile] = File(...)):
             _doc.close()
         fid = SESSIONS.add_file(sid, uf.filename, data, kit)
         ann = _annotate(SESSIONS.get_file(sid, fid))
+        counts = _counts(ann)
+        SESSIONS.set_counts(sid, fid, counts)
         threading.Thread(target=_process_file, args=(sid, fid), daemon=True).start()
-        out.append({"file_id": fid, "name": uf.filename, "kit": kit, "counts": _counts(ann)})
+        out.append({"file_id": fid, "name": uf.filename, "kit": kit, "counts": counts})
     return {"session_id": sid, "files": out}
 
 
@@ -112,11 +114,28 @@ async def upload(files: list[UploadFile] = File(...)):
 def sessions():
     res = []
     for sid in SESSIONS.list_sessions():
-        files = SESSIONS.list_files(sid)
+        try:
+            files = SESSIONS.list_files(sid)
+        except (FileNotFoundError, KeyError):
+            continue
         res.append({"session_id": sid,
-                    "files": [{"file_id": k, "name": v["name"], "kit": v["kit"]}
+                    "files": [{"file_id": k, "name": v["name"], "kit": v["kit"],
+                               "counts": v.get("counts", {"translated": 0, "review": 0, "total": 0}),
+                               "status": v.get("status", "done"),
+                               "saved_path": v.get("saved_path")}
                               for k, v in files.items()]})
     return {"sessions": res}
+
+
+@app.delete("/api/{sid}/{fid}")
+def delete_file(sid: str, fid: str):
+    try:
+        SESSIONS.file_meta(sid, fid)
+    except (KeyError, FileNotFoundError):
+        raise AppError(404, "not_found", "Oturum veya dosya bulunamadı")
+    CACHE.invalidate(fid)
+    SESSIONS.delete_file(sid, fid)
+    return {"ok": True}
 
 
 @app.get("/api/{sid}/status")

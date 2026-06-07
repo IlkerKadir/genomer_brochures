@@ -208,3 +208,73 @@ def test_sessions_listing_and_error(femobiome_pdf, tmp_path, monkeypatch):
     r = c.get("/api/yok/zzz/manifest")
     assert r.status_code == 404
     assert "error" in r.json()
+
+
+# ---- Kütüphane: /api/sessions zengin alanlar ----
+def test_sessions_rich_fields(femobiome_pdf, tmp_path, monkeypatch):
+    """/api/sessions her dosya için counts, status, saved_path döndürür."""
+    c = _isolated_client(monkeypatch, tmp_path)
+    with open(femobiome_pdf, "rb") as fh:
+        up = c.post("/api/upload", files={"files": ("rep.pdf", fh.read(), "application/pdf")})
+    assert up.status_code == 200
+
+    sess = c.get("/api/sessions").json()
+    assert len(sess["sessions"]) == 1
+    session_entry = sess["sessions"][0]
+    assert "session_id" in session_entry
+    assert len(session_entry["files"]) == 1
+    f = session_entry["files"][0]
+    assert "file_id" in f
+    assert "name" in f
+    assert "kit" in f
+    assert "counts" in f
+    assert "status" in f
+    assert "saved_path" in f
+    counts = f["counts"]
+    assert "translated" in counts and "review" in counts and "total" in counts
+    assert counts["translated"] > 0, "Çevrilmiş segment sayısı 0 olmamalı"
+
+
+# ---- Kütüphane: DELETE /api/{sid}/{fid} ----
+def test_delete_file_endpoint(femobiome_pdf, tmp_path, monkeypatch):
+    """DELETE /api/{sid}/{fid} → dosyayı siler; tek dosyaysa session da silinir."""
+    c = _isolated_client(monkeypatch, tmp_path)
+    with open(femobiome_pdf, "rb") as fh:
+        up = c.post("/api/upload", files={"files": ("rep.pdf", fh.read(), "application/pdf")})
+    body = up.json()
+    sid = body["session_id"]
+    fid = body["files"][0]["file_id"]
+
+    # Önce dosya var
+    sess_before = c.get("/api/sessions").json()
+    assert len(sess_before["sessions"]) == 1
+
+    # Sil
+    r = c.delete(f"/api/{sid}/{fid}")
+    assert r.status_code == 200
+    assert r.json()["ok"] is True
+
+    # Tek dosya silince session da yok
+    sess_after = c.get("/api/sessions").json()
+    assert len(sess_after["sessions"]) == 0
+
+    # 404 tekrar silince
+    r2 = c.delete(f"/api/{sid}/{fid}")
+    assert r2.status_code == 404
+
+
+# ---- Kütüphane: store.delete_file çok-dosya ----
+def test_delete_file_keeps_session_if_sibling(femobiome_pdf, tmp_path):
+    """İki dosya varken birini sil — session ayakta kalır."""
+    base = str(tmp_path / "sessions")
+    st = store.SessionStore(base_dir=base)
+    with open(femobiome_pdf, "rb") as fh:
+        pdf = fh.read()
+    sid = st.create_session()
+    fid1 = st.add_file(sid, "a.pdf", pdf, "femobiome_ii")
+    fid2 = st.add_file(sid, "b.pdf", pdf, "femobiome_ii")
+    st.delete_file(sid, fid1)
+    assert sid in st.list_sessions()
+    remaining = st.list_files(sid)
+    assert fid1 not in remaining
+    assert fid2 in remaining
