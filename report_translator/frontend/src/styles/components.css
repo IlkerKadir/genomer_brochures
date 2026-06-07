@@ -42,3 +42,17 @@ button:disabled{opacity:.5;cursor:default}
 .box:hover,.box.active{border-color:var(--mavi);background:rgba(43,108,176,.14)}
 .box.review{border-color:var(--uyari);background:rgba(183,121,31,.10)}
 .skeleton{padding:40px;text-align:center;color:var(--gri)}
+.segments{background:var(--kart);border:1px solid var(--cizgi);border-radius:12px;padding:12px;
+  max-height:80vh;overflow:auto}
+.segHead{position:sticky;top:0;background:var(--kart);padding-bottom:8px}
+.searchBox{width:100%;border:1px solid var(--cizgi);border-radius:7px;padding:7px;font:inherit;margin-bottom:8px}
+.filter{display:flex;gap:8px}
+.filter button{background:#eef;color:#334;font-size:12px;padding:5px 10px}
+.filter button.active{background:var(--mor);color:#fff}
+.seg{border:1px solid var(--cizgi);border-radius:9px;padding:10px;margin-bottom:9px;cursor:pointer}
+.seg.review{border-color:var(--uyari)}.seg.active{box-shadow:0 0 0 2px var(--mavi)}
+.seg .en{font-size:12px;color:var(--gri);margin-bottom:5px}
+.seg textarea{width:100%;border:1px solid var(--cizgi);border-radius:6px;padding:6px;font:inherit;
+  resize:vertical;min-height:34px}
+.seg .acts{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.seg .acts button{font-size:12px;padding:5px 9px}
