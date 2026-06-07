@@ -23,3 +23,22 @@ button:disabled{opacity:.5;cursor:default}
 .spinner{display:inline-block;width:12px;height:12px;border:2px solid #ccc;border-top-color:var(--mor);
   border-radius:50%;animation:spin .7s linear infinite;vertical-align:-1px}
 @keyframes spin{to{transform:rotate(360deg)}}
+.editor{max-width:1400px;margin:14px auto;padding:0 18px}
+.toolbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:10px}
+.saveBadge{font-size:12px}.saveBadge.ok{color:var(--ok)}.saveBadge.warn{color:var(--uyari)}
+.cmp{font-size:13px;color:var(--gri)} .zoom{font-size:13px;color:var(--gri)}
+.mini-link{font-size:12px;color:var(--mavi)}
+.editorBody{display:grid;grid-template-columns:84px 1fr 400px;gap:14px}
+.thumbs{display:flex;flex-direction:column;gap:8px;max-height:80vh;overflow:auto}
+.thumb{background:none;border:1px solid var(--cizgi);border-radius:6px;padding:2px;cursor:pointer}
+.thumb img{width:100%;display:block}.thumbNo{font-size:10px;color:var(--gri)}
+.pages{max-height:80vh;overflow:auto;background:var(--kart);border:1px solid var(--cizgi);
+  border-radius:12px;padding:10px}
+.pageRow{display:flex;gap:10px;margin-bottom:12px;justify-content:center}
+.pageWrap{position:relative;width:calc(100% * var(--zoom,1));max-width:760px}
+.pageWrap img{width:100%;display:block;border:1px solid var(--cizgi)}
+.pageTag{position:absolute;top:4px;left:4px;background:#0008;color:#fff;font-size:10px;padding:1px 5px;border-radius:4px}
+.box{position:absolute;border:1.5px solid transparent;border-radius:3px;cursor:pointer}
+.box:hover,.box.active{border-color:var(--mavi);background:rgba(43,108,176,.14)}
+.box.review{border-color:var(--uyari);background:rgba(183,121,31,.10)}
+.skeleton{padding:40px;text-align:center;color:var(--gri)}
