@@ -7,9 +7,14 @@ export function Header() {
   return (
     <header>
       <img src="./genomerlogo.png" alt="Genomer" class="logo" />
-      <h1>Rapor Çevirici <span>EN → TR</span></h1>
+      <div class="header-divider" aria-hidden="true" />
+      <h1>
+        Rapor Çevirici
+        <span>EN → TR</span>
+      </h1>
       <div class="out-dir">
-        Çıktı: <code>{outDir}</code>
+        <span>Çıktı:</span>
+        <code title={outDir}>{outDir || "—"}</code>
         <button class="mini" onClick={async () => {
           const p = prompt("Yeni çıktı klasörü:", outDir);
           if (p) { const r = await api.setOutDir(p); setOut(r.out_dir); }
