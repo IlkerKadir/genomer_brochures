@@ -17,8 +17,10 @@ function DictRow({ entry, onRefresh }) {
   const dirty = localTr !== entry.tr;
 
   const handleSave = useCallback(async () => {
+    const trimmed = localTr.trim();
+    if (!trimmed) { alert("TR alanı boş bırakılamaz."); return; }
     try {
-      await api.saveDictEntry(entry.scope, entry.en, localTr, true);
+      await api.saveDictEntry(entry.scope, entry.en, trimmed, true);
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
       onRefresh();

@@ -9,6 +9,14 @@ DICT_PATH = os.path.join(HERE, "dictionary.json")
 PARAGRAPH_WORD_THRESHOLD = 6  # >=6 kelime -> _paragraphs
 
 
+def _safe_write(path, data):
+    """Atomik yazım: önce .tmp'ye yaz, sonra os.replace ile taşı (yarım dosya riski yok)."""
+    tmp = path + ".tmp"
+    with open(tmp, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+    os.replace(tmp, path)
+
+
 def load(path=None):
     """(kits_by_kit, common, compiled_passthrough, raw) döndür."""
     path = path or DICT_PATH
@@ -83,8 +91,7 @@ def set_entry(scope, en, tr, path=None, overwrite=False):
             return {"ok": False, "conflict": True, "existing": existing}
         shutil.copy(path, path + ".bak")
         common[en] = tr
-        with open(path, "w", encoding="utf-8") as f:
-            json.dump(data, f, ensure_ascii=False, indent=2)
+        _safe_write(path, data)
         return {"ok": True}
 
     # kit scope → mevcut add_entry mantığını kullan
@@ -121,8 +128,7 @@ def delete_entry(scope, en, path=None):
     if not found:
         return {"ok": False, "not_found": True}
 
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+    _safe_write(path, data)
     return {"ok": True}
 
 
@@ -158,6 +164,5 @@ def add_entry(kit, en, tr, path=None, overwrite=False):
     else:
         sec[en] = tr
 
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+    _safe_write(path, data)
     return {"ok": True, "conflict": False}
