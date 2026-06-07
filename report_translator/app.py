@@ -220,11 +220,15 @@ def edit_segment(sid: str, fid: str, seg: str, body: SegmentEdit):
     SESSIONS.set_override(sid, fid, seg, body.tr)
     CACHE.invalidate(fid)
     if body.scope == "dict":
-        en = next((a.en for a in _annotate(SESSIONS.get_file(sid, fid)) if a.id == seg), None)
+        ann_for_dict = _annotate(SESSIONS.get_file(sid, fid))
+        en = next((a.en for a in ann_for_dict if a.id == seg), None)
         if en:
             res = dictionary.add_entry(fs["kit"], en, body.tr, overwrite=body.force)
             if res.get("conflict"):
                 return {"ok": True, "conflict": True, "existing": res["existing"], "en": en}
+            # Dict updated successfully — refresh persisted counts
+            ann2 = _annotate(SESSIONS.get_file(sid, fid))
+            SESSIONS.set_counts(sid, fid, _counts(ann2))
     return {"ok": True}
 
 
@@ -238,7 +242,9 @@ def set_kit(sid: str, fid: str, body: KitBody):
     SESSIONS.set_kit(sid, fid, body.kit)
     CACHE.invalidate(fid)
     ann = _annotate(SESSIONS.get_file(sid, fid))
-    return {"ok": True, "counts": _counts(ann)}
+    counts = _counts(ann)
+    SESSIONS.set_counts(sid, fid, counts)
+    return {"ok": True, "counts": counts}
 
 
 def _save_one(sid, fid, fs=None):

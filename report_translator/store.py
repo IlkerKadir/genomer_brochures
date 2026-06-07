@@ -96,7 +96,12 @@ class SessionStore:
 
     def set_status(self, sid, fid, status, error=None):
         with self._lock:
-            state = self._read_state(sid)
+            try:
+                state = self._read_state(sid)
+            except FileNotFoundError:
+                return
+            if fid not in state["files"]:
+                return
             state["files"][fid]["status"] = status
             if error is not None:
                 state["files"][fid]["error"] = error

@@ -263,6 +263,46 @@ def test_delete_file_endpoint(femobiome_pdf, tmp_path, monkeypatch):
     assert r2.status_code == 404
 
 
+# ---- set_kit counts kalıcılığı ----
+def test_set_kit_persists_counts(femobiome_pdf, tmp_path, monkeypatch):
+    """POST /api/{s}/{f}/kit → counts hem yanıtta hem session'da kalıcı olmalı."""
+    c = _isolated_client(monkeypatch, tmp_path)
+    with open(femobiome_pdf, "rb") as fh:
+        up = c.post("/api/upload", files={"files": ("rep.pdf", fh.read(), "application/pdf")})
+    body = up.json()
+    s, f = body["session_id"], body["files"][0]["file_id"]
+
+    r = c.post(f"/api/{s}/{f}/kit", json={"kit": "femobiome_ii"})
+    assert r.status_code == 200
+    resp = r.json()
+    assert resp["ok"] is True
+    counts_resp = resp["counts"]
+    assert counts_resp["total"] > 0
+
+    # Counts diske yazılmış olmalı — sessions endpoint'inden doğrula
+    sess = c.get("/api/sessions").json()
+    file_entry = next(
+        (fe for se in sess["sessions"] for fe in se["files"] if fe["file_id"] == f), None
+    )
+    assert file_entry is not None
+    assert file_entry["counts"]["total"] == counts_resp["total"]
+    assert file_entry["counts"]["translated"] == counts_resp["translated"]
+
+
+# ---- store.set_status silme yarışı ----
+def test_set_status_noop_after_delete(femobiome_pdf, tmp_path):
+    """set_status silinen fid için KeyError fırlatmamalı (sessiz no-op)."""
+    base = str(tmp_path / "sessions")
+    st = store.SessionStore(base_dir=base)
+    with open(femobiome_pdf, "rb") as fh:
+        pdf = fh.read()
+    sid = st.create_session()
+    fid = st.add_file(sid, "r.pdf", pdf, "femobiome_ii")
+    st.delete_file(sid, fid)  # session da silinir (tek dosya)
+    # Arka plan thread'in geç gelen set_status çağrısı exception fırlatmamalı
+    st.set_status(sid, fid, "done")  # KeyError veya FileNotFoundError değil
+
+
 # ---- Kütüphane: store.delete_file çok-dosya ----
 def test_delete_file_keeps_session_if_sibling(femobiome_pdf, tmp_path):
     """İki dosya varken birini sil — session ayakta kalır."""

@@ -1,12 +1,9 @@
-import { useEffect, useRef } from "preact/hooks";
+import { useEffect } from "preact/hooks";
 import { Dropzone } from "./Dropzone.jsx";
 import { FileCard } from "./FileCard.jsx";
 import * as api from "../api/client.js";
 
 export function UploadView({ reports, setReports, onOpen }) {
-  // pending olan distinct session_id'lerini izle
-  const pendingSessionsRef = useRef(new Set());
-
   async function handleFiles(fileList) {
     try {
       const res = await api.upload(fileList);
@@ -22,8 +19,6 @@ export function UploadView({ reports, setReports, onOpen }) {
       }));
       // Mevcut reports listesine EKLE (replace etme)
       setReports((prev) => [...prev, ...newReports]);
-      // Yeni session'ı poll kuyruğuna ekle
-      pendingSessionsRef.current.add(res.session_id);
     } catch (e) {
       alert("Yükleme başarısız: " + e.message);
     }
@@ -32,7 +27,7 @@ export function UploadView({ reports, setReports, onOpen }) {
   async function handleRemove(report) {
     try {
       await api.deleteReport(report.session_id, report.file_id);
-      setReports((prev) => prev.filter((r) => r.file_id !== report.file_id));
+      setReports((prev) => prev.filter((r) => !(r.session_id === report.session_id && r.file_id === report.file_id)));
     } catch (e) {
       alert("Kaldırma başarısız: " + e.message);
     }

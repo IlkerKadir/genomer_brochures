@@ -35,8 +35,16 @@ export const saveAll = (s) => jpost(`/api/${s}/save_all`);
 export const getOutDir = () => jget(`/api/out_dir`);
 export const setOutDir = (path) => jpost(`/api/out_dir`, { path });
 export const openOutDir = () => jpost(`/api/open_out_dir`);
-export const deleteSession = (s) => fetch(`/api/${s}`, { method: "DELETE" });
-export const deleteReport = (s, f) => fetch(`/api/${s}/${f}`, { method: "DELETE" });
+export async function deleteSession(s) {
+  const r = await fetch(`/api/${s}`, { method: "DELETE" });
+  if (!r.ok) throw await asError(r);
+  return r.json().catch(() => ({ ok: true }));
+}
+export async function deleteReport(s, f) {
+  const r = await fetch(`/api/${s}/${f}`, { method: "DELETE" });
+  if (!r.ok) throw await asError(r);
+  return r.json().catch(() => ({ ok: true }));
+}
 export const pageUrl = (s, f, n) => `/api/${s}/${f}/page/${n}.png?t=${Date.now()}`;
 export const originalUrl = (s, f, n) => `/api/${s}/${f}/original/${n}.png`;
 export const reviewUrl = (s, f) => `/api/${s}/${f}/review.txt`;
