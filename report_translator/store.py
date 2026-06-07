@@ -25,8 +25,8 @@ class RenderCache:
 
 class SessionStore:
     """Oturumları diske yazar/okur. Her oturum bir klasör; her dosya <fid>.pdf + state.json."""
-    def __init__(self, base_dir=DEFAULT_BASE):
-        self.base = base_dir
+    def __init__(self, base_dir=None):
+        self.base = base_dir if base_dir is not None else DEFAULT_BASE
         os.makedirs(self.base, exist_ok=True)
 
     def _sdir(self, sid):

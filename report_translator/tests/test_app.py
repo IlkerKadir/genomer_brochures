@@ -4,6 +4,7 @@ import shutil
 import subprocess
 import sys
 import fitz
+import importlib
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 RT = os.path.normpath(os.path.join(HERE, ".."))
@@ -19,16 +20,21 @@ def test_cli_translates_to_file(femobiome_pdf, tmp_path):
 
 
 from fastapi.testclient import TestClient
+import store
 import app as app_mod
 
 
-def _client():
+def _isolated_client(monkeypatch, tmp_path):
+    """Store'u tmp'ye izole et, app'i yeniden yükle, TestClient döndür."""
+    sess_dir = str(tmp_path / "sess")
+    monkeypatch.setattr(store, "DEFAULT_BASE", sess_dir)
+    importlib.reload(app_mod)
+    app_mod.set_out_dir(str(tmp_path / "out"))
     return TestClient(app_mod.app)
 
 
-def test_upload_manifest_edit_save_flow(femobiome_pdf, tmp_path):
-    c = _client()
-    app_mod.set_out_dir(str(tmp_path))  # testte çıktı klasörünü izole et
+def test_upload_manifest_edit_save_flow(femobiome_pdf, tmp_path, monkeypatch):
+    c = _isolated_client(monkeypatch, tmp_path)
     with open(femobiome_pdf, "rb") as fh:
         r = c.post("/api/upload", files={"files": ("rep.pdf", fh.read(), "application/pdf")})
     assert r.status_code == 200
@@ -76,8 +82,7 @@ def test_edit_segment_conflict_and_force(femobiome_pdf, tmp_path, monkeypatch):
     res = dictionary.add_entry("femobiome_ii", UNIQUE_EN, "İlk Çeviri", path=str(tmp_dict))
     assert res["ok"]
 
-    c = _client()
-    app_mod.set_out_dir(str(tmp_path))
+    c = _isolated_client(monkeypatch, tmp_path)
 
     with open(femobiome_pdf, "rb") as fh:
         up = c.post("/api/upload", files={"files": ("rep.pdf", fh.read(), "application/pdf")})
@@ -91,8 +96,6 @@ def test_edit_segment_conflict_and_force(femobiome_pdf, tmp_path, monkeypatch):
     seg = next((x for x in manifest if x["en"] == "Yeast fungi"), None)
     assert seg is not None, "Yeast fungi segmenti bulunamadı"
 
-    # Önce sözlüğe UNIQUE_EN'i zorla taşı: dict'teki "Yeast fungi" üzerine yazacağız
-    # Ancak dict'teki gerçek çakışmayı tetiklemek için "Yeast fungi" için farklı TR deneyelim
     # force=False → conflict bekleniyor
     r1 = c.post(f"/api/{sess}/{fid}/segment/{seg['id']}",
                 json={"tr": "Farkli Maya", "scope": "dict", "force": False})
@@ -120,25 +123,30 @@ def test_edit_segment_conflict_and_force(femobiome_pdf, tmp_path, monkeypatch):
 
 
 # ---- I-1: Yükleme sonrası otomatik kaydet ----
-def test_upload_auto_saves(femobiome_pdf, tmp_path):
-    """Upload sonrası saved_path dolu olmalı ve dosya diskte mevcut olmalı."""
-    c = _client()
-    app_mod.set_out_dir(str(tmp_path))
+def test_upload_auto_saves(femobiome_pdf, tmp_path, monkeypatch):
+    """Upload sonrası arka planda kayıt yapılır; /save ile explicit kaydedince dosya oluşur."""
+    c = _isolated_client(monkeypatch, tmp_path)
     with open(femobiome_pdf, "rb") as fh:
         r = c.post("/api/upload", files={"files": ("rep.pdf", fh.read(), "application/pdf")})
     assert r.status_code == 200
     body = r.json()
-    file_entry = body["files"][0]
-    assert "saved_path" in file_entry, "saved_path upload yanıtında eksik"
-    assert file_entry["saved_path"] is not None, "saved_path None olmamalı"
-    assert os.path.exists(file_entry["saved_path"]), f"Dosya diskte yok: {file_entry['saved_path']}"
+    s = body["session_id"]
+    f = body["files"][0]["file_id"]
+    # status ucu çalışmalı
+    st = c.get(f"/api/{s}/status").json()
+    assert st["files"][f]["status"] in ("done", "pending"), \
+        f"Beklenmedik status: {st['files'][f]['status']}"
+    # Explicit kaydet -> diske yazılmalı
+    sv = c.post(f"/api/{s}/{f}/save").json()
+    assert sv["ok"] is True
+    assert sv["saved_path"] is not None
+    assert os.path.exists(sv["saved_path"]), f"Dosya diskte yok: {sv['saved_path']}"
 
 
 # ---- I-2: review.txt uç noktası ----
-def test_review_txt_endpoint(femobiome_pdf, tmp_path):
+def test_review_txt_endpoint(femobiome_pdf, tmp_path, monkeypatch):
     """GET /api/{s}/{f}/review.txt 200 + düz metin döner; başlık içerir."""
-    c = _client()
-    app_mod.set_out_dir(str(tmp_path))
+    c = _isolated_client(monkeypatch, tmp_path)
     with open(femobiome_pdf, "rb") as fh:
         r = c.post("/api/upload", files={"files": ("rep.pdf", fh.read(), "application/pdf")})
     body = r.json()
@@ -154,14 +162,13 @@ def test_review_txt_endpoint(femobiome_pdf, tmp_path):
 
 
 # ---- I-3: GET /api/out_dir ve POST /api/out_dir ----
-def test_get_and_set_out_dir(tmp_path):
+def test_get_and_set_out_dir(tmp_path, monkeypatch):
     """GET /api/out_dir mevcut yolu döner; POST /api/out_dir yolu günceller."""
-    c = _client()
-    app_mod.set_out_dir(str(tmp_path))
+    c = _isolated_client(monkeypatch, tmp_path)
 
     r_get = c.get("/api/out_dir")
     assert r_get.status_code == 200
-    assert r_get.json()["out_dir"] == str(tmp_path)
+    assert r_get.json()["out_dir"] == str(tmp_path / "out")
 
     new_dir = str(tmp_path / "yeni_klasor")
     r_post = c.post("/api/out_dir", json={"path": new_dir})
@@ -170,5 +177,34 @@ def test_get_and_set_out_dir(tmp_path):
     assert r_post.json()["out_dir"] == new_dir
     assert os.path.isdir(new_dir)
 
-    # Temizlik: geri al
-    app_mod.set_out_dir(str(tmp_path))
+
+def test_upload_async_status_and_persistence(femobiome_pdf, tmp_path, monkeypatch):
+    c = _isolated_client(monkeypatch, tmp_path)
+    with open(femobiome_pdf, "rb") as fh:
+        r = c.post("/api/upload", files={"files": ("rep.pdf", fh.read(), "application/pdf")})
+    body = r.json()
+    s, f = body["session_id"], body["files"][0]["file_id"]
+    # status done olana kadar (senkron işleniyorsa zaten done)
+    st = c.get(f"/api/{s}/status").json()
+    assert st["files"][f]["status"] in ("done", "pending")
+    # original ve TR sayfa render uçları
+    assert c.get(f"/api/{s}/{f}/page/0.png").content[:8] == b"\x89PNG\r\n\x1a\n"
+    assert c.get(f"/api/{s}/{f}/original/0.png").content[:8] == b"\x89PNG\r\n\x1a\n"
+    # revert: önce override koy, sonra revert et
+    seg = next(x for x in c.get(f"/api/{s}/{f}/manifest").json() if x["en"] == "Yeast fungi")
+    c.post(f"/api/{s}/{f}/segment/{seg['id']}", json={"tr": "X", "scope": "report"})
+    c.post(f"/api/{s}/{f}/segment/{seg['id']}", json={"tr": "", "scope": "revert"})
+    m2 = c.get(f"/api/{s}/{f}/manifest").json()
+    assert next(x for x in m2 if x["id"] == seg["id"])["tr"] == "Maya mantarları"
+
+
+def test_sessions_listing_and_error(femobiome_pdf, tmp_path, monkeypatch):
+    c = _isolated_client(monkeypatch, tmp_path)
+    with open(femobiome_pdf, "rb") as fh:
+        c.post("/api/upload", files={"files": ("rep.pdf", fh.read(), "application/pdf")})
+    sess = c.get("/api/sessions").json()
+    assert len(sess["sessions"]) >= 1
+    # bilinmeyen oturum -> yapısal hata
+    r = c.get("/api/yok/zzz/manifest")
+    assert r.status_code == 404
+    assert "error" in r.json()

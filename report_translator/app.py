@@ -1,27 +1,29 @@
 """app.py — Rapor Çevirici yerel backend (FastAPI). Yalnız 127.0.0.1.
-Orijinal PDF tek doğru kaynak; çıktı her zaman taze render edilir."""
+Orijinal PDF tek doğru kaynak; çıktı her zaman taze render. Oturumlar diske kalıcı."""
 import os
 import io
-import uuid
+import sys
 import zipfile
 import subprocess
-import sys
+import threading
 import fitz
-from fastapi import FastAPI, UploadFile, File, HTTPException
-from fastapi.responses import Response
-from fastapi.staticfiles import StaticFiles
 from typing import Literal
+from fastapi import FastAPI, UploadFile, File, Request
+from fastapi.responses import Response, JSONResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 import engine
 import dictionary
+import store
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 WEB_DIR = os.path.join(HERE, "web")
 
 app = FastAPI(title="Genomer Rapor Çevirici")
 
-SESSIONS = {}  # session_id -> {"files": {file_id: FileState}}
+SESSIONS = store.SessionStore()
+CACHE = store.RenderCache()
 _OUT_DIR = os.path.join(os.path.expanduser("~"), "Genomer Ceviriler")
 
 
@@ -31,17 +33,35 @@ def set_out_dir(path):
     os.makedirs(_OUT_DIR, exist_ok=True)
 
 
+class AppError(Exception):
+    def __init__(self, status, code, message):
+        self.status, self.code, self.message = status, code, message
+
+
+@app.exception_handler(AppError)
+def _app_error_handler(request: Request, exc: AppError):
+    return JSONResponse(status_code=exc.status,
+                        content={"error": {"code": exc.code, "message": exc.message}})
+
+
 def _table_for(kit):
     kits, common, passthrough, _ = dictionary.load()
     return kits[kit], passthrough
+
+
+def _file_or_404(sid, fid):
+    try:
+        return SESSIONS.get_file(sid, fid)
+    except (KeyError, FileNotFoundError):
+        raise AppError(404, "not_found", "Oturum veya dosya bulunamadı")
 
 
 def _annotate(fs):
     table, passthrough = _table_for(fs["kit"])
     doc = fitz.open(stream=fs["pdf_bytes"], filetype="pdf")
     try:
-        segs = engine.extract_segments(doc)
-        return engine.translate_segments(segs, table, passthrough, fs["overrides"])
+        return engine.translate_segments(engine.extract_segments(doc), table, passthrough,
+                                         fs["overrides"])
     finally:
         doc.close()
 
@@ -57,155 +77,205 @@ def _render_bytes(fs):
     return engine.translate_document_bytes(fs["pdf_bytes"], table, passthrough, fs["overrides"])
 
 
-def _get(session, file):
-    sess = SESSIONS.get(session)
-    if not sess or file not in sess["files"]:
-        raise HTTPException(404, "oturum/dosya yok")
-    return sess["files"][file]
+def _process_file(sid, fid):
+    """Arka planda: dosyayı çevir, otomatik kaydet, status=done."""
+    try:
+        fs = SESSIONS.get_file(sid, fid)
+        path = _save_one(sid, fid, fs)
+        SESSIONS.set_saved_path(sid, fid, path)
+    except Exception as e:  # noqa
+        st = SESSIONS._read_state(sid)
+        st["files"][fid]["status"] = "error"
+        st["files"][fid]["error"] = str(e)
+        SESSIONS._write_state(sid, st)
 
 
 @app.post("/api/upload")
 async def upload(files: list[UploadFile] = File(...)):
-    session_id = uuid.uuid4().hex[:12]
-    SESSIONS[session_id] = {"files": {}}
+    set_out_dir(_OUT_DIR)
+    sid = SESSIONS.create_session()
     out = []
     for uf in files:
         data = await uf.read()
-        if not data[:4] == b"%PDF":
+        if data[:4] != b"%PDF":
             out.append({"name": uf.filename, "error": "geçersiz PDF"})
             continue
         kit = dictionary.detect_kit(fitz.open(stream=data, filetype="pdf"))
-        file_id = uuid.uuid4().hex[:8]
-        fs = {"name": uf.filename, "pdf_bytes": data, "kit": kit,
-              "overrides": {}, "saved_path": None}
-        SESSIONS[session_id]["files"][file_id] = fs
-        ann = _annotate(fs)
-        _save_one(fs)  # I-1: yükleme sonrası otomatik kaydet
-        out.append({"file_id": file_id, "name": uf.filename, "kit": kit,
-                    "counts": _counts(ann), "saved_path": fs["saved_path"]})
-    return {"session_id": session_id, "files": out}
+        fid = SESSIONS.add_file(sid, uf.filename, data, kit)
+        ann = _annotate(SESSIONS.get_file(sid, fid))
+        threading.Thread(target=_process_file, args=(sid, fid), daemon=True).start()
+        out.append({"file_id": fid, "name": uf.filename, "kit": kit, "counts": _counts(ann)})
+    return {"session_id": sid, "files": out}
 
 
-@app.get("/api/{session}/{file}/manifest")
-def manifest(session: str, file: str):
-    fs = _get(session, file)
+@app.get("/api/sessions")
+def sessions():
+    res = []
+    for sid in SESSIONS.list_sessions():
+        files = SESSIONS.list_files(sid)
+        res.append({"session_id": sid,
+                    "files": [{"file_id": k, "name": v["name"], "kit": v["kit"]}
+                              for k, v in files.items()]})
+    return {"sessions": res}
+
+
+@app.get("/api/{sid}/status")
+def status(sid: str):
+    try:
+        files = SESSIONS.list_files(sid)
+    except FileNotFoundError:
+        raise AppError(404, "not_found", "Oturum bulunamadı")
+    return {"files": {k: {"status": v.get("status", "done"),
+                          "saved_path": v.get("saved_path"),
+                          "error": v.get("error")} for k, v in files.items()}}
+
+
+@app.delete("/api/{sid}")
+def delete_session(sid: str):
+    SESSIONS.delete_session(sid)
+    return {"ok": True}
+
+
+@app.get("/api/{sid}/{fid}/manifest")
+def manifest(sid: str, fid: str):
+    fs = _file_or_404(sid, fid)
     ann = _annotate(fs)
     return [{"id": a.id, "page": a.page, "bbox": a.seg.bbox, "en": a.en, "tr": a.tr,
              "source": a.source, "needs_review": a.needs_review} for a in ann]
 
 
-@app.get("/api/{session}/{file}/page/{n}.png")
-def page_png(session: str, file: str, n: int):
-    fs = _get(session, file)
-    out_bytes = _render_bytes(fs)
-    doc = fitz.open(stream=out_bytes, filetype="pdf")
+@app.get("/api/{sid}/{fid}/page/{n}.png")
+def page_png(sid: str, fid: str, n: int):
+    cached = CACHE.get(fid, n)
+    if cached is not None:
+        return Response(content=cached, media_type="image/png")
+    fs = _file_or_404(sid, fid)
+    table, passthrough = _table_for(fs["kit"])
     try:
-        if n < 0 or n >= len(doc):
-            raise HTTPException(404, "sayfa yok")
-        png = doc[n].get_pixmap(dpi=150).tobytes("png")
-    finally:
-        doc.close()
+        png = engine.render_page_png(fs["pdf_bytes"], table, passthrough, fs["overrides"], n)
+    except Exception:
+        raise AppError(500, "render_failed", "Sayfa render edilemedi")
+    CACHE.set(fid, n, png)
+    return Response(content=png, media_type="image/png")
+
+
+@app.get("/api/{sid}/{fid}/original/{n}.png")
+def original_png(sid: str, fid: str, n: int):
+    fs = _file_or_404(sid, fid)
+    table, passthrough = _table_for(fs["kit"])
+    png = engine.render_page_png(fs["pdf_bytes"], table, passthrough, {}, n, original=True)
     return Response(content=png, media_type="image/png")
 
 
 class SegmentEdit(BaseModel):
     tr: str
-    scope: Literal["dict", "report"]
+    scope: Literal["dict", "report", "revert"]
     force: bool = False
 
 
-@app.post("/api/{session}/{file}/segment/{seg}")
-def edit_segment(session: str, file: str, seg: str, body: SegmentEdit):
-    fs = _get(session, file)
-    fs["overrides"][seg] = body.tr
-    result = {"ok": True}
+@app.post("/api/{sid}/{fid}/segment/{seg}")
+def edit_segment(sid: str, fid: str, seg: str, body: SegmentEdit):
+    fs = _file_or_404(sid, fid)
+    if body.scope == "revert":
+        SESSIONS.remove_override(sid, fid, seg)
+        CACHE.invalidate(fid)
+        return {"ok": True}
+    SESSIONS.set_override(sid, fid, seg, body.tr)
+    CACHE.invalidate(fid)
     if body.scope == "dict":
-        ann = _annotate(fs)
-        en = next((a.en for a in ann if a.id == seg), None)
+        en = next((a.en for a in _annotate(SESSIONS.get_file(sid, fid)) if a.id == seg), None)
         if en:
             res = dictionary.add_entry(fs["kit"], en, body.tr, overwrite=body.force)
             if res.get("conflict"):
                 return {"ok": True, "conflict": True, "existing": res["existing"], "en": en}
-    return result
+    return {"ok": True}
 
 
 class KitBody(BaseModel):
     kit: Literal["femobiome_ii", "androbiome", "enterobiome_kids"]
 
 
-@app.post("/api/{session}/{file}/kit")
-def set_kit(session: str, file: str, body: KitBody):
-    fs = _get(session, file)
-    fs["kit"] = body.kit
-    fs["overrides"] = {}
-    ann = _annotate(fs)
+@app.post("/api/{sid}/{fid}/kit")
+def set_kit(sid: str, fid: str, body: KitBody):
+    _file_or_404(sid, fid)
+    SESSIONS.set_kit(sid, fid, body.kit)
+    CACHE.invalidate(fid)
+    ann = _annotate(SESSIONS.get_file(sid, fid))
     return {"ok": True, "counts": _counts(ann)}
 
 
-def _save_one(fs):
+def _save_one(sid, fid, fs=None):
+    fs = fs or SESSIONS.get_file(sid, fid)
     os.makedirs(_OUT_DIR, exist_ok=True)
     base = os.path.splitext(fs["name"])[0]
     path = os.path.join(_OUT_DIR, base + "_TR.pdf")
     with open(path, "wb") as f:
         f.write(_render_bytes(fs))
-    fs["saved_path"] = path
+    SESSIONS.set_saved_path(sid, fid, path)
     return path
 
 
-@app.post("/api/{session}/{file}/save")
-def save_one(session: str, file: str):
-    fs = _get(session, file)
-    return {"ok": True, "saved_path": _save_one(fs)}
+@app.post("/api/{sid}/{fid}/save")
+def save_one(sid: str, fid: str):
+    _file_or_404(sid, fid)
+    return {"ok": True, "saved_path": _save_one(sid, fid)}
 
 
-@app.post("/api/{session}/save_all")
-def save_all(session: str):
-    sess = SESSIONS.get(session)
-    if not sess:
-        raise HTTPException(404, "oturum yok")
-    return {"ok": True, "paths": [_save_one(fs) for fs in sess["files"].values()]}
+@app.post("/api/{sid}/save_all")
+def save_all(sid: str):
+    try:
+        files = SESSIONS.list_files(sid)
+    except FileNotFoundError:
+        raise AppError(404, "not_found", "Oturum bulunamadı")
+    return {"ok": True, "paths": [_save_one(sid, fid) for fid in files]}
 
 
-@app.get("/api/{session}/{file}/download")
-def download(session: str, file: str):
-    fs = _get(session, file)
+@app.get("/api/{sid}/{fid}/download")
+def download(sid: str, fid: str):
+    fs = _file_or_404(sid, fid)
     base = os.path.splitext(fs["name"])[0]
     return Response(content=_render_bytes(fs), media_type="application/pdf",
                     headers={"Content-Disposition": f'attachment; filename="{base}_TR.pdf"'})
 
 
-@app.get("/api/{session}/download_all")
-def download_all(session: str):
-    sess = SESSIONS.get(session)
-    if not sess:
-        raise HTTPException(404, "oturum yok")
+@app.get("/api/{sid}/download_all")
+def download_all(sid: str):
+    try:
+        files = SESSIONS.list_files(sid)
+    except FileNotFoundError:
+        raise AppError(404, "not_found", "Oturum bulunamadı")
     buf = io.BytesIO()
     with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as z:
-        for fs in sess["files"].values():
+        for fid in files:
+            fs = SESSIONS.get_file(sid, fid)
             base = os.path.splitext(fs["name"])[0]
             z.writestr(base + "_TR.pdf", _render_bytes(fs))
     return Response(content=buf.getvalue(), media_type="application/zip",
                     headers={"Content-Disposition": 'attachment; filename="ceviriler.zip"'})
 
 
-class OutDirBody(BaseModel):
-    path: str
+@app.get("/api/{sid}/{fid}/review.txt")
+def review_txt(sid: str, fid: str):
+    fs = _file_or_404(sid, fid)
+    ann = _annotate(fs)
+    lines = sorted({a.en for a in ann if a.needs_review})
+    body = "# Gözden geçirilecek / sözlüğe eklenecek birimler\n\n" + "\n".join(lines)
+    base = os.path.splitext(fs["name"])[0]
+    return Response(content=body, media_type="text/plain; charset=utf-8",
+                    headers={"Content-Disposition": f'attachment; filename="{base}_review.txt"'})
 
 
-@app.post("/api/{session}/out_dir")
-def change_out_dir_legacy(session: str, body: OutDirBody):
-    set_out_dir(body.path)
-    return {"ok": True, "out_dir": _OUT_DIR}
-
-
-# I-3: session'sız out_dir yönetimi
 @app.get("/api/out_dir")
 def get_out_dir():
     return {"out_dir": _OUT_DIR}
 
 
+class OutDirBody(BaseModel):
+    path: str
+
+
 @app.post("/api/out_dir")
-def change_out_dir(body: OutDirBody):
+def set_out_dir_endpoint(body: OutDirBody):
     set_out_dir(body.path)
     return {"ok": True, "out_dir": _OUT_DIR}
 
@@ -216,29 +286,11 @@ def open_out_dir():
     if sys.platform == "darwin":
         subprocess.run(["open", _OUT_DIR])
     elif sys.platform == "win32":
-        os.startfile(_OUT_DIR)
+        os.startfile(_OUT_DIR)  # type: ignore
     else:
         subprocess.run(["xdg-open", _OUT_DIR])
     return {"ok": True}
 
 
-# I-2: review.txt uç noktası
-@app.get("/api/{session}/{file}/review.txt")
-def review_txt(session: str, file: str):
-    fs = _get(session, file)
-    ann = _annotate(fs)
-    unique_en = sorted({a.en for a in ann if a.needs_review})
-    base = os.path.splitext(fs["name"])[0]
-    content = "# Gözden geçirilecek / sözlüğe eklenecek birimler\n\n" + "\n".join(unique_en)
-    return Response(
-        content=content,
-        media_type="text/plain; charset=utf-8",
-        headers={
-            "Content-Disposition": f'attachment; filename="{base}_review.txt"'
-        },
-    )
-
-
-# statik frontend (en sonda mount edilir ki /api yolları gölgelenmesin)
 if os.path.isdir(WEB_DIR):
     app.mount("/", StaticFiles(directory=WEB_DIR, html=True), name="web")
