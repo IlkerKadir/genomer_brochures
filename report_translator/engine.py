@@ -225,59 +225,97 @@ def _leading_indent(text, font, size):
     return font.text_length(" " * n, size) if n else 0.0
 
 
-def render(doc, annotated):
-    """annotated: AnnotatedSegment listesi. doc üzerinde yerinde render (kopya verin).
-    Yalnızca değişen (override/dict ile çevrilen) segmentler işlenir."""
-    by_page = {}
-    for a in annotated:
-        if a.source in ("passthrough",) or a.tr == a.en:
-            continue
-        if a.source == "unknown":
-            continue
-        by_page.setdefault(a.seg.page, []).append(a)
+def _render_page_items(page, items, font_cache):
+    """Tek bir sayfadaki değişen segmentleri yerinde render et (redaksiyon + geri yazma)."""
+    if not items:
+        return
+    for a in items:
+        for r in a.seg.rects:
+            page.add_redact_annot(fitz.Rect(r), fill=None)
+    page.apply_redactions(images=fitz.PDF_REDACT_IMAGE_NONE,
+                          graphics=fitz.PDF_REDACT_LINE_ART_NONE,
+                          text=fitz.PDF_REDACT_TEXT_REMOVE)
+    for a in items:
+        s = a.seg
+        fontfile = os.path.join(FONT_DIR, s.fontfile)
+        fontname = font_cache.get(s.fontfile)
+        if fontname is None:
+            fontname = "F%d" % len(font_cache)
+            font_cache[s.fontfile] = fontname
+        font = fitz.Font(fontfile=fontfile)
+        text = a.tr.strip()
+        indent = _leading_indent(s.raw_first, font, s.size)
+        if s.single_line:
+            ox, oy = s.origin
+            page.insert_text((ox + indent, oy), text, fontname=fontname,
+                             fontfile=fontfile, fontsize=s.size, color=s.color)
+        else:
+            box = fitz.Rect(s.bbox)
+            left = box.x0 + indent
+            fs = s.size
+            fitted = False
+            while fs > 4.5:
+                pad = fitz.Rect(left, box.y0 - 1, box.x1 + 2, box.y1 + 4 * s.size)
+                rc = page.insert_textbox(pad, text, fontname=fontname, fontfile=fontfile,
+                                         fontsize=fs, color=s.color, lineheight=1.15,
+                                         align=fitz.TEXT_ALIGN_LEFT)
+                if rc >= 0:
+                    fitted = True
+                    break
+                fs -= 0.25
+            if not fitted:
+                sys.stderr.write("UYARI: segment sığmadı, atlandı: %r\n" % text)
 
+
+def _changed_items(annotated):
+    return [a for a in annotated
+            if a.source not in ("passthrough", "unknown") and a.tr != a.en]
+
+
+def render(doc, annotated):
+    """Tüm belgeyi yerinde render et (kopya verin)."""
+    by_page = {}
+    for a in _changed_items(annotated):
+        by_page.setdefault(a.seg.page, []).append(a)
     font_cache = {}
     for page_index, items in by_page.items():
-        page = doc[page_index]
-        # 1) yalnızca metni sil
-        for a in items:
-            for r in a.seg.rects:
-                page.add_redact_annot(fitz.Rect(r), fill=None)
-        page.apply_redactions(images=fitz.PDF_REDACT_IMAGE_NONE,
-                              graphics=fitz.PDF_REDACT_LINE_ART_NONE,
-                              text=fitz.PDF_REDACT_TEXT_REMOVE)
-        # 2) Türkçe metni yerleştir
-        for a in items:
-            s = a.seg
-            fontfile = os.path.join(FONT_DIR, s.fontfile)
-            fontname = font_cache.get(s.fontfile)
-            if fontname is None:
-                fontname = "F%d" % len(font_cache)
-                font_cache[s.fontfile] = fontname
-            font = fitz.Font(fontfile=fontfile)
-            text = a.tr.strip()
-            indent = _leading_indent(s.raw_first, font, s.size)
-            if s.single_line:
-                ox, oy = s.origin
-                page.insert_text((ox + indent, oy), text, fontname=fontname,
-                                 fontfile=fontfile, fontsize=s.size, color=s.color)
-            else:
-                box = fitz.Rect(s.bbox)
-                left = box.x0 + indent
-                fs = s.size
-                fitted = False
-                while fs > 4.5:
-                    pad = fitz.Rect(left, box.y0 - 1, box.x1 + 2, box.y1 + 4 * s.size)
-                    rc = page.insert_textbox(pad, text, fontname=fontname, fontfile=fontfile,
-                                             fontsize=fs, color=s.color, lineheight=1.15,
-                                             align=fitz.TEXT_ALIGN_LEFT)
-                    if rc >= 0:
-                        fitted = True
-                        break
-                    fs -= 0.25
-                if not fitted:
-                    sys.stderr.write("UYARI: segment sığmadı, atlandı: %r\n" % text)
+        _render_page_items(doc[page_index], items, font_cache)
     return doc
+
+
+def translate_one_page_bytes(pdf_path_or_bytes, table, passthrough, overrides,
+                             page_index, original=False):
+    """Yalnız page_index render edilmiş tek-sayfalık PDF bayt'ı döndür."""
+    if isinstance(pdf_path_or_bytes, (bytes, bytearray)):
+        doc = fitz.open(stream=pdf_path_or_bytes, filetype="pdf")
+    else:
+        doc = fitz.open(pdf_path_or_bytes)
+    if not original:
+        ann = translate_segments(extract_segments(doc), table, passthrough, overrides)
+        items = [a for a in _changed_items(ann) if a.seg.page == page_index]
+        _render_page_items(doc[page_index], items, {})
+    # yalnız o sayfayı içeren yeni belge
+    out = fitz.open()
+    out.insert_pdf(doc, from_page=page_index, to_page=page_index)
+    data = out.tobytes(garbage=4, deflate=True)
+    out.close(); doc.close()
+    return data
+
+
+def render_page_png(pdf_path_or_bytes, table, passthrough, overrides,
+                    page_index, dpi=150, original=False):
+    """page_index'in render edilmiş PNG bayt'ı (override'lı veya orijinal)."""
+    if isinstance(pdf_path_or_bytes, (bytes, bytearray)):
+        doc = fitz.open(stream=pdf_path_or_bytes, filetype="pdf")
+    else:
+        doc = fitz.open(pdf_path_or_bytes)
+    if not original:
+        ann = translate_segments(extract_segments(doc), table, passthrough, overrides)
+        items = [a for a in _changed_items(ann) if a.seg.page == page_index]
+        _render_page_items(doc[page_index], items, {})
+    png = doc[page_index].get_pixmap(dpi=dpi).tobytes("png")
+    doc.close()
+    return png
 
 
 def translate_document_bytes(pdf_path_or_bytes, table, passthrough, overrides):

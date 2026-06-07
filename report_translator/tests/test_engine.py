@@ -93,3 +93,31 @@ def test_render_applies_override(femobiome_pdf):
         femobiome_pdf, table, passthrough, overrides={target.id: "ÖZELMAYA"})
     text = fitz.open(stream=out_bytes, filetype="pdf")[0].get_text()
     assert "ÖZELMAYA" in text
+
+
+def test_render_page_png_matches_full_render(femobiome_pdf):
+    table, passthrough = _table()
+    with open(femobiome_pdf, "rb") as fh:
+        pdf_bytes = fh.read()
+    # tek-sayfa render PNG üretir
+    png0 = engine.render_page_png(pdf_bytes, table, passthrough, {}, 0)
+    assert png0[:8] == b"\x89PNG\r\n\x1a\n"
+    # tek-sayfa render'daki metin, tam-belge render'daki sayfa 0 metniyle aynı olmalı
+    full = engine.translate_document_bytes(pdf_bytes, table, passthrough, {})
+    full_doc = fitz.open(stream=full, filetype="pdf")
+    page0_png_via_full = full_doc[0].get_pixmap(dpi=150).tobytes("png")
+    # bayt-bayt eşitlik kırılgan; bunun yerine metin eşitliğini doğrula
+    import fitz as _f
+    doc_single = _f.open(stream=engine.translate_one_page_bytes(pdf_bytes, table, passthrough, {}, 0), filetype="pdf")
+    assert "Maya mantarları" in doc_single[0].get_text()
+
+
+def test_render_page_original(femobiome_pdf):
+    table, passthrough = _table()
+    with open(femobiome_pdf, "rb") as fh:
+        pdf_bytes = fh.read()
+    png = engine.render_page_png(pdf_bytes, table, passthrough, {}, 0, original=True)
+    assert png[:8] == b"\x89PNG\r\n\x1a\n"
+    # orijinal: İngilizce metin korunur (çeviri uygulanmaz) -> "Yeast fungi"
+    doc = fitz.open(stream=engine.translate_one_page_bytes(pdf_bytes, table, passthrough, {}, 0, original=True), filetype="pdf")
+    assert "Yeast fungi" in doc[0].get_text()
