@@ -33,7 +33,8 @@ def test_session_delete(tmp_path, femobiome_pdf):
     base = str(tmp_path / "sessions")
     st = store.SessionStore(base_dir=base)
     sid = st.create_session()
-    st.add_file(sid, "r.pdf", open(femobiome_pdf, "rb").read(), "femobiome_ii")
+    with open(femobiome_pdf, "rb") as fh:
+        st.add_file(sid, "r.pdf", fh.read(), "femobiome_ii")
     st.delete_session(sid)
     assert sid not in st.list_sessions()
     assert not os.path.exists(os.path.join(base, sid))

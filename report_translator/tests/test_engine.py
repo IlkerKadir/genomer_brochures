@@ -109,7 +109,10 @@ def test_render_page_png_matches_full_render(femobiome_pdf):
     # bayt-bayt eşitlik kırılgan; bunun yerine metin eşitliğini doğrula
     import fitz as _f
     doc_single = _f.open(stream=engine.translate_one_page_bytes(pdf_bytes, table, passthrough, {}, 0), filetype="pdf")
-    assert "Maya mantarları" in doc_single[0].get_text()
+    try:
+        assert "Maya mantarları" in doc_single[0].get_text()
+    finally:
+        doc_single.close()
 
 
 def test_render_page_original(femobiome_pdf):
@@ -120,4 +123,7 @@ def test_render_page_original(femobiome_pdf):
     assert png[:8] == b"\x89PNG\r\n\x1a\n"
     # orijinal: İngilizce metin korunur (çeviri uygulanmaz) -> "Yeast fungi"
     doc = fitz.open(stream=engine.translate_one_page_bytes(pdf_bytes, table, passthrough, {}, 0, original=True), filetype="pdf")
-    assert "Yeast fungi" in doc[0].get_text()
+    try:
+        assert "Yeast fungi" in doc[0].get_text()
+    finally:
+        doc.close()

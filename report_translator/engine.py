@@ -290,15 +290,20 @@ def translate_one_page_bytes(pdf_path_or_bytes, table, passthrough, overrides,
         doc = fitz.open(stream=pdf_path_or_bytes, filetype="pdf")
     else:
         doc = fitz.open(pdf_path_or_bytes)
-    if not original:
-        ann = translate_segments(extract_segments(doc), table, passthrough, overrides)
-        items = [a for a in _changed_items(ann) if a.seg.page == page_index]
-        _render_page_items(doc[page_index], items, {})
-    # yalnız o sayfayı içeren yeni belge
-    out = fitz.open()
-    out.insert_pdf(doc, from_page=page_index, to_page=page_index)
-    data = out.tobytes(garbage=4, deflate=True)
-    out.close(); doc.close()
+    try:
+        if not original:
+            ann = translate_segments(extract_segments(doc), table, passthrough, overrides)
+            items = [a for a in _changed_items(ann) if a.seg.page == page_index]
+            _render_page_items(doc[page_index], items, {})
+        # yalnız o sayfayı içeren yeni belge
+        out = fitz.open()
+        try:
+            out.insert_pdf(doc, from_page=page_index, to_page=page_index)
+            data = out.tobytes(garbage=4, deflate=True)
+        finally:
+            out.close()
+    finally:
+        doc.close()
     return data
 
 
@@ -309,12 +314,14 @@ def render_page_png(pdf_path_or_bytes, table, passthrough, overrides,
         doc = fitz.open(stream=pdf_path_or_bytes, filetype="pdf")
     else:
         doc = fitz.open(pdf_path_or_bytes)
-    if not original:
-        ann = translate_segments(extract_segments(doc), table, passthrough, overrides)
-        items = [a for a in _changed_items(ann) if a.seg.page == page_index]
-        _render_page_items(doc[page_index], items, {})
-    png = doc[page_index].get_pixmap(dpi=dpi).tobytes("png")
-    doc.close()
+    try:
+        if not original:
+            ann = translate_segments(extract_segments(doc), table, passthrough, overrides)
+            items = [a for a in _changed_items(ann) if a.seg.page == page_index]
+            _render_page_items(doc[page_index], items, {})
+        png = doc[page_index].get_pixmap(dpi=dpi).tobytes("png")
+    finally:
+        doc.close()
     return png
 
 
@@ -324,9 +331,11 @@ def translate_document_bytes(pdf_path_or_bytes, table, passthrough, overrides):
         doc = fitz.open(stream=pdf_path_or_bytes, filetype="pdf")
     else:
         doc = fitz.open(pdf_path_or_bytes)
-    segs = extract_segments(doc)
-    ann = translate_segments(segs, table, passthrough, overrides)
-    render(doc, ann)
-    out = doc.tobytes(garbage=4, deflate=True)
-    doc.close()
+    try:
+        segs = extract_segments(doc)
+        ann = translate_segments(segs, table, passthrough, overrides)
+        render(doc, ann)
+        out = doc.tobytes(garbage=4, deflate=True)
+    finally:
+        doc.close()
     return out

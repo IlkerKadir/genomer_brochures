@@ -13,15 +13,19 @@ class RenderCache:
     """file_id -> {page_index: png_bytes}. Override değişince invalidate edilir."""
     def __init__(self):
         self._c = {}
+        self._lock = threading.Lock()
 
     def get(self, file_id, page):
-        return self._c.get(file_id, {}).get(page)
+        with self._lock:
+            return self._c.get(file_id, {}).get(page)
 
     def set(self, file_id, page, png):
-        self._c.setdefault(file_id, {})[page] = png
+        with self._lock:
+            self._c.setdefault(file_id, {})[page] = png
 
     def invalidate(self, file_id):
-        self._c.pop(file_id, None)
+        with self._lock:
+            self._c.pop(file_id, None)
 
 
 class SessionStore:
@@ -29,6 +33,8 @@ class SessionStore:
     def __init__(self, base_dir=None):
         self.base = base_dir if base_dir is not None else DEFAULT_BASE
         self._lock = threading.Lock()
+
+    def _ensure_base(self):
         os.makedirs(self.base, exist_ok=True)
 
     def _sdir(self, sid):
@@ -50,6 +56,7 @@ class SessionStore:
         os.replace(tmp, path)
 
     def create_session(self):
+        self._ensure_base()
         sid = uuid.uuid4().hex[:12]
         os.makedirs(self._sdir(sid), exist_ok=True)
         self._write_state(sid, {"files": {}})
@@ -62,9 +69,17 @@ class SessionStore:
         with self._lock:
             state = self._read_state(sid)
             state["files"][fid] = {"name": name, "kit": kit, "overrides": {},
-                                   "saved_path": None, "status": "done"}
+                                   "saved_path": None, "status": "pending"}
             self._write_state(sid, state)
         return fid
+
+    def set_status(self, sid, fid, status, error=None):
+        with self._lock:
+            state = self._read_state(sid)
+            state["files"][fid]["status"] = status
+            if error is not None:
+                state["files"][fid]["error"] = error
+            self._write_state(sid, state)
 
     def list_sessions(self):
         if not os.path.isdir(self.base):

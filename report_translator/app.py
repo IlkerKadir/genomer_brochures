@@ -81,19 +81,14 @@ def _process_file(sid, fid):
     """Arka planda: dosyayı çevir, otomatik kaydet, status=done."""
     try:
         fs = SESSIONS.get_file(sid, fid)
-        path = _save_one(sid, fid, fs)
-        SESSIONS.set_saved_path(sid, fid, path)
+        _save_one(sid, fid, fs)
+        SESSIONS.set_status(sid, fid, "done")
     except Exception as e:  # noqa
-        with SESSIONS._lock:
-            st = SESSIONS._read_state(sid)
-            st["files"][fid]["status"] = "error"
-            st["files"][fid]["error"] = str(e)
-            SESSIONS._write_state(sid, st)
+        SESSIONS.set_status(sid, fid, "error", str(e))
 
 
 @app.post("/api/upload")
 async def upload(files: list[UploadFile] = File(...)):
-    set_out_dir(_OUT_DIR)
     sid = SESSIONS.create_session()
     out = []
     for uf in files:
@@ -101,7 +96,11 @@ async def upload(files: list[UploadFile] = File(...)):
         if data[:4] != b"%PDF":
             out.append({"name": uf.filename, "error": "geçersiz PDF"})
             continue
-        kit = dictionary.detect_kit(fitz.open(stream=data, filetype="pdf"))
+        _doc = fitz.open(stream=data, filetype="pdf")
+        try:
+            kit = dictionary.detect_kit(_doc)
+        finally:
+            _doc.close()
         fid = SESSIONS.add_file(sid, uf.filename, data, kit)
         ann = _annotate(SESSIONS.get_file(sid, fid))
         threading.Thread(target=_process_file, args=(sid, fid), daemon=True).start()
@@ -133,6 +132,12 @@ def status(sid: str):
 
 @app.delete("/api/{sid}")
 def delete_session(sid: str):
+    try:
+        fids = list(SESSIONS.list_files(sid).keys())
+    except (FileNotFoundError, KeyError):
+        fids = []
+    for fid in fids:
+        CACHE.invalidate(fid)
     SESSIONS.delete_session(sid)
     return {"ok": True}
 
@@ -145,12 +150,23 @@ def manifest(sid: str, fid: str):
              "source": a.source, "needs_review": a.needs_review} for a in ann]
 
 
+def _check_page(pdf_bytes, n):
+    doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+    try:
+        count = doc.page_count
+    finally:
+        doc.close()
+    if n < 0 or n >= count:
+        raise AppError(404, "page_not_found", "Sayfa bulunamadı")
+
+
 @app.get("/api/{sid}/{fid}/page/{n}.png")
 def page_png(sid: str, fid: str, n: int):
     cached = CACHE.get(fid, n)
     if cached is not None:
         return Response(content=cached, media_type="image/png")
     fs = _file_or_404(sid, fid)
+    _check_page(fs["pdf_bytes"], n)
     table, passthrough = _table_for(fs["kit"])
     try:
         png = engine.render_page_png(fs["pdf_bytes"], table, passthrough, fs["overrides"], n)
@@ -163,6 +179,7 @@ def page_png(sid: str, fid: str, n: int):
 @app.get("/api/{sid}/{fid}/original/{n}.png")
 def original_png(sid: str, fid: str, n: int):
     fs = _file_or_404(sid, fid)
+    _check_page(fs["pdf_bytes"], n)
     table, passthrough = _table_for(fs["kit"])
     png = engine.render_page_png(fs["pdf_bytes"], table, passthrough, {}, n, original=True)
     return Response(content=png, media_type="image/png")
