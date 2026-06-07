@@ -38,6 +38,94 @@ def detect_kit(doc):
     return "femobiome_ii"
 
 
+def list_entries(path=None):
+    """Tüm sözlük girişlerini düz liste olarak döndür.
+    passthrough_patterns ve _meta hariç.
+    Her giriş: {"scope": ..., "en": ..., "tr": ..., "paragraph": bool}
+    """
+    path = path or DICT_PATH
+    with open(path, encoding="utf-8") as f:
+        data = json.load(f)
+
+    result = []
+    # common girişleri
+    for en, tr in data.get("common", {}).items():
+        result.append({"scope": "common", "en": en, "tr": tr, "paragraph": False})
+
+    # kit girişleri
+    for kit in ("femobiome_ii", "androbiome", "enterobiome_kids"):
+        sec = data.get(kit, {})
+        paras = sec.get("_paragraphs", {})
+        for en, tr in sec.items():
+            if en == "_paragraphs":
+                continue
+            result.append({"scope": kit, "en": en, "tr": tr, "paragraph": False})
+        for en, tr in paras.items():
+            result.append({"scope": kit, "en": en, "tr": tr, "paragraph": True})
+
+    return result
+
+
+def set_entry(scope, en, tr, path=None, overwrite=False):
+    """scope='common' ise common'a, kit ise add_entry mantığıyla yazar.
+    Yedek .bak alır. Çakışmada {ok:False, conflict:True, existing}.
+    Başarıda {ok:True}.
+    """
+    path = path or DICT_PATH
+    en = re.sub(r"\s+", " ", en).strip()
+
+    if scope == "common":
+        with open(path, encoding="utf-8") as f:
+            data = json.load(f)
+        common = data.setdefault("common", {})
+        existing = common.get(en)
+        if existing is not None and existing != tr and not overwrite:
+            return {"ok": False, "conflict": True, "existing": existing}
+        shutil.copy(path, path + ".bak")
+        common[en] = tr
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+        return {"ok": True}
+
+    # kit scope → mevcut add_entry mantığını kullan
+    return add_entry(scope, en, tr, path=path, overwrite=overwrite)
+
+
+def delete_entry(scope, en, path=None):
+    """scope'a göre girişi siler. Yedek .bak alır.
+    Başarıda {ok:True}. Bulunamazsa {ok:False, not_found:True}.
+    """
+    path = path or DICT_PATH
+    en = re.sub(r"\s+", " ", en).strip()
+    with open(path, encoding="utf-8") as f:
+        data = json.load(f)
+
+    found = False
+    if scope == "common":
+        if en in data.get("common", {}):
+            shutil.copy(path, path + ".bak")
+            del data["common"][en]
+            found = True
+    else:
+        sec = data.get(scope, {})
+        paras = sec.get("_paragraphs", {})
+        if en in sec:
+            shutil.copy(path, path + ".bak")
+            del sec[en]
+            found = True
+        elif en in paras:
+            shutil.copy(path, path + ".bak")
+            del paras[en]
+            found = True
+
+    if not found:
+        return {"ok": False, "not_found": True}
+
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+    return {"ok": True}
+
+
 def add_entry(kit, en, tr, path=None, overwrite=False):
     """Sözlüğe EN->TR ekle. Yedek alır, çakışmayı bildirir, uzun metni _paragraphs'a koyar.
     Döner: {ok, conflict?, existing?}"""

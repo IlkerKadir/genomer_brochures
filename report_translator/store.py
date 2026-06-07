@@ -27,6 +27,11 @@ class RenderCache:
         with self._lock:
             self._c.pop(file_id, None)
 
+    def clear(self):
+        """Tüm önbelleği boşalt (sözlük değişikliğinde çağrılır)."""
+        with self._lock:
+            self._c.clear()
+
 
 class SessionStore:
     """Oturumları diske yazar/okur. Her oturum bir klasör; her dosya <fid>.pdf + state.json."""

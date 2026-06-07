@@ -335,5 +335,50 @@ def open_out_dir():
     return {"ok": True}
 
 
+# ── Sözlük yönetimi ──────────────────────────────────────────────────────────
+
+DictScope = Literal["common", "femobiome_ii", "androbiome", "enterobiome_kids"]
+
+
+@app.get("/api/dictionary")
+def get_dictionary():
+    """Tüm sözlük girişlerini listele."""
+    return {"entries": dictionary.list_entries()}
+
+
+class DictEntryBody(BaseModel):
+    scope: DictScope
+    en: str
+    tr: str
+    overwrite: bool = False
+
+
+@app.post("/api/dictionary/entry")
+def post_dict_entry(body: DictEntryBody):
+    """Sözlüğe giriş ekle veya güncelle."""
+    res = dictionary.set_entry(body.scope, body.en, body.tr, overwrite=body.overwrite)
+    if res.get("conflict"):
+        return {"ok": True, "conflict": True, "existing": res["existing"]}
+    CACHE.clear()
+    return {"ok": True}
+
+
+class DictDeleteBody(BaseModel):
+    scope: DictScope
+    en: str
+
+
+@app.post("/api/dictionary/delete")
+def post_dict_delete(body: DictDeleteBody):
+    """Sözlükten giriş sil."""
+    res = dictionary.delete_entry(body.scope, body.en)
+    if res.get("not_found"):
+        return JSONResponse(status_code=404,
+                            content={"ok": False, "error": {"code": "not_found",
+                                                             "message": "Giriş bulunamadı"}})
+    CACHE.clear()
+    return {"ok": True}
+
+
 if os.path.isdir(WEB_DIR):
     app.mount("/", StaticFiles(directory=WEB_DIR, html=True), name="web")
