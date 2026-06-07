@@ -4,6 +4,7 @@ import os
 import json
 import uuid
 import shutil
+import threading
 
 DEFAULT_BASE = os.path.join(os.path.expanduser("~"), ".genomer_cevirici", "sessions")
 
@@ -27,6 +28,7 @@ class SessionStore:
     """Oturumları diske yazar/okur. Her oturum bir klasör; her dosya <fid>.pdf + state.json."""
     def __init__(self, base_dir=None):
         self.base = base_dir if base_dir is not None else DEFAULT_BASE
+        self._lock = threading.Lock()
         os.makedirs(self.base, exist_ok=True)
 
     def _sdir(self, sid):
@@ -40,8 +42,12 @@ class SessionStore:
             return json.load(f)
 
     def _write_state(self, sid, state):
-        with open(self._state_path(sid), "w", encoding="utf-8") as f:
+        # Atomic write: tmp dosyasına yaz, sonra taşı (okuma yarışını önler)
+        path = self._state_path(sid)
+        tmp = path + ".tmp"
+        with open(tmp, "w", encoding="utf-8") as f:
             json.dump(state, f, ensure_ascii=False, indent=2)
+        os.replace(tmp, path)
 
     def create_session(self):
         sid = uuid.uuid4().hex[:12]
@@ -53,10 +59,11 @@ class SessionStore:
         fid = uuid.uuid4().hex[:8]
         with open(os.path.join(self._sdir(sid), fid + ".pdf"), "wb") as f:
             f.write(pdf_bytes)
-        state = self._read_state(sid)
-        state["files"][fid] = {"name": name, "kit": kit, "overrides": {},
-                               "saved_path": None, "status": "done"}
-        self._write_state(sid, state)
+        with self._lock:
+            state = self._read_state(sid)
+            state["files"][fid] = {"name": name, "kit": kit, "overrides": {},
+                                   "saved_path": None, "status": "done"}
+            self._write_state(sid, state)
         return fid
 
     def list_sessions(self):
@@ -79,25 +86,29 @@ class SessionStore:
         return self._read_state(sid)["files"]
 
     def set_override(self, sid, fid, seg_id, tr):
-        state = self._read_state(sid)
-        state["files"][fid]["overrides"][seg_id] = tr
-        self._write_state(sid, state)
+        with self._lock:
+            state = self._read_state(sid)
+            state["files"][fid]["overrides"][seg_id] = tr
+            self._write_state(sid, state)
 
     def remove_override(self, sid, fid, seg_id):
-        state = self._read_state(sid)
-        state["files"][fid]["overrides"].pop(seg_id, None)
-        self._write_state(sid, state)
+        with self._lock:
+            state = self._read_state(sid)
+            state["files"][fid]["overrides"].pop(seg_id, None)
+            self._write_state(sid, state)
 
     def set_kit(self, sid, fid, kit):
-        state = self._read_state(sid)
-        state["files"][fid]["kit"] = kit
-        state["files"][fid]["overrides"] = {}
-        self._write_state(sid, state)
+        with self._lock:
+            state = self._read_state(sid)
+            state["files"][fid]["kit"] = kit
+            state["files"][fid]["overrides"] = {}
+            self._write_state(sid, state)
 
     def set_saved_path(self, sid, fid, path):
-        state = self._read_state(sid)
-        state["files"][fid]["saved_path"] = path
-        self._write_state(sid, state)
+        with self._lock:
+            state = self._read_state(sid)
+            state["files"][fid]["saved_path"] = path
+            self._write_state(sid, state)
 
     def delete_session(self, sid):
         d = self._sdir(sid)

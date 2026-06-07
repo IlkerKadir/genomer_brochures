@@ -84,10 +84,11 @@ def _process_file(sid, fid):
         path = _save_one(sid, fid, fs)
         SESSIONS.set_saved_path(sid, fid, path)
     except Exception as e:  # noqa
-        st = SESSIONS._read_state(sid)
-        st["files"][fid]["status"] = "error"
-        st["files"][fid]["error"] = str(e)
-        SESSIONS._write_state(sid, st)
+        with SESSIONS._lock:
+            st = SESSIONS._read_state(sid)
+            st["files"][fid]["status"] = "error"
+            st["files"][fid]["error"] = str(e)
+            SESSIONS._write_state(sid, st)
 
 
 @app.post("/api/upload")
