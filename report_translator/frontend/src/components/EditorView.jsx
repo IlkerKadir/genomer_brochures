@@ -5,7 +5,9 @@ import { ThumbnailRail } from "./ThumbnailRail.jsx";
 import { SegmentPanel } from "./SegmentPanel.jsx";
 import * as api from "../api/client.js";
 
-export function EditorView({ session, file, onBack }) {
+export function EditorView({ file, onBack }) {
+  // Klinik güvenlik: session her zaman tıklanan raporun kendi session_id'sinden türetilir
+  const session = file.session_id;
   const store = useMemo(createStore, []);
   const [zoom, setZoom] = useState(1);
   const [compare, setCompare] = useState(false);

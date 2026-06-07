@@ -36,6 +36,7 @@ export const getOutDir = () => jget(`/api/out_dir`);
 export const setOutDir = (path) => jpost(`/api/out_dir`, { path });
 export const openOutDir = () => jpost(`/api/open_out_dir`);
 export const deleteSession = (s) => fetch(`/api/${s}`, { method: "DELETE" });
+export const deleteReport = (s, f) => fetch(`/api/${s}/${f}`, { method: "DELETE" });
 export const pageUrl = (s, f, n) => `/api/${s}/${f}/page/${n}.png?t=${Date.now()}`;
 export const originalUrl = (s, f, n) => `/api/${s}/${f}/original/${n}.png`;
 export const reviewUrl = (s, f) => `/api/${s}/${f}/review.txt`;

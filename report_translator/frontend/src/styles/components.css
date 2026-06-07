@@ -358,6 +358,43 @@ button.mini:hover:not(:disabled) {
   transform: translateY(-2px);
 }
 
+/* Card top row: kit badge + remove button aligned */
+.card-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 22px;
+}
+
+/* Kaldır button — ghost/mini, kart köşesinde */
+.card-remove {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px var(--space-2);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-medium);
+  color: var(--text-tertiary);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  box-shadow: none;
+  transition:
+    color var(--transition-base),
+    background var(--transition-base),
+    border-color var(--transition-base);
+  margin-left: auto;
+}
+
+.card-remove:hover:not(:disabled) {
+  color: var(--color-error);
+  background: var(--color-error-soft);
+  border-color: var(--color-error-border);
+  transform: none;
+  box-shadow: none;
+}
+
 /* Kit badge */
 .kit {
   display: inline-flex;
