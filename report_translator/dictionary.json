@@ -8,7 +8,6 @@
     "surum": "0.1-ornek",
     "tarih": "2026-06-06"
   },
-
   "passthrough_patterns": [
     "^[\\d.,%\\s≥≤<>/\\-–—~xX*†‡§¹²³•·]+$",
     "^lg ?GE/ml$",
@@ -17,7 +16,6 @@
     "^(HPV|HSV|CMV|BVAB|EBV|HHV)[\\s\\d/().,-]*$",
     "^[¹²³*]?\\s*[A-Z][a-z]+( \\([A-Za-z]+\\))?( [a-z]+)?( spp\\.?| cluster)?( ?[/,] ?[A-Z][a-z]+( [a-z]+)?( spp\\.?)?)*\\.?$"
   ],
-
   "common": {
     "Result": "Sonuç",
     "Reference": "Referans",
@@ -34,9 +32,9 @@
     "Conclusion": "Sonuç",
     "Conclusion:": "Sonuç:",
     "logarithmic scale": "logaritmik ölçek",
-    "Container ID:": "Konteyner ID:"
+    "Container ID:": "Konteyner ID:",
+    "DETECTED": "TESPİT EDİLDİ"
   },
-
   "femobiome_ii": {
     "Female microbiota assessment": "Kadın mikrobiyota değerlendirmesi",
     "Mycoplasmas": "Mikoplazmalar",
@@ -78,10 +76,19 @@
       "Gestational age over 37-38 weeks – negative result, all other cases – positive result.": "Gebelik yaşı 37-38 haftanın üzerinde – negatif sonuç, diğer tüm durumlar – pozitif sonuç.",
       "Color indicator – overall assessment of the microbiota state (eubiosis / moderate or severe dysbiosis);": "Renk göstergesi – mikrobiyota durumunun genel değerlendirmesi (öbiyoz / orta veya şiddetli disbiyoz);",
       "Linear histogram – display of the proportions of normobiota, aerobes, anaerobes and mycoplasmas in the microbiota;": "Doğrusal histogram – mikrobiyotadaki normobiyota, aeroblar, anaeroblar ve mikoplazmaların oranlarının gösterimi;",
-      "Column histogram – individual profile of microorganisms.": "Sütun histogram – mikroorganizmaların bireysel profili."
-    }
+      "Column histogram – individual profile of microorganisms.": "Sütun histogram – mikroorganizmaların bireysel profili.",
+      "Gestational age over 37-38 weeks – negative result, all other cases – <4,0 lg GE/ml.": "Gebelik yaşı 37-38 haftanın üzerinde – negatif sonuç, diğer tüm durumlar – <4,0 lg GE/ml.",
+      "- Linear histogram – display of the proportions of normobiota, aerobes, anaerobes, and mycoplasmas in the microbiota;": "- Doğrusal histogram – mikrobiyotadaki normobiyota, aeroblar, anaeroblar ve mikoplazmaların oranlarının gösterimi;",
+      "HPV 31-68 (11 types) – total detection of HPV 31/33/35/39/51/52/56/58/59/66/68 without differentiation.": "HPV 31-68 (11 tip) – HPV 31/33/35/39/51/52/56/58/59/66/68 ayırım yapılmadan toplam saptanması.",
+      "A dash (—) means a negative result; a listing separated by a \"/\" indicates pooled detection.": "Tire işareti (—) negatif sonuç anlamına gelir; \"/\" ile ayrılmış listeleme birleşik saptamayı gösterir.",
+      "Automated conclusion is only formed if the locus of biomaterial collection (V or C) is specified. Result interpretation": "Otomatik sonuç yalnızca biyomateryal alma lokusu (V veya C) belirtildiğinde oluşturulur. Sonuç yorumu",
+      "- Color indicator – overall assessment of the microbiota state (eubiosis / moderate or severe dysbiosis);": "- Renk göstergesi – mikrobiyota durumunun genel değerlendirmesi (öbiyoz / orta veya şiddetli disbiyoz);",
+      "- Column histogram – individual profile of microorganisms.": "- Sütun histogram – mikroorganizmaların bireysel profili.",
+      "Aerobes – facultative anaerobic opportunistic microorganisms. Anaerobes – obligate anaerobic opportunistic": "Aeroblar – fakültatif anaerobik fırsatçı mikroorganizmalar. Anaeroblar – obligat anaerobik fırsatçı",
+      "microorganisms. Mycoplasmas – opportunistic genital mycoplasmas.": "mikroorganizmalar. Mikoplazmalar – fırsatçı genital mikoplazmalar."
+    },
+    "in Lactobacillus spp.,%": "Lactobacillus spp. içinde, %"
   },
-
   "androbiome": {
     "Urogenital microbiome composition test": "Ürogenital mikrobiyom kompozisyon testi",
     "Information about laboratory": "Laboratuvar bilgileri",
@@ -117,10 +124,10 @@
     "_paragraphs": {
       "The bacterial microbiome composition is abnormal: opportunistic bacteria are detected.": "Bakteriyel mikrobiyom kompozisyonu anormaldir: fırsatçı bakteriler saptandı.",
       "The bacterial microbiome composition is abnormal: STIs are detected, but normal vaginal microflora is severely disturbed.": "Bakteriyel mikrobiyom kompozisyonu anormaldir: CYBE saptandı, normal vajinal mikroflora dengesi ciddi şekilde bozulmuştur.",
-      "Amount of bacterial and/or human DNA in the sample is not enough for the test result.": "Numunedeki bakteriyel ve/veya insan DNA miktarı test sonucu için yeterli değildir."
+      "Amount of bacterial and/or human DNA in the sample is not enough for the test result.": "Numunedeki bakteriyel ve/veya insan DNA miktarı test sonucu için yeterli değildir.",
+      "* Quantitative Analysis Lg(X) ** Qualitative Analysis *** Below threshold": "* Kantitatif Analiz Lg(X) ** Kalitatif Analiz *** Eşik altı"
     }
   },
-
   "enterobiome_kids": {
     "Research result": "Araştırma sonucu",
     "FULL NAME:": "AD SOYAD:",
@@ -167,7 +174,15 @@
     "_paragraphs": {
       "IMPORTANT: the interpretation of the results must be made strictly by the attending physician.": "ÖNEMLİ: sonuçların yorumlanması kesinlikle tedavi eden hekim tarafından yapılmalıdır.",
       "The study was carried out by ______________________ (Full name)": "Çalışmayı yapan ______________________ (Ad Soyad)",
-      "* Lg X values are given – means 10 X": "* Lg X değerleri verilmiştir – 10 anlamına gelir"
-    }
+      "* Lg X values are given – means 10 X": "* Lg X değerleri verilmiştir – 10 anlamına gelir",
+      "IMPORTANT: the interpretation of the results must be made strictly by the attending physician": "ÖNEMLİ: sonuçların yorumlanması kesinlikle tedavi eden hekim tarafından yapılmalıdır"
+    },
+    "INTERVAL": "ARALIĞI",
+    "Lactobacillaceae, quantity": "Lactobacillaceae, miktar",
+    "Bacteroidetes, presence": "Bacteroidetes, varlık",
+    "Firmicutes/Bacteroidetes, ratio:": "Firmicutes/Bacteroidetes, oran:",
+    "pathogenic agents Enterobacterales": "patojenik ajanlar Enterobacterales",
+    "Page 1 of 2": "Sayfa 1 / 2",
+    "Page 2 of 2": "Sayfa 2 / 2"
   }
 }
