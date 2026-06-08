@@ -329,6 +329,180 @@ git commit -m "test(engine): gerçek lab örneğiyle kapat+yeniden-yaz entegrasy
 
 ---
 
+## Task 4: Görünmez (beyaz) metin-katmanı rengini gerçek mürekkep rengiyle değiştir
+
+**Bağlam:** Görsel doğrulamada keşfedildi — vektör-outline etiketlerin görünmez metin katmanı **beyaz** (`s.color == (1,1,1)`). Kapatma sonrası `color=s.color` ile yazınca beyaz-üstüne-beyaz → görünmez. Çözüm: kapatma yapıldığında yeniden-yazma rengini orijinal pixmap'ten örneklenen gerçek mürekkep rengiyle (`_sample_fg`) belirle. Bu, "Kontrol parametreleri" morunu ve siyah veri etiketlerini doğru korur; sonuç kutusu teal'i de korunur.
+
+**Files:**
+- Modify: `report_translator/engine.py` (ekle: `_sample_fg`; değiştir: `_render_page_items` — renk belirleme + yeniden-yazmada `col` kullan)
+- Test: `report_translator/tests/test_render_bg.py` (3 test ekle)
+
+- [ ] **Step 1: Failing test'leri ekle** — `report_translator/tests/test_render_bg.py` sonuna:
+
+```python
+def test_sample_fg_returns_ink_over_background():
+    # beyaz zemin + küçük siyah mürekkep bloğu -> baskın ön-plan siyah
+    pm = _solid_pm(100, 50, (255, 255, 255))
+    pm.set_rect(fitz.IRect(25, 22, 45, 28), (0, 0, 0))
+    fg = engine._sample_fg(pm, fitz.Rect(20, 20, 60, 30), 1.0, (1.0, 1.0, 1.0))
+    assert all(c < 0.1 for c in fg)
+
+
+def test_sample_fg_no_ink_returns_black():
+    # tamamen zemin (bg-dışı piksel yok) -> siyah fallback
+    pm = _solid_pm(100, 50, (255, 255, 255))
+    fg = engine._sample_fg(pm, fitz.Rect(20, 20, 60, 30), 1.0, (1.0, 1.0, 1.0))
+    assert fg == (0.0, 0.0, 0.0)
+
+
+def test_reinsert_uses_ink_color_not_invisible_textlayer():
+    """Görünmez (beyaz) metin-katmanı + siyah vektör mürekkebi: TR görünür yazılmalı."""
+    doc = fitz.open()
+    page = doc.new_page(width=300, height=120)
+    # beyaz (görünmez) metin katmanı
+    page.insert_text((50, 66), "Hello", fontsize=12, color=(1, 1, 1))
+    segs = engine.extract_segments(doc)
+    assert segs
+    rect = fitz.Rect(segs[0].rects[0])
+    # görünen SİYAH vektör mürekkebi (blok)
+    page.draw_rect(rect, color=None, fill=(0, 0, 0))
+
+    ann = engine.translate_segments(segs, {"Hello": "Merhaba"}, [], {})
+    items = [a for a in engine._changed_items(ann) if a.seg.page == 0]
+    assert items
+    engine._render_page_items(page, items, {})
+
+    pm = page.get_pixmap(dpi=150)
+    sc = 150 / 72
+    dark = 0
+    for yy in range(int(rect.y0 * sc), int(rect.y1 * sc) + 1):
+        for xx in range(int(rect.x0 * sc), int(rect.x1 * sc) + 1):
+            if 0 <= xx < pm.width and 0 <= yy < pm.height:
+                px = pm.pixel(xx, yy)
+                if px[0] < 80 and px[1] < 80 and px[2] < 80:
+                    dark += 1
+    assert dark > 0, "TR görünür mürekkep rengiyle yazılmadı (beyaz/görünmez kaldı)"
+    assert "Merhaba" in page.get_text()
+```
+
+- [ ] **Step 2: Test'in başarısız olduğunu doğrula**
+
+Run: `cd /Users/ilkerkadirozturk/Documents/genomer_brochures/report_translator && python3 -m pytest tests/test_render_bg.py -v`
+Expected: yeni 3 testten en az `test_sample_fg_*` ikisi FAIL (`_sample_fg` yok → AttributeError); `test_reinsert_uses_ink_color...` da FAIL (beyaz yazılıyor → `dark == 0`).
+
+- [ ] **Step 3: `_sample_fg`'yi ekle** — `engine.py` içinde `def _sample_bg(`'nin hemen ALTINA (yani `_render_page_items`'in üstüne) ekle:
+
+```python
+def _sample_fg(pixmap, rect, scale, bg, tol=24):
+    """rect içindeki baskın ön-plan (mürekkep) rengini örnekle: bg'den farklı baskın renk.
+
+    Görünmez (beyaz) metin-katmanı rengi yerine gerçek mürekkep rengini verir.
+    bg-dışı piksel yoksa (0,0,0) siyah döndürür (asla None)."""
+    x0 = int(rect.x0 * scale); y0 = int(rect.y0 * scale)
+    x1 = int(rect.x1 * scale); y1 = int(rect.y1 * scale)
+    bg255 = tuple(int(round(v * 255)) for v in bg)
+    cnt = Counter()
+    for yy in range(y0, y1 + 1):
+        for xx in range(x0, x1 + 1):
+            if 0 <= xx < pixmap.width and 0 <= yy < pixmap.height:
+                px = pixmap.pixel(xx, yy)
+                if not all(abs(a - b) <= tol for a, b in zip(px[:3], bg255[:3])):
+                    cnt[px] += 1
+    if not cnt:
+        return (0.0, 0.0, 0.0)
+    (col, _), = cnt.most_common(1)
+    return (col[0] / 255.0, col[1] / 255.0, col[2] / 255.0)
+```
+
+- [ ] **Step 4: `_render_page_items`'i renk-belirlemeyle güncelle.** Mevcut fonksiyonun TAMAMINI şu sürümle değiştir:
+
+```python
+def _render_page_items(page, items, font_cache):
+    """Tek bir sayfadaki değişen segmentleri yerinde render et (redaksiyon + geri yazma)."""
+    if not items:
+        return
+    try:
+        pm = page.get_pixmap(dpi=150)
+        scale = 150 / 72.0
+    except Exception:                      # pragma: no cover - beklenmez
+        pm = None
+        scale = 1.0
+    colors = {}                            # id(a) -> yeniden-yazma rengi
+    for a in items:
+        first_bg = None
+        for r in a.seg.rects:
+            rect = fitz.Rect(r)
+            bg = _sample_bg(pm, rect, scale) if pm is not None else None
+            if bg is not None:
+                if first_bg is None:
+                    first_bg = bg
+                # vektör-outline kenarları metin bbox'undan taşabilir -> ~1px genişlet
+                page.add_redact_annot(rect + (-1, -1, 1, 1), fill=bg)
+            else:
+                page.add_redact_annot(rect, fill=None)   # güvenli: İngilizce kalır
+        # kapatma yapıldıysa görünmez (beyaz) metin-katmanı yerine gerçek mürekkep rengi
+        if first_bg is not None and pm is not None:
+            colors[id(a)] = _sample_fg(pm, fitz.Rect(a.seg.rects[0]), scale, first_bg)
+        else:
+            colors[id(a)] = a.seg.color
+    page.apply_redactions(images=fitz.PDF_REDACT_IMAGE_NONE,
+                          graphics=fitz.PDF_REDACT_LINE_ART_NONE,
+                          text=fitz.PDF_REDACT_TEXT_REMOVE)
+    for a in items:
+        s = a.seg
+        col = colors[id(a)]
+        fontfile = os.path.join(FONT_DIR, s.fontfile)
+        fontname = font_cache.get(s.fontfile)
+        if fontname is None:
+            fontname = "F%d" % len(font_cache)
+            font_cache[s.fontfile] = fontname
+        font = fitz.Font(fontfile=fontfile)
+        text = a.tr.strip()
+        indent = _leading_indent(s.raw_first, font, s.size)
+        if s.single_line:
+            ox, oy = s.origin
+            page.insert_text((ox + indent, oy), text, fontname=fontname,
+                             fontfile=fontfile, fontsize=s.size, color=col)
+        else:
+            box = fitz.Rect(s.bbox)
+            left = box.x0 + indent
+            fs = s.size
+            fitted = False
+            while fs > 4.5:
+                pad = fitz.Rect(left, box.y0 - 1, box.x1 + 2, box.y1 + 4 * s.size)
+                rc = page.insert_textbox(pad, text, fontname=fontname, fontfile=fontfile,
+                                         fontsize=fs, color=col, lineheight=1.15,
+                                         align=fitz.TEXT_ALIGN_LEFT)
+                if rc >= 0:
+                    fitted = True
+                    break
+                fs -= 0.25
+            if not fitted:
+                sys.stderr.write("UYARI: segment sığmadı, atlandı: %r\n" % text)
+```
+
+Değişiklikler: (a) `colors` sözlüğü + her segment için `first_bg` izleme + `_sample_fg` çağrısı; (b) yeniden-yazma döngüsünde `col = colors[id(a)]` ve iki `color=s.color` → `color=col`. Geri kalan mantık aynı.
+
+- [ ] **Step 5: Test'lerin geçtiğini doğrula**
+
+Run: `cd /Users/ilkerkadirozturk/Documents/genomer_brochures/report_translator && python3 -m pytest tests/test_render_bg.py -v`
+Expected: test_render_bg.py'deki tüm testler PASS (önceki + 3 yeni).
+
+- [ ] **Step 6: Tüm paket (gerileme)**
+
+Run: `cd /Users/ilkerkadirozturk/Documents/genomer_brochures/report_translator && python3 -m pytest -q`
+Expected: `88 passed` (gerçek örnek varsa) veya `87 passed, 1 skipped` (yoksa). Mevcut testlerden hiçbiri bozulmamalı.
+
+- [ ] **Step 7: Commit**
+
+```bash
+cd /Users/ilkerkadirozturk/Documents/genomer_brochures
+git add report_translator/engine.py report_translator/tests/test_render_bg.py
+git commit -m "feat(engine): kapatmada gerçek mürekkep rengini örnekle (görünmez beyaz metin-katmanı düzeltmesi)
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
+```
+
 ## Self-Review Notları
 
 - **Spec kapsamı:** `_sample_bg` (örnekleme + uniformity guard) → Task 1. Dolgulu redaksiyon + 1px genişletme + fallback → Task 2. Evrensel kapsam + 78-test gerilemesi → Task 2 Step 5. Gerçek örnek + görsel → Task 3. Hepsi karşılandı.
