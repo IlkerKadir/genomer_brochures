@@ -215,3 +215,53 @@ def test_config_endpoints_and_ai_in_flow(femobiome_dysbiosis_pdf, tmp_path, monk
     ai_segs = [m for m in man if m["source"] == "ai"]
     assert len(ai_segs) >= 1
     assert any(m["tr"].startswith("[AI]") for m in ai_segs)
+
+
+def test_deepl_translate_with_glossary(monkeypatch):
+    captured = {}
+    monkeypatch.setattr(tr_mod, "_http_post_form",
+                        lambda url, fields, headers, timeout=10: captured.update(url=url, fields=fields) or
+                        {"translations": [{"text": "x"}]})
+    p = tr_mod.DeepLProvider("k:fx", glossary_id="GID123")
+    p.translate(["relative amount of X"])
+    assert captured["url"] == "https://api-free.deepl.com/v2/translate"
+    assert ("glossary_id", "GID123") in captured["fields"]
+    assert ("source_lang", "EN") in captured["fields"]
+
+
+def test_create_glossary_posts_and_parses(monkeypatch):
+    captured = {}
+    monkeypatch.setattr(tr_mod, "_http_post_form",
+                        lambda url, fields, headers, timeout=10: captured.update(url=url, fields=dict(fields)) or
+                        {"glossary_id": "G-NEW"})
+    gid = tr_mod.create_glossary("k:fx", "genomer-terms", "relative amount\tgöreceli miktar")
+    assert gid == "G-NEW"
+    assert captured["url"] == "https://api-free.deepl.com/v2/glossaries"
+    assert captured["fields"]["source_lang"] == "EN" and captured["fields"]["target_lang"] == "TR"
+    assert captured["fields"]["entries_format"] == "tsv"
+    assert "göreceli miktar" in captured["fields"]["entries"]
+
+
+def test_ensure_glossary_caches_and_recreates(monkeypatch):
+    calls = {"n": 0}
+    def fake_create(api_key, name, entries, source="EN", target="TR"):
+        calls["n"] += 1
+        return "G-%d" % calls["n"]
+    monkeypatch.setattr(tr_mod, "create_glossary", fake_create)
+    state = {}
+    g1 = tr_mod.ensure_glossary("k:fx", "a\tb", state)
+    g2 = tr_mod.ensure_glossary("k:fx", "a\tb", state)   # aynı giriş -> tekrar oluşturmaz
+    assert g1 == g2 and calls["n"] == 1
+    g3 = tr_mod.ensure_glossary("k:fx", "a\tc", state)   # değişti -> yeniden oluştur
+    assert g3 != g1 and calls["n"] == 2
+    assert tr_mod.ensure_glossary("k:fx", "  ", state) is None  # boş giriş
+
+
+def test_glossary_entries_from_file(tmp_path, monkeypatch):
+    f = tmp_path / "glossary.tsv"
+    f.write_text("# yorum\nrelative amount\tgöreceli miktar\n\neubiosis\töbiyoz\n", encoding="utf-8")
+    monkeypatch.setattr(aiconfig, "GLOSSARY_PATH", str(f))
+    tsv = aiconfig.glossary_entries_tsv()
+    assert "relative amount\tgöreceli miktar" in tsv
+    assert "eubiosis\töbiyoz" in tsv
+    assert "# yorum" not in tsv

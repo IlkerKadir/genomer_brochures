@@ -102,3 +102,36 @@ def cache_get(cache, en):
 def cache_set(cache, en, tr):
     cache[_norm(en)] = tr
     _save_cache(cache)
+
+
+GLOSSARY_PATH = os.path.join(HERE, "glossary.tsv")
+GLOSSARY_STATE_PATH = os.path.join(HERE, "glossary_state.json")
+
+
+def glossary_entries_tsv():
+    """glossary.tsv'den 'EN\\tTR' satırlarını döndür (yorum/boş satır atlanır)."""
+    if not os.path.exists(GLOSSARY_PATH):
+        return ""
+    out = []
+    with open(GLOSSARY_PATH, encoding="utf-8") as f:
+        for line in f:
+            line = line.rstrip("\n")
+            if not line.strip() or line.lstrip().startswith("#"):
+                continue
+            if "\t" in line:
+                out.append(line)
+    return "\n".join(out)
+
+
+def load_glossary_state():
+    if os.path.exists(GLOSSARY_STATE_PATH):
+        with open(GLOSSARY_STATE_PATH, encoding="utf-8") as f:
+            return json.load(f)
+    return {}
+
+
+def save_glossary_state(state):
+    tmp = GLOSSARY_STATE_PATH + ".tmp"
+    with open(tmp, "w", encoding="utf-8") as f:
+        json.dump(state, f, ensure_ascii=False, indent=2)
+    os.replace(tmp, GLOSSARY_STATE_PATH)

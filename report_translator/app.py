@@ -61,6 +61,17 @@ def _ai_for(kit):
     markers = dictionary.ai_markers(raw, kit)
     if not markers:
         return None
+    # Standart terimleri DeepL glossary ile zorla (varsa). Hata/desteksizse glossary'siz devam.
+    try:
+        entries = aiconfig.glossary_entries_tsv()
+        if entries.strip() and hasattr(provider, "glossary_id"):
+            state = aiconfig.load_glossary_state()
+            gid = translator.ensure_glossary(cfg["deepl_api_key"], entries, state)
+            if gid:
+                provider.glossary_id = gid
+                aiconfig.save_glossary_state(state)
+    except Exception:
+        pass
     return (provider, markers, aiconfig.load_cache())
 
 
