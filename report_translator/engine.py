@@ -238,7 +238,8 @@ def _sample_bg(pixmap, rect, scale, tol=12, min_frac=0.7):
     """Segment dikdörtgeninin kenar marjından (harf dışı dolgu) baskın zemin rengini örnekle.
 
     Halka yeterince tek-renk ise (r, g, b) 0-1 float tuple; çok-renkli/örneklenemezse None.
-    None dönerse çağıran fill=None'a düşer (vektör İngilizce kalır, yama oluşmaz)."""
+    None dönerse çağıran fill=None'a düşer (vektör İngilizce kalır, yama oluşmaz).
+    tol sıkı (12): gradyan/yakın renkleri 'tek renk' saymamak için."""
     x0 = int(rect.x0 * scale); y0 = int(rect.y0 * scale)
     x1 = int(rect.x1 * scale); y1 = int(rect.y1 * scale)
     cnt = Counter()
@@ -266,6 +267,7 @@ def _sample_fg(pixmap, rect, scale, bg, tol=24):
 
     Görünmez (beyaz) metin-katmanı rengi yerine gerçek mürekkep rengini verir.
     bg-dışı piksel yoksa (0,0,0) siyah döndürür (asla None).
+    tol gevşek (24): anti-aliased harf kenar piksellerini de mürekkep saymak için.
     Not: RGB pixmap varsayar (page.get_pixmap() varsayılanı alfasızdır); ilk 3 kanalı kullanır."""
     x0 = int(rect.x0 * scale); y0 = int(rect.y0 * scale)
     x1 = int(rect.x1 * scale); y1 = int(rect.y1 * scale)
