@@ -23,15 +23,18 @@ def _auth(api_key):
 
 
 class DeepLProvider:
-    def __init__(self, api_key, glossary_id=None):
+    def __init__(self, api_key, glossary_id=None, context=None):
         self.api_key = api_key
         self.glossary_id = glossary_id
+        self.context = context
 
     def translate(self, texts, target="TR"):
         fields = [("text", t) for t in texts]
         fields += [("target_lang", target), ("source_lang", "EN")]
         if self.glossary_id:
             fields.append(("glossary_id", self.glossary_id))   # standart terimleri zorla
+        if self.context:
+            fields.append(("context", self.context))           # klinik domain bağlamı
         res = _http_post_form(_base(self.api_key) + "/translate", fields, _auth(self.api_key))
         return [t["text"] for t in res["translations"]]
 

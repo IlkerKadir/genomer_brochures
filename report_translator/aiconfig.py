@@ -13,6 +13,9 @@ DEFAULT_CONFIG = {
     "deepl_api_key": "",
     "ai_summary_enabled": False,
     "target_lang": "TR",
+    "deepl_context": ("Clinical conclusion summary of a urogenital microbiota qPCR diagnostic "
+                      "report. Bacterial group relative amounts are reported as percentage "
+                      "values; do not infer increase or decrease that is not explicitly stated."),
 }
 
 

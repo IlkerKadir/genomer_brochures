@@ -266,3 +266,19 @@ def test_glossary_entries_from_file(tmp_path, monkeypatch):
     assert "relative amount\tgöreceli miktar" in tsv
     assert "eubiosis\töbiyoz" in tsv
     assert "# yorum" not in tsv
+
+
+def test_deepl_translate_with_context(monkeypatch):
+    captured = {}
+    monkeypatch.setattr(tr_mod, "_http_post_form",
+                        lambda url, fields, headers, timeout=10: captured.update(fields=fields) or
+                        {"translations": [{"text": "x"}]})
+    tr_mod.DeepLProvider("k:fx", context="clinical report").translate(["relative amount"])
+    assert ("context", "clinical report") in captured["fields"]
+    # context yokken gönderilmez
+    captured.clear()
+    monkeypatch.setattr(tr_mod, "_http_post_form",
+                        lambda url, fields, headers, timeout=10: captured.update(fields=fields) or
+                        {"translations": [{"text": "x"}]})
+    tr_mod.DeepLProvider("k:fx").translate(["x"])
+    assert not any(k == "context" for k, _ in captured["fields"])
