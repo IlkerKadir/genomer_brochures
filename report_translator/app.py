@@ -45,8 +45,8 @@ def _app_error_handler(request: Request, exc: AppError):
 
 
 def _table_for(kit):
-    kits, common, passthrough, _ = dictionary.load()
-    return kits[kit], passthrough
+    kits, common, passthrough, raw = dictionary.load()
+    return kits[kit], passthrough, dictionary.compile_templates(raw, kit)
 
 
 def _file_or_404(sid, fid):
@@ -57,11 +57,11 @@ def _file_or_404(sid, fid):
 
 
 def _annotate(fs):
-    table, passthrough = _table_for(fs["kit"])
+    table, passthrough, templates = _table_for(fs["kit"])
     doc = fitz.open(stream=fs["pdf_bytes"], filetype="pdf")
     try:
         return engine.translate_segments(engine.extract_segments(doc), table, passthrough,
-                                         fs["overrides"])
+                                         fs["overrides"], templates)
     finally:
         doc.close()
 
@@ -73,8 +73,9 @@ def _counts(ann):
 
 
 def _render_bytes(fs):
-    table, passthrough = _table_for(fs["kit"])
-    return engine.translate_document_bytes(fs["pdf_bytes"], table, passthrough, fs["overrides"])
+    table, passthrough, templates = _table_for(fs["kit"])
+    return engine.translate_document_bytes(fs["pdf_bytes"], table, passthrough,
+                                           fs["overrides"], templates)
 
 
 def _process_file(sid, fid):
@@ -186,9 +187,10 @@ def page_png(sid: str, fid: str, n: int):
         return Response(content=cached, media_type="image/png")
     fs = _file_or_404(sid, fid)
     _check_page(fs["pdf_bytes"], n)
-    table, passthrough = _table_for(fs["kit"])
+    table, passthrough, templates = _table_for(fs["kit"])
     try:
-        png = engine.render_page_png(fs["pdf_bytes"], table, passthrough, fs["overrides"], n)
+        png = engine.render_page_png(fs["pdf_bytes"], table, passthrough, fs["overrides"], n,
+                                     templates=templates)
     except Exception:
         raise AppError(500, "render_failed", "Sayfa render edilemedi")
     CACHE.set(fid, n, png)
@@ -199,7 +201,7 @@ def page_png(sid: str, fid: str, n: int):
 def original_png(sid: str, fid: str, n: int):
     fs = _file_or_404(sid, fid)
     _check_page(fs["pdf_bytes"], n)
-    table, passthrough = _table_for(fs["kit"])
+    table, passthrough, _tpl = _table_for(fs["kit"])
     png = engine.render_page_png(fs["pdf_bytes"], table, passthrough, {}, n, original=True)
     return Response(content=png, media_type="image/png")
 

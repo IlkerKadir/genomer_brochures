@@ -27,7 +27,7 @@ def load(path=None):
     kits = {}
     for kit in ("femobiome_ii", "androbiome", "enterobiome_kids"):
         sec = raw.get(kit, {})
-        atomic = {k: v for k, v in sec.items() if k != "_paragraphs"}
+        atomic = {k: v for k, v in sec.items() if k not in ("_paragraphs", "_templates")}
         paras = sec.get("_paragraphs", {})
         merged = {}
         merged.update(common)
@@ -35,6 +35,13 @@ def load(path=None):
         merged.update(paras)
         kits[kit] = merged
     return kits, common, passthrough, raw
+
+
+def compile_templates(raw, kit):
+    """Kit'in `_templates` listesini [(derlenmiş_regex, yerine_metni)] olarak döndür.
+    _templates = [[regex_deseni, TR_metni], ...] — substring çevirisinden ÖNCE uygulanır."""
+    pats = raw.get(kit, {}).get("_templates", [])
+    return [(re.compile(p), r) for p, r in pats]
 
 
 def detect_kit(doc):

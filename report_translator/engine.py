@@ -174,10 +174,11 @@ class AnnotatedSegment:
 
 
 class _Matcher:
-    def __init__(self, table, passthrough):
+    def __init__(self, table, passthrough, templates=None):
         self.table = table
         self.keys = sorted(table.keys(), key=len, reverse=True)
         self.passthrough = passthrough
+        self.templates = templates or []   # [(derlenmiş_regex, yerine_metni), ...]
 
     def is_passthrough_full(self, t):
         return any(p.fullmatch(t) for p in self.passthrough)
@@ -192,15 +193,17 @@ class _Matcher:
         if self.is_passthrough_full(t):
             return text, False, False
         result = t
-        for k in self.keys:
+        for rx, rep in self.templates:        # regex ön-geçişi (yüzde biçimi vb.)
+            result = rx.sub(rep, result)
+        for k in self.keys:                   # parça-değişimi (longest-match)
             if k in result:
                 result = result.replace(k, self.table[k])
         changed = norm_ws(result) != t
         return (result if changed else text), changed, False
 
 
-def translate_segments(segments, table, passthrough, overrides):
-    matcher = _Matcher(table, passthrough)
+def translate_segments(segments, table, passthrough, overrides, templates=None):
+    matcher = _Matcher(table, passthrough, templates)
     out = []
     for s in segments:
         if s.id in overrides:
@@ -284,7 +287,7 @@ def render(doc, annotated):
 
 
 def translate_one_page_bytes(pdf_path_or_bytes, table, passthrough, overrides,
-                             page_index, original=False):
+                             page_index, original=False, templates=None):
     """Yalnız page_index render edilmiş tek-sayfalık PDF bayt'ı döndür."""
     if isinstance(pdf_path_or_bytes, (bytes, bytearray)):
         doc = fitz.open(stream=pdf_path_or_bytes, filetype="pdf")
@@ -292,7 +295,7 @@ def translate_one_page_bytes(pdf_path_or_bytes, table, passthrough, overrides,
         doc = fitz.open(pdf_path_or_bytes)
     try:
         if not original:
-            ann = translate_segments(extract_segments(doc), table, passthrough, overrides)
+            ann = translate_segments(extract_segments(doc), table, passthrough, overrides, templates)
             items = [a for a in _changed_items(ann) if a.seg.page == page_index]
             _render_page_items(doc[page_index], items, {})
         # yalnız o sayfayı içeren yeni belge
@@ -308,7 +311,7 @@ def translate_one_page_bytes(pdf_path_or_bytes, table, passthrough, overrides,
 
 
 def render_page_png(pdf_path_or_bytes, table, passthrough, overrides,
-                    page_index, dpi=150, original=False):
+                    page_index, dpi=150, original=False, templates=None):
     """page_index'in render edilmiş PNG bayt'ı (override'lı veya orijinal)."""
     if isinstance(pdf_path_or_bytes, (bytes, bytearray)):
         doc = fitz.open(stream=pdf_path_or_bytes, filetype="pdf")
@@ -316,7 +319,7 @@ def render_page_png(pdf_path_or_bytes, table, passthrough, overrides,
         doc = fitz.open(pdf_path_or_bytes)
     try:
         if not original:
-            ann = translate_segments(extract_segments(doc), table, passthrough, overrides)
+            ann = translate_segments(extract_segments(doc), table, passthrough, overrides, templates)
             items = [a for a in _changed_items(ann) if a.seg.page == page_index]
             _render_page_items(doc[page_index], items, {})
         png = doc[page_index].get_pixmap(dpi=dpi).tobytes("png")
@@ -325,7 +328,7 @@ def render_page_png(pdf_path_or_bytes, table, passthrough, overrides,
     return png
 
 
-def translate_document_bytes(pdf_path_or_bytes, table, passthrough, overrides):
+def translate_document_bytes(pdf_path_or_bytes, table, passthrough, overrides, templates=None):
     """Orijinalden taze TR PDF bayt'ı üretir. pdf_path_or_bytes: yol (str) veya bytes."""
     if isinstance(pdf_path_or_bytes, (bytes, bytearray)):
         doc = fitz.open(stream=pdf_path_or_bytes, filetype="pdf")
@@ -333,7 +336,7 @@ def translate_document_bytes(pdf_path_or_bytes, table, passthrough, overrides):
         doc = fitz.open(pdf_path_or_bytes)
     try:
         segs = extract_segments(doc)
-        ann = translate_segments(segs, table, passthrough, overrides)
+        ann = translate_segments(segs, table, passthrough, overrides, templates)
         render(doc, ann)
         out = doc.tobytes(garbage=4, deflate=True)
     finally:

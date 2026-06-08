@@ -87,10 +87,6 @@
       "Aerobes – facultative anaerobic opportunistic microorganisms. Anaerobes – obligate anaerobic opportunistic": "Aeroblar – fakültatif anaerobik fırsatçı mikroorganizmalar. Anaeroblar – obligat anaerobik fırsatçı",
       "microorganisms. Mycoplasmas – opportunistic genital mycoplasmas.": "mikroorganizmalar. Mikoplazmalar – fırsatçı genital mikoplazmalar.",
       "Normal microbiota within the reference range,": "Normal mikrobiyota referans aralığında,",
-      ", increased relative amount of aerobes.": ", aeroblar göreceli miktarı artmış.",
-      ", increased relative amount of anaerobes.": ", anaeroblar göreceli miktarı artmış.",
-      ", increased relative amount of mycoplasmas.": ", mikoplazmalar göreceli miktarı artmış.",
-      ", increased relative amount of opportunistic microorganisms.": ", fırsatçı mikroorganizmaların göreceli miktarı artmış.",
       ". Predominance of obligate pathogens (STIs).": ". Zorunlu patojenlerin (CYBE) baskınlığı.",
       "Relative amount of Lactobacillus spp. within the reference range:": "Lactobacillus spp. göreceli miktarı referans aralığında:",
       "Relative amount of Lactobacillus spp. decreased": "Lactobacillus spp. göreceli miktarı azalmış",
@@ -107,7 +103,11 @@
       "IMPORTANT! The test result interpretation is generated if the sample type (V, C) is specified. Result interpretation is carried out exclusively by physician!": "ÖNEMLİ! Test sonucu yorumu yalnızca örnek türü (V, C) belirtildiğinde oluşturulur. Sonuç yorumu yalnızca hekim tarafından yapılır!",
       "Terminology and symbols Aerobes — facultative-anaerobic opportunists. Anaerobes — obligate anaerobic opportunists. Mycoplasmas — opportunistic genital mycoplasmas. Dash (—) = negative result; “/” = combined detection.": "Terminoloji ve işaretler Aeroblar — fakültatif anaerobik fırsatçılar. Anaeroblar — zorunlu anaerobik fırsatçılar. Mikoplazmalar — fırsatçı genital mikoplazmalar. Tire (—) = negatif sonuç; “/” = birleşik saptama.",
       "Detected: HPV 16, HPV 31-68 (see the note)": "Saptandı: HPV 16, HPV 31-68 (nota bakınız)",
-      "Microbiota state – severe anaerobic dysbiosis: normobiota is decreased to 6%, relative amount of Lactobacillus spp. 4% (L.iners, L.crispatus, L.jensenii/ L.mulieris, L.gasseri/L.paragasseri), Bifidobacterium spp. 2%, relative amount of anaerobes is increased": "Mikrobiyota durumu – şiddetli anaerobik disbiyoz: normobiyota azaldı: 6%, göreceli miktarı: Lactobacillus spp. 4% (L.iners, L.crispatus, L.jensenii/ L.mulieris, L.gasseri/L.paragasseri), Bifidobacterium spp. 2%, göreceli miktarı: anaeroblar artmış"
+      ", increased relative amount of aerobes.": ", aeroblar göreceli miktarı yükselmiş.",
+      ", increased relative amount of anaerobes.": ", anaeroblar göreceli miktarı yükselmiş.",
+      ", increased relative amount of mycoplasmas.": ", mikoplazmalar göreceli miktarı yükselmiş.",
+      ", increased relative amount of opportunistic microorganisms.": ", fırsatçı mikroorganizmaların göreceli miktarı yükselmiş.",
+      "relative amount of anaerobes is increased": "anaeroblar göreceli miktarı yükselmiş"
     },
     "in Lactobacillus spp.,%": "Lactobacillus spp. içinde, %",
     "Microbiota status -": "Mikrobiyota durumu -",
@@ -124,14 +124,10 @@
     "mycoplasma-associated dysbiosis": "mikoplazma ilişkili disbiyoz",
     "mixed dysbiosis": "karışık disbiyoz",
     "pronounced dysbiosis of unknown etiology": "etiyolojisi bilinmeyen belirgin disbiyoz",
-    "Normal microbiota decreased to": "Normal mikrobiyota azaldı:",
-    ": normal microbiota decreased to": ": normal mikrobiyota azaldı:",
     ", relative amount of": ", göreceli miktarı:",
     "anaerobes are present": "anaeroblar mevcut",
     "anaerobes and aerobes are present": "anaeroblar ve aeroblar mevcut",
     "aerobes are present": "aeroblar mevcut",
-    "Increased relative amount of anaerobes": "Anaeroblar göreceli miktarı artmış",
-    "Increased relative amount of aerobes": "Aeroblar göreceli miktarı artmış",
     "and anaerobes": "ve anaeroblar",
     "Detected:": "Saptandı:",
     "No pathogens detected.": "Patojen saptanmadı.",
@@ -142,10 +138,20 @@
     "severe mycoplasma-associated dysbiosis": "şiddetli mikoplazma ilişkili disbiyoz",
     "severe mixed dysbiosis": "şiddetli karışık disbiyoz",
     "severe": "şiddetli",
-    "normobiota is decreased to": "normobiyota azaldı:",
     "relative amount of": "göreceli miktarı:",
-    "is increased": "artmış",
-    "are present": "mevcut"
+    "are present": "mevcut",
+    "_templates": [
+      [
+        "(\\d+(?:[.,]\\d+)?)\\s*%",
+        "%\\1"
+      ]
+    ],
+    "normobiota is decreased to": "normobiyota gerilemiş:",
+    "Normal microbiota decreased to": "normal mikrobiyota gerilemiş:",
+    ": normal microbiota decreased to": ": normal mikrobiyota gerilemiş:",
+    "Increased relative amount of anaerobes": "Anaeroblar göreceli miktarı yükselmiş",
+    "Increased relative amount of aerobes": "Aeroblar göreceli miktarı yükselmiş",
+    "is increased": "yükselmiş"
   },
   "androbiome": {
     "Urogenital microbiome composition test": "Ürogenital mikrobiyom kompozisyon testi",

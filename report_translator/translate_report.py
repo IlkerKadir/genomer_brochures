@@ -8,12 +8,13 @@ import dictionary
 
 
 def translate_pdf(in_path, out_path, kit=None):
-    kits, common, passthrough, _ = dictionary.load()
+    kits, common, passthrough, raw = dictionary.load()
     doc = fitz.open(in_path)
     kit = kit or dictionary.detect_kit(doc)
     table = kits[kit]
+    templates = dictionary.compile_templates(raw, kit)
     segs = engine.extract_segments(doc)
-    ann = engine.translate_segments(segs, table, passthrough, overrides={})
+    ann = engine.translate_segments(segs, table, passthrough, overrides={}, templates=templates)
     engine.render(doc, ann)
     doc.save(out_path, garbage=4, deflate=True)
     doc.close()
