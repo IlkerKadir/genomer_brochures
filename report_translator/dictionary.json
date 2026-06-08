@@ -126,7 +126,8 @@
       "The bacterial microbiome composition is abnormal: STIs are detected, but normal vaginal microflora is severely disturbed.": "Bakteriyel mikrobiyom kompozisyonu anormaldir: CYBE saptandı, normal vajinal mikroflora dengesi ciddi şekilde bozulmuştur.",
       "Amount of bacterial and/or human DNA in the sample is not enough for the test result.": "Numunedeki bakteriyel ve/veya insan DNA miktarı test sonucu için yeterli değildir.",
       "* Quantitative Analysis Lg(X) ** Qualitative Analysis *** Below threshold": "* Kantitatif Analiz Lg(X) ** Kalitatif Analiz *** Eşik altı"
-    }
+    },
+    "Sample ID:": "Örnek ID:"
   },
   "enterobiome_kids": {
     "Research result": "Araştırma sonucu",
@@ -175,7 +176,8 @@
       "IMPORTANT: the interpretation of the results must be made strictly by the attending physician.": "ÖNEMLİ: sonuçların yorumlanması kesinlikle tedavi eden hekim tarafından yapılmalıdır.",
       "The study was carried out by ______________________ (Full name)": "Çalışmayı yapan ______________________ (Ad Soyad)",
       "* Lg X values are given – means 10 X": "* Lg X değerleri verilmiştir – 10 anlamına gelir",
-      "IMPORTANT: the interpretation of the results must be made strictly by the attending physician": "ÖNEMLİ: sonuçların yorumlanması kesinlikle tedavi eden hekim tarafından yapılmalıdır"
+      "IMPORTANT: the interpretation of the results must be made strictly by the attending physician": "ÖNEMLİ: sonuçların yorumlanması kesinlikle tedavi eden hekim tarafından yapılmalıdır",
+      "** the value of the proportion of the number of metabolically active bifidobacteria is indicated": "** metabolik olarak aktif bifidobakterilerin sayısının oranının değeri belirtilmiştir"
     },
     "INTERVAL": "ARALIĞI",
     "Lactobacillaceae, quantity": "Lactobacillaceae, miktar",
