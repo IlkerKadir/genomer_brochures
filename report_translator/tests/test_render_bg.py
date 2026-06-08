@@ -72,14 +72,63 @@ def test_fill_covers_vector_ink():
 
     pm = page.get_pixmap(dpi=150)
     sc = 150 / 72
-    red = 0
+    red = total = 0
     for yy in range(int(red_rect.y0 * sc), int(red_rect.y1 * sc) + 1):
         for xx in range(int(red_rect.x0 * sc), int(red_rect.x1 * sc) + 1):
             if 0 <= xx < pm.width and 0 <= yy < pm.height:
+                total += 1
                 px = pm.pixel(xx, yy)
                 if px[0] > 180 and px[1] < 80 and px[2] < 80:
                     red += 1
-    assert red == 0, f"kırmızı vektör mürekkebi örtülmedi: {red} piksel kaldı"
+    # Solid kırmızı blok (vektör mürekkebi) kapatıldı: çoğunluk artık zemin.
+    # Kalan az kırmızı yalnız yeniden-yazılan TR harf izleri olabilir (_sample_fg
+    # mürekkep rengini -kırmızı- örnekleyip TR'yi o renkle yazar; beklenen davranış).
+    assert red < 0.25 * total, f"kırmızı blok kapatılmadı: {red}/{total}"
+    assert "Merhaba" in page.get_text()
+
+
+def test_sample_fg_returns_ink_over_background():
+    # beyaz zemin + küçük siyah mürekkep bloğu -> baskın ön-plan siyah
+    pm = _solid_pm(100, 50, (255, 255, 255))
+    pm.set_rect(fitz.IRect(25, 22, 45, 28), (0, 0, 0))
+    fg = engine._sample_fg(pm, fitz.Rect(20, 20, 60, 30), 1.0, (1.0, 1.0, 1.0))
+    assert all(c < 0.1 for c in fg)
+
+
+def test_sample_fg_no_ink_returns_black():
+    # tamamen zemin (bg-dışı piksel yok) -> siyah fallback
+    pm = _solid_pm(100, 50, (255, 255, 255))
+    fg = engine._sample_fg(pm, fitz.Rect(20, 20, 60, 30), 1.0, (1.0, 1.0, 1.0))
+    assert fg == (0.0, 0.0, 0.0)
+
+
+def test_reinsert_uses_ink_color_not_invisible_textlayer():
+    """Görünmez (beyaz) metin-katmanı + siyah vektör mürekkebi: TR görünür yazılmalı."""
+    doc = fitz.open()
+    page = doc.new_page(width=300, height=120)
+    # beyaz (görünmez) metin katmanı
+    page.insert_text((50, 66), "Hello", fontsize=12, color=(1, 1, 1))
+    segs = engine.extract_segments(doc)
+    assert segs
+    rect = fitz.Rect(segs[0].rects[0])
+    # görünen SİYAH vektör mürekkebi (blok)
+    page.draw_rect(rect, color=None, fill=(0, 0, 0))
+
+    ann = engine.translate_segments(segs, {"Hello": "Merhaba"}, [], {})
+    items = [a for a in engine._changed_items(ann) if a.seg.page == 0]
+    assert items
+    engine._render_page_items(page, items, {})
+
+    pm = page.get_pixmap(dpi=150)
+    sc = 150 / 72
+    dark = 0
+    for yy in range(int(rect.y0 * sc), int(rect.y1 * sc) + 1):
+        for xx in range(int(rect.x0 * sc), int(rect.x1 * sc) + 1):
+            if 0 <= xx < pm.width and 0 <= yy < pm.height:
+                px = pm.pixel(xx, yy)
+                if px[0] < 80 and px[1] < 80 and px[2] < 80:
+                    dark += 1
+    assert dark > 0, "TR görünür mürekkep rengiyle yazılmadı (beyaz/görünmez kaldı)"
     assert "Merhaba" in page.get_text()
 
 
