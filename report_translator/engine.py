@@ -244,6 +244,14 @@ def _sub_glyphs(text):
     return text.translate(_GLYPH_SUBS)
 
 
+def _bullet_breaks(text):
+    """Çok-satırlı kutuda her madde-işaretini (■) yeni satıra al (ilki hariç).
+
+    Çıkarma sırasında birden çok madde tek segmente birleşip aralarındaki satır
+    sonu boşluğa dönüşebilir; bunu orijinaldeki gibi geri koyar. ■ yoksa değişmez."""
+    return re.sub(r"\s*■\s*", "\n■ ", text).lstrip("\n")
+
+
 def _sample_bg(pixmap, rect, scale, tol=12, min_frac=0.7):
     """Segment dikdörtgeninin kenar marjından (harf dışı dolgu) baskın zemin rengini örnekle.
 
@@ -345,6 +353,7 @@ def _render_page_items(page, items, font_cache):
             page.insert_text((ox + indent, oy), text, fontname=fontname,
                              fontfile=fontfile, fontsize=s.size, color=col)
         else:
+            text = _bullet_breaks(text)        # her madde-işareti yeni satırda
             box = fitz.Rect(s.bbox)
             left = box.x0 + indent
             fs = s.size
