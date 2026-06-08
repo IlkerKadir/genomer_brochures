@@ -10,3 +10,6 @@ dist/
 config.json
 ai_cache.json
 glossary_state.json
+# Gerçek lab/hasta verisi — git'e ASLA girmez
+new_samples/
+*.xlsx

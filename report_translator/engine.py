@@ -31,8 +31,10 @@ def map_font(orig_font):
         key = orig_font.split("+", 1)[1].lower()
     if key in FONT_MAP:
         return FONT_MAP[key]
-    bold = "bold" in key
-    ital = "italic" in key or "oblique" in key
+    # Bold/italic'i hem İngilizce hem Türkçe font adlarından tespit et
+    # (gerçek lab yazılımı "ArialKalın"/"Arialİtalik" kullanıyor; ı/İ encoding'i sorunlu olabilir)
+    bold = "bold" in key or "kal" in key            # Kalın
+    ital = "italic" in key or "talik" in key or "oblique" in key   # İtalik
     if "calibri" in key or "carlito" in key:
         return ("Carlito-BoldItalic.ttf" if bold and ital else
                 "Carlito-Bold.ttf" if bold else
@@ -41,7 +43,9 @@ def map_font(orig_font):
         return "Montserrat-Bold.ttf"
     if "roboto" in key:
         return "Roboto-Italic.ttf" if ital else "Roboto-Regular.ttf"
-    return "Arial-Bold.ttf" if bold else "Arial-Regular.ttf"
+    return ("Arial-BoldItalic.ttf" if bold and ital else
+            "Arial-Bold.ttf" if bold else
+            "Arial-Italic.ttf" if ital else "Arial-Regular.ttf")
 
 
 def norm_ws(s):
