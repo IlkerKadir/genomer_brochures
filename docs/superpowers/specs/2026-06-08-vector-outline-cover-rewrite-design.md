@@ -43,6 +43,18 @@ ya `(255,255,255)` beyaz ya `(240,240,240)` açık gridir. **Grafik/çok-renkli 
 çevrilebilir etiket yoktur.** Dolayısıyla "düz olmayan zemin" durumu femo'da hiç oluşmaz; yine de
 gelecekteki diğer kitler için güvenli fallback tasarıma dahildir (aşağıda).
 
+## Sorun-2: görünmez (beyaz) metin-katmanı rengi → görünmez yeniden-yazma
+
+Görsel doğrulamada keşfedildi: vektör-outline etiketlerin **görünmez metin katmanı beyaz (`#ffffff`)
+renktedir**, görünen vektör mürekkebi ise siyah/renklidir (ör. "Kontrol parametreleri" mor, veri
+satırları siyah). Çekirdek `s.color`'ı bu görünmez katmandan alır; biz `color=s.color` (beyaz) ile
+yeniden yazınca metin beyaz-üstüne-beyaz → **görünmez** olur. (Bu hata eskiden de vardı ama görünür
+İngilizce vektörün altında gizliydi; Sorun-1'i kapatınca açığa çıktı.)
+
+**Çözüm:** Kapatma uygulandığında (bg bulunduğunda), yeniden-yazma rengini `s.color` yerine
+orijinal pixmap'ten örneklenen **gerçek mürekkep (ön-plan) rengiyle** belirle. Bu hem görünür hem
+de orijinal rengi (siyah veri, mor başlık) korur. Bg bulunamazsa (fallback) eski `s.color` kullanılır.
+
 ## Mimari
 
 Değişiklik tek dosyada: `report_translator/engine.py`. Yeni bir saf yardımcı fonksiyon + mevcut
@@ -65,6 +77,17 @@ Segment dikdörtgeninin **kenar marjından** (harflerin dışındaki dolgu halka
 - **Çıktı:** `(r, g, b)` 0-1 float tuple veya `None`.
 - **Saf fonksiyon:** dosya/IO yok; sadece pixmap okur. Birim-test edilebilir.
 
+### Yeni fonksiyon: `_sample_fg(pixmap, rect, scale, bg, tol=24)`
+
+Segment dikdörtgeninin **içinden** baskın **ön-plan (mürekkep)** rengini örnekler — yani `bg`'den
+farklı olan baskın renk. Görünmez (beyaz) metin-katmanı rengi yerine gerçek mürekkep rengini verir.
+
+- **Girdi:** `pixmap` (orijinal sayfa), `rect`, `scale`, `bg` (`_sample_bg`'nin döndürdüğü 0-1 renk), `tol`.
+- **Algoritma:** `rect` içindeki pikselleri tara; `bg`'ye `tol` toleransı içinde **olmayan** pikselleri
+  say; baskın olanı `(r,g,b)` 0-1 float döndür. Hiç bg-dışı piksel yoksa `(0,0,0)` (siyah) döndür.
+- **Çıktı:** `(r, g, b)` 0-1 float (asla None — fallback siyah).
+- **Saf fonksiyon:** birim-test edilebilir.
+
 ### Güncellenen: `_render_page_items(page, items, font_cache)`
 
 Mevcut akış: tüm `items` rect'lerini `fill=None` ile redakte et → apply_redactions → Türkçe yaz.
@@ -80,8 +103,13 @@ Yeni akış:
      `page.add_redact_annot(fitz.Rect(r) + (-1, -1, 1, 1), fill=bg)`
    - `bg` `None` ise (güvenli fallback): `page.add_redact_annot(fitz.Rect(r), fill=None)`
      → İngilizce vektör kalır, yama yok. (Femo'da tetiklenmez.)
+   - Her segment için **yeniden-yazma rengini** belirle: segmentin ilk rect'inin `bg`'si bulunduysa
+     `col = _sample_fg(pm, fitz.Rect(seg.rects[0]), scale, bg)` (gerçek mürekkep rengi); aksi halde
+     `col = seg.color` (eski davranış). Bu renk segment-id ile saklanır.
 4. `page.apply_redactions(images=NONE, graphics=LINE_ART_NONE, text=REMOVE)` (mevcut parametreler).
-5. Türkçe metni eskisi gibi yaz (mevcut `insert_text` / `insert_textbox` kodu **değişmez**).
+5. Türkçe metni yaz: `insert_text` / `insert_textbox` çağrılarında `color=s.color` yerine yukarıda
+   belirlenen **segment rengi** (`col`) kullanılır. Geri kalan yazma mantığı (font, indent, fit
+   döngüsü) **değişmez**.
 
 `graphics=PDF_REDACT_LINE_ART_NONE` korunur: tablo çizgileri, kutu kenarları, grafik barları
 silinmez; sadece redaksiyon dolgusu üstlerine boyanır (yalnız metin bbox'u kadar dar alanda).

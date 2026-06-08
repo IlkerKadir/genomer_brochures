@@ -4,6 +4,7 @@
 import os
 import re
 import sys
+from collections import Counter
 from dataclasses import dataclass
 import fitz  # PyMuPDF
 import aiconfig
@@ -233,17 +234,93 @@ def _leading_indent(text, font, size):
     return font.text_length(" " * n, size) if n else 0.0
 
 
+def _sample_bg(pixmap, rect, scale, tol=12, min_frac=0.7):
+    """Segment dikdörtgeninin kenar marjından (harf dışı dolgu) baskın zemin rengini örnekle.
+
+    Halka yeterince tek-renk ise (r, g, b) 0-1 float tuple; çok-renkli/örneklenemezse None.
+    None dönerse çağıran fill=None'a düşer (vektör İngilizce kalır, yama oluşmaz).
+    tol sıkı (12): gradyan/yakın renkleri 'tek renk' saymamak için."""
+    x0 = int(rect.x0 * scale); y0 = int(rect.y0 * scale)
+    x1 = int(rect.x1 * scale); y1 = int(rect.y1 * scale)
+    cnt = Counter()
+    for d in (1, 2):
+        for xx in range(x0, x1 + 1):
+            for yy in (y0 - d, y1 + d):           # üst ve alt marj
+                if 0 <= xx < pixmap.width and 0 <= yy < pixmap.height:
+                    cnt[pixmap.pixel(xx, yy)] += 1
+        for yy in range(y0, y1 + 1):
+            for xx in (x0 - d, x1 + d):           # sol ve sağ marj
+                if 0 <= xx < pixmap.width and 0 <= yy < pixmap.height:
+                    cnt[pixmap.pixel(xx, yy)] += 1
+    if not cnt:
+        return None
+    (col, _), = cnt.most_common(1)
+    near = sum(v for c, v in cnt.items()
+               if all(abs(a - b) <= tol for a, b in zip(c[:3], col[:3])))
+    if near / sum(cnt.values()) < min_frac:
+        return None
+    return (col[0] / 255.0, col[1] / 255.0, col[2] / 255.0)
+
+
+def _sample_fg(pixmap, rect, scale, bg, tol=24):
+    """rect içindeki baskın ön-plan (mürekkep) rengini örnekle: bg'den farklı baskın renk.
+
+    Görünmez (beyaz) metin-katmanı rengi yerine gerçek mürekkep rengini verir.
+    bg-dışı piksel yoksa (0,0,0) siyah döndürür (asla None).
+    tol gevşek (24): anti-aliased harf kenar piksellerini de mürekkep saymak için.
+    Not: RGB pixmap varsayar (page.get_pixmap() varsayılanı alfasızdır); ilk 3 kanalı kullanır."""
+    x0 = int(rect.x0 * scale); y0 = int(rect.y0 * scale)
+    x1 = int(rect.x1 * scale); y1 = int(rect.y1 * scale)
+    bg255 = tuple(int(round(v * 255)) for v in bg)
+    cnt = Counter()
+    for yy in range(y0, y1 + 1):
+        for xx in range(x0, x1 + 1):
+            if 0 <= xx < pixmap.width and 0 <= yy < pixmap.height:
+                px = pixmap.pixel(xx, yy)
+                if not all(abs(a - b) <= tol for a, b in zip(px[:3], bg255[:3])):
+                    cnt[px] += 1
+    if not cnt:
+        return (0.0, 0.0, 0.0)
+    (col, _), = cnt.most_common(1)
+    return (col[0] / 255.0, col[1] / 255.0, col[2] / 255.0)
+
+
 def _render_page_items(page, items, font_cache):
     """Tek bir sayfadaki değişen segmentleri yerinde render et (redaksiyon + geri yazma)."""
     if not items:
         return
+    try:
+        pm = page.get_pixmap(dpi=150)
+        scale = 150 / 72.0
+    except Exception:                      # pragma: no cover - beklenmez
+        pm = None
+        scale = 1.0
+    resolved = []                          # (annotation, yeniden-yazma rengi)
     for a in items:
+        first_bg = None
+        first_rect = None
         for r in a.seg.rects:
-            page.add_redact_annot(fitz.Rect(r), fill=None)
+            rect = fitz.Rect(r)
+            bg = _sample_bg(pm, rect, scale) if pm is not None else None
+            if bg is not None:
+                if first_bg is None:
+                    first_bg = bg
+                    first_rect = rect
+                # vektör-outline kenarları metin bbox'undan taşabilir -> ~1px genişlet
+                page.add_redact_annot(rect + (-1, -1, 1, 1), fill=bg)
+            else:
+                page.add_redact_annot(rect, fill=None)   # güvenli: İngilizce kalır
+        # kapatma yapıldıysa görünmez (beyaz) metin-katmanı yerine gerçek mürekkep rengi;
+        # mürekkebi, zemini bulunan rect'ten örnekle
+        if first_bg is not None and pm is not None:
+            col = _sample_fg(pm, first_rect, scale, first_bg)
+        else:
+            col = a.seg.color
+        resolved.append((a, col))
     page.apply_redactions(images=fitz.PDF_REDACT_IMAGE_NONE,
                           graphics=fitz.PDF_REDACT_LINE_ART_NONE,
                           text=fitz.PDF_REDACT_TEXT_REMOVE)
-    for a in items:
+    for a, col in resolved:
         s = a.seg
         fontfile = os.path.join(FONT_DIR, s.fontfile)
         fontname = font_cache.get(s.fontfile)
@@ -256,7 +333,7 @@ def _render_page_items(page, items, font_cache):
         if s.single_line:
             ox, oy = s.origin
             page.insert_text((ox + indent, oy), text, fontname=fontname,
-                             fontfile=fontfile, fontsize=s.size, color=s.color)
+                             fontfile=fontfile, fontsize=s.size, color=col)
         else:
             box = fitz.Rect(s.bbox)
             left = box.x0 + indent
@@ -265,7 +342,7 @@ def _render_page_items(page, items, font_cache):
             while fs > 4.5:
                 pad = fitz.Rect(left, box.y0 - 1, box.x1 + 2, box.y1 + 4 * s.size)
                 rc = page.insert_textbox(pad, text, fontname=fontname, fontfile=fontfile,
-                                         fontsize=fs, color=s.color, lineheight=1.15,
+                                         fontsize=fs, color=col, lineheight=1.15,
                                          align=fitz.TEXT_ALIGN_LEFT)
                 if rc >= 0:
                     fitted = True
