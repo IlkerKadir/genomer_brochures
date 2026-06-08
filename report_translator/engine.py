@@ -255,7 +255,7 @@ def _sample_bg(pixmap, rect, scale, tol=12, min_frac=0.7):
         return None
     (col, _), = cnt.most_common(1)
     near = sum(v for c, v in cnt.items()
-               if all(abs(a - b) <= tol for a, b in zip(c, col)))
+               if all(abs(a - b) <= tol for a, b in zip(c[:3], col[:3])))
     if near / sum(cnt.values()) < min_frac:
         return None
     return (col[0] / 255.0, col[1] / 255.0, col[2] / 255.0)

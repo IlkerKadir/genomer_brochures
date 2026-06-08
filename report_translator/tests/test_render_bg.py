@@ -36,6 +36,14 @@ def test_sample_bg_multicolor_returns_none():
     assert bg is None
 
 
+def test_sample_bg_scale_factor():
+    # scale=2.0: rect (10,10,30,15) pikselde (20,20,60,30)'a eşlenir; marj beyaz
+    pm = _solid_pm(200, 100, (255, 255, 255))
+    bg = engine._sample_bg(pm, fitz.Rect(10, 10, 30, 15), 2.0)
+    assert bg is not None
+    assert all(abs(c - 1.0) < 0.02 for c in bg)
+
+
 def test_sample_bg_edge_does_not_crash():
     # rect sayfa kenarında: sol/üst marj sınır dışı -> kalan noktalardan örnekle, çökme
     pm = _solid_pm(100, 50, (255, 255, 255))
