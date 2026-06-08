@@ -200,20 +200,44 @@ def test_paragraph_groups_groups_prose_lines():
     a = _item(_seg(322, 124, 552, 133))
     b = _item(_seg(322, 134, 539, 143))
     c = _item(_seg(322, 145, 490, 154))
-    groups = engine._paragraph_groups([a, b, c], [a.seg, b.seg, c.seg])
+    groups = engine._paragraph_groups([a, b, c], {id(a), id(b), id(c)})
     assert len(groups) == 1 and len(groups[0]) == 3
+
+
+def test_paragraph_groups_includes_passthrough_middle_line():
+    # ortadaki satır değişmemiş (passthrough Latin adı) olsa da blok bütünlüğü için DAHİL edilir
+    a = _item(_seg(322, 124, 552, 133))
+    b = _item(_seg(322, 134, 490, 143))      # passthrough/unknown (changed değil)
+    c = _item(_seg(322, 145, 500, 154))
+    groups = engine._paragraph_groups([a, b, c], {id(a), id(c)})
+    assert len(groups) == 1 and len(groups[0]) == 3 and groups[0][1] is b
+
+
+def test_paragraph_groups_skips_all_unknown_block():
+    # hiçbir satır değişmemişse (saf İngilizce) reflow edilmez
+    a = _item(_seg(322, 124, 552, 133))
+    b = _item(_seg(322, 134, 539, 143))
+    assert engine._paragraph_groups([a, b], set()) == []
 
 
 def test_paragraph_groups_skips_table_rows_with_right_neighbor():
     # tablo: her etiket satırının sağında değer hücresi -> reflow EDİLMEZ (tablo korunur)
     r1 = _item(_seg(46, 280, 133, 289))
     r2 = _item(_seg(46, 295, 121, 304))
-    v1 = _seg(180, 280, 210, 289)
-    v2 = _seg(180, 295, 210, 304)
-    groups = engine._paragraph_groups([r1, r2], [r1.seg, r2.seg, v1, v2])
+    v1 = _item(_seg(180, 280, 210, 289))
+    v2 = _item(_seg(180, 295, 210, 304))
+    groups = engine._paragraph_groups([r1, r2, v1, v2], {id(r1), id(r2)})
     assert groups == []
 
 
 def test_paragraph_groups_single_line_not_grouped():
     a = _item(_seg(322, 124, 552, 133))
-    assert engine._paragraph_groups([a], [a.seg]) == []
+    assert engine._paragraph_groups([a], {id(a)}) == []
+
+
+def test_group_bottom_finds_nearest_below():
+    a = _item(_seg(322, 124, 552, 133))
+    b = _item(_seg(322, 134, 539, 143))
+    chart = _seg(322, 230, 500, 240)         # altta, x-örtüşen
+    assert engine._group_bottom([a, b], [a.seg, b.seg, chart]) == 230
+    assert engine._group_bottom([a, b], [a.seg, b.seg]) is None

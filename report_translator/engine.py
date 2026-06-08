@@ -337,13 +337,18 @@ def _has_right_neighbor(seg, all_segs, gap=4):
     return False
 
 
-def _paragraph_groups(items, all_segs):
-    """Ardışık tek-satır segmentleri paragraf bloklarına grupla (tablo satırlarını hariç tut).
+def _paragraph_groups(all_items, changed_ids):
+    """Ardışık tek-satır segmentleri paragraf bloklarına grupla (tablo/hasta-alanı hariç).
 
-    Döner: reflow edilecek grupların listesi (her biri AnnotatedSegment listesi).
-    Bir grup yalnızca >=2 satırsa VE hiçbir satırın sağında komşu yoksa reflow edilir."""
-    singles = sorted([it for it in items if it.seg.single_line],
+    `all_items`: sayfanın tüm segmentleri; `changed_ids`: çevrilen (değişen) segment id'leri.
+    Tüm tek-satır segmentleri komşuluğa göre grupla; bir grup ancak şu üç koşulda reflow edilir:
+    >=2 satır, en az biri değişmiş (saf-İngilizce blokları atla), ve hiçbir satırın sağında
+    komşu yok (tablo değer hücreleri sağda olur -> tablolar/hasta-alanları korunur).
+    Gruplar passthrough/unknown satırları da kapsar (aradaki Latin adı satırı gibi) ki blok
+    bütünlüğü bozulmasın."""
+    singles = sorted([it for it in all_items if it.seg.single_line],
                      key=lambda it: (round(it.seg.bbox[1]), it.seg.bbox[0]))
+    all_segs = [it.seg for it in all_items]
     used = [False] * len(singles)
     groups = []
     for idx, it in enumerate(singles):
@@ -351,7 +356,7 @@ def _paragraph_groups(items, all_segs):
             continue
         grp = [it]
         used[idx] = True
-        cur = it
+        cur = it                              # cur = gruba son eklenen üye (sıradaki değil)
         for j in range(idx + 1, len(singles)):
             if used[j]:
                 continue
@@ -365,36 +370,73 @@ def _paragraph_groups(items, all_segs):
                 cur = nx
         groups.append(grp)
     return [grp for grp in groups
-            if len(grp) >= 2 and not any(_has_right_neighbor(g.seg, all_segs) for g in grp)]
+            if len(grp) >= 2
+            and any(id(g) in changed_ids for g in grp)
+            and not any(_has_right_neighbor(g.seg, all_segs) for g in grp)]
 
 
-def _render_reflow_group(page, grp, col_of, font_cache):
-    """Bir paragraf grubunu kutuya yeniden akıt (kelime-bazlı sarma, her segmentin kendi fontu).
+def _group_bottom(grp, all_segs):
+    """Grubun altındaki (y-altında, x-örtüşen) en yakın segmentin üst kenarı; yoksa None.
 
-    İngilizcedeki gibi alt satıra geçer; Latin tür adlarının italiği korunur. Madde
-    işaretiyle (■) başlayan segmentler yeni satıra alınır."""
-    x0 = min(g.seg.bbox[0] for g in grp)
-    right = max(g.seg.bbox[2] for g in grp)
-    pitches = [grp[i + 1].seg.bbox[1] - grp[i].seg.bbox[1] for i in range(len(grp) - 1)]
-    pitch = min(pitches) if pitches else grp[0].seg.size * 1.2
-    cx, cy = x0, grp[0].seg.origin[1]
+    Sarılan metnin alttaki öğeye (ör. grafik) taşmaması için sınır olarak kullanılır."""
+    gx0 = min(g.seg.bbox[0] for g in grp)
+    gx1 = max(g.seg.bbox[2] for g in grp)
+    gy1 = max(g.seg.bbox[3] for g in grp)
+    grp_ids = {id(g.seg) for g in grp}
+    bottom = None
+    for s in all_segs:
+        if id(s) in grp_ids:
+            continue
+        if s.bbox[1] >= gy1 - 1 and min(gx1, s.bbox[2]) - max(gx0, s.bbox[0]) > 1:
+            if bottom is None or s.bbox[1] < bottom:
+                bottom = s.bbox[1]
+    return bottom
+
+
+def _reflow_layout(page, grp, col_of, font_cache, sc, x0, right, baseline, pitch, do_render):
+    """Grubu sc ölçeğinde sararak yerleştir; son satırın y'sini döndür (do_render=False ise sadece ölçer)."""
+    cx, cy = x0, baseline
     for gi, g in enumerate(grp):
         s = g.seg
         fontfile = os.path.join(FONT_DIR, s.fontfile)
         fontname = _fontname_for(s.fontfile, font_cache)
         font = fitz.Font(fontfile=fontfile)
         col = col_of[id(g)]
+        size = s.size * sc
         text = _sub_glyphs(g.tr.strip())
-        if gi > 0 and text.startswith("■"):        # yeni madde -> yeni satır
-            cx, cy = x0, cy + pitch
-        space_w = font.text_length(" ", s.size)
+        if gi > 0 and text.startswith("■") and cx > x0 + 0.1:   # yeni madde -> yeni satır
+            cx, cy = x0, cy + pitch * sc
+        space_w = font.text_length(" ", size)
         for word in text.split():
-            ww = font.text_length(word, s.size)
-            if cx > x0 + 0.1 and cx + ww > right:   # satır sonu -> sar
-                cx, cy = x0, cy + pitch
-            page.insert_text((cx, cy), word, fontname=fontname,
-                             fontfile=fontfile, fontsize=s.size, color=col)
+            ww = font.text_length(word, size)
+            if cx > x0 + 0.1 and cx + ww > right:               # satır sonu -> sar
+                cx, cy = x0, cy + pitch * sc
+            if do_render:
+                page.insert_text((cx, cy), word, fontname=fontname,
+                                 fontfile=fontfile, fontsize=size, color=col)
             cx += ww + space_w
+    return cy
+
+
+def _render_reflow_group(page, grp, col_of, font_cache, bottom=None):
+    """Bir paragraf grubunu kutuya yeniden akıt (kelime-bazlı sarma, her segmentin kendi fontu).
+
+    İngilizcedeki gibi alt satıra geçer; Latin tür adlarının italiği korunur. Madde işaretiyle
+    (■) başlayan segmentler yeni satıra alınır. `bottom` verilirse ve sarılan metin taşacaksa
+    blok orantılı olarak küçültülür (taşma yerine ölçek)."""
+    x0 = min(g.seg.bbox[0] for g in grp)
+    right = max(g.seg.bbox[2] for g in grp)
+    pitches = sorted(grp[i + 1].seg.bbox[1] - grp[i].seg.bbox[1] for i in range(len(grp) - 1))
+    pitch = pitches[len(pitches) // 2] if pitches else grp[0].seg.size * 1.2   # medyan aralık
+    baseline = grp[0].seg.origin[1]
+    sc = 1.0
+    if bottom is not None:
+        while sc > 0.5:
+            if _reflow_layout(page, grp, col_of, font_cache, sc, x0, right,
+                              baseline, pitch, False) <= bottom - 2:
+                break
+            sc -= 0.05
+    _reflow_layout(page, grp, col_of, font_cache, sc, x0, right, baseline, pitch, True)
 
 
 def _render_page_items(page, items, font_cache, all_items=None):
@@ -410,8 +452,21 @@ def _render_page_items(page, items, font_cache, all_items=None):
     except Exception:                      # pragma: no cover - beklenmez
         pm = None
         scale = 1.0
+    changed_ids = {id(a) for a in items}
+    all_segs = [it.seg for it in all_items] if all_items is not None else None
+    groups = _paragraph_groups(all_items, changed_ids) if all_items is not None else []
+    grouped = {id(g) for grp in groups for g in grp}
+    # redaksiyon kümesi: değişen segmentler + grup üyeleri (aradaki passthrough/unknown satırlar
+    # da redakte edilip akış içinde yeniden yazılır; yoksa orijinal İngilizce yerinde kalırdı)
+    render_set = list(items)
+    seen = set(changed_ids)
+    for grp in groups:
+        for g in grp:
+            if id(g) not in seen:
+                render_set.append(g)
+                seen.add(id(g))
     resolved = []                          # (annotation, yeniden-yazma rengi)
-    for a in items:
+    for a in render_set:
         first_bg = None
         first_rect = None
         for r in a.seg.rects:
@@ -436,11 +491,8 @@ def _render_page_items(page, items, font_cache, all_items=None):
                           graphics=fitz.PDF_REDACT_LINE_ART_NONE,
                           text=fitz.PDF_REDACT_TEXT_REMOVE)
     col_of = {id(a): col for a, col in resolved}
-    all_segs = [it.seg for it in all_items] if all_items is not None else None
-    groups = _paragraph_groups(items, all_segs) if all_segs is not None else []
-    grouped = {id(g) for grp in groups for g in grp}
     for grp in groups:                     # paragraf blokları -> sararak akıt
-        _render_reflow_group(page, grp, col_of, font_cache)
+        _render_reflow_group(page, grp, col_of, font_cache, _group_bottom(grp, all_segs))
     for a, col in resolved:
         if id(a) in grouped:               # grup içinde render edildi
             continue
