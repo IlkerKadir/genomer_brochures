@@ -105,7 +105,9 @@
       "NB! Low total bacterial load and human genomic DNA; microbiota assessment is limited to specific indicators.": "DİKKAT! Düşük toplam bakteri yükü ve insan genomik DNA; mikrobiyota değerlendirmesi belirli göstergelerle sınırlıdır.",
       "NB! Low total bacterial load; microbiota assessment is limited to specific indicators.": "DİKKAT! Düşük toplam bakteri yükü; mikrobiyota değerlendirmesi belirli göstergelerle sınırlıdır.",
       "IMPORTANT! The test result interpretation is generated if the sample type (V, C) is specified. Result interpretation is carried out exclusively by physician!": "ÖNEMLİ! Test sonucu yorumu yalnızca örnek türü (V, C) belirtildiğinde oluşturulur. Sonuç yorumu yalnızca hekim tarafından yapılır!",
-      "Terminology and symbols Aerobes — facultative-anaerobic opportunists. Anaerobes — obligate anaerobic opportunists. Mycoplasmas — opportunistic genital mycoplasmas. Dash (—) = negative result; “/” = combined detection.": "Terminoloji ve işaretler Aeroblar — fakültatif anaerobik fırsatçılar. Anaeroblar — zorunlu anaerobik fırsatçılar. Mikoplazmalar — fırsatçı genital mikoplazmalar. Tire (—) = negatif sonuç; “/” = birleşik saptama."
+      "Terminology and symbols Aerobes — facultative-anaerobic opportunists. Anaerobes — obligate anaerobic opportunists. Mycoplasmas — opportunistic genital mycoplasmas. Dash (—) = negative result; “/” = combined detection.": "Terminoloji ve işaretler Aeroblar — fakültatif anaerobik fırsatçılar. Anaeroblar — zorunlu anaerobik fırsatçılar. Mikoplazmalar — fırsatçı genital mikoplazmalar. Tire (—) = negatif sonuç; “/” = birleşik saptama.",
+      "Detected: HPV 16, HPV 31-68 (see the note)": "Saptandı: HPV 16, HPV 31-68 (nota bakınız)",
+      "Microbiota state – severe anaerobic dysbiosis: normobiota is decreased to 6%, relative amount of Lactobacillus spp. 4% (L.iners, L.crispatus, L.jensenii/ L.mulieris, L.gasseri/L.paragasseri), Bifidobacterium spp. 2%, relative amount of anaerobes is increased": "Mikrobiyota durumu – şiddetli anaerobik disbiyoz: normobiyota azaldı: 6%, göreceli miktarı: Lactobacillus spp. 4% (L.iners, L.crispatus, L.jensenii/ L.mulieris, L.gasseri/L.paragasseri), Bifidobacterium spp. 2%, göreceli miktarı: anaeroblar artmış"
     },
     "in Lactobacillus spp.,%": "Lactobacillus spp. içinde, %",
     "Microbiota status -": "Mikrobiyota durumu -",
@@ -241,6 +243,8 @@
     "Firmicutes/Bacteroidetes, ratio:": "Firmicutes/Bacteroidetes, oran:",
     "pathogenic agents Enterobacterales": "patojenik ajanlar Enterobacterales",
     "Page 1 of 2": "Sayfa 1 / 2",
-    "Page 2 of 2": "Sayfa 2 / 2"
+    "Page 2 of 2": "Sayfa 2 / 2",
+    "metabolically active “child” species, proportion**": "metabolik olarak aktif “çocuk” türleri, oran**",
+    "metabolically active “child” species, diversity": "metabolik olarak aktif “çocuk” türleri, çeşitlilik"
   }
 }
