@@ -176,15 +176,22 @@ def test_fill_covers_vector_ink():
 
     pm = page.get_pixmap(dpi=150)
     sc = 150 / 72
-    red = 0
+    red = total = 0
     for yy in range(int(red_rect.y0 * sc), int(red_rect.y1 * sc) + 1):
         for xx in range(int(red_rect.x0 * sc), int(red_rect.x1 * sc) + 1):
             if 0 <= xx < pm.width and 0 <= yy < pm.height:
+                total += 1
                 px = pm.pixel(xx, yy)
                 if px[0] > 180 and px[1] < 80 and px[2] < 80:
                     red += 1
-    assert red == 0, f"kırmızı vektör mürekkebi örtülmedi: {red} piksel kaldı"
+    # Solid kırmızı blok kapatıldı: çoğunluk zemin. (Task 4'ten sonra: _sample_fg
+    # mürekkep rengini örnekleyip TR'yi o renkle yazar, az harf-izi kırmızı olabilir.)
+    assert red < 0.25 * total, f"kırmızı blok kapatılmadı: {red}/{total}"
+    assert "Merhaba" in page.get_text()
 ```
+> **Not:** Task 4, `_sample_fg`'yi eklediğinde bu testin assertion'ı `red == 0`'dan
+> `red < 0.25 * total`'a güncellenir (yeniden-yazılan TR artık mürekkep rengini -burada
+> kırmızı- kullanır). Bu satır yukarıda zaten güncel haliyle gösterilmiştir.
 
 - [ ] **Step 2: Test'in başarısız olduğunu doğrula**
 
