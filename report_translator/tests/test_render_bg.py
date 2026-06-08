@@ -79,3 +79,4 @@ def test_fill_covers_vector_ink():
                 if px[0] > 180 and px[1] < 80 and px[2] < 80:
                     red += 1
     assert red == 0, f"kırmızı vektör mürekkebi örtülmedi: {red} piksel kaldı"
+    assert "Merhaba" in page.get_text()
