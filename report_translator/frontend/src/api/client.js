@@ -56,3 +56,5 @@ export const saveDictEntry = (scope, en, tr, overwrite = false) =>
   jpost('/api/dictionary/entry', { scope, en, tr, overwrite });
 export const deleteDictEntry = (scope, en) =>
   jpost('/api/dictionary/delete', { scope, en });
+export const getConfig = () => jget(`/api/config`);
+export const setConfig = (patch) => jpost(`/api/config`, patch);

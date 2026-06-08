@@ -1375,3 +1375,11 @@ code {
   border-color: var(--color-error-border) !important;
   transform: none !important;
 }
+.settings{max-width:680px;margin:24px auto;padding:0 22px}
+.settings h2{font-size:18px}
+.settings-note{font-size:13px;color:var(--gri);background:#fff;border:1px solid var(--cizgi);
+  border-radius:10px;padding:12px}
+.settings-row{display:flex;align-items:center;gap:10px;margin:14px 0;flex-wrap:wrap}
+.settings-row input[type=password]{flex:1;min-width:220px;border:1px solid var(--cizgi);
+  border-radius:7px;padding:8px;font:inherit}
+.settings-msg{color:var(--ok);font-size:13px}

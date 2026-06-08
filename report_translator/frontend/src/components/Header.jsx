@@ -25,6 +25,12 @@ export function Header({ view, onNav }) {
         >
           Sözlük
         </button>
+        <button
+          class={`nav-tab${view === "settings" ? " active" : ""}`}
+          onClick={() => onNav("settings")}
+        >
+          Ayarlar
+        </button>
       </nav>
       <div class="out-dir">
         <span>Çıktı:</span>
