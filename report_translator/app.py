@@ -66,10 +66,13 @@ def _ai_for(kit):
         entries = aiconfig.glossary_entries_tsv()
         if entries.strip() and hasattr(provider, "glossary_id"):
             state = aiconfig.load_glossary_state()
+            old_gid = state.get("glossary_id")
             gid = translator.ensure_glossary(cfg["deepl_api_key"], entries, state)
             if gid:
                 provider.glossary_id = gid
                 aiconfig.save_glossary_state(state)
+                if gid != old_gid:        # glossary değişti -> eski AI önbelleği geçersiz
+                    aiconfig.clear_cache()
     except Exception:
         pass
     return (provider, markers, aiconfig.load_cache())

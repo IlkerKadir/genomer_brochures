@@ -135,3 +135,9 @@ def save_glossary_state(state):
     with open(tmp, "w", encoding="utf-8") as f:
         json.dump(state, f, ensure_ascii=False, indent=2)
     os.replace(tmp, GLOSSARY_STATE_PATH)
+
+
+def clear_cache():
+    """AI önbelleğini sil (örn. glossary/terimler değişince eski çeviriler geçersiz)."""
+    if os.path.exists(CACHE_PATH):
+        os.remove(CACHE_PATH)

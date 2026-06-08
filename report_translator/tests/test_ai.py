@@ -139,7 +139,8 @@ def _seg(engine, sid, en, tr, source):
     return engine.AnnotatedSegment(s, tr, source, source == "unknown")
 
 
-def test_apply_ai_summary_translates_only_eligible():
+def test_apply_ai_summary_translates_only_eligible(tmp_path, monkeypatch):
+    monkeypatch.setattr(aiconfig, "CACHE_PATH", str(tmp_path / "c.json"))
     markers = ["Microbiota state", "Detected:"]
     cache = {}
     prov = FakeProvider()
