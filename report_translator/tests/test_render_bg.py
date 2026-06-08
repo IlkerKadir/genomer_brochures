@@ -157,3 +157,12 @@ def test_sub_glyphs_replaces_missing_bullet():
     # ⯀ (U+2BC0, Arial'da yok) -> ■ (U+25A0, dolu kare, Arial'da var)
     assert engine._sub_glyphs("⯀ Test") == "■ Test"
     assert engine._sub_glyphs("normal metin") == "normal metin"
+
+
+def test_bullet_breaks_puts_each_bullet_on_new_line():
+    t = "■ Birinci madde. ■ İkinci madde."
+    assert engine._bullet_breaks(t) == "■ Birinci madde.\n■ İkinci madde."
+
+
+def test_bullet_breaks_no_bullet_unchanged():
+    assert engine._bullet_breaks("düz metin") == "düz metin"
