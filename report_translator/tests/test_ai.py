@@ -76,3 +76,45 @@ def test_markers_loaded_from_dictionary():
     assert any("Microbiota state" in m for m in markers)
     # _ai_markers, çeviri tablosuna sızmamalı (değer string olmalı)
     assert "_ai_markers" not in kits["femobiome_ii"]
+
+
+import translator as tr_mod
+
+
+def test_deepl_provider_request_and_parse(monkeypatch):
+    captured = {}
+
+    def fake_post(url, fields, headers, timeout=10):
+        captured["url"] = url
+        captured["fields"] = fields
+        captured["headers"] = headers
+        return {"translations": [{"text": "Mikrobiyota durumu"},
+                                 {"text": "Patojen saptanmadı."}]}
+
+    monkeypatch.setattr(tr_mod, "_http_post_form", fake_post)
+    p = tr_mod.DeepLProvider("key:fx")
+    out = p.translate(["Microbiota state", "No pathogens detected."])
+    assert out == ["Mikrobiyota durumu", "Patojen saptanmadı."]
+    # ücretsiz uç nokta (:fx)
+    assert captured["url"] == "https://api-free.deepl.com/v2/translate"
+    assert captured["headers"]["Authorization"] == "DeepL-Auth-Key key:fx"
+    assert ("target_lang", "TR") in captured["fields"]
+    assert ("text", "Microbiota state") in captured["fields"]
+
+
+def test_deepl_pro_endpoint(monkeypatch):
+    captured = {}
+    monkeypatch.setattr(tr_mod, "_http_post_form",
+                        lambda url, f, h, timeout=10: captured.update(url=url) or
+                        {"translations": [{"text": "x"}]})
+    tr_mod.DeepLProvider("prokey").translate(["a"])
+    assert captured["url"] == "https://api.deepl.com/v2/translate"
+
+
+def test_get_provider_disabled_or_no_key():
+    assert tr_mod.get_provider({"ai_summary_enabled": False, "deepl_api_key": "k"}) is None
+    assert tr_mod.get_provider({"ai_summary_enabled": True, "provider": "deepl",
+                                "deepl_api_key": ""}) is None
+    p = tr_mod.get_provider({"ai_summary_enabled": True, "provider": "deepl",
+                             "deepl_api_key": "k:fx"})
+    assert isinstance(p, tr_mod.DeepLProvider)
