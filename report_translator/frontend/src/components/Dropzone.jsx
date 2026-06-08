@@ -20,7 +20,7 @@ export function Dropzone({ onFiles }) {
       </div>
       <p class="dropzone-title">PDF raporlarını buraya sürükleyin</p>
       <p class="dropzone-sub">veya tıklayarak bilgisayarınızdan seçin</p>
-      <span class="dropzone-hint">Çoklu seçim desteklenir · Yalnızca PDF</span>
+      <span class="dropzone-hint">Birden fazla raporu aynı anda ekleyebilirsiniz · Yalnızca PDF</span>
       <input ref={input} type="file" accept="application/pdf" multiple hidden
         onChange={(e) => onFiles(e.target.files)} />
     </div>
