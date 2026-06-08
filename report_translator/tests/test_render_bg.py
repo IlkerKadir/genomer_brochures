@@ -176,3 +176,44 @@ def test_fit_size_shrinks_long_text_only():
     assert engine._fit_size(f, long, w, 10) < 10          # uzun -> küçülür
     fs = engine._fit_size(f, long, w, 10)
     assert f.text_length(long, fs) <= w + 0.5 or fs <= 4.5  # sığar ya da floor
+
+
+import types as _types
+
+
+def _seg(x0, y0, x1, y1, size=9, single=True):
+    return _types.SimpleNamespace(bbox=(x0, y0, x1, y1), size=size, single_line=single)
+
+
+def _item(seg):
+    return _types.SimpleNamespace(seg=seg)
+
+
+def test_has_right_neighbor_detects_table_value():
+    label = _seg(46, 280, 133, 289)
+    value = _seg(180, 280, 210, 289)
+    assert engine._has_right_neighbor(label, [label, value])
+    assert not engine._has_right_neighbor(label, [label])
+
+
+def test_paragraph_groups_groups_prose_lines():
+    a = _item(_seg(322, 124, 552, 133))
+    b = _item(_seg(322, 134, 539, 143))
+    c = _item(_seg(322, 145, 490, 154))
+    groups = engine._paragraph_groups([a, b, c], [a.seg, b.seg, c.seg])
+    assert len(groups) == 1 and len(groups[0]) == 3
+
+
+def test_paragraph_groups_skips_table_rows_with_right_neighbor():
+    # tablo: her etiket satırının sağında değer hücresi -> reflow EDİLMEZ (tablo korunur)
+    r1 = _item(_seg(46, 280, 133, 289))
+    r2 = _item(_seg(46, 295, 121, 304))
+    v1 = _seg(180, 280, 210, 289)
+    v2 = _seg(180, 295, 210, 304)
+    groups = engine._paragraph_groups([r1, r2], [r1.seg, r2.seg, v1, v2])
+    assert groups == []
+
+
+def test_paragraph_groups_single_line_not_grouped():
+    a = _item(_seg(322, 124, 552, 133))
+    assert engine._paragraph_groups([a], [a.seg]) == []

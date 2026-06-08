@@ -314,8 +314,94 @@ def _sample_fg(pixmap, rect, scale, bg, tol=24):
     return (col[0] / 255.0, col[1] / 255.0, col[2] / 255.0)
 
 
-def _render_page_items(page, items, font_cache):
-    """Tek bir sayfadaki değişen segmentleri yerinde render et (redaksiyon + geri yazma)."""
+def _fontname_for(fontfile, font_cache):
+    """fontfile için kalıcı PDF font adı (F0, F1, ...) üret/önbellekle."""
+    name = font_cache.get(fontfile)
+    if name is None:
+        name = "F%d" % len(font_cache)
+        font_cache[fontfile] = name
+    return name
+
+
+def _has_right_neighbor(seg, all_segs, gap=4):
+    """seg'in sağında (y-bandı örtüşen) başka segment var mı?
+
+    Tablo değer hücreleri (lg GE/mL, %, Reference) sağda olur; paragraf satırlarının
+    sağı boştur. Bu, reflow'un yanlışlıkla tablo satırlarını birleştirmesini önler."""
+    y0, y1 = seg.bbox[1], seg.bbox[3]
+    for o in all_segs:
+        if o is seg:
+            continue
+        if o.bbox[0] >= seg.bbox[2] + gap and min(y1, o.bbox[3]) - max(y0, o.bbox[1]) > 1:
+            return True
+    return False
+
+
+def _paragraph_groups(items, all_segs):
+    """Ardışık tek-satır segmentleri paragraf bloklarına grupla (tablo satırlarını hariç tut).
+
+    Döner: reflow edilecek grupların listesi (her biri AnnotatedSegment listesi).
+    Bir grup yalnızca >=2 satırsa VE hiçbir satırın sağında komşu yoksa reflow edilir."""
+    singles = sorted([it for it in items if it.seg.single_line],
+                     key=lambda it: (round(it.seg.bbox[1]), it.seg.bbox[0]))
+    used = [False] * len(singles)
+    groups = []
+    for idx, it in enumerate(singles):
+        if used[idx]:
+            continue
+        grp = [it]
+        used[idx] = True
+        cur = it
+        for j in range(idx + 1, len(singles)):
+            if used[j]:
+                continue
+            nx = singles[j]
+            same_x = abs(nx.seg.bbox[0] - cur.seg.bbox[0]) <= 3
+            adjacent = 0 < nx.seg.bbox[1] - cur.seg.bbox[1] <= 1.9 * cur.seg.size
+            same_size = abs(nx.seg.size - cur.seg.size) <= 0.6
+            if same_x and adjacent and same_size:
+                grp.append(nx)
+                used[j] = True
+                cur = nx
+        groups.append(grp)
+    return [grp for grp in groups
+            if len(grp) >= 2 and not any(_has_right_neighbor(g.seg, all_segs) for g in grp)]
+
+
+def _render_reflow_group(page, grp, col_of, font_cache):
+    """Bir paragraf grubunu kutuya yeniden akıt (kelime-bazlı sarma, her segmentin kendi fontu).
+
+    İngilizcedeki gibi alt satıra geçer; Latin tür adlarının italiği korunur. Madde
+    işaretiyle (■) başlayan segmentler yeni satıra alınır."""
+    x0 = min(g.seg.bbox[0] for g in grp)
+    right = max(g.seg.bbox[2] for g in grp)
+    pitches = [grp[i + 1].seg.bbox[1] - grp[i].seg.bbox[1] for i in range(len(grp) - 1)]
+    pitch = min(pitches) if pitches else grp[0].seg.size * 1.2
+    cx, cy = x0, grp[0].seg.origin[1]
+    for gi, g in enumerate(grp):
+        s = g.seg
+        fontfile = os.path.join(FONT_DIR, s.fontfile)
+        fontname = _fontname_for(s.fontfile, font_cache)
+        font = fitz.Font(fontfile=fontfile)
+        col = col_of[id(g)]
+        text = _sub_glyphs(g.tr.strip())
+        if gi > 0 and text.startswith("■"):        # yeni madde -> yeni satır
+            cx, cy = x0, cy + pitch
+        space_w = font.text_length(" ", s.size)
+        for word in text.split():
+            ww = font.text_length(word, s.size)
+            if cx > x0 + 0.1 and cx + ww > right:   # satır sonu -> sar
+                cx, cy = x0, cy + pitch
+            page.insert_text((cx, cy), word, fontname=fontname,
+                             fontfile=fontfile, fontsize=s.size, color=col)
+            cx += ww + space_w
+
+
+def _render_page_items(page, items, font_cache, all_items=None):
+    """Tek bir sayfadaki değişen segmentleri yerinde render et (redaksiyon + geri yazma).
+
+    all_items verilirse (sayfanın tüm segmentleri), ardışık tek-satır paragraf blokları
+    tespit edilip kutuya yeniden akıtılır (sarma); tablo satırları güvenlik kuralıyla hariç."""
     if not items:
         return
     try:
@@ -349,13 +435,18 @@ def _render_page_items(page, items, font_cache):
     page.apply_redactions(images=fitz.PDF_REDACT_IMAGE_NONE,
                           graphics=fitz.PDF_REDACT_LINE_ART_NONE,
                           text=fitz.PDF_REDACT_TEXT_REMOVE)
+    col_of = {id(a): col for a, col in resolved}
+    all_segs = [it.seg for it in all_items] if all_items is not None else None
+    groups = _paragraph_groups(items, all_segs) if all_segs is not None else []
+    grouped = {id(g) for grp in groups for g in grp}
+    for grp in groups:                     # paragraf blokları -> sararak akıt
+        _render_reflow_group(page, grp, col_of, font_cache)
     for a, col in resolved:
+        if id(a) in grouped:               # grup içinde render edildi
+            continue
         s = a.seg
         fontfile = os.path.join(FONT_DIR, s.fontfile)
-        fontname = font_cache.get(s.fontfile)
-        if fontname is None:
-            fontname = "F%d" % len(font_cache)
-            font_cache[s.fontfile] = fontname
+        fontname = _fontname_for(s.fontfile, font_cache)
         font = fitz.Font(fontfile=fontfile)
         text = _sub_glyphs(a.tr.strip())
         indent = _leading_indent(s.raw_first, font, s.size)
@@ -394,9 +485,12 @@ def render(doc, annotated):
     by_page = {}
     for a in _changed_items(annotated):
         by_page.setdefault(a.seg.page, []).append(a)
+    by_page_all = {}
+    for a in annotated:
+        by_page_all.setdefault(a.seg.page, []).append(a)
     font_cache = {}
     for page_index, items in by_page.items():
-        _render_page_items(doc[page_index], items, font_cache)
+        _render_page_items(doc[page_index], items, font_cache, by_page_all.get(page_index))
     return doc
 
 
@@ -411,7 +505,8 @@ def translate_one_page_bytes(pdf_path_or_bytes, table, passthrough, overrides,
         if not original:
             ann = translate_segments(extract_segments(doc), table, passthrough, overrides, templates)
             items = [a for a in _changed_items(ann) if a.seg.page == page_index]
-            _render_page_items(doc[page_index], items, {})
+            all_items = [a for a in ann if a.seg.page == page_index]
+            _render_page_items(doc[page_index], items, {}, all_items)
         # yalnız o sayfayı içeren yeni belge
         out = fitz.open()
         try:
@@ -437,7 +532,8 @@ def render_page_png(pdf_path_or_bytes, table, passthrough, overrides,
             if ai:
                 apply_ai_summary(ann, ai[0], ai[1], ai[2])
             items = [a for a in _changed_items(ann) if a.seg.page == page_index]
-            _render_page_items(doc[page_index], items, {})
+            all_items = [a for a in ann if a.seg.page == page_index]
+            _render_page_items(doc[page_index], items, {}, all_items)
         png = doc[page_index].get_pixmap(dpi=dpi).tobytes("png")
     finally:
         doc.close()
