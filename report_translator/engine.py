@@ -265,9 +265,21 @@ def _render_page_items(page, items, font_cache):
     """Tek bir sayfadaki değişen segmentleri yerinde render et (redaksiyon + geri yazma)."""
     if not items:
         return
+    try:
+        pm = page.get_pixmap(dpi=150)
+        scale = 150 / 72.0
+    except Exception:                      # pragma: no cover - beklenmez
+        pm = None
+        scale = 1.0
     for a in items:
         for r in a.seg.rects:
-            page.add_redact_annot(fitz.Rect(r), fill=None)
+            rect = fitz.Rect(r)
+            bg = _sample_bg(pm, rect, scale) if pm is not None else None
+            if bg is not None:
+                # vektör-outline kenarları metin bbox'undan taşabilir -> ~1px genişlet
+                page.add_redact_annot(rect + (-1, -1, 1, 1), fill=bg)
+            else:
+                page.add_redact_annot(rect, fill=None)   # güvenli: İngilizce kalır
     page.apply_redactions(images=fitz.PDF_REDACT_IMAGE_NONE,
                           graphics=fitz.PDF_REDACT_LINE_ART_NONE,
                           text=fitz.PDF_REDACT_TEXT_REMOVE)

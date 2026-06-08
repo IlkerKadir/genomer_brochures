@@ -49,3 +49,33 @@ def test_sample_bg_edge_does_not_crash():
     pm = _solid_pm(100, 50, (255, 255, 255))
     bg = engine._sample_bg(pm, fitz.Rect(0, 0, 30, 20), 1.0)
     assert bg is None or all(abs(c - 1.0) < 0.02 for c in bg)
+
+
+def test_fill_covers_vector_ink():
+    """Metin-dışı vektör mürekkebi (kırmızı blok) redaksiyon dolgusuyla örtülmeli."""
+    doc = fitz.open()
+    page = doc.new_page(width=300, height=120)
+    # 1) gerçek metin katmanı koy (extract bunu bulur, redaksiyon siler)
+    page.insert_text((50, 66), "Hello", fontsize=12, color=(0, 0, 0))
+    # 2) segmentin TAM dikdörtgeni üzerine ayırt edici kırmızı blok çiz
+    #    ("vektör-outline İngilizce" simülasyonu; metin bbox'u ile birebir hizalı)
+    segs = engine.extract_segments(doc)
+    assert segs, "metin segmenti bulunamadı"
+    red_rect = fitz.Rect(segs[0].rects[0])
+    page.draw_rect(red_rect, color=None, fill=(1, 0, 0))
+
+    ann = engine.translate_segments(segs, {"Hello": "Merhaba"}, [], {})
+    items = [a for a in engine._changed_items(ann) if a.seg.page == 0]
+    assert items, "çevrilecek segment bulunamadı"
+    engine._render_page_items(page, items, {})
+
+    pm = page.get_pixmap(dpi=150)
+    sc = 150 / 72
+    red = 0
+    for yy in range(int(red_rect.y0 * sc), int(red_rect.y1 * sc) + 1):
+        for xx in range(int(red_rect.x0 * sc), int(red_rect.x1 * sc) + 1):
+            if 0 <= xx < pm.width and 0 <= yy < pm.height:
+                px = pm.pixel(xx, yy)
+                if px[0] > 180 and px[1] < 80 and px[2] < 80:
+                    red += 1
+    assert red == 0, f"kırmızı vektör mürekkebi örtülmedi: {red} piksel kaldı"
