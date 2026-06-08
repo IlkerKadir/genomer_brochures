@@ -265,7 +265,8 @@ def _sample_fg(pixmap, rect, scale, bg, tol=24):
     """rect içindeki baskın ön-plan (mürekkep) rengini örnekle: bg'den farklı baskın renk.
 
     Görünmez (beyaz) metin-katmanı rengi yerine gerçek mürekkep rengini verir.
-    bg-dışı piksel yoksa (0,0,0) siyah döndürür (asla None)."""
+    bg-dışı piksel yoksa (0,0,0) siyah döndürür (asla None).
+    Not: RGB pixmap varsayar (page.get_pixmap() varsayılanı alfasızdır); ilk 3 kanalı kullanır."""
     x0 = int(rect.x0 * scale); y0 = int(rect.y0 * scale)
     x1 = int(rect.x1 * scale); y1 = int(rect.y1 * scale)
     bg255 = tuple(int(round(v * 255)) for v in bg)
@@ -292,30 +293,33 @@ def _render_page_items(page, items, font_cache):
     except Exception:                      # pragma: no cover - beklenmez
         pm = None
         scale = 1.0
-    colors = {}                            # id(a) -> yeniden-yazma rengi
+    resolved = []                          # (annotation, yeniden-yazma rengi)
     for a in items:
         first_bg = None
+        first_rect = None
         for r in a.seg.rects:
             rect = fitz.Rect(r)
             bg = _sample_bg(pm, rect, scale) if pm is not None else None
             if bg is not None:
                 if first_bg is None:
                     first_bg = bg
+                    first_rect = rect
                 # vektör-outline kenarları metin bbox'undan taşabilir -> ~1px genişlet
                 page.add_redact_annot(rect + (-1, -1, 1, 1), fill=bg)
             else:
                 page.add_redact_annot(rect, fill=None)   # güvenli: İngilizce kalır
-        # kapatma yapıldıysa görünmez (beyaz) metin-katmanı yerine gerçek mürekkep rengi
+        # kapatma yapıldıysa görünmez (beyaz) metin-katmanı yerine gerçek mürekkep rengi;
+        # mürekkebi, zemini bulunan rect'ten örnekle
         if first_bg is not None and pm is not None:
-            colors[id(a)] = _sample_fg(pm, fitz.Rect(a.seg.rects[0]), scale, first_bg)
+            col = _sample_fg(pm, first_rect, scale, first_bg)
         else:
-            colors[id(a)] = a.seg.color
+            col = a.seg.color
+        resolved.append((a, col))
     page.apply_redactions(images=fitz.PDF_REDACT_IMAGE_NONE,
                           graphics=fitz.PDF_REDACT_LINE_ART_NONE,
                           text=fitz.PDF_REDACT_TEXT_REMOVE)
-    for a in items:
+    for a, col in resolved:
         s = a.seg
-        col = colors[id(a)]
         fontfile = os.path.join(FONT_DIR, s.fontfile)
         fontname = font_cache.get(s.fontfile)
         if fontname is None:
