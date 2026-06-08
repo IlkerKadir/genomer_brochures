@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 import fitz
 import pytest
@@ -80,3 +81,24 @@ def test_fill_covers_vector_ink():
                     red += 1
     assert red == 0, f"kırmızı vektör mürekkebi örtülmedi: {red} piksel kaldı"
     assert "Merhaba" in page.get_text()
+
+
+_SAMPLE = os.path.join(os.path.dirname(__file__), "..", "new_samples", "split", "rapor_1.pdf")
+
+
+@pytest.mark.skipif(not os.path.exists(_SAMPLE), reason="gerçek lab örneği yok (gitignore)")
+def test_real_lab_body_label_translated_and_covered():
+    import dictionary
+    kits, _c, pt, raw = dictionary.load()
+    tpl = dictionary.compile_templates(raw, "femobiome_ii")
+    out = engine.translate_document_bytes(_SAMPLE, kits["femobiome_ii"], pt, {}, tpl, None)
+    doc = fitz.open(stream=out, filetype="pdf")
+    p0 = doc[0]
+
+    # 1) metin katmanında İngilizce 'Control parameters' kalmamalı, TR gelmiş olmalı
+    txt = p0.get_text()
+    assert "Control parameters" not in txt
+    assert "Kontrol parametreleri" in re.sub(r"\s+", " ", txt.replace("\xa0", " "))
+
+    # 2) render çökmeden tamamlanmalı ve sayfa sayısı korunmalı
+    assert doc.page_count == 2
