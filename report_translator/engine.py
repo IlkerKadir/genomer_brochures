@@ -252,6 +252,17 @@ def _bullet_breaks(text):
     return re.sub(r"\s*■\s*", "\n■ ", text).lstrip("\n")
 
 
+def _fit_size(font, text, avail, size, floor=4.5):
+    """text `avail` genişliğine sığana kadar font boyutunu küçült (floor'a kadar).
+
+    Tek-satır segmentlerde çeviri orijinalden uzun olunca yatay taşmayı önler;
+    sığıyorsa `size` aynen döner."""
+    fs = size
+    while fs > floor and font.text_length(text, fs) > avail + 0.5:
+        fs -= 0.25
+    return fs
+
+
 def _sample_bg(pixmap, rect, scale, tol=12, min_frac=0.7):
     """Segment dikdörtgeninin kenar marjından (harf dışı dolgu) baskın zemin rengini örnekle.
 
@@ -350,8 +361,10 @@ def _render_page_items(page, items, font_cache):
         indent = _leading_indent(s.raw_first, font, s.size)
         if s.single_line:
             ox, oy = s.origin
+            # çeviri orijinal genişliği aşıyorsa fontu sığacak kadar küçült (taşma yok)
+            fs = _fit_size(font, text, s.bbox[2] - (ox + indent), s.size)
             page.insert_text((ox + indent, oy), text, fontname=fontname,
-                             fontfile=fontfile, fontsize=s.size, color=col)
+                             fontfile=fontfile, fontsize=fs, color=col)
         else:
             text = _bullet_breaks(text)        # her madde-işareti yeni satırda
             box = fitz.Rect(s.bbox)

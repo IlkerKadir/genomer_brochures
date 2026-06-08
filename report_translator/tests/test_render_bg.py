@@ -166,3 +166,13 @@ def test_bullet_breaks_puts_each_bullet_on_new_line():
 
 def test_bullet_breaks_no_bullet_unchanged():
     assert engine._bullet_breaks("düz metin") == "düz metin"
+
+
+def test_fit_size_shrinks_long_text_only():
+    f = fitz.Font(fontfile=os.path.join(engine.FONT_DIR, "Arial-Regular.ttf"))
+    short, long = "ab", "abcdefghijklmnopqrstuvwxyz"
+    w = f.text_length(short, 10)            # 'ab' genişliği
+    assert engine._fit_size(f, short, w, 10) == 10        # sığan -> küçülmez
+    assert engine._fit_size(f, long, w, 10) < 10          # uzun -> küçülür
+    fs = engine._fit_size(f, long, w, 10)
+    assert f.text_length(long, fs) <= w + 0.5 or fs <= 4.5  # sığar ya da floor
