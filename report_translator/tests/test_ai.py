@@ -58,3 +58,21 @@ def test_ai_eligible_combines_both():
     assert aiconfig.ai_eligible("Microbiota state – eubiosis: normal microbiota predominance.", markers)
     # marker eşleşir ama tarih var -> uygun değil
     assert not aiconfig.ai_eligible("Microbiota state on 01.02.2024", markers)
+
+
+def test_cache_roundtrip(tmp_path, monkeypatch):
+    monkeypatch.setattr(aiconfig, "CACHE_PATH", str(tmp_path / "ai_cache.json"))
+    cache = aiconfig.load_cache()
+    assert cache == {}
+    aiconfig.cache_set(cache, "Microbiota state – eubiosis", "Mikrobiyota durumu – öbiyoz")
+    cache2 = aiconfig.load_cache()
+    assert cache2["Microbiota state – eubiosis"] == "Mikrobiyota durumu – öbiyoz"
+
+
+def test_markers_loaded_from_dictionary():
+    import dictionary
+    kits, common, pt, raw = dictionary.load()
+    markers = dictionary.ai_markers(raw, "femobiome_ii")
+    assert any("Microbiota state" in m for m in markers)
+    # _ai_markers, çeviri tablosuna sızmamalı (değer string olmalı)
+    assert "_ai_markers" not in kits["femobiome_ii"]

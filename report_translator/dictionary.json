@@ -151,7 +151,19 @@
     ": normal microbiota decreased to": ": normal mikrobiyota gerilemiş:",
     "Increased relative amount of anaerobes": "Anaeroblar göreceli miktarı yükselmiş",
     "Increased relative amount of aerobes": "Aeroblar göreceli miktarı yükselmiş",
-    "is increased": "yükselmiş"
+    "is increased": "yükselmiş",
+    "_ai_markers": [
+      "Microbiota state",
+      "Microbiota status",
+      "Detected:",
+      "No pathogens detected",
+      "Pathogens are not detected",
+      "NB!",
+      "Normal microbiota",
+      "Relative amount of",
+      "Increased relative amount",
+      "predominance of normal microbiota"
+    ]
   },
   "androbiome": {
     "Urogenital microbiome composition test": "Ürogenital mikrobiyom kompozisyon testi",
@@ -191,7 +203,17 @@
       "Amount of bacterial and/or human DNA in the sample is not enough for the test result.": "Numunedeki bakteriyel ve/veya insan DNA miktarı test sonucu için yeterli değildir.",
       "* Quantitative Analysis Lg(X) ** Qualitative Analysis *** Below threshold": "* Kantitatif Analiz Lg(X) ** Kalitatif Analiz *** Eşik altı"
     },
-    "Sample ID:": "Örnek ID:"
+    "Sample ID:": "Örnek ID:",
+    "_ai_markers": [
+      "The bacterial microbiome composition",
+      "STIs DNA",
+      "STIs are detected",
+      "DETECTED:",
+      "Candida spp. below threshold",
+      "Exceeding the threshold",
+      "Amount of bacterial",
+      "microflora is severely disturbed"
+    ]
   },
   "enterobiome_kids": {
     "Research result": "Araştırma sonucu",
@@ -251,6 +273,13 @@
     "Page 1 of 2": "Sayfa 1 / 2",
     "Page 2 of 2": "Sayfa 2 / 2",
     "metabolically active “child” species, proportion**": "metabolik olarak aktif “çocuk” türleri, oran**",
-    "metabolically active “child” species, diversity": "metabolik olarak aktif “çocuk” türleri, çeşitlilik"
+    "metabolically active “child” species, diversity": "metabolik olarak aktif “çocuk” türleri, çeşitlilik",
+    "_ai_markers": [
+      "Proportion of normal microbiota is within",
+      "The order of Enterobacterales",
+      "Lactobacillaceae agents",
+      "Yeast fungi are not detected",
+      "Total amount of bifidobacteria"
+    ]
   }
 }

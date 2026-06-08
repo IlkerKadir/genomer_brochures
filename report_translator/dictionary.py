@@ -27,7 +27,8 @@ def load(path=None):
     kits = {}
     for kit in ("femobiome_ii", "androbiome", "enterobiome_kids"):
         sec = raw.get(kit, {})
-        atomic = {k: v for k, v in sec.items() if k not in ("_paragraphs", "_templates")}
+        atomic = {k: v for k, v in sec.items()
+                  if k not in ("_paragraphs", "_templates", "_ai_markers")}
         paras = sec.get("_paragraphs", {})
         merged = {}
         merged.update(common)
@@ -35,6 +36,11 @@ def load(path=None):
         merged.update(paras)
         kits[kit] = merged
     return kits, common, passthrough, raw
+
+
+def ai_markers(raw, kit):
+    """Kit'in AI özet işaretçilerini (beyaz-liste) döndür."""
+    return list(raw.get(kit, {}).get("_ai_markers", []))
 
 
 def compile_templates(raw, kit):
