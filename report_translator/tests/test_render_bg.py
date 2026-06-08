@@ -151,3 +151,9 @@ def test_real_lab_body_label_translated_and_covered():
 
     # 2) render çökmeden tamamlanmalı ve sayfa sayısı korunmalı
     assert doc.page_count == 2
+
+
+def test_sub_glyphs_replaces_missing_bullet():
+    # ⯀ (U+2BC0, Arial'da yok) -> ■ (U+25A0, dolu kare, Arial'da var)
+    assert engine._sub_glyphs("⯀ Test") == "■ Test"
+    assert engine._sub_glyphs("normal metin") == "normal metin"

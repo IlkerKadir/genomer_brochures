@@ -234,6 +234,16 @@ def _leading_indent(text, font, size):
     return font.text_length(" " * n, size) if n else 0.0
 
 
+# Render fontları (Arial vb.) bazı sembol gliflerini içermez → içi boş kutu çizilir.
+# Bilinen eksikleri fontun sahip olduğu eşdeğerle değiştir (ör. ⯀ U+2BC0 -> ■ U+25A0).
+_GLYPH_SUBS = {0x2BC0: "■"}
+
+
+def _sub_glyphs(text):
+    """Render fontunda olmayan bilinen glifleri eşdeğeriyle değiştir."""
+    return text.translate(_GLYPH_SUBS)
+
+
 def _sample_bg(pixmap, rect, scale, tol=12, min_frac=0.7):
     """Segment dikdörtgeninin kenar marjından (harf dışı dolgu) baskın zemin rengini örnekle.
 
@@ -328,7 +338,7 @@ def _render_page_items(page, items, font_cache):
             fontname = "F%d" % len(font_cache)
             font_cache[s.fontfile] = fontname
         font = fitz.Font(fontfile=fontfile)
-        text = a.tr.strip()
+        text = _sub_glyphs(a.tr.strip())
         indent = _leading_indent(s.raw_first, font, s.size)
         if s.single_line:
             ox, oy = s.origin
