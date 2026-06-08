@@ -6,6 +6,7 @@ import re
 import sys
 from dataclasses import dataclass
 import fitz  # PyMuPDF
+import aiconfig
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 FONT_DIR = os.path.join(HERE, "fonts")
@@ -311,8 +312,8 @@ def translate_one_page_bytes(pdf_path_or_bytes, table, passthrough, overrides,
 
 
 def render_page_png(pdf_path_or_bytes, table, passthrough, overrides,
-                    page_index, dpi=150, original=False, templates=None):
-    """page_index'in render edilmiş PNG bayt'ı (override'lı veya orijinal)."""
+                    page_index, dpi=150, original=False, templates=None, ai=None):
+    """page_index'in render edilmiş PNG bayt'ı."""
     if isinstance(pdf_path_or_bytes, (bytes, bytearray)):
         doc = fitz.open(stream=pdf_path_or_bytes, filetype="pdf")
     else:
@@ -320,6 +321,8 @@ def render_page_png(pdf_path_or_bytes, table, passthrough, overrides,
     try:
         if not original:
             ann = translate_segments(extract_segments(doc), table, passthrough, overrides, templates)
+            if ai:
+                apply_ai_summary(ann, ai[0], ai[1], ai[2])
             items = [a for a in _changed_items(ann) if a.seg.page == page_index]
             _render_page_items(doc[page_index], items, {})
         png = doc[page_index].get_pixmap(dpi=dpi).tobytes("png")
@@ -328,8 +331,9 @@ def render_page_png(pdf_path_or_bytes, table, passthrough, overrides,
     return png
 
 
-def translate_document_bytes(pdf_path_or_bytes, table, passthrough, overrides, templates=None):
-    """Orijinalden taze TR PDF bayt'ı üretir. pdf_path_or_bytes: yol (str) veya bytes."""
+def translate_document_bytes(pdf_path_or_bytes, table, passthrough, overrides,
+                             templates=None, ai=None):
+    """Orijinalden taze TR PDF bayt'ı üretir. ai = (provider, markers, cache) veya None."""
     if isinstance(pdf_path_or_bytes, (bytes, bytearray)):
         doc = fitz.open(stream=pdf_path_or_bytes, filetype="pdf")
     else:
@@ -337,8 +341,45 @@ def translate_document_bytes(pdf_path_or_bytes, table, passthrough, overrides, t
     try:
         segs = extract_segments(doc)
         ann = translate_segments(segs, table, passthrough, overrides, templates)
+        if ai:
+            apply_ai_summary(ann, ai[0], ai[1], ai[2])
         render(doc, ann)
         out = doc.tobytes(garbage=4, deflate=True)
     finally:
         doc.close()
     return out
+
+
+def apply_ai_summary(annotated, provider, markers, cache, deid=None):
+    """Saf çeviriden SONRA: yalnız 'özet' (beyaz-liste) + de-id temiz segmentleri AI ile çevir.
+    Öncelik: dict-exact korunur > önbellek > AI çağrısı > (hata/yedek) yerel çeviri kalır.
+    Ağ yalnız provider verilince ve önbellek ıskasında çalışır. annotated yerinde değişir."""
+    if deid is None:
+        deid = aiconfig.deid_ok
+    todo = []   # (index, norm_en)
+    for i, a in enumerate(annotated):
+        if a.source == "dict-exact":          # hekim/sözlük onayı kazanır
+            continue
+        en = norm_ws(a.en)
+        if not any(m.lower() in en.lower() for m in markers):
+            continue
+        if not deid(en):                        # hasta verisi -> asla gönderme
+            continue
+        cached = cache.get(en)
+        if cached is not None:
+            a.tr = cached
+            a.source = "ai"
+            a.needs_review = False
+            continue
+        todo.append((i, en))
+    if provider and todo:
+        try:
+            results = provider.translate([en for _, en in todo])
+            for (i, en), tr in zip(todo, results):
+                aiconfig.cache_set(cache, en, tr)
+                annotated[i].tr = tr
+                annotated[i].source = "ai"
+                annotated[i].needs_review = False
+        except Exception:
+            pass    # yerel yedek: annotated[i].tr zaten sözlük+şablon çevirisini taşıyor
+    return annotated

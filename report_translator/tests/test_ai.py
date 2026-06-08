@@ -118,3 +118,64 @@ def test_get_provider_disabled_or_no_key():
     p = tr_mod.get_provider({"ai_summary_enabled": True, "provider": "deepl",
                              "deepl_api_key": "k:fx"})
     assert isinstance(p, tr_mod.DeepLProvider)
+
+
+import engine
+
+
+class FakeProvider:
+    def __init__(self):
+        self.received = []
+
+    def translate(self, texts, target="TR"):
+        self.received.append(list(texts))
+        return ["[AI] " + t for t in texts]
+
+
+def _seg(engine, sid, en, tr, source):
+    s = engine.Segment(id=sid, page=0, bbox=[0, 0, 1, 1], en=en, fontfile="Arial-Regular.ttf",
+                       size=8.0, color=(0, 0, 0), single_line=True, rects=[[0, 0, 1, 1]],
+                       origin=(0, 0), raw_first=en, is_paragraph=False)
+    return engine.AnnotatedSegment(s, tr, source, source == "unknown")
+
+
+def test_apply_ai_summary_translates_only_eligible():
+    markers = ["Microbiota state", "Detected:"]
+    cache = {}
+    prov = FakeProvider()
+    ann = [
+        _seg(engine, "0:1", "Microbiota state – severe dysbiosis: normobiota low.", "kısmi", "dict-partial"),
+        _seg(engine, "0:2", "Yeast fungi", "Maya mantarları", "dict-exact"),          # özet değil
+        _seg(engine, "0:3", "Detected: Sample ID: Sample_1", "...", "unknown"),         # de-id reddi
+        _seg(engine, "0:4", "Detected: HPV 16", "Saptandı: HPV 16", "dict-partial"),
+    ]
+    engine.apply_ai_summary(ann, prov, markers, cache, deid=None)
+    # yalnız 0:1 ve 0:4 AI'ya gitti (0:2 özet değil; 0:3 de-id reddi)
+    sent = prov.received[0]
+    assert "Microbiota state – severe dysbiosis: normobiota low." in sent
+    assert "Detected: HPV 16" in sent
+    assert all("Sample ID" not in s for s in sent)            # KRİTİK: hasta verisi gitmedi
+    assert all("Yeast fungi" not in s for s in sent)
+    assert ann[0].tr.startswith("[AI]") and ann[0].source == "ai"
+    assert ann[3].tr.startswith("[AI]")
+    assert ann[1].tr == "Maya mantarları"                     # dokunulmadı
+    assert cache  # önbelleğe yazıldı
+
+
+def test_apply_ai_summary_uses_cache_and_skips_provider():
+    markers = ["Microbiota state"]
+    cache = {"Microbiota state – eubiosis.": "ÖNBELLEK"}
+    prov = FakeProvider()
+    ann = [_seg(engine, "0:1", "Microbiota state – eubiosis.", "kısmi", "dict-partial")]
+    engine.apply_ai_summary(ann, prov, markers, cache, deid=None)
+    assert ann[0].tr == "ÖNBELLEK" and ann[0].source == "ai"
+    assert prov.received == []                                # API çağrılmadı
+
+
+def test_apply_ai_summary_fallback_on_error():
+    markers = ["Microbiota state"]
+    class Boom:
+        def translate(self, texts, target="TR"): raise RuntimeError("offline")
+    ann = [_seg(engine, "0:1", "Microbiota state – eubiosis.", "yerel-yedek", "dict-partial")]
+    engine.apply_ai_summary(ann, Boom(), markers, {}, deid=None)
+    assert ann[0].tr == "yerel-yedek"                         # yerel çeviri korundu
