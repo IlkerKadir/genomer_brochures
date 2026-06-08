@@ -14,6 +14,13 @@ def femobiome_pdf():
 
 
 @pytest.fixture
+def femobiome_dysbiosis_pdf():
+    p = os.path.join(SAMPLES, "Femobiome_II_report severe anaerobic dysbiosis_eng.pdf")
+    assert os.path.exists(p), f"örnek bulunamadı: {p}"
+    return p
+
+
+@pytest.fixture
 def androbiome_pdf():
     p = os.path.join(SAMPLES, "Androbiome.pdf")
     assert os.path.exists(p), f"örnek bulunamadı: {p}"

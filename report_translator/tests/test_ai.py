@@ -179,3 +179,39 @@ def test_apply_ai_summary_fallback_on_error():
     ann = [_seg(engine, "0:1", "Microbiota state – eubiosis.", "yerel-yedek", "dict-partial")]
     engine.apply_ai_summary(ann, Boom(), markers, {}, deid=None)
     assert ann[0].tr == "yerel-yedek"                         # yerel çeviri korundu
+
+
+def test_config_endpoints_and_ai_in_flow(femobiome_dysbiosis_pdf, tmp_path, monkeypatch):
+    import store
+    monkeypatch.setattr(store, "DEFAULT_BASE", str(tmp_path / "sess"))
+    monkeypatch.setattr(aiconfig, "CONFIG_PATH", str(tmp_path / "config.json"))
+    monkeypatch.setattr(aiconfig, "CACHE_PATH", str(tmp_path / "cache.json"))
+    import importlib, app as app_mod
+    importlib.reload(app_mod)
+    app_mod.set_out_dir(str(tmp_path / "out"))
+    # sahte sağlayıcı enjekte et
+    import translator
+    class Fake:
+        def translate(self, texts, target="TR"): return ["[AI] " + t for t in texts]
+    monkeypatch.setattr(translator, "get_provider", lambda cfg: Fake() if cfg.get("ai_summary_enabled") else None)
+
+    from fastapi.testclient import TestClient
+    c = TestClient(app_mod.app)
+
+    # config: başta kapalı, anahtar yok
+    assert c.get("/api/config").json()["ai_summary_enabled"] is False
+    # config aç + anahtar gir
+    c.post("/api/config", json={"ai_summary_enabled": True, "deepl_api_key": "k:fx"})
+    pub = c.get("/api/config").json()
+    assert pub["ai_summary_enabled"] is True and pub["has_key"] is True
+    assert "deepl_api_key" not in pub
+
+    # upload + manifest: özet segmenti AI ile çevrilmiş ("ai" source)
+    # (eubiosis sonucu dict-exact olduğundan AI'ya gitmez; disbiyoz sonucu dict-partial -> uygun)
+    with open(femobiome_dysbiosis_pdf, "rb") as fh:
+        r = c.post("/api/upload", files={"files": ("rep.pdf", fh.read(), "application/pdf")}).json()
+    s, f = r["session_id"], r["files"][0]["file_id"]
+    man = c.get(f"/api/{s}/{f}/manifest").json()
+    ai_segs = [m for m in man if m["source"] == "ai"]
+    assert len(ai_segs) >= 1
+    assert any(m["tr"].startswith("[AI]") for m in ai_segs)

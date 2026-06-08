@@ -16,6 +16,8 @@ from pydantic import BaseModel
 import engine
 import dictionary
 import store
+import aiconfig
+import translator
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 WEB_DIR = os.path.join(HERE, "web")
@@ -49,6 +51,19 @@ def _table_for(kit):
     return kits[kit], passthrough, dictionary.compile_templates(raw, kit)
 
 
+def _ai_for(kit):
+    """(provider, markers, cache) veya None. Config kapalı/anahtarsız ise None."""
+    cfg = aiconfig.load_config()
+    provider = translator.get_provider(cfg)
+    if provider is None:
+        return None
+    _, _, _, raw = dictionary.load()
+    markers = dictionary.ai_markers(raw, kit)
+    if not markers:
+        return None
+    return (provider, markers, aiconfig.load_cache())
+
+
 def _file_or_404(sid, fid):
     try:
         return SESSIONS.get_file(sid, fid)
@@ -60,8 +75,12 @@ def _annotate(fs):
     table, passthrough, templates = _table_for(fs["kit"])
     doc = fitz.open(stream=fs["pdf_bytes"], filetype="pdf")
     try:
-        return engine.translate_segments(engine.extract_segments(doc), table, passthrough,
-                                         fs["overrides"], templates)
+        ann = engine.translate_segments(engine.extract_segments(doc), table, passthrough,
+                                        fs["overrides"], templates)
+        ai = _ai_for(fs["kit"])
+        if ai:
+            engine.apply_ai_summary(ann, ai[0], ai[1], ai[2])
+        return ann
     finally:
         doc.close()
 
@@ -75,7 +94,7 @@ def _counts(ann):
 def _render_bytes(fs):
     table, passthrough, templates = _table_for(fs["kit"])
     return engine.translate_document_bytes(fs["pdf_bytes"], table, passthrough,
-                                           fs["overrides"], templates)
+                                           fs["overrides"], templates, _ai_for(fs["kit"]))
 
 
 def _process_file(sid, fid):
@@ -190,7 +209,7 @@ def page_png(sid: str, fid: str, n: int):
     table, passthrough, templates = _table_for(fs["kit"])
     try:
         png = engine.render_page_png(fs["pdf_bytes"], table, passthrough, fs["overrides"], n,
-                                     templates=templates)
+                                     templates=templates, ai=_ai_for(fs["kit"]))
     except Exception:
         raise AppError(500, "render_failed", "Sayfa render edilemedi")
     CACHE.set(fid, n, png)
@@ -308,6 +327,24 @@ def review_txt(sid: str, fid: str):
     base = os.path.splitext(fs["name"])[0]
     return Response(content=body, media_type="text/plain; charset=utf-8",
                     headers={"Content-Disposition": f'attachment; filename="{base}_review.txt"'})
+
+
+@app.get("/api/config")
+def get_config():
+    return aiconfig.public_config()
+
+
+class ConfigBody(BaseModel):
+    ai_summary_enabled: bool | None = None
+    deepl_api_key: str | None = None
+    provider: str | None = None
+
+
+@app.post("/api/config")
+def set_config(body: ConfigBody):
+    updates = {k: v for k, v in body.model_dump().items() if v is not None}
+    aiconfig.save_config(updates)
+    return aiconfig.public_config()
 
 
 @app.get("/api/out_dir")
