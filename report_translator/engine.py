@@ -444,6 +444,50 @@ def _render_reflow_group(page, grp, col_of, font_cache, bottom=None):
     _reflow_layout(page, grp, col_of, font_cache, sc, x0, right, baseline, pitch, True)
 
 
+def _thin_strokes(page):
+    """Sayfadaki ince çizgi-grafiklerini (tablo ızgara çizgileri) (a, b, renk, kalınlık) olarak yakala.
+
+    Kapatma dolgusu (fill=bg) bu çizgileri örter; render sonunda örtülenler üste yeniden
+    çizilerek ızgara bütünlüğü korunur (gerçek-lab vektör-outline raporlarında dolgu, altındaki
+    ince çizgiyi de boyuyordu → kırık/beyaz-taşma görünümü)."""
+    out = []
+    for d in page.get_drawings():
+        w = d.get("width") or 0
+        col = d.get("color")
+        if col is None or "s" not in d["type"] or w > 1.5:
+            continue
+        for it in d["items"]:
+            if it[0] == "l":
+                out.append((fitz.Point(it[1]), fitz.Point(it[2]), tuple(col), w))
+            elif it[0] == "re":
+                r = fitz.Rect(it[1])
+                cs = [fitz.Point(r.x0, r.y0), fitz.Point(r.x1, r.y0),
+                      fitz.Point(r.x1, r.y1), fitz.Point(r.x0, r.y1)]
+                for i in range(4):
+                    out.append((cs[i], cs[(i + 1) % 4], tuple(col), w))
+    return out
+
+
+def _redraw_covered_strokes(page, strokes, filled_rects):
+    """Yalnız bir kapatma-dolgusuyla kesişen ince çizgileri orijinal renk/kalınlıkla üste çiz.
+    Grafik/çizelge gibi dolgu uygulanmayan alanlara dokunulmaz (cerrahi onarım)."""
+    if not filled_rects or not strokes:
+        return
+    from collections import defaultdict
+    groups = defaultdict(list)
+    for a, b, col, w in strokes:
+        seg = fitz.Rect(min(a.x, b.x), min(a.y, b.y), max(a.x, b.x), max(a.y, b.y))
+        seg += (-0.5, -0.5, 0.5, 0.5)              # dejenere (sıfır en/boy) çizgi için tolerans
+        if any(seg.intersects(fr) for fr in filled_rects):
+            groups[(col, round(max(w, 0.3), 2))].append((a, b))
+    for (col, w), lines in groups.items():
+        shape = page.new_shape()
+        for a, b in lines:
+            shape.draw_line(a, b)
+        shape.finish(color=col, width=w)
+        shape.commit()
+
+
 def _render_page_items(page, items, font_cache, all_items=None):
     """Tek bir sayfadaki değişen segmentleri yerinde render et (redaksiyon + geri yazma).
 
@@ -451,6 +495,8 @@ def _render_page_items(page, items, font_cache, all_items=None):
     tespit edilip kutuya yeniden akıtılır (sarma); tablo satırları güvenlik kuralıyla hariç."""
     if not items:
         return
+    strokes = _thin_strokes(page)              # kapatma ÖNCESİ ızgara çizgilerini yakala
+    filled_rects = []                          # kapatma-dolgusu (fill=bg) uygulanan dikdörtgenler
     try:
         pm = page.get_pixmap(dpi=150)
         scale = 150 / 72.0
@@ -482,7 +528,9 @@ def _render_page_items(page, items, font_cache, all_items=None):
                     first_bg = bg
                     first_rect = rect
                 # vektör-outline kenarları metin bbox'undan taşabilir -> ~1px genişlet
-                page.add_redact_annot(rect + (-1, -1, 1, 1), fill=bg)
+                fr = rect + (-1, -1, 1, 1)
+                page.add_redact_annot(fr, fill=bg)
+                filled_rects.append(fr)
             else:
                 page.add_redact_annot(rect, fill=None)   # güvenli: İngilizce kalır
         # kapatma yapıldıysa görünmez (beyaz) metin-katmanı yerine gerçek mürekkep rengi;
@@ -530,6 +578,8 @@ def _render_page_items(page, items, font_cache, all_items=None):
                 fs -= 0.25
             if not fitted:
                 sys.stderr.write("UYARI: segment sığmadı, atlandı: %r\n" % text)
+    # kapatma-dolgusunun örttüğü ızgara çizgilerini orijinal renk/kalınlıkla geri çiz
+    _redraw_covered_strokes(page, strokes, filled_rects)
 
 
 def _changed_items(annotated):

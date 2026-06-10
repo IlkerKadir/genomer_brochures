@@ -209,6 +209,31 @@ def test_multiline_turkish_survives_source_font_collision(tmp_path):
     assert "oranı" in txt and "içindedir" in txt and "çeşitliliği" in txt, repr(txt)
 
 
+def test_grid_line_survives_cover_fill():
+    """Kapatma-dolgusu (fill=bg) bir ızgara çizgisini örttüğünde, çizgi render sonunda
+    orijinal renk/kalınlıkla geri çizilmeli (gerçek-lab tablolarında kırık/beyaz-taşma onarımı)."""
+    import numpy as np
+    doc = fitz.open()
+    page = doc.new_page(width=160, height=80)
+    # yatay siyah ızgara çizgisi (x10-150)
+    page.draw_line(fitz.Point(10, 40), fitz.Point(150, 40), color=(0, 0, 0), width=1)
+    # GENİŞ İngilizce metin -> geniş kapatma-dolgusu çizgiyi örter; KISA çeviri ("Et") sola yazılır
+    page.insert_text((20, 42), "Wide English Label Here", fontsize=9, color=(0, 0, 0))
+    segs = engine.extract_segments(doc)
+    ann = engine.translate_segments(segs, {"Wide English Label Here": "Et"}, [], {})
+    items = [a for a in ann if a.tr != a.en and a.seg.page == 0]
+    assert items
+    engine._render_page_items(page, items, {})
+    pm = page.get_pixmap(dpi=150)
+    arr = np.frombuffer(pm.samples, dtype=np.uint8).reshape(pm.height, pm.width, pm.n)[:, :, :3]
+    sc = 150 / 72.0
+    # dolgunun örttüğü ama metin yazılmayan bölge (x70-110): geri-çizim olmazsa çizgi silinir
+    yb = int(40 * sc)
+    band = arr[yb - 1:yb + 2, int(70 * sc):int(110 * sc)]
+    dark = int((band < 100).all(axis=2).sum())
+    assert dark > 40, f"ızgara çizgisi geri çizilmedi (koyu px={dark})"
+
+
 def test_sub_glyphs_replaces_missing_bullet():
     # ⯀ (U+2BC0, Arial'da yok) -> ■ (U+25A0, dolu kare, Arial'da var)
     assert engine._sub_glyphs("⯀ Test") == "■ Test"
