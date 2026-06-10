@@ -320,6 +320,35 @@ def test_has_right_neighbor_detects_table_value():
     assert not engine._has_right_neighbor(label, [label])
 
 
+def _mseg(page, x0, y0, x1, y1, en, single=False, size=10, font="Carlito-Regular.ttf"):
+    return _types.SimpleNamespace(page=page, bbox=[x0, y0, x1, y1], en=en,
+                                  single_line=single, size=size, fontfile=font,
+                                  rects=[[x0, y0, x1, y1]])
+
+
+def test_merge_split_sentences_joins_continuation():
+    # cümle ortasından bölünmüş iki blok (1. noktalama'sız biter, 2. küçük harfle başlar) birleşir
+    a = _mseg(0, 308, 105, 573, 172,
+              "Lactobacillaceae agents are absent. The Bacteroidetes taxa")
+    b = _mseg(0, 308, 173, 570, 205,
+              "agents are present. Proportion of opportunistic microbiota is normal.")
+    out = engine._merge_split_sentences([a, b])
+    assert len(out) == 1
+    assert "The Bacteroidetes taxa agents are present" in out[0].en
+    assert out[0].bbox[3] == 205            # bbox alt sınırı genişledi
+
+
+def test_merge_split_sentences_keeps_real_paragraph_breaks():
+    # 1. blok cümle-sonu noktasıyla biterse VEYA 2. blok büyük harfle başlarsa birleşmez
+    a = _mseg(0, 308, 105, 573, 172, "First sentence ends cleanly.")
+    b = _mseg(0, 308, 173, 570, 205, "Second sentence starts here.")
+    assert len(engine._merge_split_sentences([a, b])) == 2
+    # tek-satır bloklar (tablo hücreleri) asla birleşmez
+    c = _mseg(0, 46, 280, 133, 289, "etiket", single=True)
+    d = _mseg(0, 46, 295, 133, 304, "değer", single=True)
+    assert len(engine._merge_split_sentences([c, d])) == 2
+
+
 def test_avail_width_extends_to_neighbor_or_margin():
     # kısa, dar etiket ('SEX:' gibi): sağı boşsa kullanılabilir genişlik sayfa kenarına uzar
     label = _seg(40, 30, 57, 39)            # ~17pt geniş

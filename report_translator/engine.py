@@ -160,7 +160,47 @@ def extract_segments(doc):
                 else:
                     segments.append(_segment_from_unit(unit, page_index, seq))
                     seq += 1
-    return segments
+    return _merge_split_sentences(segments)
+
+
+def _merge_split_sentences(segments):
+    """Aynı sütunda dikey-bitişik, aynı font/boyut iki prose bloğu — birincisi cümle-sonu
+    noktalaması OLMADAN bitip ikincisi küçük harfle başlıyorsa — tek segmente birleştir.
+
+    Gerçek-lab özet kutusu bazı raporlarda cümle ortasından iki bloğa bölünüyor
+    (ör. '...The Bacteroidetes taxa' + 'agents are present...'). Birleştirmeyince her parça
+    ayrı çevrilir (DeepL yarım cümle alır → kötü çeviri) ve ayrı kutuya yazılır (cümle ortasında
+    satır atlama). Yalnız çok-satırlı (single_line=False) bloklar aday; tablo hücreleri etkilenmez."""
+    multi = sorted([s for s in segments if not s.single_line],
+                   key=lambda s: (s.page, round(s.bbox[0]), s.bbox[1]))
+    drop = set()
+    i = 0
+    while i < len(multi):
+        a = multi[i]
+        if id(a) in drop:
+            i += 1
+            continue
+        j = i + 1
+        while j < len(multi):
+            b = multi[j]
+            if id(b) in drop:
+                j += 1
+                continue
+            same_col = (a.page == b.page and abs(a.bbox[0] - b.bbox[0]) <= 4
+                        and a.fontfile == b.fontfile and abs(a.size - b.size) <= 0.6)
+            adjacent = -2.0 <= (b.bbox[1] - a.bbox[3]) <= a.size * 0.8
+            split_sentence = (a.en.rstrip()[-1:] not in ".!?:" and b.en.lstrip()[:1].islower())
+            if same_col and adjacent and split_sentence:
+                a.en = a.en.rstrip() + " " + b.en.lstrip()
+                a.bbox = [min(a.bbox[0], b.bbox[0]), a.bbox[1],
+                          max(a.bbox[2], b.bbox[2]), b.bbox[3]]
+                a.rects = a.rects + b.rects
+                drop.add(id(b))
+                j += 1
+            else:
+                break
+        i += 1
+    return [s for s in segments if id(s) not in drop]
 
 
 @dataclass
