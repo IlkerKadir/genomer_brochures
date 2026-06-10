@@ -15,7 +15,14 @@
     "^\\d{1,2}\\.\\d{1,2}\\.\\d{2,4}$",
     "^(HPV|HSV|CMV|BVAB|EBV|HHV)[\\s\\d/().,-]*$",
     "^[¹²³*]?\\s*[A-Z][a-z]+( \\([A-Za-z]+\\))?( [a-z]+)?( spp\\.?| cluster)?( ?[/,] ?[A-Z][a-z]+( [a-z]+)?( spp\\.?)?)*\\.?$",
-    "^Female microflora analysis$"
+    "^Female microflora analysis$",
+    "^(Enterobiome Kids|Androbiome|Femobiome(?: II)?)$",
+    "^Sample_\\w+$",
+    "^PCS$",
+    "^[A-Z]\\.[a-z]+$",
+    "^[A-Z][a-z]+(\\+[A-Z][a-z]+)+$",
+    "^(tcdA|tcdB|mecA|srr2)([,\\s]+(tcdA|tcdB|mecA|srr2))*$",
+    "^(\\d{1,2}\\s+)?[¹²³*]?\\s*[A-Z][a-z]+( \\([A-Za-z]+\\))?( [A-Z][a-z]+)?( [a-z]+)?( subsp\\.?( [a-z]+)?)?( spp\\.?| cluster| gr)?( ?[/+,] ?[A-Z][a-z]+( [a-z]+)?( subsp\\.?( [a-z]+)?)?( spp\\.?| gr)?)*\\.?\\s*\\*{0,2}$"
   ],
   "common": {
     "Result": "Sonuç",
@@ -231,15 +238,24 @@
       "* Quantitative Analysis Lg(X) ** Qualitative Analysis *** Below threshold": "* Kantitatif Analiz Lg(X) ** Kalitatif Analiz *** Eşik altı"
     },
     "Sample ID:": "Örnek ID:",
+    "Patient:": "Hasta:",
+    "Comment:": "Açıklama:",
+    "Sample marking:": "Örnek işareti:",
+    "Total Bacterial Load": "Toplam Bakteri Yükü",
     "_ai_markers": [
       "The bacterial microbiome composition",
       "STIs DNA",
       "STIs are detected",
       "DETECTED:",
       "Candida spp. below threshold",
+      "is below threshold",
+      "DNA is below",
       "Exceeding the threshold",
       "Amount of bacterial",
-      "microflora is severely disturbed"
+      "microflora is severely disturbed",
+      "are detected",
+      "is abnormal",
+      "is normal"
     ]
   },
   "enterobiome_kids": {
@@ -296,6 +312,15 @@
     "Lactobacillaceae, quantity": "Lactobacillaceae, miktar",
     "Bacteroidetes, presence": "Bacteroidetes, varlık",
     "Firmicutes/Bacteroidetes, ratio:": "Firmicutes/Bacteroidetes, oran:",
+    "Total bacterial load (TBL)": "Toplam bakteri kütlesi (TBK)",
+    "Total bacterial load": "Toplam bakteri kütlesi",
+    "Bacteroidota (Bacteroidetes), presence": "Bacteroidota (Bacteroidetes), varlık",
+    "Bacillota/Bacteroidota (Firmicutes/Bacteroidetes), ratio:": "Bacillota/Bacteroidota (Firmicutes/Bacteroidetes), oran:",
+    "Bacillota/Bacteroidota (Firmicutes/Bacteroidetes) ratio:": "Bacillota/Bacteroidota (Firmicutes/Bacteroidetes) oranı:",
+    "Metabolically active infant-type bifidobacteria **": "Metabolik olarak aktif bebek tipi bifidobakterileri **",
+    "metabolically active infant-type, diversity": "metabolik olarak aktif bebek tipi, çeşitlilik",
+    "Streptococcus agalactiae with srr2": "Streptococcus agalactiae (srr2)",
+    "Not valid": "Geçersiz",
     "pathogenic agents Enterobacterales": "patojenik ajanlar Enterobacterales",
     "Page 1 of 2": "Sayfa 1 / 2",
     "Page 2 of 2": "Sayfa 2 / 2",
@@ -306,7 +331,19 @@
       "The order of Enterobacterales",
       "Lactobacillaceae agents",
       "Yeast fungi are not detected",
-      "Total amount of bifidobacteria"
+      "Total amount of bifidobacteria",
+      "is within the normal range",
+      "is within normal limits",
+      "opportunistic microbiota",
+      "amount of yeast fungi",
+      "agents are present",
+      "agents are absent",
+      "is reduced",
+      "is increased",
+      "represented by",
+      "Taxonomic diversity",
+      "are not detected",
+      "is not detected"
     ]
   }
 }

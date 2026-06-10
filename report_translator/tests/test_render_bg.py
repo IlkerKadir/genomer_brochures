@@ -153,6 +153,62 @@ def test_real_lab_body_label_translated_and_covered():
     assert doc.page_count == 2
 
 
+def test_fontname_for_avoids_source_pdf_name_collision():
+    # Gerçek-lab PDF'leri fontlarını F0/F1/... olarak adlandırır. Üretilen ad bunlarla
+    # ÇAKIŞMAMALI; yoksa insert_textbox kaynak fontu (Türkçe glif'siz) yeniden kullanır.
+    cache = {}
+    names = [engine._fontname_for("Carlito-Regular.ttf", cache),
+             engine._fontname_for("Arial-Regular.ttf", cache),
+             engine._fontname_for("Carlito-Regular.ttf", cache)]  # tekrar -> aynı
+    assert names[0] == names[2]                       # önbellek tutarlı
+    assert names[0] != names[1]                       # farklı font farklı ad
+    for n in names:
+        assert not re.fullmatch(r"F\d+", n), f"çakışmaya açık ad: {n}"
+        for clash in ("F0", "F1", "F2", "F3", "C0", "T1", "TT0", "C2_0"):
+            assert n != clash
+
+
+def _ascii_only_font(tmp_path):
+    """Türkçe glif'i OLMAYAN bir kaynak font üret (gerçek-lab subset fontunu taklit).
+    Mevcutsa fonttools ile Arial'ı ASCII'ye indir; yoksa testi atla."""
+    fonttools = pytest.importorskip("fontTools")
+    from fontTools.subset import Subsetter, Options
+    from fontTools.ttLib import TTFont
+    f = TTFont(os.path.join(engine.FONT_DIR, "Arial-Regular.ttf"))
+    opt = Options()
+    opt.glyph_names = True
+    ss = Subsetter(options=opt)
+    ss.populate(text="".join(chr(c) for c in range(32, 127)))   # yalnız ASCII
+    ss.subset(f)
+    out = str(tmp_path / "ascii_only.ttf")
+    f.save(out)
+    return out
+
+
+def test_multiline_turkish_survives_source_font_collision(tmp_path):
+    """Kaynak sayfada 'F0' adlı (Türkçe glif'siz) bir font varken Türkçe çok-satırlı segment
+    render edilince ı/ç/ş/ğ düşmemeli. Çakışan kısa ad ('F0') insert_textbox'ı kaynak
+    glif'siz fontu yeniden kullanmaya iter → mojibake; bu test o regresyonu yakalar."""
+    src = _ascii_only_font(tmp_path)               # Türkçe glif YOK
+    doc = fitz.open()
+    page = doc.new_page(width=360, height=200)
+    # kaynak PDF'i taklit: sayfaya 'F0' adlı glif'siz font + İngilizce metin yerleştir
+    page.insert_text((20, 30), "English only text", fontname="F0",
+                     fontfile=src, fontsize=10)
+    page.insert_text((20, 90), "placeholder line", fontsize=10, color=(0, 0, 0))
+    segs = engine.extract_segments(doc)
+    seg = [s for s in segs if "placeholder" in s.en][0]
+    seg.single_line = False                       # çok-satırlı insert_textbox yolunu zorla
+    seg.bbox = [20, 80, 340, 100]
+    ann = engine.translate_segments(
+        segs, {"placeholder line": "oranı aralık içindedir Fırsatçı çeşitliliği"}, [], {})
+    items = [a for a in ann if a.tr != a.en and a.seg.page == 0]
+    assert items, "çevrilecek segment yok"
+    engine._render_page_items(page, items, {})
+    txt = page.get_text()
+    assert "oranı" in txt and "içindedir" in txt and "çeşitliliği" in txt, repr(txt)
+
+
 def test_sub_glyphs_replaces_missing_bullet():
     # ⯀ (U+2BC0, Arial'da yok) -> ■ (U+25A0, dolu kare, Arial'da var)
     assert engine._sub_glyphs("⯀ Test") == "■ Test"

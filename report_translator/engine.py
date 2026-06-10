@@ -315,10 +315,15 @@ def _sample_fg(pixmap, rect, scale, bg, tol=24):
 
 
 def _fontname_for(fontfile, font_cache):
-    """fontfile için kalıcı PDF font adı (F0, F1, ...) üret/önbellekle."""
+    """fontfile için kalıcı, çakışmasız PDF font adı üret/önbellekle.
+
+    Gerçek-lab PDF'leri gömülü fontlarını F0/F1/... olarak adlandırır. Kısa "F0"
+    gibi adlar bu kaynak fontlarla ÇAKIŞIR: insert_text(box) çakışan adı görünce
+    kaynak fontu (Türkçe glif'siz) yeniden kullanır → ı/ç/ş/ğ düşer, mojibake olur.
+    Bu yüzden hiçbir kaynak PDF'te bulunmayacak ayırt edici bir önek kullanılır."""
     name = font_cache.get(fontfile)
     if name is None:
-        name = "F%d" % len(font_cache)
+        name = "GnmrTR%d" % len(font_cache)
         font_cache[fontfile] = name
     return name
 
