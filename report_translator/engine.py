@@ -432,7 +432,23 @@ def _paragraph_groups(all_items, changed_ids):
     return [grp for grp in groups
             if len(grp) >= 2
             and any(id(g) in changed_ids for g in grp)
-            and not any(_has_right_neighbor(g.seg, all_segs) for g in grp)]
+            and not any(_has_right_neighbor(g.seg, all_segs) for g in grp)
+            and _is_prose_block(grp)]
+
+
+def _is_prose_block(grp):
+    """Grup sarılmış prose mu, yoksa istiflenmiş kısa etiketler mi?
+
+    Sarılmış prose'da son-olmayan satırlar kolonu DOLDURUR (bir sonraki kelime sığmadığı
+    için sağ kenara yakın biter). Tablo etiket satırları (ör. değer hücresi '—' olduğu için
+    sağ-komşusu görünmeyen 'HPV 16' / 'HPV 18' / 'HPV 45') kısadır ve kolonu doldurmaz.
+    En az bir son-olmayan satır kolonu dolduruyorsa prose say (reflow et)."""
+    gl = min(g.seg.bbox[0] for g in grp)
+    gr = max(g.seg.bbox[2] for g in grp)
+    width = gr - gl
+    if width <= 0:
+        return False
+    return any(g.seg.bbox[2] >= gr - 0.25 * width for g in grp[:-1])
 
 
 def _group_bottom(grp, all_segs):
