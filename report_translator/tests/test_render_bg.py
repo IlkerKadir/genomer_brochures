@@ -343,10 +343,28 @@ def test_merge_split_sentences_keeps_real_paragraph_breaks():
     a = _mseg(0, 308, 105, 573, 172, "First sentence ends cleanly.")
     b = _mseg(0, 308, 173, 570, 205, "Second sentence starts here.")
     assert len(engine._merge_split_sentences([a, b])) == 2
-    # tek-satır bloklar (tablo hücreleri) asla birleşmez
-    c = _mseg(0, 46, 280, 133, 289, "etiket", single=True)
-    d = _mseg(0, 46, 295, 133, 304, "değer", single=True)
-    assert len(engine._merge_split_sentences([c, d])) == 2
+
+
+def test_merge_single_line_prose_continuation():
+    # GENİŞ tek-satır prose parçaları (sağ-komşusuz) birleşir (sonuç kutusu cümle bölünmesi)
+    a = _mseg(0, 322, 105, 560, 114,
+              "NB! Low total bacterial load. The accuracy of bacterial", single=True)  # ~238pt
+    b = _mseg(0, 322, 115, 540, 124, "amount calculation may be low.", single=True)
+    out = engine._merge_split_sentences([a, b])
+    assert len(out) == 1
+    assert "accuracy of bacterial amount calculation may be low" in out[0].en
+
+
+def test_merge_skips_single_line_table_cells():
+    # dar tek-satır hücreler birleşmez (kısa -> prose değil)
+    a = _mseg(0, 46, 280, 90, 289, "not detected", single=True)     # ~44pt
+    b = _mseg(0, 46, 295, 90, 304, "not detected", single=True)
+    assert len(engine._merge_split_sentences([a, b])) == 2
+    # geniş AMA sağ-komşulu tek-satır (tablo etiketi) birleşmez
+    c = _mseg(0, 46, 280, 250, 289, "metabolically active species, proportion", single=True)
+    d = _mseg(0, 46, 295, 250, 304, "metabolically active infant species", single=True)
+    val = _mseg(0, 300, 280, 340, 289, "99", single=True)           # c'nin sağ komşusu
+    assert len(engine._merge_split_sentences([c, d, val])) == 3
 
 
 def test_avail_width_extends_to_neighbor_or_margin():

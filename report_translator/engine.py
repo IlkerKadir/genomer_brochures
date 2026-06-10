@@ -163,26 +163,41 @@ def extract_segments(doc):
     return _merge_split_sentences(segments)
 
 
+def _mergeable_continuation(a, b, page_segs):
+    """a (cümle-sonu noktalamasız biten) ve b (küçük harfle başlayan) gerçek bir bölünmüş
+    cümle mi? Çok-satırlı prose blokları doğrudan; tek-satır parçalar yalnız GENİŞ prose satırı
+    olup iki tarafta da sağ-komşu YOKSA (tablo değer hücresi yok) birleşir. Böylece özet/sonuç
+    kutusu parçaları birleşir ama tablo etiket/değer satırları korunur."""
+    if not a.single_line and not b.single_line:
+        return True
+    return ((a.bbox[2] - a.bbox[0]) > 150
+            and not _has_right_neighbor(a, page_segs)
+            and not _has_right_neighbor(b, page_segs))
+
+
 def _merge_split_sentences(segments):
     """Aynı sütunda dikey-bitişik, aynı font/boyut iki prose bloğu — birincisi cümle-sonu
     noktalaması OLMADAN bitip ikincisi küçük harfle başlıyorsa — tek segmente birleştir.
 
-    Gerçek-lab özet kutusu bazı raporlarda cümle ortasından iki bloğa bölünüyor
-    (ör. '...The Bacteroidetes taxa' + 'agents are present...'). Birleştirmeyince her parça
-    ayrı çevrilir (DeepL yarım cümle alır → kötü çeviri) ve ayrı kutuya yazılır (cümle ortasında
-    satır atlama). Yalnız çok-satırlı (single_line=False) bloklar aday; tablo hücreleri etkilenmez."""
-    multi = sorted([s for s in segments if not s.single_line],
-                   key=lambda s: (s.page, round(s.bbox[0]), s.bbox[1]))
+    Gerçek-lab özet/sonuç kutusu bazı raporlarda cümle ortasından iki parçaya bölünüyor
+    (ör. '...The Bacteroidetes taxa' + 'agents are present...', '...The accuracy of bacterial' +
+    'amount calculation may be low.'). Birleştirmeyince her parça ayrı çevrilir (DeepL yarım
+    cümle alır → kötü çeviri) ve ayrı yazılır (cümle ortasında satır atlama). Tablo hücreleri
+    `_mergeable_continuation` koruması ile etkilenmez."""
+    by_page = {}
+    for s in segments:
+        by_page.setdefault(s.page, []).append(s)
+    cand = sorted(segments, key=lambda s: (s.page, round(s.bbox[0]), s.bbox[1]))
     drop = set()
     i = 0
-    while i < len(multi):
-        a = multi[i]
+    while i < len(cand):
+        a = cand[i]
         if id(a) in drop:
             i += 1
             continue
         j = i + 1
-        while j < len(multi):
-            b = multi[j]
+        while j < len(cand):
+            b = cand[j]
             if id(b) in drop:
                 j += 1
                 continue
@@ -190,11 +205,13 @@ def _merge_split_sentences(segments):
                         and a.fontfile == b.fontfile and abs(a.size - b.size) <= 0.6)
             adjacent = -2.0 <= (b.bbox[1] - a.bbox[3]) <= a.size * 0.8
             split_sentence = (a.en.rstrip()[-1:] not in ".!?:" and b.en.lstrip()[:1].islower())
-            if same_col and adjacent and split_sentence:
+            if (same_col and adjacent and split_sentence
+                    and _mergeable_continuation(a, b, by_page[a.page])):
                 a.en = a.en.rstrip() + " " + b.en.lstrip()
                 a.bbox = [min(a.bbox[0], b.bbox[0]), a.bbox[1],
                           max(a.bbox[2], b.bbox[2]), b.bbox[3]]
                 a.rects = a.rects + b.rects
+                a.single_line = False              # birleşik metin çok satıra sarılmalı (küçülmesin)
                 drop.add(id(b))
                 j += 1
             else:

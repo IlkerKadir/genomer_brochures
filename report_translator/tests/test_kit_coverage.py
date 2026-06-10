@@ -51,6 +51,11 @@ PASSTHROUGH_YES = [
     "Actinomycetota (Actinobacteria) Bifidobacterium spp",
     "Bacillota (Firmicutes) Clostridium leptum gr",
     "Bacteroidota (Bacteroidetes) Alistipes spp",
+    # femobiome Latin/marker: dipnot rakamlı tür, kısaltılmış tür/eğik liste, BVAB/HPV markerları
+    "Lactobacillus spp.1", "Lactobacillus spp.¹", "Streptococcus spp.²",
+    "L.gasseri/L.paragasseri", "L.gasseri/L. paragasseri", "L.jensenii/L.mulieris",
+    "(L.crispatus, L.iners, L.jensenii/L.mulieris),",
+    "BVAB1/BVAB2/BVAB3", "BVAB1 / BVAB2 / BVAB3", "HPV 16", "HSV-1",
 ]
 
 # Gerçek etiketler / cümleler passthrough OLMAMALI (sözlük/AI ile çevrilirler)
@@ -120,6 +125,7 @@ def test_ai_markers_do_not_route_patient_fields():
 
 _ENTERO = os.path.join(os.path.dirname(__file__), "..", "new_samples", "entero_split", "entero_1.pdf")
 _ANDRO = os.path.join(os.path.dirname(__file__), "..", "new_samples", "andro_split", "andro_1.pdf")
+_FEMO = os.path.join(os.path.dirname(__file__), "..", "new_samples", "split", "rapor_3.pdf")
 
 
 def _unknown_strings(path, kit):
@@ -154,5 +160,14 @@ def test_androbiome_no_unknown_after_coverage():
     _kits, _common, _pt, raw = dictionary.load()
     markers = dictionary.ai_markers(raw, "androbiome")
     leftover = [t for t in _unknown_strings(_ANDRO, "androbiome")
+                if not aiconfig.ai_eligible(t, markers)]
+    assert leftover == [], f"çevrilemeyen (özet-dışı) dizgiler kaldı: {leftover}"
+
+
+@pytest.mark.skipif(not os.path.exists(_FEMO), reason="gerçek lab örneği yok (gitignore)")
+def test_femobiome_no_unknown_after_coverage():
+    _kits, _common, _pt, raw = dictionary.load()
+    markers = dictionary.ai_markers(raw, "femobiome_ii")
+    leftover = [t for t in _unknown_strings(_FEMO, "femobiome_ii")
                 if not aiconfig.ai_eligible(t, markers)]
     assert leftover == [], f"çevrilemeyen (özet-dışı) dizgiler kaldı: {leftover}"
