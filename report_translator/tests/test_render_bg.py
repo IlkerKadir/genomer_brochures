@@ -58,12 +58,18 @@ def test_fill_covers_vector_ink():
     page = doc.new_page(width=300, height=120)
     # 1) gerçek metin katmanı koy (extract bunu bulur, redaksiyon siler)
     page.insert_text((50, 66), "Hello", fontsize=12, color=(0, 0, 0))
-    # 2) segmentin TAM dikdörtgeni üzerine ayırt edici kırmızı blok çiz
-    #    ("vektör-outline İngilizce" simülasyonu; metin bbox'u ile birebir hizalı)
+    # 2) segmentin dikdörtgeni üzerine glif-boyutlu kırmızı dolgular çiz
+    #    ("vektör-outline İngilizce" simülasyonu: eğriye-çevrilmiş harfler = çok sayıda küçük dolgu;
+    #     ≥5 glif-boyutlu dolgu sayfayı vektör-outline olarak işaretler -> kapatma devreye girer)
     segs = engine.extract_segments(doc)
     assert segs, "metin segmenti bulunamadı"
     red_rect = fitz.Rect(segs[0].rects[0])
-    page.draw_rect(red_rect, color=None, fill=(1, 0, 0))
+    n = 6
+    step = red_rect.width / n
+    for i in range(n):                          # 6 glif-boyutlu kırmızı dolgu (harf taklidi)
+        gx = red_rect.x0 + i * step
+        page.draw_rect(fitz.Rect(gx, red_rect.y0, gx + step * 0.9, red_rect.y1),
+                       color=None, fill=(1, 0, 0))
 
     ann = engine.translate_segments(segs, {"Hello": "Merhaba"}, [], {})
     items = [a for a in engine._changed_items(ann) if a.seg.page == 0]
@@ -207,6 +213,43 @@ def test_multiline_turkish_survives_source_font_collision(tmp_path):
     engine._render_page_items(page, items, {})
     txt = page.get_text()
     assert "oranı" in txt and "içindedir" in txt and "çeşitliliği" in txt, repr(txt)
+
+
+def test_page_graphics_detects_vector_outline():
+    # glif-boyutlu dolgu yok -> normal metin (vektör-outline DEĞİL)
+    doc = fitz.open()
+    p1 = doc.new_page(width=200, height=60)
+    p1.draw_rect(fitz.Rect(0, 20, 200, 35), color=None, fill=(0.89, 0.89, 0.89))  # büyük şerit
+    p1.insert_text((10, 32), "Normal text row", fontsize=10)
+    _strokes, vec = engine._page_graphics(p1)
+    assert vec is False
+    # ≥5 glif-boyutlu dolgu -> vektör-outline
+    p2 = doc.new_page(width=200, height=60)
+    for i in range(6):
+        p2.draw_rect(fitz.Rect(10 + i * 12, 20, 18 + i * 12, 34), color=None, fill=(0, 0, 0))
+    _s2, vec2 = engine._page_graphics(p2)
+    assert vec2 is True
+
+
+def test_normal_text_row_keeps_black_ink_no_coverfill():
+    """Normal-metin sayfasında (gri şeritli satır) çeviri SİYAH mürekkeple yazılmalı;
+    kapatma-dolgusu/ink-örnekleme devreye girip metni soluk (beyaz/gri) yapMAMALI."""
+    import numpy as np
+    doc = fitz.open()
+    page = doc.new_page(width=300, height=70)
+    page.draw_rect(fitz.Rect(0, 28, 300, 44), color=None, fill=(0.89, 0.89, 0.89))  # gri zebra şeridi
+    page.insert_text((20, 40), "Label", fontsize=10, color=(0, 0, 0))
+    segs = engine.extract_segments(doc)
+    ann = engine.translate_segments(segs, {"Label": "Etiket"}, [], {})
+    items = [a for a in ann if a.tr != a.en and a.seg.page == 0]
+    engine._render_page_items(page, items, {})
+    assert "Etiket" in page.get_text()
+    pm = page.get_pixmap(dpi=150)
+    arr = np.frombuffer(pm.samples, dtype=np.uint8).reshape(pm.height, pm.width, pm.n)[:, :, :3]
+    sc = 150 / 72.0
+    band = arr[int(31 * sc):int(43 * sc), int(20 * sc):int(60 * sc)]
+    dark = int((band < 90).all(axis=2).sum())
+    assert dark > 40, f"çeviri siyah yazılmadı (soluk mürekkep?), koyu px={dark}"
 
 
 def test_grid_line_survives_cover_fill():

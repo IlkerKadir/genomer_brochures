@@ -444,28 +444,35 @@ def _render_reflow_group(page, grp, col_of, font_cache, bottom=None):
     _reflow_layout(page, grp, col_of, font_cache, sc, x0, right, baseline, pitch, True)
 
 
-def _thin_strokes(page):
-    """Sayfadaki ince çizgi-grafiklerini (tablo ızgara çizgileri) (a, b, renk, kalınlık) olarak yakala.
+def _page_graphics(page):
+    """Tek bir get_drawings çağrısından (ince_çizgiler, vektör_outline_mu) döndür.
 
-    Kapatma dolgusu (fill=bg) bu çizgileri örter; render sonunda örtülenler üste yeniden
-    çizilerek ızgara bütünlüğü korunur (gerçek-lab vektör-outline raporlarında dolgu, altındaki
-    ince çizgiyi de boyuyordu → kırık/beyaz-taşma görünümü)."""
-    out = []
+    - ince çizgiler: tablo ızgara çizgileri (a, b, renk, kalınlık). Kapatma dolgusu bunları
+      örtebilir; render sonunda örtülenler üste yeniden çizilir.
+    - vektör_outline_mu: sayfa gövde metnini eğriye-çevrilmiş (glif-boyutlu dolgu yolları)
+      olarak çiziyor mu? Öyleyse kapatma+yeniden-yaz gerekir; normal metin sayfalarında
+      (ör. Enterobiome) kapatma dolgusu gereksiz/zararlıdır (gri kutu + soluk mürekkep)."""
+    strokes = []
+    glyph_fills = 0
     for d in page.get_drawings():
+        typ = d["type"]
         w = d.get("width") or 0
         col = d.get("color")
-        if col is None or "s" not in d["type"] or w > 1.5:
-            continue
-        for it in d["items"]:
-            if it[0] == "l":
-                out.append((fitz.Point(it[1]), fitz.Point(it[2]), tuple(col), w))
-            elif it[0] == "re":
-                r = fitz.Rect(it[1])
-                cs = [fitz.Point(r.x0, r.y0), fitz.Point(r.x1, r.y0),
-                      fitz.Point(r.x1, r.y1), fitz.Point(r.x0, r.y1)]
-                for i in range(4):
-                    out.append((cs[i], cs[(i + 1) % 4], tuple(col), w))
-    return out
+        if "f" in typ:                         # dolgu: glif-boyutlu mu? (vektör-outline işareti)
+            r = fitz.Rect(d["rect"])
+            if 0 < r.width < 40 and 0 < r.height < 20:
+                glyph_fills += 1
+        if col is not None and "s" in typ and w <= 1.5:
+            for it in d["items"]:
+                if it[0] == "l":
+                    strokes.append((fitz.Point(it[1]), fitz.Point(it[2]), tuple(col), w))
+                elif it[0] == "re":
+                    rr = fitz.Rect(it[1])
+                    cs = [fitz.Point(rr.x0, rr.y0), fitz.Point(rr.x1, rr.y0),
+                          fitz.Point(rr.x1, rr.y1), fitz.Point(rr.x0, rr.y1)]
+                    for i in range(4):
+                        strokes.append((cs[i], cs[(i + 1) % 4], tuple(col), w))
+    return strokes, glyph_fills >= 5
 
 
 def _redraw_covered_strokes(page, strokes, filled_rects):
@@ -495,7 +502,7 @@ def _render_page_items(page, items, font_cache, all_items=None):
     tespit edilip kutuya yeniden akıtılır (sarma); tablo satırları güvenlik kuralıyla hariç."""
     if not items:
         return
-    strokes = _thin_strokes(page)              # kapatma ÖNCESİ ızgara çizgilerini yakala
+    strokes, vector_outline = _page_graphics(page)   # ızgara çizgileri + vektör-outline mu?
     filled_rects = []                          # kapatma-dolgusu (fill=bg) uygulanan dikdörtgenler
     try:
         pm = page.get_pixmap(dpi=150)
@@ -522,7 +529,8 @@ def _render_page_items(page, items, font_cache, all_items=None):
         first_rect = None
         for r in a.seg.rects:
             rect = fitz.Rect(r)
-            bg = _sample_bg(pm, rect, scale) if pm is not None else None
+            # kapatma yalnız vektör-outline sayfalarda; normal metin redaksiyonla temizce silinir
+            bg = _sample_bg(pm, rect, scale) if (pm is not None and vector_outline) else None
             if bg is not None:
                 if first_bg is None:
                     first_bg = bg
