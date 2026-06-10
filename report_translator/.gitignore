@@ -13,3 +13,8 @@ glossary_state.json
 # Gerçek lab/hasta verisi — git'e ASLA girmez
 new_samples/
 *.xlsx
+# Gerçek-lab kaynak rapor PDF'leri (hasta verisi) — kök dizine bırakılanlar dahil
+*.pdf
+Entrobiome*.pdf
+andro hpv*.pdf
+Femo*.pdf
