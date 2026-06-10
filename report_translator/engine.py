@@ -342,6 +342,21 @@ def _has_right_neighbor(seg, all_segs, gap=4):
     return False
 
 
+def _avail_width(seg, all_segs, page_width, left):
+    """Tek-satır segment için sağdaki en yakın komşuya (yoksa sayfa kenarına) kadar kullanılabilir
+    genişlik. Çeviri orijinalden uzunsa (ör. 'SEX:' -> 'CİNSİYET:'), fontu küçültmek yerine
+    sağdaki boşluğa taşımayı sağlar. Tablo hücrelerinde sağ komşu bulunur -> taşma yine engellenir."""
+    right = page_width - 4.0
+    if all_segs:
+        y0, y1 = seg.bbox[1], seg.bbox[3]
+        for o in all_segs:
+            if o is seg or o.bbox[0] < seg.bbox[2] - 0.5:
+                continue
+            if min(y1, o.bbox[3]) - max(y0, o.bbox[1]) > 1.0:   # y-örtüşen sağ komşu
+                right = min(right, o.bbox[0] - 2.0)
+    return max(right - left, seg.bbox[2] - left)               # en az orijinal genişlik
+
+
 def _paragraph_groups(all_items, changed_ids):
     """Ardışık tek-satır segmentleri paragraf bloklarına grupla (tablo/hasta-alanı hariç).
 
@@ -565,8 +580,10 @@ def _render_page_items(page, items, font_cache, all_items=None):
         indent = _leading_indent(s.raw_first, font, s.size)
         if s.single_line:
             ox, oy = s.origin
-            # çeviri orijinal genişliği aşıyorsa fontu sığacak kadar küçült (taşma yok)
-            fs = _fit_size(font, text, s.bbox[2] - (ox + indent), s.size)
+            # kullanılabilir genişlik = sağdaki komşuya/sayfa kenarına kadar (etiketler boşluğa taşar,
+            # küçülmez); yine sığmazsa _fit_size fontu küçültür (tablo hücrelerinde taşma engellenir)
+            avail = _avail_width(s, all_segs, page.rect.width, ox + indent)
+            fs = _fit_size(font, text, avail, s.size)
             page.insert_text((ox + indent, oy), text, fontname=fontname,
                              fontfile=fontfile, fontsize=fs, color=col)
         else:

@@ -320,6 +320,17 @@ def test_has_right_neighbor_detects_table_value():
     assert not engine._has_right_neighbor(label, [label])
 
 
+def test_avail_width_extends_to_neighbor_or_margin():
+    # kısa, dar etiket ('SEX:' gibi): sağı boşsa kullanılabilir genişlik sayfa kenarına uzar
+    label = _seg(40, 30, 57, 39)            # ~17pt geniş
+    free = engine._avail_width(label, [label], 400, 40)
+    assert free > 300, free                 # küçülme yok -> 'CİNSİYET:' tam boyutta sığar
+    # sağda değer hücresi olunca (tablo) kullanılabilir genişlik komşuya kadar kısıtlanır
+    value = _seg(200, 30, 260, 39)
+    tbl = engine._avail_width(label, [label, value], 400, 40)
+    assert 150 < tbl < 162, tbl             # ~ (200-2) - 40 ; taşma yine engellenir
+
+
 def test_paragraph_groups_groups_prose_lines():
     a = _item(_seg(322, 124, 552, 133))
     b = _item(_seg(322, 134, 539, 143))
