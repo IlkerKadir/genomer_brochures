@@ -623,8 +623,10 @@ def _render_page_items(page, items, font_cache, all_items=None):
                 if first_bg is None:
                     first_bg = bg
                     first_rect = rect
-                # vektör-outline kenarları metin bbox'undan taşabilir -> ~1px genişlet
-                fr = rect + (-1, -1, 1, 1)
+                # vektör kenarları metin bbox'unu yatayda taşabilir -> yatayda 1px genişlet;
+                # dikeyde yalnız 0.3px (ince tablo ızgara çizgileri ~0.7px ötede; onları örtüp
+                # soluklaştırmamak için). Yine de örtülen çizgi olursa _redraw_covered_strokes geri çizer.
+                fr = rect + (-1, -0.3, 1, 0.3)
                 page.add_redact_annot(fr, fill=bg)
                 filled_rects.append(fr)
             else:
