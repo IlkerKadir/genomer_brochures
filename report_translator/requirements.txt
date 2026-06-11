@@ -3,3 +3,7 @@ pymupdf==1.26.7
 fastapi==0.115.0
 uvicorn==0.30.6
 python-multipart==0.0.9
+# DeepL HTTPS sertifika doğrulaması (Windows): truststore = OS sertifika deposu
+# (kurumsal CA + eksik ara-sertifika), certifi = yedek CA paketi.
+truststore==0.10.1
+certifi==2024.8.30

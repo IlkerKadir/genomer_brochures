@@ -1,15 +1,45 @@
 """translator.py — sağlayıcı-bağımsız harici çeviri arayüzü. İlk uygulama: DeepL (glossary destekli)."""
 import json
+import ssl
 import hashlib
 import urllib.request
 import urllib.parse
+
+_SSL_CTX = None
+
+
+def _ssl_context():
+    """HTTPS doğrulama bağlamı. Windows'ta varsayılan urllib sertifikayı doğrulayamaz
+    (CERTIFICATE_VERIFY_FAILED). Öncelik:
+    1) truststore — İŞLETİM SİSTEMİ sertifika deposu (Windows kurumsal CA + eksik ara-sertifika
+       otomatik AIA çözümü). En kapsamlı.
+    2) certifi — Mozilla CA paketi (eksik kök/ara CA).
+    3) varsayılan bağlam.
+    Bir kez kurulup önbelleğe alınır."""
+    global _SSL_CTX
+    if _SSL_CTX is not None:
+        return _SSL_CTX
+    try:
+        import truststore
+        _SSL_CTX = truststore.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+        return _SSL_CTX
+    except Exception:
+        pass
+    try:
+        import certifi
+        _SSL_CTX = ssl.create_default_context(cafile=certifi.where())
+        return _SSL_CTX
+    except Exception:
+        pass
+    _SSL_CTX = ssl.create_default_context()
+    return _SSL_CTX
 
 
 def _http_post_form(url, fields, headers, timeout=10):
     """form-encoded POST → JSON yanıt. (Testlerde monkeypatch'lenir.)"""
     body = urllib.parse.urlencode(fields).encode("utf-8")
     req = urllib.request.Request(url, data=body, headers=headers)
-    with urllib.request.urlopen(req, timeout=timeout) as resp:
+    with urllib.request.urlopen(req, timeout=timeout, context=_ssl_context()) as resp:
         return json.load(resp)
 
 
@@ -52,7 +82,7 @@ def delete_glossary(api_key, glossary_id):
     yeni oluşturmadan önce eskisini silmek gerekir, yoksa 'Too many glossaries')."""
     req = urllib.request.Request(_base(api_key) + "/glossaries/" + glossary_id,
                                  headers=_auth(api_key), method="DELETE")
-    with urllib.request.urlopen(req, timeout=10):
+    with urllib.request.urlopen(req, timeout=10, context=_ssl_context()):
         return True
 
 

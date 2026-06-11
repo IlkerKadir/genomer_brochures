@@ -1,0 +1,1 @@
+**Goal:** Rapor çevirici motorunda yalnızca hastaya-özel sonuç özetini sağlayıcı-bağımsız bir AI (önce DeepL) ile çevirmek; hasta verisini asla göndermemek (iki katmanlı de-id), sonucu önbelleklemek, internet/anahtar yoksa yerel sözlük+şablona düşmek; sonuç editörde düzenlenebilir kalmak.

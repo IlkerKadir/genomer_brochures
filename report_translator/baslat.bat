@@ -16,6 +16,9 @@ if errorlevel 1 goto installfail
 goto run
 
 :run
+REM Mevcut venv'lerde SSL bagimliliklari eksikse kur (DeepL sertifika dogrulamasi icin)
+.venv\Scripts\python -c "import truststore, certifi" 2>nul
+if errorlevel 1 .venv\Scripts\python -m pip install -q truststore certifi
 if not exist "web\index.html" echo UYARI: web klasoru eksik - klasoru eksiksiz kopyalayin.
 start "" http://127.0.0.1:8731
 echo.
