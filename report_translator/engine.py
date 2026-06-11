@@ -583,6 +583,65 @@ def _redraw_covered_strokes(page, strokes, filled_rects):
         shape.commit()
 
 
+# Femo hasta-başlığı etiketleri metin katmanı OLMAYAN saf vektör (Patient name: vb.).
+# Sabit şablon: 6 etiket, soldaki ince ayraç çizgileriyle bölünmüş satırlarda, sırayla.
+_FEMO_HEADER_LABELS = [
+    "Hasta adı:", "Doğum tarihi:", "Numune tarihi:",
+    "Örnek türü:", "Örnek ID:", "Hekim:",
+]
+
+
+def _overlay_femo_header(page):
+    """Femo hasta-başlığı etiketlerini (metin katmanı yok, saf vektör) Türkçeye çevir.
+
+    İmza: üst-sol bölgede ≥6 ince yatay ayraç çizgisi + o bölgede metin katmanı YOK
+    (andro/entero başlıkları metin katmanlı → tetiklenmez). Her satırda etiket (sol glif
+    kümesi) kapatılıp Türkçe yazılır; değer (hasta verisi, boşluktan sonraki küme) korunur."""
+    draws = page.get_drawings()
+    lines = sorted(set(
+        round(it[1][1], 1)
+        for d in draws if "s" in d["type"] and (d.get("width") or 0) < 2.0
+        for it in d["items"]
+        if it[0] == "l" and abs(it[1][1] - it[2][1]) < 0.5
+        and min(it[1][0], it[2][0]) < 60 and max(it[1][0], it[2][0]) > 280
+        and 130 < it[1][1] < 240))
+    if len(lines) < 6:
+        return
+    band = fitz.Rect(40, lines[0] - 16, 300, lines[5])
+    if page.get_textbox(band).strip():         # bu bölgede metin var -> femo değil, dokunma
+        return
+    black_fills = [fitz.Rect(d["rect"]) for d in draws
+                   if "f" in d["type"] and d.get("fill") and max(d["fill"]) < 0.3]
+    font = fitz.Font(fontfile=os.path.join(FONT_DIR, "Arial-Bold.ttf"))
+    fontfile = os.path.join(FONT_DIR, "Arial-Bold.ttf")
+    plans = []                                 # (baseline, right, label, size)
+    for i, label in enumerate(_FEMO_HEADER_LABELS):
+        bottom = lines[i]
+        row = sorted((r for r in black_fills if bottom - 13 < r.y0 < bottom - 1 and r.x0 < 220),
+                     key=lambda r: r.x0)
+        if not row:
+            continue
+        lab_end = row[0].x1                    # etiket kümesi: soldan, >5pt boşluğa kadar
+        value_start = None
+        for r in row[1:]:
+            if r.x0 - lab_end > 5:
+                value_start = r.x0
+                break
+            lab_end = max(lab_end, r.x1)
+        right = (value_start - 1.5) if value_start else (lab_end + 3)
+        page.add_redact_annot(fitz.Rect(46, bottom - 13, right, bottom - 1.5), fill=(1, 1, 1))
+        size = _fit_size(font, label, right - 49, 9.0)
+        plans.append((bottom - 4.0, label, size))
+    if not plans:
+        return
+    page.apply_redactions(images=fitz.PDF_REDACT_IMAGE_NONE,
+                          graphics=fitz.PDF_REDACT_LINE_ART_NONE,
+                          text=fitz.PDF_REDACT_TEXT_REMOVE)
+    for baseline, label, size in plans:
+        page.insert_text((49, baseline), label, fontname="GnmrTRhdr",
+                         fontfile=fontfile, fontsize=size, color=(0, 0, 0))
+
+
 def _render_page_items(page, items, font_cache, all_items=None):
     """Tek bir sayfadaki değişen segmentleri yerinde render et (redaksiyon + geri yazma).
 
@@ -680,6 +739,8 @@ def _render_page_items(page, items, font_cache, all_items=None):
                 sys.stderr.write("UYARI: segment sığmadı, atlandı: %r\n" % text)
     # kapatma-dolgusunun örttüğü ızgara çizgilerini orijinal renk/kalınlıkla geri çiz
     _redraw_covered_strokes(page, strokes, filled_rects)
+    # femo hasta-başlığı etiketleri (metin katmanı yok, saf vektör) -> Türkçe kaplama (femo imzalıysa)
+    _overlay_femo_header(page)
 
 
 def _changed_items(annotated):

@@ -277,6 +277,34 @@ def test_grid_line_survives_cover_fill():
     assert dark > 40, f"ızgara çizgisi geri çizilmedi (koyu px={dark})"
 
 
+def _femo_header_page():
+    doc = fitz.open()
+    page = doc.new_page(width=595, height=842)
+    ys = [147, 161, 176, 190, 205, 219, 234]      # 7 ayraç çizgisi -> 6 satır
+    for y in ys:
+        page.draw_line(fitz.Point(46, y), fitz.Point(298, y), color=(0, 0, 0), width=0.5)
+    for y in ys[:6]:                              # her satırda siyah 'etiket glifi' bloğu
+        page.draw_rect(fitz.Rect(49, y - 10, 95, y - 3), color=None, fill=(0, 0, 0))
+    return doc, page
+
+
+def test_overlay_femo_header_translates_labels():
+    # metin katmanı YOK + 6 ayraç çizgisi -> femo imzası -> Türkçe etiketler yazılır
+    doc, page = _femo_header_page()
+    engine._overlay_femo_header(page)
+    txt = page.get_text().replace("\xa0", " ")   # insert_text boşluğu \xa0 olarak dönebilir
+    for lbl in engine._FEMO_HEADER_LABELS:
+        assert lbl in txt, (lbl, txt)
+
+
+def test_overlay_femo_header_skips_when_text_layer_present():
+    # aynı yapı AMA metin katmanı var (andro/entero başlıkları) -> overlay tetiklenmez
+    doc, page = _femo_header_page()
+    page.insert_text((50, 150), "Patient name:", fontsize=9)
+    engine._overlay_femo_header(page)
+    assert "Hasta adı:" not in page.get_text()
+
+
 def test_sub_glyphs_replaces_missing_bullet():
     # ⯀ (U+2BC0, Arial'da yok) -> ■ (U+25A0, dolu kare, Arial'da var)
     assert engine._sub_glyphs("⯀ Test") == "■ Test"
