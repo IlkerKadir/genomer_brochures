@@ -655,6 +655,60 @@ def _overlay_femo_header(page):
                          fontfile=fontfile, fontsize=size, color=(0, 0, 0))
 
 
+# Femo "Notes / Terminology" footer'ı da metin katmanı OLMAYAN saf vektör, sabit boilerplate.
+# Türkçe çeviri (İlker gözden geçirebilir) — kaynak metin DNA-Technology femo şablonundan.
+_FEMO_FOOTER_TR = (
+    "Notlar\n"
+    "● Göreceli miktar, toplam miktarın oranı olarak hesaplanır.\n"
+    "Sonuç doğruluğu, yöntemin hata payından ve bu testle saptanamayan mikroorganizmaların "
+    "varlığından etkilenebilir.\n"
+    "● HPV 31–68 — HPV31/33/35/39/51/52/56/58/59/66/68 arasında genotiplemesiz birleşik saptama.\n"
+    "● Streptococcus agalactiae için referans: gestasyonel yaş ≥37–38 hafta — negatif sonuç; "
+    "diğer tüm durumlar — <4,0 lg GE/mL.\n"
+    "\n"
+    "Rapor formundaki infografik türleri\n"
+    "- renkli gösterge simgesi — mikrobiyota durumunun genel değerlendirmesi "
+    "(öbiyoz, orta veya belirgin disbiyoz);\n"
+    "- yığılmış çubuk grafik — mikrobiyota içindeki normal mikrobiyota, aerob, anaerob ve "
+    "mikoplazmaların oranlarının gösterimi;\n"
+    "- çubuk grafik — bireysel mikroorganizma profili.\n"
+    "\n"
+    "Terminoloji ve semboller\n"
+    "Aeroblar — fakültatif-anaerobik fırsatçılar. Anaeroblar — zorunlu anaerobik fırsatçılar. "
+    "Mikoplazmalar — fırsatçı genital mikoplazmalar.\n"
+    "Tire (—) = negatif sonuç; “/” = birleşik saptama."
+)
+
+
+def _overlay_femo_footer(page):
+    """Femo 'Notlar/Terminoloji' footer'ı (metin katmanı yok, saf vektör, sabit boilerplate)
+    İngilizce kalıyordu. Alt-bölgedeki vektör-glif kümesi kapatılıp Türkçe metin yazılır.
+    İmza: y>600'de glif-dolgu kümesi VAR ama o bölgede metin katmanı YOK (femo'ya özgü)."""
+    draws = page.get_drawings()
+    foot = [fitz.Rect(d["rect"]) for d in draws
+            if "f" in d["type"] and d.get("fill") and max(d["fill"]) < 0.3
+            and 40 < fitz.Rect(d["rect"]).x0 < 560 and fitz.Rect(d["rect"]).y0 > 620]
+    if len(foot) < 8:                          # footer glif kümesi yok -> femo footer değil
+        return
+    top = min(r.y0 for r in foot)
+    bot = max(r.y1 for r in foot)
+    if page.get_textbox(fitz.Rect(42, top - 2, 565, bot + 2)).strip():
+        return                                 # bölgede metin var -> saf vektör değil, dokunma
+    page.add_redact_annot(fitz.Rect(42, top - 3, 568, bot + 3), fill=(1, 1, 1))
+    page.apply_redactions(images=fitz.PDF_REDACT_IMAGE_NONE,
+                          graphics=fitz.PDF_REDACT_LINE_ART_NONE,
+                          text=fitz.PDF_REDACT_TEXT_REMOVE)
+    fontfile = os.path.join(FONT_DIR, "Arial-Regular.ttf")
+    fs = 6.5
+    while fs > 4.0:
+        rc = page.insert_textbox(fitz.Rect(46, top - 2, 566, bot + 24), _FEMO_FOOTER_TR,
+                                 fontname="GnmrTRft", fontfile=fontfile, fontsize=fs,
+                                 lineheight=1.18, color=(0, 0, 0))
+        if rc >= 0:
+            break
+        fs -= 0.25
+
+
 def _render_page_items(page, items, font_cache, all_items=None):
     """Tek bir sayfadaki değişen segmentleri yerinde render et (redaksiyon + geri yazma).
 
@@ -754,6 +808,7 @@ def _render_page_items(page, items, font_cache, all_items=None):
     _redraw_covered_strokes(page, strokes, filled_rects)
     # femo hasta-başlığı etiketleri (metin katmanı yok, saf vektör) -> Türkçe kaplama (femo imzalıysa)
     _overlay_femo_header(page)
+    _overlay_femo_footer(page)                 # femo Notlar/Terminoloji footer'ı (saf vektör)
 
 
 def _changed_items(annotated):

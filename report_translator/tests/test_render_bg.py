@@ -323,6 +323,26 @@ def test_overlay_femo_header_continuation_page_two_labels():
     assert "Doğum tarihi:" not in txt          # 2-alanlı sette yok
 
 
+def test_overlay_femo_footer_writes_turkish():
+    # alt bölgede vektör glif kümesi + metin yok -> femo footer imzası -> Türkçe yazılır
+    doc = fitz.open()
+    page = doc.new_page(width=595, height=842)
+    for i in range(12):                          # >=8 alt glif-dolgu (footer simülasyonu)
+        page.draw_rect(fitz.Rect(42, 640 + i * 11, 300, 646 + i * 11), color=None, fill=(0, 0, 0))
+    engine._overlay_femo_footer(page)
+    txt = page.get_text().replace("\xa0", " ")
+    assert "Terminoloji ve semboller" in txt and "Notlar" in txt
+
+
+def test_overlay_femo_footer_skips_without_glyph_cluster():
+    # alt glif kümesi yok -> footer overlay tetiklenmez (andro/entero güvenli)
+    doc = fitz.open()
+    page = doc.new_page(width=595, height=842)
+    page.draw_rect(fitz.Rect(42, 650, 300, 658), color=None, fill=(0, 0, 0))  # tek glif (<8)
+    engine._overlay_femo_footer(page)
+    assert "Notlar" not in page.get_text()
+
+
 def test_sub_glyphs_replaces_missing_bullet():
     # ⯀ (U+2BC0, Arial'da yok) -> ■ (U+25A0, dolu kare, Arial'da var)
     assert engine._sub_glyphs("⯀ Test") == "■ Test"
