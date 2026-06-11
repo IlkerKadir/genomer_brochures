@@ -15,6 +15,10 @@ DEFAULT_CONFIG = {
     "deepl_api_key": "",
     "ai_summary_enabled": False,
     "target_lang": "TR",
+    # Kurumsal ağ/proxy SSL sorunları için (Windows): kurumsal kök CA dosyası (.pem) yolu;
+    # ya da son çare olarak doğrulamayı kapat (yalnız de-id özet gönderildiği için kabul edilebilir).
+    "deepl_ca_file": "",
+    "deepl_insecure_ssl": False,
     "deepl_context": ("Formal Turkish translation of a clinical conclusion from a urogenital or "
                       "intestinal microbiota qPCR diagnostic report. Keep all Latin taxonomic names "
                       "and abbreviations (spp., gr, subsp.) exactly as written; do not translate them. "

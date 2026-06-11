@@ -6,32 +6,60 @@ import urllib.request
 import urllib.parse
 
 _SSL_CTX = None
+_SSL_OPTS = {"ca_file": None, "insecure": False}
 
 
-def _ssl_context():
-    """HTTPS doğrulama bağlamı. Windows'ta varsayılan urllib sertifikayı doğrulayamaz
-    (CERTIFICATE_VERIFY_FAILED). Öncelik:
-    1) truststore — İŞLETİM SİSTEMİ sertifika deposu (Windows kurumsal CA + eksik ara-sertifika
-       otomatik AIA çözümü). En kapsamlı.
-    2) certifi — Mozilla CA paketi (eksik kök/ara CA).
-    3) varsayılan bağlam.
-    Bir kez kurulup önbelleğe alınır."""
-    global _SSL_CTX
-    if _SSL_CTX is not None:
-        return _SSL_CTX
+def configure_ssl(ca_file=None, insecure=False):
+    """SSL davranışını ayarla (config'ten). ca_file: kurumsal kök CA (.pem) yolu;
+    insecure: True ise doğrulama kapatılır (son çare, yalnız de-id özet gönderilir).
+    Bağlamı yeniden kurar."""
+    global _SSL_CTX, _SSL_OPTS
+    _SSL_OPTS = {"ca_file": (ca_file or None), "insecure": bool(insecure)}
+    _SSL_CTX = None
+
+
+def _base_ctx():
+    """Standart doğrulama bağlamı: truststore (OS deposu) -> certifi -> varsayılan."""
     try:
         import truststore
-        _SSL_CTX = truststore.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
-        return _SSL_CTX
+        return truststore.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
     except Exception:
         pass
     try:
         import certifi
-        _SSL_CTX = ssl.create_default_context(cafile=certifi.where())
-        return _SSL_CTX
+        return ssl.create_default_context(cafile=certifi.where())
     except Exception:
         pass
-    _SSL_CTX = ssl.create_default_context()
+    return ssl.create_default_context()
+
+
+def _ssl_context():
+    """HTTPS doğrulama bağlamı (bir kez kurulur, önbelleğe alınır).
+    - insecure: doğrulama kapalı (kurumsal proxy/AV kökü hiçbir yerde güvenilir değilse son çare).
+    - ca_file: standart CA'lara EK olarak kurumsal kök yüklenir (önerilen kurumsal çözüm).
+    - aksi halde: OS deposu (truststore) / certifi / varsayılan."""
+    global _SSL_CTX
+    if _SSL_CTX is not None:
+        return _SSL_CTX
+    if _SSL_OPTS["insecure"]:
+        ctx = ssl.create_default_context()
+        ctx.check_hostname = False
+        ctx.verify_mode = ssl.CERT_NONE
+        _SSL_CTX = ctx
+        return ctx
+    if _SSL_OPTS["ca_file"]:
+        try:
+            import certifi
+            ctx = ssl.create_default_context(cafile=certifi.where())
+        except Exception:
+            ctx = ssl.create_default_context()
+        try:
+            ctx.load_verify_locations(cafile=_SSL_OPTS["ca_file"])
+        except Exception:
+            pass
+        _SSL_CTX = ctx
+        return ctx
+    _SSL_CTX = _base_ctx()
     return _SSL_CTX
 
 
@@ -116,6 +144,7 @@ def get_provider(config):
     """config'e göre Provider veya None (kapalı/anahtarsız/bilinmeyen)."""
     if not config.get("ai_summary_enabled"):
         return None
+    configure_ssl(config.get("deepl_ca_file"), config.get("deepl_insecure_ssl"))
     provider = config.get("provider", "deepl")
     if provider == "deepl" and config.get("deepl_api_key"):
         return DeepLProvider(config["deepl_api_key"])

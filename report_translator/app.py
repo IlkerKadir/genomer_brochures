@@ -359,6 +359,8 @@ class ConfigBody(BaseModel):
     ai_summary_enabled: bool | None = None
     deepl_api_key: str | None = None
     provider: str | None = None
+    deepl_ca_file: str | None = None
+    deepl_insecure_ssl: bool | None = None
 
 
 @app.post("/api/config")
@@ -378,7 +380,10 @@ def ai_test():
     info = {"ai_summary_enabled": bool(cfg.get("ai_summary_enabled")),
             "has_key": bool(cfg.get("deepl_api_key")),
             "key_kind": ("free" if (cfg.get("deepl_api_key") or "").endswith(":fx") else "pro"),
-            "config_path": aiconfig.CONFIG_PATH}
+            "config_path": aiconfig.CONFIG_PATH,
+            "ssl_mode": ("insecure" if cfg.get("deepl_insecure_ssl")
+                         else ("ca_file:" + cfg["deepl_ca_file"]) if cfg.get("deepl_ca_file")
+                         else "auto (truststore/certifi)")}
     provider = translator.get_provider(cfg)
     if provider is None:
         info["ok"] = False
