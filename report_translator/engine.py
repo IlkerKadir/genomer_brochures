@@ -655,6 +655,46 @@ def _overlay_femo_header(page):
                          fontfile=fontfile, fontsize=size, color=(0, 0, 0))
 
 
+def _overlay_femo_detected(page):
+    """Femo PATHOGENS tablosundaki sonuç değeri 'DETECTED' (metin katmanı yok, saf vektör)
+    -> 'TESPİT EDİLDİ'. İmza: tabloda 'sonuç/lg/referans' sütunlarında çok sayıda dikey-dizili
+    '—' (tire) vardır; en soldaki tire-sütunu = sonuç sütunudur. O sütundaki GENİŞ vektör küme
+    (tireden geniş) = DETECTED. Sonuç kutusu/diğer sayfalarda tire-sütunu yoktur -> tetiklenmez."""
+    fills = [fitz.Rect(d["rect"]) for d in page.get_drawings()
+             if "f" in d["type"] and d.get("fill") and max(d["fill"]) < 0.3]
+    dashes = [r for r in fills if 4 < r.width < 13 and r.height < 6 and r.x0 > 300]
+    cols = {}                                   # tire merkez-x'lerini ±6pt sütunlara grupla
+    for r in dashes:
+        cx = round((r.x0 + r.x1) / 2)
+        key = next((k for k in cols if abs(k - cx) < 6), cx)
+        cols.setdefault(key, []).append(r)
+    dash_cols = sorted(k for k, v in cols.items() if len(v) >= 4)
+    if len(dash_cols) < 3:
+        return                                  # PATHOGENS 3 tire-sütunu (sonuç/lg/referans) yok
+                                                # -> femo PATHOGENS sayfası değil (ör. sayfa-0'da 2 sütun)
+    result_cx = dash_cols[0]                     # en soldaki tire-sütunu = sonuç sütunu
+    right_bound = ((dash_cols[0] + dash_cols[1]) / 2) if len(dash_cols) > 1 else result_cx + 45
+    targets = [r for r in fills
+               if abs((r.x0 + r.x1) / 2 - result_cx) < 30 and r.width > 18 and r.height < 12]
+    if not targets:
+        return
+    fontfile = os.path.join(FONT_DIR, "Arial-Regular.ttf")
+    font = fitz.Font(fontfile=fontfile)
+    plans = []
+    for r in targets:
+        page.add_redact_annot(fitz.Rect(r.x0 - 1, r.y0 - 1, min(r.x1 + 2, right_bound), r.y1 + 1),
+                              fill=(1, 1, 1))
+        avail = right_bound - r.x0
+        size = _fit_size(font, "TESPİT EDİLDİ", avail, (r.y1 - r.y0) * 1.25 or 7.5)
+        plans.append((r.x0, r.y1, size))
+    page.apply_redactions(images=fitz.PDF_REDACT_IMAGE_NONE,
+                          graphics=fitz.PDF_REDACT_LINE_ART_NONE,
+                          text=fitz.PDF_REDACT_TEXT_REMOVE)
+    for x0, baseline, size in plans:
+        page.insert_text((x0, baseline), "TESPİT EDİLDİ", fontname="GnmrTRdet",
+                         fontfile=fontfile, fontsize=size, color=(0, 0, 0))
+
+
 # Femo "Notes / Terminology" footer'ı da metin katmanı OLMAYAN saf vektör, sabit boilerplate.
 # Türkçe çeviri (İlker gözden geçirebilir) — kaynak metin DNA-Technology femo şablonundan.
 _FEMO_FOOTER_TR = (
@@ -809,6 +849,7 @@ def _render_page_items(page, items, font_cache, all_items=None):
     # femo hasta-başlığı etiketleri (metin katmanı yok, saf vektör) -> Türkçe kaplama (femo imzalıysa)
     _overlay_femo_header(page)
     _overlay_femo_footer(page)                 # femo Notlar/Terminoloji footer'ı (saf vektör)
+    _overlay_femo_detected(page)               # femo PATHOGENS 'DETECTED' değeri (saf vektör)
 
 
 def _changed_items(annotated):

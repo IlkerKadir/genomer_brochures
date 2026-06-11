@@ -343,6 +343,30 @@ def test_overlay_femo_footer_skips_without_glyph_cluster():
     assert "Notlar" not in page.get_text()
 
 
+def test_overlay_femo_detected_translates_in_pathogens_table():
+    # 3 tire-sütunu (PATHOGENS imzası) + sonuç sütununda geniş vektör küme -> DETECTED çevrilir
+    doc = fitz.open()
+    page = doc.new_page(width=595, height=842)
+    for y in (360, 375, 390, 405):               # 4 satır x 3 tire-sütunu
+        for x in (388, 475, 543):
+            page.draw_rect(fitz.Rect(x, y, x + 9, y + 2), color=None, fill=(0, 0, 0))
+    page.draw_rect(fitz.Rect(365, 343, 412, 350), color=None, fill=(0, 0, 0))  # DETECTED (geniş)
+    engine._overlay_femo_detected(page)
+    assert "TESPİT EDİLDİ" in page.get_text().replace("\xa0", " ")
+
+
+def test_overlay_femo_detected_skips_without_three_dash_columns():
+    # yalnız 2 tire-sütunu (ör. sayfa-0) -> PATHOGENS değil -> tetiklenmez
+    doc = fitz.open()
+    page = doc.new_page(width=595, height=842)
+    for y in (360, 375, 390, 405):
+        for x in (388, 475):                      # sadece 2 sütun
+            page.draw_rect(fitz.Rect(x, y, x + 9, y + 2), color=None, fill=(0, 0, 0))
+    page.draw_rect(fitz.Rect(365, 343, 412, 350), color=None, fill=(0, 0, 0))
+    engine._overlay_femo_detected(page)
+    assert "TESPİT EDİLDİ" not in page.get_text().replace("\xa0", " ")
+
+
 def test_sub_glyphs_replaces_missing_bullet():
     # ⯀ (U+2BC0, Arial'da yok) -> ■ (U+25A0, dolu kare, Arial'da var)
     assert engine._sub_glyphs("⯀ Test") == "■ Test"
