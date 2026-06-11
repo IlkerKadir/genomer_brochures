@@ -286,3 +286,20 @@ def test_deepl_translate_with_context(monkeypatch):
                         {"translations": [{"text": "x"}]})
     tr_mod.DeepLProvider("k:fx").translate(["x"])
     assert not any(k == "context" for k, _ in captured["fields"])
+
+
+def test_postedit_fixes_buffer_n(tmp_path, monkeypatch):
+    f = tmp_path / "postedit.tsv"
+    f.write_text("# yorum\nmikrobiyota(ı|i|u|ü)n\tmikrobiyotan\\1n\n", encoding="utf-8")
+    monkeypatch.setattr(aiconfig, "POSTEDIT_PATH", str(f))
+    corr = aiconfig.postedit_corrections()
+    # DeepL tampon-n hatası düzelir; zaten doğru olan değişmez
+    assert aiconfig.apply_postedit("normal mikrobiyotaın baskınlığı", corr) == "normal mikrobiyotanın baskınlığı"
+    assert aiconfig.apply_postedit("normal mikrobiyotanın baskınlığı", corr) == "normal mikrobiyotanın baskınlığı"
+    assert aiconfig.apply_postedit("mikrobiyota durumu", corr) == "mikrobiyota durumu"
+
+
+def test_postedit_missing_file_noop(monkeypatch):
+    monkeypatch.setattr(aiconfig, "POSTEDIT_PATH", "/nonexistent/postedit.tsv")
+    assert aiconfig.postedit_corrections() == []
+    assert aiconfig.apply_postedit("metin", []) == "metin"

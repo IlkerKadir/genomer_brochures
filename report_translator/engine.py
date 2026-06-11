@@ -772,6 +772,7 @@ def apply_ai_summary(annotated, provider, markers, cache, deid=None):
     Ağ yalnız provider verilince ve önbellek ıskasında çalışır. annotated yerinde değişir."""
     if deid is None:
         deid = aiconfig.deid_ok
+    corrections = aiconfig.postedit_corrections()   # DeepL Türkçe dilbilgisi düzeltmeleri
     todo = []   # (index, norm_en)
     for i, a in enumerate(annotated):
         if a.source == "dict-exact":          # hekim/sözlük onayı kazanır
@@ -783,7 +784,7 @@ def apply_ai_summary(annotated, provider, markers, cache, deid=None):
             continue
         cached = cache.get(en)
         if cached is not None:
-            a.tr = cached
+            a.tr = aiconfig.apply_postedit(cached, corrections)   # önbellek ham DeepL tutar
             a.source = "ai"
             a.needs_review = False
             continue
@@ -792,8 +793,8 @@ def apply_ai_summary(annotated, provider, markers, cache, deid=None):
         try:
             results = provider.translate([en for _, en in todo])
             for (i, en), tr in zip(todo, results):
-                aiconfig.cache_set(cache, en, tr)
-                annotated[i].tr = tr
+                aiconfig.cache_set(cache, en, tr)                 # ham DeepL'i önbelleğe yaz
+                annotated[i].tr = aiconfig.apply_postedit(tr, corrections)
                 annotated[i].source = "ai"
                 annotated[i].needs_review = False
         except Exception:

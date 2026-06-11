@@ -1,0 +1,5 @@
+# DeepL çeviri-sonrası düzeltmeler. YANLIŞ<TAB>DOĞRU (regex). Yalnız AI (DeepL) çıktısına uygulanır.
+# DeepL'in Türkçe tampon-ünsüz (n/y) hatalarını ve bilinen tutarsızlıkları düzeltir.
+# Sözlük/şablon (insan-onaylı) çevirilere DOKUNMAZ.
+mikrobiyota(ı|i|u|ü)n	mikrobiyotan\1n
+mikrobiyota'(n[ıiuü]n|n[ıiuü]|y[ae])	mikrobiyota\1

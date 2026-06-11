@@ -111,6 +111,36 @@ def cache_set(cache, en, tr):
 
 GLOSSARY_PATH = os.path.join(HERE, "glossary.tsv")
 GLOSSARY_STATE_PATH = os.path.join(HERE, "glossary_state.json")
+POSTEDIT_PATH = os.path.join(HERE, "postedit.tsv")
+
+
+def postedit_corrections():
+    """postedit.tsv'den derlenmiş (regex, yerine) düzeltme çiftlerini döndür.
+    Yalnız AI (DeepL) çıktısına uygulanır; DeepL'in Türkçe tampon-ünsüz hatalarını düzeltir.
+    Hatalı satır (geçersiz regex) atlanır."""
+    if not os.path.exists(POSTEDIT_PATH):
+        return []
+    out = []
+    with open(POSTEDIT_PATH, encoding="utf-8") as f:
+        for line in f:
+            line = line.rstrip("\n")
+            if not line.strip() or line.lstrip().startswith("#") or "\t" not in line:
+                continue
+            wrong, right = line.split("\t", 1)
+            try:
+                out.append((re.compile(wrong), right))
+            except re.error:
+                continue
+    return out
+
+
+def apply_postedit(text, corrections=None):
+    """AI çevirisine çeviri-sonrası düzeltmeleri uygula (regex sırayla)."""
+    if corrections is None:
+        corrections = postedit_corrections()
+    for rx, rep in corrections:
+        text = rx.sub(rep, text)
+    return text
 
 
 def glossary_entries_tsv():
