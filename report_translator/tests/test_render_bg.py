@@ -347,10 +347,13 @@ def test_overlay_femo_detected_translates_in_pathogens_table():
     # 3 tire-sütunu (PATHOGENS imzası) + sonuç sütununda geniş vektör küme -> DETECTED çevrilir
     doc = fitz.open()
     page = doc.new_page(width=595, height=842)
-    for y in (360, 375, 390, 405):               # 4 satır x 3 tire-sütunu
+    for y in (360, 375, 390, 405):               # 4 satır x 3 tire-sütunu (sonuç/lg/referans)
         for x in (388, 475, 543):
             page.draw_rect(fitz.Rect(x, y, x + 9, y + 2), color=None, fill=(0, 0, 0))
-    page.draw_rect(fitz.Rect(365, 343, 412, 350), color=None, fill=(0, 0, 0))  # DETECTED (geniş)
+    # DETECTED satırı: sonuç sütununda geniş küme + AYNI satırda lg/ref tireleri (veri satırı)
+    page.draw_rect(fitz.Rect(365, 345, 412, 352), color=None, fill=(0, 0, 0))  # DETECTED (geniş)
+    page.draw_rect(fitz.Rect(475, 347, 484, 349), color=None, fill=(0, 0, 0))  # lg tire
+    page.draw_rect(fitz.Rect(543, 347, 552, 349), color=None, fill=(0, 0, 0))  # ref tire
     engine._overlay_femo_detected(page)
     assert "TESPİT EDİLDİ" in page.get_text().replace("\xa0", " ")
 

@@ -371,6 +371,36 @@ def _sample_fg(pixmap, rect, scale, bg, tol=24):
     return (col[0] / 255.0, col[1] / 255.0, col[2] / 255.0)
 
 
+def _segment_has_ink(pixmap, seg, scale, tol=24, min_count=4):
+    """Segmentin orijinalde GÖRÜNÜR mürekkebi (bg-dışı piksel) var mı?
+
+    Femo vektör-outline raporlarında bazı şablon alanları (Performed by, Laboratory director,
+    Full name, Signature) görünür vektör OLMADAN yalnız (görünmez) metin-katmanında bulunur.
+    Bunları çevirip yazarsak orijinalde olmayan siyah metin çıkar. Bu kontrol, görünür mürekkebi
+    olmayan segmentleri tespit eder -> render edilmezler. Zemin belirsizse (None) güvenli tarafta
+    kalıp 'görünür' sayar (render eder)."""
+    saw_bg = False
+    for r in seg.rects:
+        rect = fitz.Rect(r)
+        bg = _sample_bg(pixmap, rect, scale)
+        if bg is None:
+            return True                        # belirsiz zemin -> görünür say
+        saw_bg = True
+        bg255 = tuple(int(round(v * 255)) for v in bg)
+        x0 = int(rect.x0 * scale); y0 = int(rect.y0 * scale)
+        x1 = int(rect.x1 * scale); y1 = int(rect.y1 * scale)
+        cnt = 0
+        for yy in range(y0, y1 + 1):
+            for xx in range(x0, x1 + 1):
+                if 0 <= xx < pixmap.width and 0 <= yy < pixmap.height:
+                    px = pixmap.pixel(xx, yy)
+                    if not all(abs(a - b) <= tol for a, b in zip(px[:3], bg255[:3])):
+                        cnt += 1
+                        if cnt >= min_count:
+                            return True
+    return not saw_bg                          # hiç zemin bulunamadıysa görünür say
+
+
 def _fontname_for(fontfile, font_cache):
     """fontfile için kalıcı, çakışmasız PDF font adı üret/önbellekle.
 
@@ -674,8 +704,12 @@ def _overlay_femo_detected(page):
                                                 # -> femo PATHOGENS sayfası değil (ör. sayfa-0'da 2 sütun)
     result_cx = dash_cols[0]                     # en soldaki tire-sütunu = sonuç sütunu
     right_bound = ((dash_cols[0] + dash_cols[1]) / 2) if len(dash_cols) > 1 else result_cx + 45
-    targets = [r for r in fills
-               if abs((r.x0 + r.x1) / 2 - result_cx) < 30 and r.width > 18 and r.height < 12]
+    cands = [r for r in fills
+             if abs((r.x0 + r.x1) / 2 - result_cx) < 30 and r.width > 18 and r.height < 12]
+    # aday gerçek bir tablo VERİ satırında olmalı: aynı y'de (±7) sağ sütun(lar)da bir tire bulunsun.
+    # Böylece sütun başlığı ('Result', y192) ve imza-alanı kümeleri (geniş ama tiresiz) elenir.
+    targets = [r for r in cands
+               if any(d.x0 > result_cx + 30 and abs(d.y0 - r.y0) < 8 for d in dashes)]
     if not targets:
         return
     fontfile = os.path.join(FONT_DIR, "Arial-Regular.ttf")
@@ -779,6 +813,11 @@ def _render_page_items(page, items, font_cache, all_items=None):
                 seen.add(id(g))
     resolved = []                          # (annotation, yeniden-yazma rengi)
     for a in render_set:
+        # vektör sayfada orijinalde GÖRÜNMEZ (mürekkebi olmayan) metin-katmanı segmentlerini atla:
+        # femo'da "Performed by/Laboratory director/Full name/Signature" gibi alanlar görünür
+        # vektör olmadan yalnız metin-katmanında durur; çevrilince siyah çıkar (orijinalde yoktu).
+        if vector_outline and pm is not None and not _segment_has_ink(pm, a.seg, scale):
+            continue
         first_bg = None
         first_rect = None
         for r in a.seg.rects:
