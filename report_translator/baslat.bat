@@ -1,40 +1,44 @@
 @echo off
-chcp 65001 >nul
 cd /d "%~dp0"
 
-REM --- Python kurulu mu? ---
 where python >nul 2>nul
-if errorlevel 1 (
-  echo.
-  echo HATA: Python bulunamadi.
-  echo python.org/downloads adresinden Python 3.13 kurun ve kurulum sirasinda
-  echo "Add Python to PATH" kutusunu mutlaka isaretleyin, sonra bu dosyayi tekrar calistirin.
-  echo.
-  pause
-  exit /b 1
-)
+if errorlevel 1 goto nopython
 
-REM --- Ilk acilis: sanal ortam + bagimliliklar (internet gerekir) ---
-if not exist ".venv\Scripts\python.exe" (
-  echo Ilk kurulum yapiliyor, lutfen bekleyin (internet gerekir)...
-  python -m venv .venv
-  .venv\Scripts\python -m pip install --upgrade pip -q
-  .venv\Scripts\pip install -q -r requirements.txt
-  if errorlevel 1 (
-    echo.
-    echo HATA: Bagimliliklar kurulamadi. Internet baglantisini kontrol edip tekrar deneyin.
-    echo.
-    pause
-    exit /b 1
-  )
-)
+if not exist ".venv\Scripts\python.exe" goto setup
+goto run
 
-if not exist "web\index.html" echo UYARI: Arayuz dosyalari (web\) eksik - klasoru eksiksiz kopyaladiginizdan emin olun.
+:setup
+echo Ilk kurulum yapiliyor, lutfen bekleyin. Internet gerekir...
+python -m venv .venv
+.venv\Scripts\python -m pip install --upgrade pip -q
+.venv\Scripts\python -m pip install -q -r requirements.txt
+if errorlevel 1 goto installfail
+goto run
 
-REM --- Sunucu hazir olunca tarayiciyi ac (ayri islem), sunucuyu bu pencerede calistir ---
-start "" cmd /c "timeout /t 3 /nobreak >nul & start """" http://127.0.0.1:8731"
+:run
+if not exist "web\index.html" echo UYARI: web klasoru eksik - klasoru eksiksiz kopyalayin.
+start "" http://127.0.0.1:8731
 echo.
-echo Genomer Rapor Cevirici baslatiliyor... Tarayicida birazdan acilacak.
-echo (Bu pencereyi kapatirsaniz uygulama durur.)
+echo Genomer Rapor Cevirici calisiyor.
+echo Tarayicida acilmazsa: http://127.0.0.1:8731
+echo Durdurmak icin bu pencereyi kapatin.
 echo.
 .venv\Scripts\python -m uvicorn app:app --port 8731 --host 127.0.0.1
+pause
+exit /b 0
+
+:nopython
+echo.
+echo HATA: Python bulunamadi.
+echo python.org adresinden Python 3.13 kurun ve kurulumda
+echo "Add Python to PATH" kutusunu isaretleyin, sonra tekrar calistirin.
+echo.
+pause
+exit /b 1
+
+:installfail
+echo.
+echo HATA: Bagimliliklar kurulamadi. Internet baglantisini kontrol edip tekrar deneyin.
+echo.
+pause
+exit /b 1
