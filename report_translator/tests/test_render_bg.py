@@ -293,16 +293,34 @@ def test_overlay_femo_header_translates_labels():
     doc, page = _femo_header_page()
     engine._overlay_femo_header(page)
     txt = page.get_text().replace("\xa0", " ")   # insert_text boşluğu \xa0 olarak dönebilir
-    for lbl in engine._FEMO_HEADER_LABELS:
+    for lbl in engine._FEMO_HEADER_LABELS[6]:    # 6 alanlı sayfa-1 başlığı
         assert lbl in txt, (lbl, txt)
 
 
-def test_overlay_femo_header_skips_when_text_layer_present():
-    # aynı yapı AMA metin katmanı var (andro/entero başlıkları) -> overlay tetiklenmez
-    doc, page = _femo_header_page()
-    page.insert_text((50, 150), "Patient name:", fontsize=9)
+def test_overlay_femo_header_skips_without_glyph_rows():
+    # andro/entero başlıkları: etiketler METİN (glif-dolgu yok) -> femo deseni yok -> overlay atlar
+    doc = fitz.open()
+    page = doc.new_page(width=595, height=842)
+    for y in [147, 161, 176, 190, 205, 219, 234]:
+        page.draw_line(fitz.Point(46, y), fitz.Point(298, y), color=(0, 0, 0), width=0.5)
+    page.insert_text((49, 144), "Patient name:", fontsize=9)   # metin etiket, vektör glif-dolgu YOK
     engine._overlay_femo_header(page)
     assert "Hasta adı:" not in page.get_text()
+
+
+def test_overlay_femo_header_continuation_page_two_labels():
+    # devam sayfası: 2 alanlı başlık (Patient name, Sample ID) -> 2 etiket yazılır
+    doc = fitz.open()
+    page = doc.new_page(width=595, height=842)
+    ys = [151, 165]                            # 2 hasta-alanı satırı (sonra büyük boşluk)
+    for y in ys + [202, 216]:                  # 202+ ayrı tablo (büyük boşluk -> koşu biter)
+        page.draw_line(fitz.Point(46, y), fitz.Point(298, y), color=(0, 0, 0), width=0.5)
+    for y in ys:
+        page.draw_rect(fitz.Rect(49, y - 10, 95, y - 3), color=None, fill=(0, 0, 0))
+    engine._overlay_femo_header(page)
+    txt = page.get_text().replace("\xa0", " ")
+    assert "Hasta adı:" in txt and "Örnek ID:" in txt
+    assert "Doğum tarihi:" not in txt          # 2-alanlı sette yok
 
 
 def test_sub_glyphs_replaces_missing_bullet():

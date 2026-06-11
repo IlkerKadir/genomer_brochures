@@ -584,19 +584,21 @@ def _redraw_covered_strokes(page, strokes, filled_rects):
 
 
 # Femo hasta-başlığı etiketleri metin katmanı OLMAYAN saf vektör (Patient name: vb.).
-# Sabit şablon: 6 etiket, soldaki ince ayraç çizgileriyle bölünmüş satırlarda, sırayla.
-_FEMO_HEADER_LABELS = [
-    "Hasta adı:", "Doğum tarihi:", "Numune tarihi:",
-    "Örnek türü:", "Örnek ID:", "Hekim:",
-]
+# Sabit şablon: sayfa-1'de 6 alan; devam sayfalarında 2 alan (Patient name, Sample ID).
+# Etiket sayısına göre eşlenir (metin yok -> hangi etiket olduğu sıra/şablondan bilinir).
+_FEMO_HEADER_LABELS = {
+    6: ["Hasta adı:", "Doğum tarihi:", "Numune tarihi:", "Örnek türü:", "Örnek ID:", "Hekim:"],
+    2: ["Hasta adı:", "Örnek ID:"],
+}
 
 
 def _overlay_femo_header(page):
     """Femo hasta-başlığı etiketlerini (metin katmanı yok, saf vektör) Türkçeye çevir.
 
-    İmza: üst-sol bölgede ≥6 ince yatay ayraç çizgisi + o bölgede metin katmanı YOK
-    (andro/entero başlıkları metin katmanlı → tetiklenmez). Her satırda etiket (sol glif
-    kümesi) kapatılıp Türkçe yazılır; değer (hasta verisi, boşluktan sonraki küme) korunur."""
+    İmza: üst bölgede ~14.4pt düzenli aralıklı, üzerinde etiket-glifi olan ardışık ayraç
+    çizgileri (hasta-alan satırları) + o satırlarda metin katmanı YOK (andro/entero başlıkları
+    metin katmanlı → tetiklenmez). Etiket sayısı şablonu belirler (6=sayfa-1, 2=devam sayfası).
+    Her satırda etiket glif-kümesi kapatılıp Türkçe yazılır; değer (hasta verisi) korunur."""
     draws = page.get_drawings()
     lines = sorted(set(
         round(it[1][1], 1)
@@ -604,36 +606,47 @@ def _overlay_femo_header(page):
         for it in d["items"]
         if it[0] == "l" and abs(it[1][1] - it[2][1]) < 0.5
         and min(it[1][0], it[2][0]) < 60 and max(it[1][0], it[2][0]) > 280
-        and 130 < it[1][1] < 240))
-    if len(lines) < 6:
-        return
-    band = fitz.Rect(40, lines[0] - 16, 300, lines[5])
-    if page.get_textbox(band).strip():         # bu bölgede metin var -> femo değil, dokunma
+        and 60 < it[1][1] < 260))
+    if len(lines) < 2:
         return
     black_fills = [fitz.Rect(d["rect"]) for d in draws
                    if "f" in d["type"] and d.get("fill") and max(d["fill"]) < 0.3]
-    font = fitz.Font(fontfile=os.path.join(FONT_DIR, "Arial-Bold.ttf"))
-    fontfile = os.path.join(FONT_DIR, "Arial-Bold.ttf")
-    plans = []                                 # (baseline, right, label, size)
-    for i, label in enumerate(_FEMO_HEADER_LABELS):
-        bottom = lines[i]
-        row = sorted((r for r in black_fills if bottom - 13 < r.y0 < bottom - 1 and r.x0 < 220),
+    # üstten, ~14.4pt düzenli aralıklı, üzerinde etiket-glifi olan ardışık satırları topla
+    rows = []          # (bottom, lab_top, lab_end, value_start)
+    prev = None
+    for y in lines:
+        if rows and prev is not None and abs((y - prev) - 14.4) > 3:
+            break                              # düzenli koşu bitti -> hasta-alanları bitti
+        row = sorted((r for r in black_fills if y - 13 < r.y0 < y - 1 and 46 < r.x0 < 220),
                      key=lambda r: r.x0)
-        if not row:
-            continue
-        lab_end = row[0].x1                    # etiket kümesi: soldan, >5pt boşluğa kadar
-        value_start = None
-        for r in row[1:]:
-            if r.x0 - lab_end > 5:
-                value_start = r.x0
-                break
-            lab_end = max(lab_end, r.x1)
+        if row:
+            lab_top = min(r.y0 for r in row)
+            lab_end = row[0].x1
+            value_start = None
+            for r in row[1:]:                  # etiket kümesi: soldan, >5pt boşluğa kadar
+                if r.x0 - lab_end > 5:
+                    value_start = r.x0
+                    break
+                lab_end = max(lab_end, r.x1)
+            rows.append((y, lab_top, lab_end, value_start))
+            prev = y
+        elif rows:
+            break                              # etiketsiz satır -> hasta-alanları bitti
+        else:
+            prev = y                           # henüz başlamadık (banner üstü vb.)
+    labels = _FEMO_HEADER_LABELS.get(len(rows))
+    if not labels:
+        return                                 # bilinmeyen alan sayısı -> yanlış etiket yazma
+    # Not: vektör glif-satır deseni femo'ya özgüdür (andro/entero başlıkları metin katmanlı,
+    # bu desen oluşmaz) -> ayrı metin-yok kontrolü gerekmez; sadece bilinen alan sayılarında yaz.
+    fontfile = os.path.join(FONT_DIR, "Arial-Bold.ttf")
+    font = fitz.Font(fontfile=fontfile)
+    plans = []
+    for (bottom, lab_top, lab_end, value_start), label in zip(rows, labels):
         right = (value_start - 1.5) if value_start else (lab_end + 3)
-        page.add_redact_annot(fitz.Rect(46, bottom - 13, right, bottom - 1.5), fill=(1, 1, 1))
+        page.add_redact_annot(fitz.Rect(46, lab_top - 1, right, bottom - 1.5), fill=(1, 1, 1))
         size = _fit_size(font, label, right - 49, 9.0)
         plans.append((bottom - 4.0, label, size))
-    if not plans:
-        return
     page.apply_redactions(images=fitz.PDF_REDACT_IMAGE_NONE,
                           graphics=fitz.PDF_REDACT_LINE_ART_NONE,
                           text=fitz.PDF_REDACT_TEXT_REMOVE)
