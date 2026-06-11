@@ -368,6 +368,39 @@ def set_config(body: ConfigBody):
     return aiconfig.public_config()
 
 
+@app.get("/api/ai/test")
+def ai_test():
+    """DeepL bağlantı/anahtar tanısı: canlı bir test çevirisi yapar, gerçek hatayı döndürür.
+    Tarayıcıda http://127.0.0.1:8731/api/ai/test açılarak görülebilir (normal akışta hata
+    sessizce yutulup sözlüğe düşülür; bu uçnokta hatayı görünür kılar)."""
+    import urllib.error
+    cfg = aiconfig.load_config()
+    info = {"ai_summary_enabled": bool(cfg.get("ai_summary_enabled")),
+            "has_key": bool(cfg.get("deepl_api_key")),
+            "key_kind": ("free" if (cfg.get("deepl_api_key") or "").endswith(":fx") else "pro"),
+            "config_path": aiconfig.CONFIG_PATH}
+    provider = translator.get_provider(cfg)
+    if provider is None:
+        info["ok"] = False
+        info["error"] = "Sağlayıcı yok: AI kapalı ya da anahtar boş (Ayarlar'dan anahtarı girip AI'yı açın)."
+        return info
+    try:
+        out = provider.translate(["Microbiota status - eubiosis."])
+        info["ok"] = True
+        info["sample_tr"] = out[0] if out else ""
+    except urllib.error.HTTPError as e:
+        try:
+            body = e.read().decode("utf-8", "replace")[:300]
+        except Exception:
+            body = ""
+        info["ok"] = False
+        info["error"] = "DeepL HTTP %d: %s" % (e.code, body)
+    except Exception as e:
+        info["ok"] = False
+        info["error"] = "%s: %s" % (type(e).__name__, e)
+    return info
+
+
 @app.get("/api/out_dir")
 def get_out_dir():
     return {"out_dir": _OUT_DIR}
