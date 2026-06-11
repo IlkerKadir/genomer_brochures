@@ -13,9 +13,11 @@ DEFAULT_CONFIG = {
     "deepl_api_key": "",
     "ai_summary_enabled": False,
     "target_lang": "TR",
-    "deepl_context": ("Clinical conclusion summary of a urogenital microbiota qPCR diagnostic "
-                      "report. Bacterial group relative amounts are reported as percentage "
-                      "values; do not infer increase or decrease that is not explicitly stated."),
+    "deepl_context": ("Formal Turkish translation of a clinical conclusion from a urogenital or "
+                      "intestinal microbiota qPCR diagnostic report. Keep all Latin taxonomic names "
+                      "and abbreviations (spp., gr, subsp.) exactly as written; do not translate them. "
+                      "Relative amounts are reported as percentages; do not infer any increase or "
+                      "decrease that is not explicitly stated. Use a formal medical register."),
 }
 
 

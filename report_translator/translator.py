@@ -47,6 +47,15 @@ def create_glossary(api_key, name, entries_tsv, source="EN", target="TR"):
     return res["glossary_id"]
 
 
+def delete_glossary(api_key, glossary_id):
+    """Bir glossary'yi sil (DeepL hesap limiti: ücretsiz katman tek glossary'ye izin verir;
+    yeni oluşturmadan önce eskisini silmek gerekir, yoksa 'Too many glossaries')."""
+    req = urllib.request.Request(_base(api_key) + "/glossaries/" + glossary_id,
+                                 headers=_auth(api_key), method="DELETE")
+    with urllib.request.urlopen(req, timeout=10):
+        return True
+
+
 def entries_hash(entries_tsv):
     return hashlib.sha256(entries_tsv.encode("utf-8")).hexdigest()[:16]
 
@@ -59,6 +68,14 @@ def ensure_glossary(api_key, entries_tsv, state):
     h = entries_hash(entries_tsv)
     if state.get("hash") == h and state.get("glossary_id"):
         return state["glossary_id"]
+    # Girişler değişti -> eski glossary'yi sil (DeepL ücretsiz katman tek glossary'ye izin verir;
+    # silmeden yeni oluşturmak 'Too many glossaries' (456) hatası verir).
+    old = state.get("glossary_id")
+    if old:
+        try:
+            delete_glossary(api_key, old)
+        except Exception:
+            pass
     gid = create_glossary(api_key, "genomer-terms", entries_tsv)
     state["hash"] = h
     state["glossary_id"] = gid

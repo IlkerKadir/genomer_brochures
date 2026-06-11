@@ -60,6 +60,10 @@
     "Full name": "Ad Soyad"
   },
   "femobiome_ii": {
+    "DETECTED": "TESPİT EDİLDİ",
+    "detected": "tespit edildi",
+    "Detected": "Tespit edildi",
+    "not detected": "tespit edilmedi",
     "Female microbiota assessment": "Kadın mikrobiyota değerlendirmesi",
     "Mycoplasmas": "Mikoplazmalar",
     "Anaerobes": "Anaeroblar",

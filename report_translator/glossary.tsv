@@ -1,12 +1,19 @@
 # Genomer standart terim sözlüğü (DeepL glossary). EN<TAB>TR. Düzenlenebilir.
+# Kanonik terimler — DeepL özet çevirilerinde tutarlılığı zorlar. Kit-çakışan terim (detected) eklenMEZ.
 relative amount	göreceli miktar
 relative quantity	göreceli miktar
+proportion	oran
 eubiosis	öbiyoz
 dysbiosis	disbiyoz
+mixed dysbiosis	karışık disbiyoz
 opportunistic	fırsatçı
 normal microbiota	normal mikrobiyota
 total bacterial load	toplam bakteri yükü
 yeast fungi	maya mantarları
 obligate pathogens	zorunlu patojenler
-mixed dysbiosis	karışık disbiyoz
 unknown etiology	etiyolojisi bilinmeyen
+quantification accuracy	kantitasyon doğruluğu
+sample type	örnek türü
+predominance	baskınlık
+pronounced	belirgin
+spp.	spp.

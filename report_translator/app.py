@@ -62,25 +62,26 @@ def _ai_for(kit):
     if not markers:
         return None
     # DeepL: klinik domain bağlamı (context) + standart terim glossary'si.
-    # Glossary/context değişirse eski AI önbelleği geçersizdir -> temizle.
+    context = cfg.get("deepl_context") or None
+    if hasattr(provider, "context"):
+        provider.context = context
+    entries = aiconfig.glossary_entries_tsv()
+    state = aiconfig.load_glossary_state()
+    # Önbellek geçersizleştirme glossary API'sinden BAĞIMSIZ olmalı: glossary/context imzası
+    # değişince eski çeviriler geçersizdir; glossary oluşturma (ağ/limit) başarısız olsa bile temizle.
+    sig = translator.entries_hash((entries or "") + "\x00" + (context or ""))
+    if state.get("cache_sig") != sig:
+        aiconfig.clear_cache()
+        state["cache_sig"] = sig
+        aiconfig.save_glossary_state(state)
     try:
-        context = cfg.get("deepl_context") or None
-        if hasattr(provider, "context"):
-            provider.context = context
-        entries = aiconfig.glossary_entries_tsv()
-        state = aiconfig.load_glossary_state()
         if entries.strip() and hasattr(provider, "glossary_id"):
             gid = translator.ensure_glossary(cfg["deepl_api_key"], entries, state)
             if gid:
                 provider.glossary_id = gid
-        # glossary girişleri + context imzası: değişince önbellek geçersiz
-        sig = translator.entries_hash((entries or "") + "\x00" + (context or ""))
-        if state.get("cache_sig") != sig:
-            aiconfig.clear_cache()
-            state["cache_sig"] = sig
-        aiconfig.save_glossary_state(state)
+                aiconfig.save_glossary_state(state)
     except Exception:
-        pass
+        pass    # glossary oluşturma başarısız (ağ/limit) -> glossary'siz devam (context yine etkin)
     return (provider, markers, aiconfig.load_cache())
 
 

@@ -245,16 +245,20 @@ def test_create_glossary_posts_and_parses(monkeypatch):
 
 def test_ensure_glossary_caches_and_recreates(monkeypatch):
     calls = {"n": 0}
+    deleted = []
     def fake_create(api_key, name, entries, source="EN", target="TR"):
         calls["n"] += 1
         return "G-%d" % calls["n"]
     monkeypatch.setattr(tr_mod, "create_glossary", fake_create)
+    monkeypatch.setattr(tr_mod, "delete_glossary", lambda k, gid: deleted.append(gid))
     state = {}
     g1 = tr_mod.ensure_glossary("k:fx", "a\tb", state)
     g2 = tr_mod.ensure_glossary("k:fx", "a\tb", state)   # aynı giriş -> tekrar oluşturmaz
     assert g1 == g2 and calls["n"] == 1
-    g3 = tr_mod.ensure_glossary("k:fx", "a\tc", state)   # değişti -> yeniden oluştur
+    assert deleted == []                                  # değişmedi -> silme yok
+    g3 = tr_mod.ensure_glossary("k:fx", "a\tc", state)   # değişti -> eskiyi sil, yeniden oluştur
     assert g3 != g1 and calls["n"] == 2
+    assert deleted == [g1]                                # eski glossary silindi (DeepL tek-glossary limiti)
     assert tr_mod.ensure_glossary("k:fx", "  ", state) is None  # boş giriş
 
 
