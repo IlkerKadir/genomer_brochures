@@ -1,0 +1,4 @@
+# Geliştirme/test bağımlılıkları: pip install -r requirements-dev.txt
+-r requirements.txt
+pytest==8.3.2
+httpx==0.27.2

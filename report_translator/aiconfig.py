@@ -4,9 +4,11 @@ import os
 import re
 import json
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-CONFIG_PATH = os.path.join(HERE, "config.json")
-CACHE_PATH = os.path.join(HERE, "ai_cache.json")
+import paths
+
+# Yazılabilir kullanıcı durumu (paketli modda %APPDATA%\Genomer, geliştirmede kaynak dizin).
+CONFIG_PATH = paths.data_path("config.json")
+CACHE_PATH = paths.data_path("ai_cache.json")
 
 DEFAULT_CONFIG = {
     "provider": "deepl",
@@ -109,9 +111,9 @@ def cache_set(cache, en, tr):
     _save_cache(cache)
 
 
-GLOSSARY_PATH = os.path.join(HERE, "glossary.tsv")
-GLOSSARY_STATE_PATH = os.path.join(HERE, "glossary_state.json")
-POSTEDIT_PATH = os.path.join(HERE, "postedit.tsv")
+GLOSSARY_PATH = paths.data_path("glossary.tsv", seed=True)        # düzenlenebilir; tabandan seed
+GLOSSARY_STATE_PATH = paths.data_path("glossary_state.json")     # durum (cache imzası)
+POSTEDIT_PATH = paths.data_path("postedit.tsv", seed=True)       # düzenlenebilir; tabandan seed
 
 
 def postedit_corrections():

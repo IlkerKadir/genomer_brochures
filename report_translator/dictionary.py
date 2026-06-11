@@ -4,8 +4,11 @@ import re
 import json
 import shutil
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-DICT_PATH = os.path.join(HERE, "dictionary.json")
+import paths
+
+# Yazılabilir sözlük (kullanıcı "Sözlüğe ekle" düzenlemeleri kalıcı olur); paketli modda
+# ilk açılışta bundle'daki tabandan kopyalanır, geliştirmede kaynak dosyadır.
+DICT_PATH = paths.data_path("dictionary.json", seed=True)
 PARAGRAPH_WORD_THRESHOLD = 6  # >=6 kelime -> _paragraphs
 
 

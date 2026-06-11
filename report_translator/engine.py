@@ -8,9 +8,9 @@ from collections import Counter
 from dataclasses import dataclass
 import fitz  # PyMuPDF
 import aiconfig
+import paths
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-FONT_DIR = os.path.join(HERE, "fonts")
+FONT_DIR = paths.bundle_path("fonts")          # salt-okunur paket varlığı
 
 FONT_MAP = {
     "roboto-regular": "Roboto-Regular.ttf",

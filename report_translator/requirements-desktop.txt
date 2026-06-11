@@ -1,0 +1,4 @@
+# Yerel masaüstü paketi (.exe) için ek bağımlılık — PyInstaller build'inde kullanılır.
+# baslat.bat (tarayıcı) için GEREKMEZ.
+-r requirements.txt
+pywebview==5.2

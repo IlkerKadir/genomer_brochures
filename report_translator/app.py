@@ -18,9 +18,9 @@ import dictionary
 import store
 import aiconfig
 import translator
+import paths
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-WEB_DIR = os.path.join(HERE, "web")
+WEB_DIR = paths.bundle_path("web")             # salt-okunur paket varlığı (derlenmiş SPA)
 
 app = FastAPI(title="Genomer Rapor Çevirici")
 
